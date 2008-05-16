@@ -34,7 +34,10 @@ public class RSS10FeedHandler extends AbstractElementHandler {
 
 	public void endElement(String qName) throws SAXException {
 		if (qName.equals(TITLE)) {
-			feed.setTitle(getBuffer().toString());
+			// Only set the title if it has not already been specified
+			if (feed.getTitle() == null || feed.getTitle().length() == 0) {
+				feed.setTitle(getBuffer().toString());
+			}
 			setCapture(false);
 		}
 		if (qName.equals(DESCRIPTION)) {
