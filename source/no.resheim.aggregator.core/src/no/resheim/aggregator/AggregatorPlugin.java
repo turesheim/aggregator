@@ -52,13 +52,12 @@ public class AggregatorPlugin extends Plugin {
 	 * @return The proxy service
 	 */
 	public IProxyService getProxyService() {
-		// if (serviceTracker == null) {
-		// this.serviceTracker = new ServiceTracker(getBundle()
-		// .getBundleContext(), IProxyService.class.getName(), null);
-		//
-		// }
-		// return (IProxyService) this.serviceTracker.getService();
-		return null;
+		if (serviceTracker == null) {
+			this.serviceTracker = new ServiceTracker(getBundle()
+					.getBundleContext(), IProxyService.class.getName(), null);
+
+		}
+		return (IProxyService) this.serviceTracker.getService();
 	}
 
 	/*
@@ -68,7 +67,10 @@ public class AggregatorPlugin extends Plugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		// Create a default feed registry
 		registry = new FeedRegistry();
+
+		// Read in all the default feeds.
 		InputStream is = FileLocator.openStream(this.getBundle(), new Path(
 				"/feeds.txt"), false); //$NON-NLS-1$
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -90,6 +92,7 @@ public class AggregatorPlugin extends Plugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		registry.shutdown();
 		super.stop(context);
 	}
 

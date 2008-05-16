@@ -11,7 +11,6 @@
 package no.resheim.aggregator.model;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -108,8 +107,10 @@ public class FeedRegistry implements IAggregatorItem {
 
 		private IStatus close() {
 			try {
+				System.out.println("Shutting down database"); //$NON-NLS-1$
 				connection = DriverManager.getConnection(JDBC_DERBY + location
 						+ DISCONNECT_OPTIONS);
+				connection.close();
 			} catch (SQLException e) {
 				// Should throw ERROR 08006 which we will ignore.
 			}
@@ -526,7 +527,6 @@ public class FeedRegistry implements IAggregatorItem {
 		 */
 		private void insert(Feed feed) {
 			try {
-				ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 				PreparedStatement ps = connection
 						.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) "); //$NON-NLS-1$
 				ps.setString(1, feed.getUUID().toString());
@@ -757,6 +757,10 @@ public class FeedRegistry implements IAggregatorItem {
 			}
 		});
 		job.schedule();
+	}
+
+	public void shutdown() {
+		database.close();
 	}
 
 	/**
