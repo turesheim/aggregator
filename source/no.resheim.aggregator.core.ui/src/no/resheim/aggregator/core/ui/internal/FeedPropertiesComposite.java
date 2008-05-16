@@ -11,7 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal;
 
-import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.model.Feed;
 import no.resheim.aggregator.model.Feed.Archiving;
 import no.resheim.aggregator.model.Feed.UpdatePeriod;
@@ -23,10 +22,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
@@ -38,7 +35,7 @@ public class FeedPropertiesComposite extends Composite {
 
 	private Label urlLabel = null;
 
-	private Combo titleText = null;
+	private Text titleText = null;
 
 	private Text urlText = null;
 
@@ -94,7 +91,7 @@ public class FeedPropertiesComposite extends Composite {
 		gridLayout.makeColumnsEqualWidth = false;
 		titleLabel = new Label(this, SWT.NONE);
 		titleLabel.setText(Messages.FeedPropertiesComposite_0);
-		titleText = new Combo(this, SWT.BORDER);
+		titleText = new Text(this, SWT.BORDER);
 		titleText.setToolTipText(Messages.FeedPropertiesComposite_1);
 		titleText.setLayoutData(gridData);
 		titleText
@@ -103,19 +100,6 @@ public class FeedPropertiesComposite extends Composite {
 						feed.setTitle(titleText.getText());
 					}
 				});
-		titleText.addListener(SWT.Selection, new Listener() {
-
-			public void handleEvent(Event event) {
-				if (titleText.getSelectionIndex() >= 0) {
-					urlText.setText(AggregatorPlugin.DEFAULT_FEEDS
-							.get(titleText.getSelectionIndex())[1]);
-				}
-			}
-
-		});
-		for (String[] item : AggregatorPlugin.DEFAULT_FEEDS) {
-			titleText.add(item[0]);
-		}
 		urlLabel = new Label(this, SWT.NONE);
 		urlLabel.setText(Messages.FeedPropertiesComposite_2);
 		urlText = new Text(this, SWT.BORDER);
