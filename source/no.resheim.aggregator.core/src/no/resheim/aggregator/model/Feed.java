@@ -46,8 +46,6 @@ public class Feed extends AbstractAggregatorItem {
 		DAYS
 	}
 
-	protected String userTitle = BLANK_STRING;
-
 	protected String title = BLANK_STRING;
 
 	protected String url = BLANK_STRING;
@@ -65,6 +63,8 @@ public class Feed extends AbstractAggregatorItem {
 	protected long lastUpdate;
 
 	boolean updating;
+
+	boolean hidden;
 
 	private IAggregatorItem parent;
 	private String description;
@@ -100,17 +100,6 @@ public class Feed extends AbstractAggregatorItem {
 	}
 
 	public Feed() {
-	}
-
-	public String getUserTitle() {
-		if (userTitle != null) {
-			return userTitle;
-		} else
-			return BLANK_STRING;
-	}
-
-	public void setUserTitle(String userTitle) {
-		this.userTitle = userTitle;
 	}
 
 	/**
@@ -200,7 +189,6 @@ public class Feed extends AbstractAggregatorItem {
 	 * @param wc
 	 */
 	public void updateFromWorkingCopy(FeedWorkingCopy wc) {
-		this.userTitle = wc.userTitle;
 		this.title = wc.title;
 		this.url = wc.url;
 		this.archiving = wc.archiving;
@@ -208,6 +196,7 @@ public class Feed extends AbstractAggregatorItem {
 		this.archivingDays = wc.archivingDays;
 		this.updateInterval = wc.updateInterval;
 		this.updatePeriod = wc.updatePeriod;
+		this.hidden = wc.hidden;
 	}
 
 	public boolean isUpdating() {
@@ -277,6 +266,14 @@ public class Feed extends AbstractAggregatorItem {
 	@Override
 	public String toString() {
 		return getTitle();
+	}
+
+	public boolean isHidden() {
+		return hidden;
+	}
+
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
 	}
 
 }

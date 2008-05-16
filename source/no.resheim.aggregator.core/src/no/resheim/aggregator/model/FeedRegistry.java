@@ -390,21 +390,21 @@ public class FeedRegistry implements IAggregatorItem {
 			feed.setUUID(UUID.fromString(rs.getString(1)));
 			feed.setParentUUID(UUID.fromString(rs.getString(2)));
 			feed.setTitle(rs.getString(3));
-			feed.setUserTitle(rs.getString(4));
-			feed.setURL(rs.getString(5));
-			feed.setMarks(decode(rs.getString(6)));
-			feed.setArchiving(Archiving.valueOf(rs.getString(7)));
-			feed.setArchivingItems(rs.getInt(8));
-			feed.setArchivingDays(rs.getInt(9));
-			feed.setUpdateInterval(rs.getInt(10));
-			feed.setUpdatePeriod(UpdatePeriod.valueOf(rs.getString(11)));
-			feed.setLastUpdate(rs.getLong(12));
-			feed.setDescription(rs.getString(13));
-			feed.setLink(rs.getString(14));
-			feed.setWebmaster(rs.getString(15));
-			feed.setEditor(rs.getString(16));
-			feed.setCopyright(rs.getString(17));
-			feed.setType(rs.getString(18));
+			feed.setURL(rs.getString(4));
+			feed.setMarks(decode(rs.getString(5)));
+			feed.setArchiving(Archiving.valueOf(rs.getString(6)));
+			feed.setArchivingItems(rs.getInt(7));
+			feed.setArchivingDays(rs.getInt(8));
+			feed.setUpdateInterval(rs.getInt(9));
+			feed.setUpdatePeriod(UpdatePeriod.valueOf(rs.getString(10)));
+			feed.setLastUpdate(rs.getLong(11));
+			feed.setDescription(rs.getString(12));
+			feed.setLink(rs.getString(13));
+			feed.setWebmaster(rs.getString(14));
+			feed.setEditor(rs.getString(15));
+			feed.setCopyright(rs.getString(16));
+			feed.setType(rs.getString(17));
+			feed.setHidden(rs.getInt(18) != 0);
 			return feed;
 		}
 
@@ -532,21 +532,21 @@ public class FeedRegistry implements IAggregatorItem {
 				ps.setString(1, feed.getUUID().toString());
 				ps.setString(2, feed.getParentUUID().toString());
 				ps.setString(3, feed.getTitle()); // title
-				ps.setString(4, feed.getUserTitle()); // user_title
-				ps.setString(5, feed.getURL()); // url;
-				ps.setString(6, encode(feed.getMarks())); // marks
-				ps.setString(7, feed.getArchiving().toString()); // archiving
-				ps.setInt(8, feed.getArchivingItems()); // archiving_items
-				ps.setInt(9, feed.getArchivingDays()); // archiving_days
-				ps.setInt(10, feed.getUpdateInterval()); // update_interval
-				ps.setString(11, feed.getUpdatePeriod().toString()); // update_period
-				ps.setLong(12, feed.getLastUpdate()); // last_update
-				ps.setString(13, feed.getDescription()); // description
-				ps.setString(14, feed.getLink()); // link
-				ps.setString(15, feed.getWebmaster()); // webmaster
-				ps.setString(16, feed.getEditor()); // editor
-				ps.setString(17, feed.getCopyright()); // copyright
-				ps.setString(18, feed.getType()); // feed_type
+				ps.setString(4, feed.getURL()); // url;
+				ps.setString(5, encode(feed.getMarks())); // marks
+				ps.setString(6, feed.getArchiving().toString()); // archiving
+				ps.setInt(7, feed.getArchivingItems()); // archiving_items
+				ps.setInt(8, feed.getArchivingDays()); // archiving_days
+				ps.setInt(9, feed.getUpdateInterval()); // update_interval
+				ps.setString(10, feed.getUpdatePeriod().toString()); // update_period
+				ps.setLong(11, feed.getLastUpdate()); // last_update
+				ps.setString(12, feed.getDescription()); // description
+				ps.setString(13, feed.getLink()); // link
+				ps.setString(14, feed.getWebmaster()); // webmaster
+				ps.setString(15, feed.getEditor()); // editor
+				ps.setString(16, feed.getCopyright()); // copyright
+				ps.setString(17, feed.getType()); // feed_type
+				ps.setInt(18, feed.isHidden() ? 1 : 0);
 				ps.executeUpdate();
 				ps.close();
 			} catch (Exception e) {

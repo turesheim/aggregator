@@ -9,7 +9,6 @@ CREATE TABLE feeds (
         uuid CHAR(36) NOT NULL,
 		parent_uuid CHAR(36) NOT NULL,
 		title VARCHAR(32) NOT NULL,
-		user_title VARCHAR(32) NOT NULL,
 		url VARCHAR(256) NOT NULL,
 		marks VARCHAR(64) NOT NULL,		
 		archiving VARCHAR(32) NOT NULL,			
@@ -23,7 +22,8 @@ CREATE TABLE feeds (
 		webmaster VARCHAR(64),
 		editor VARCHAR(64),
 		copyright VARCHAR(64),
-		feed_type VARCHAR(32) 
+		feed_type VARCHAR(32),
+		hidden INT NOT NULL
 	);
 
 CREATE TABLE articles (

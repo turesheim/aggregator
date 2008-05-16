@@ -20,7 +20,6 @@ public class FeedWorkingCopy extends Feed {
 
 	public FeedWorkingCopy(Feed feed) {
 		this.feed = feed;
-		this.userTitle = feed.userTitle;
 		this.title = feed.title;
 		this.url = feed.url;
 		this.archiving = feed.archiving;
@@ -28,13 +27,13 @@ public class FeedWorkingCopy extends Feed {
 		this.archivingDays = feed.archivingDays;
 		this.updateInterval = feed.updateInterval;
 		this.updatePeriod = feed.updatePeriod;
+		this.hidden = feed.hidden;
 	}
 
 	public Feed getFeed() {
 		if (feed == null) {
 			feed = new Feed();
 		}
-		feed.userTitle = userTitle;
 		feed.title = title;
 		feed.url = url;
 		feed.archiving = archiving;
@@ -44,6 +43,7 @@ public class FeedWorkingCopy extends Feed {
 		feed.updatePeriod = updatePeriod;
 		feed.uuid = uuid;
 		feed.parent_uuid = parent_uuid;
+		feed.hidden = hidden;
 		return feed;
 	}
 
