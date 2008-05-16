@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Aggregator Core UI
+Bundle-SymbolicName: no.resheim.aggregator.core.ui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: no.resheim.aggregator.core.ui.AggregatorUIPlugin
+Bundle-Vendor: Resheim Software
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ no.resheim.aggregator.core,
+ org.eclipse.ui.forms
+Eclipse-LazyStart: true
+Export-Package: no.resheim.aggregator.core.ui,
+ no.resheim.aggregator.core.ui.internal;x-internal:=true,
+ no.resheim.aggregator.core.ui.internal.preferences;x-internal:=true

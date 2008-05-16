@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="no.resheim.aggregator.core.ui.internal.preferences.AggregatorPreferencePage"
+            id="no.resheim.aggregator.ui.preferences.general"
+            name="Aggregator">
+      </page>
+      <page
+            category="no.resheim.aggregator.ui.preferences.general"
+            class="no.resheim.aggregator.core.ui.internal.preferences.UpdatingPreferencePage"
+            id="no.resheim.aggregator.ui.preferences.update"
+            name="Updating">
+      </page>
+      <page
+            category="no.resheim.aggregator.ui.preferences.general"
+            class="no.resheim.aggregator.core.ui.internal.preferences.ArchivingPreferencePage"
+            id="no.resheim.aggregator.ui.preferences.archiving"
+            name="Archiving">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="no.resheim.aggregator.core.ui.internal.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.AddFeedCommandHandler"
+            description="Adds a new feed to the aggregator."
+            id="no.resheim.aggregator.core.ui.addFeed"
+            name="Add Feed">
+      </command>
+      <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.DeleteItemCommandHandler"
+            id="no.resheim.aggregator.core.ui.delete"
+            name="Delete">
+      </command>
+      <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.FeedPropertiesCommandHandler"
+            id="no.resheim.aggregator.core.ui.properties"
+            name="Properties">
+      </command>
+      <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.AddFolderCommandHandler"
+            id="no.resheim.aggregator.core.ui.newFolder"
+            name="Add Folder">
+      </command>
+      <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.UpdateFeedCommandHandler"
+            id="no.resheim.aggregator.core.ui.update"
+            name="Update">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="no.resheim.aggregator.core.ui.addFeed"
+            disabledIcon="icons/dtool16/new_wiz.gif"
+            icon="icons/etool16/new_wiz.gif">
+      </image>
+      <image
+            commandId="no.resheim.aggregator.core.ui.update"
+            disabledIcon="icons/dlcl16/nav_refresh.gif"
+            icon="icons/clcl16/nav_refresh.gif">
+      </image>
+      <image
+            commandId="no.resheim.aggregator.core.ui.newFolder"
+            disabledIcon="icons/dtool16/newfolder_wiz.gif"
+            icon="icons/etool16/newfolder_wiz.gif">
+      </image>
+   </extension>
+
+</plugin>

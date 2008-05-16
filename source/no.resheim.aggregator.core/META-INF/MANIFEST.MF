@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Aggregator Core
+Bundle-SymbolicName: no.resheim.aggregator.core;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: no.resheim.aggregator.AggregatorPlugin
+Bundle-Vendor: Resheim Software
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.core.net
+Eclipse-LazyStart: true
+Bundle-ClassPath: .,
+ lib/derby.jar
+Export-Package: no.resheim.aggregator,
+ no.resheim.aggregator.internal;x-internal:=true,
+ no.resheim.aggregator.internal.rss;x-internal:=true,
+ no.resheim.aggregator.model
