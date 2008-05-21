@@ -38,7 +38,7 @@ public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 			}
 			// Use the selected element
 			FeedCategory folder = new FeedCategory(UUID.randomUUID(),
-					parentUUID, "New folder"); //$NON-NLS-1$
+					parentUUID, Messages.AddFolderCommandHandler_NewFolderName);
 			registry.add(folder);
 		}
 		return null;

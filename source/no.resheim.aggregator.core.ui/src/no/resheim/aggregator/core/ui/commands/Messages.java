@@ -4,6 +4,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "no.resheim.aggregator.core.ui.commands.messages"; //$NON-NLS-1$
+	public static String AddFolderCommandHandler_NewFolderName;
 	public static String FeedPropertiesCommand_CANCEL;
 	public static String FeedPropertiesCommand_Description;
 	public static String FeedPropertiesCommand_OK;
