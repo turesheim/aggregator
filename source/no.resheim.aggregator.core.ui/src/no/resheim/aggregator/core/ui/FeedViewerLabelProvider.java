@@ -30,9 +30,15 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 /**
+ * This label provider will listen to any preference changes and update it's
+ * internal settings accordingly.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
+ */
+/**
+ * @author torkildr
+ * 
  */
 public class FeedViewerLabelProvider extends LabelProvider implements
 		ILabelProvider, IColorProvider, IPropertyChangeListener {
@@ -54,12 +60,11 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 		store.addPropertyChangeListener(this);
 	}
 
-	public String getColumnText(Object element, int columnIndex) {
-		if (columnIndex == 1) {
-		}
-		return null;
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
+	 */
 	public Image getImage(Object element) {
 		if (element instanceof FeedCategory) {
 			return PlatformUI.getWorkbench().getSharedImages().getImage(
@@ -101,10 +106,20 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 		return element.toString();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
+	 */
 	public Color getBackground(Object element) {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
+	 */
 	public Color getForeground(Object element) {
 		if (element instanceof Article) {
 			if (((Article) element).isRead()) {
@@ -125,6 +140,11 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 		super.dispose();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+	 */
 	public void propertyChange(PropertyChangeEvent event) {
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()
 				.getPreferenceStore();
