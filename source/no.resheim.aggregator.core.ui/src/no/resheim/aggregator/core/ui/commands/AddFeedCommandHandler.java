@@ -35,11 +35,12 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 /**
  * Command to add a new feed to the registry. The view where this command is
- * added must implement <i>IFeedView</i> for the command to be able to
+ * added must implement {@link IFeedView} for the command to be able to
  * determine the active feed registry.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
+ * @see IFeedView
  */
 public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 		implements IHandler {

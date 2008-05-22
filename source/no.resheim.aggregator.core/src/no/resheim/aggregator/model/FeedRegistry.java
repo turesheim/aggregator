@@ -708,17 +708,22 @@ public class FeedRegistry implements IAggregatorItem {
 		private void rename(IAggregatorItem item) {
 			String query = null;
 			if (item instanceof FeedCategory) {
-				query = "update categories set title='" + ((FeedCategory) item).getTitle() //$NON-NLS-1$
+				query = "update categories set title='" + item.getTitle() //$NON-NLS-1$
 						+ "' where uuid='" + item.getUUID().toString() + "'"; //$NON-NLS-1$ //$NON-NLS-2$
 			}
-			try {
-				Statement s = connection.createStatement();
-				s.setEscapeProcessing(true);
-				s.executeUpdate(query);
-			} catch (SQLException e) {
-				e.printStackTrace();
+			if (item instanceof Feed) {
+				query = "update feeds set title='" + item.getTitle() //$NON-NLS-1$
+						+ "' where uuid='" + item.getUUID().toString() + "'"; //$NON-NLS-1$ //$NON-NLS-2$
 			}
-
+			if (query != null) {
+				try {
+					Statement s = connection.createStatement();
+					s.setEscapeProcessing(true);
+					s.executeUpdate(query);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -1023,8 +1028,14 @@ public class FeedRegistry implements IAggregatorItem {
 		}
 	}
 
-	public void setRegistry(FeedRegistry registry) {
-		// TODO Auto-generated method stub
+	public FeedRegistry getRegistry() {
+		return this;
+	}
 
+	public void setTitle(String title) {
+	}
+
+	public String getTitle() {
+		return null;
 	}
 }

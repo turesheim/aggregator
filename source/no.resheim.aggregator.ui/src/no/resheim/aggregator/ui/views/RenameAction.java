@@ -11,7 +11,9 @@
  *******************************************************************************/
 package no.resheim.aggregator.ui.views;
 
+import no.resheim.aggregator.model.Feed;
 import no.resheim.aggregator.model.FeedCategory;
+import no.resheim.aggregator.model.IAggregatorItem;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
@@ -27,6 +29,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 
 /**
+ * Action for renaming an item directly inside the tree view. Only categories
+ * (folders) and feeds are supported. Feed articles cannot be renamed.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -49,12 +53,17 @@ public class RenameAction extends Action {
 		if (obj instanceof FeedCategory) {
 			renameItem(treeView.getTree().getSelection()[0], (FeedCategory) obj);
 		}
+		if (obj instanceof Feed) {
+			renameItem(treeView.getTree().getSelection()[0],
+					(IAggregatorItem) obj);
+		}
 	} // run
 
-	private void renameItem(final TreeItem item, final FeedCategory category) {
+	private void renameItem(final TreeItem item,
+			final IAggregatorItem aggregatorItem) {
 		// Create a text field to do the editing
 		final Text text = new Text(treeView.getTree(), SWT.NONE);
-		text.setText(item.getText());
+		text.setText(aggregatorItem.getTitle());
 		text.selectAll();
 		text.setFocus();
 
@@ -63,8 +72,8 @@ public class RenameAction extends Action {
 		text.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent event) {
 				item.setText(text.getText());
-				category.setTitle(text.getText());
-				category.getRegistry().rename(category);
+				aggregatorItem.setTitle(text.getText());
+				aggregatorItem.getRegistry().rename(aggregatorItem);
 				text.dispose();
 			}
 		});
@@ -78,8 +87,8 @@ public class RenameAction extends Action {
 				case SWT.CR:
 					// Enter hit--set the text into the tree and drop through
 					item.setText(text.getText());
-					category.setTitle(text.getText());
-					category.getRegistry().rename(category);
+					aggregatorItem.setTitle(text.getText());
+					aggregatorItem.getRegistry().rename(aggregatorItem);
 				case SWT.ESC:
 					// End editing session
 					text.dispose();
@@ -89,6 +98,13 @@ public class RenameAction extends Action {
 		});
 		// Set the text field into the editor
 		treeEditor.setEditor(text, item);
+	}
+
+	@Override
+	public boolean isEnabled() {
+		ISelection selection = treeView.getSelection();
+		Object obj = ((IStructuredSelection) selection).getFirstElement();
+		return (obj instanceof FeedCategory || obj instanceof Feed);
 	}
 
 }
