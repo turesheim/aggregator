@@ -9,7 +9,7 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.model;
+package no.resheim.aggregator.data;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,9 +21,9 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import no.resheim.aggregator.AggregatorPlugin;
+import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
+import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.internal.FeedParser;
-import no.resheim.aggregator.model.AggregatorItemChangedEvent.FeedChangeEventType;
-import no.resheim.aggregator.model.Feed.Archiving;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;

@@ -9,7 +9,7 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.model;
+package no.resheim.aggregator.data;
 
 /**
  * Feeds are created by the user and immediately inserted into the database,

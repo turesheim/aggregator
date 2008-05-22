@@ -1,7 +1,7 @@
 /****************************************************************************
  *      Copyright (c) 2007 Torkild Ulvøy Resheim. All rights reserved.      *
  ****************************************************************************/
-package no.resheim.aggregator.model;
+package no.resheim.aggregator.data;
 
 /**
  * 

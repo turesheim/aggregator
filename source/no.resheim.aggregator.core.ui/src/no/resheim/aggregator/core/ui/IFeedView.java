@@ -11,7 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import no.resheim.aggregator.model.FeedRegistry;
+import no.resheim.aggregator.data.FeedRegistry;
 
 /**
  * 

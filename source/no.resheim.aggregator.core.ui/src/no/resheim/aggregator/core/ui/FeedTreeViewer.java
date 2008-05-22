@@ -3,8 +3,8 @@
  ****************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import no.resheim.aggregator.model.FeedRegistry;
-import no.resheim.aggregator.model.IAggregatorItem;
+import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IStructuredSelection;

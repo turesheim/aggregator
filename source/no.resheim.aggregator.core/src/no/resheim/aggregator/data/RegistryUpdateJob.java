@@ -9,7 +9,7 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.model;
+package no.resheim.aggregator.data;
 
 import java.util.Collections;
 import java.util.Comparator;

@@ -11,9 +11,9 @@
  *******************************************************************************/
 package no.resheim.aggregator.ui.views;
 
-import no.resheim.aggregator.model.Feed;
-import no.resheim.aggregator.model.FeedCategory;
-import no.resheim.aggregator.model.IAggregatorItem;
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedCategory;
+import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;

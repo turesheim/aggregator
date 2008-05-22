@@ -13,7 +13,7 @@ package no.resheim.aggregator.core.ui.internal.preferences;
 
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
-import no.resheim.aggregator.model.Feed.UpdatePeriod;
+import no.resheim.aggregator.data.Feed.UpdatePeriod;
 
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;

@@ -1,4 +1,4 @@
-package no.resheim.aggregator.model;
+package no.resheim.aggregator.data;
 
 /**
  * This event type is used to add information to feed changed events.

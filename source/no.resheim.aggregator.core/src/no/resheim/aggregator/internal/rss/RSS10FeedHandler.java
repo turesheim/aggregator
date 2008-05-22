@@ -11,8 +11,8 @@
  *******************************************************************************/
 package no.resheim.aggregator.internal.rss;
 
-import no.resheim.aggregator.model.Feed;
-import no.resheim.aggregator.model.FeedRegistry;
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedRegistry;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

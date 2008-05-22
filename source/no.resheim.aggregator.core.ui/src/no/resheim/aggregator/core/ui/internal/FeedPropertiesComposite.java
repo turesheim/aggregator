@@ -11,9 +11,9 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal;
 
-import no.resheim.aggregator.model.Feed;
-import no.resheim.aggregator.model.Feed.Archiving;
-import no.resheim.aggregator.model.Feed.UpdatePeriod;
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.Feed.Archiving;
+import no.resheim.aggregator.data.Feed.UpdatePeriod;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;

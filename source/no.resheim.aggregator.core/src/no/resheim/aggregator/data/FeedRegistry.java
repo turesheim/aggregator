@@ -8,7 +8,7 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.model;
+package no.resheim.aggregator.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,8 +16,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import no.resheim.aggregator.IAggregatorStorage;
-import no.resheim.aggregator.model.AggregatorItemChangedEvent.FeedChangeEventType;
-import no.resheim.aggregator.model.Feed.Archiving;
+import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
+import no.resheim.aggregator.data.Feed.Archiving;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;

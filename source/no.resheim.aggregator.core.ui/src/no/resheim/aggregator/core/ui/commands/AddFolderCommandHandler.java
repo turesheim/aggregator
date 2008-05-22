@@ -14,9 +14,9 @@ package no.resheim.aggregator.core.ui.commands;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.ui.IFeedView;
-import no.resheim.aggregator.model.FeedCategory;
-import no.resheim.aggregator.model.FeedRegistry;
-import no.resheim.aggregator.model.IAggregatorItem;
+import no.resheim.aggregator.data.FeedCategory;
+import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;

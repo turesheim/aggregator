@@ -13,10 +13,10 @@ package no.resheim.aggregator.internal;
 
 import java.util.Stack;
 
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedRegistry;
 import no.resheim.aggregator.internal.rss.IElementHandler;
 import no.resheim.aggregator.internal.rss.RSSFeedHandler;
-import no.resheim.aggregator.model.Feed;
-import no.resheim.aggregator.model.FeedRegistry;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

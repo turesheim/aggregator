@@ -12,7 +12,7 @@
 
 package no.resheim.aggregator.core.ui.internal;
 
-import no.resheim.aggregator.model.Feed;
+import no.resheim.aggregator.data.Feed;
 
 public class FeedDescriptionFormatter {
 

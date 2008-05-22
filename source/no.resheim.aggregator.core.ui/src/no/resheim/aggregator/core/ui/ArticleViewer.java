@@ -10,9 +10,9 @@ import java.util.Date;
 import no.resheim.aggregator.core.ui.internal.FeedDescriptionFormatter;
 import no.resheim.aggregator.core.ui.internal.FeedItemTitle;
 import no.resheim.aggregator.core.ui.internal.FeedViewWidgetFactory;
-import no.resheim.aggregator.model.Article;
-import no.resheim.aggregator.model.Feed;
-import no.resheim.aggregator.model.IAggregatorItem;
+import no.resheim.aggregator.data.Article;
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;

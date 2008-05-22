@@ -12,13 +12,13 @@
 
 package no.resheim.aggregator.core.ui;
 
-import no.resheim.aggregator.model.AggregatorItemChangedEvent;
-import no.resheim.aggregator.model.Article;
-import no.resheim.aggregator.model.Feed;
-import no.resheim.aggregator.model.FeedCategory;
-import no.resheim.aggregator.model.FeedListener;
-import no.resheim.aggregator.model.FeedRegistry;
-import no.resheim.aggregator.model.IAggregatorItem;
+import no.resheim.aggregator.data.AggregatorItemChangedEvent;
+import no.resheim.aggregator.data.Article;
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedCategory;
+import no.resheim.aggregator.data.FeedListener;
+import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.jface.viewers.IBasicPropertyConstants;
 import org.eclipse.jface.viewers.IStructuredContentProvider;

@@ -12,9 +12,9 @@
 package no.resheim.aggregator.core.ui;
 
 import no.resheim.aggregator.AggregatorPlugin;
-import no.resheim.aggregator.model.Article;
-import no.resheim.aggregator.model.Feed;
-import no.resheim.aggregator.model.FeedCategory;
+import no.resheim.aggregator.data.Article;
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedCategory;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;

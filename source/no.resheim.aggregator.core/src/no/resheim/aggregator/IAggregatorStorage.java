@@ -3,9 +3,9 @@ package no.resheim.aggregator;
 import java.util.HashMap;
 import java.util.UUID;
 
-import no.resheim.aggregator.model.Article;
-import no.resheim.aggregator.model.Feed;
-import no.resheim.aggregator.model.IAggregatorItem;
+import no.resheim.aggregator.data.Article;
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;

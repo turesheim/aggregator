@@ -13,9 +13,9 @@ package no.resheim.aggregator.core.ui;
 
 import no.resheim.aggregator.core.ui.internal.NewFeedWizardGeneralPage;
 import no.resheim.aggregator.core.ui.internal.NewFeedWizardOptionsPage;
-import no.resheim.aggregator.model.Feed;
-import no.resheim.aggregator.model.FeedRegistry;
-import no.resheim.aggregator.model.FeedWorkingCopy;
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedWorkingCopy;
 
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;

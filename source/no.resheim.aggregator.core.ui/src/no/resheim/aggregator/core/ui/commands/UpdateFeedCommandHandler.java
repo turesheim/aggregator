@@ -12,9 +12,9 @@
 package no.resheim.aggregator.core.ui.commands;
 
 import no.resheim.aggregator.core.ui.IFeedView;
-import no.resheim.aggregator.model.Feed;
-import no.resheim.aggregator.model.FeedRegistry;
-import no.resheim.aggregator.model.IAggregatorItem;
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;

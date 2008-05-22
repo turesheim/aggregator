@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import no.resheim.aggregator.model.DerbySQLStorage;
-import no.resheim.aggregator.model.FeedRegistry;
+import no.resheim.aggregator.data.DerbySQLStorage;
+import no.resheim.aggregator.data.FeedRegistry;
 
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.FileLocator;

@@ -12,6 +12,6 @@ Eclipse-LazyStart: true
 Bundle-ClassPath: .,
  lib/derby.jar
 Export-Package: no.resheim.aggregator,
+ no.resheim.aggregator.data,
  no.resheim.aggregator.internal;x-internal:=true,
- no.resheim.aggregator.internal.rss;x-internal:=true,
- no.resheim.aggregator.model
+ no.resheim.aggregator.internal.rss;x-internal:=true

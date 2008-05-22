@@ -21,10 +21,10 @@ import no.resheim.aggregator.core.ui.FeedViewerContentProvider;
 import no.resheim.aggregator.core.ui.FeedViewerLabelProvider;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
-import no.resheim.aggregator.model.Article;
-import no.resheim.aggregator.model.Feed;
-import no.resheim.aggregator.model.FeedCategory;
-import no.resheim.aggregator.model.FeedRegistry;
+import no.resheim.aggregator.data.Article;
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedCategory;
+import no.resheim.aggregator.data.FeedRegistry;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;

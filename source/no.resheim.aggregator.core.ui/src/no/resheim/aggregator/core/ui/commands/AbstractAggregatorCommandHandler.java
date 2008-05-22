@@ -3,7 +3,7 @@
  */
 package no.resheim.aggregator.core.ui.commands;
 
-import no.resheim.aggregator.model.IAggregatorItem;
+import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;

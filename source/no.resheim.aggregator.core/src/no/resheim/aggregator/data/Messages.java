@@ -1,4 +1,4 @@
-package no.resheim.aggregator.model;
+package no.resheim.aggregator.data;
 
 import org.eclipse.osgi.util.NLS;
 

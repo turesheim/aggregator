@@ -1,4 +1,4 @@
-package no.resheim.aggregator.model;
+package no.resheim.aggregator.data;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,9 +18,9 @@ import java.util.UUID;
 
 import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.IAggregatorStorage;
-import no.resheim.aggregator.model.AbstractAggregatorItem.Mark;
-import no.resheim.aggregator.model.Feed.Archiving;
-import no.resheim.aggregator.model.Feed.UpdatePeriod;
+import no.resheim.aggregator.data.AbstractAggregatorItem.Mark;
+import no.resheim.aggregator.data.Feed.Archiving;
+import no.resheim.aggregator.data.Feed.UpdatePeriod;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
