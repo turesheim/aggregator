@@ -211,7 +211,7 @@ public class Feed extends AbstractAggregatorItem {
 		return parent;
 	}
 
-	void setParent(IAggregatorItem parent) {
+	public void setParent(IAggregatorItem parent) {
 		this.parent = parent;
 	}
 

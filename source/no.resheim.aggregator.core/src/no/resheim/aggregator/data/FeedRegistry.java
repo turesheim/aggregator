@@ -56,7 +56,7 @@ public class FeedRegistry implements IAggregatorItem {
 	 * 
 	 * @param storage
 	 */
-	public void load(IAggregatorStorage storage) {
+	public void initialize(IAggregatorStorage storage) {
 		this.database = storage;
 		sites = storage.initializeFeeds();
 		// Start a new update job that will periodically wake up and create

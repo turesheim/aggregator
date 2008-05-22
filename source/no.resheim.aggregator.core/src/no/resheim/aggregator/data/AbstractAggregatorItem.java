@@ -41,7 +41,7 @@ public abstract class AbstractAggregatorItem implements IAggregatorItem {
 	 * 
 	 * @param uuid
 	 */
-	protected void setUUID(UUID uuid) {
+	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
 	}
 
@@ -59,7 +59,7 @@ public abstract class AbstractAggregatorItem implements IAggregatorItem {
 	 * 
 	 * @param parent_uuid
 	 */
-	protected void setParentUUID(UUID parent_uuid) {
+	public void setParentUUID(UUID parent_uuid) {
 		this.parent_uuid = parent_uuid;
 	}
 
@@ -67,7 +67,7 @@ public abstract class AbstractAggregatorItem implements IAggregatorItem {
 		return registry;
 	}
 
-	protected void setRegistry(FeedRegistry registry) {
+	public void setRegistry(FeedRegistry registry) {
 		this.registry = registry;
 	}
 

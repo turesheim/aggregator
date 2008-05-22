@@ -1,4 +1,4 @@
-package no.resheim.aggregator.data;
+package no.resheim.aggregator.data.internal;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,6 +18,11 @@ import java.util.UUID;
 
 import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.IAggregatorStorage;
+import no.resheim.aggregator.data.Article;
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedCategory;
+import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.IAggregatorItem;
 import no.resheim.aggregator.data.AbstractAggregatorItem.Mark;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;

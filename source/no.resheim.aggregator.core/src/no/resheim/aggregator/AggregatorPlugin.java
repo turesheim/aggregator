@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import no.resheim.aggregator.data.DerbySQLStorage;
 import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.internal.DerbySQLStorage;
 
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.FileLocator;
@@ -90,7 +90,7 @@ public class AggregatorPlugin extends Plugin {
 		registry = new FeedRegistry(DEFAULT_ID);
 		storage = new DerbySQLStorage(registry, getStorageLocation(registry));
 		storage.startup(new NullProgressMonitor());
-		registry.load(storage);
+		registry.initialize(storage);
 
 		// Read in all the default feeds.
 		InputStream is = FileLocator.openStream(this.getBundle(), new Path(

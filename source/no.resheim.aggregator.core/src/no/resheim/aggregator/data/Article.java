@@ -69,7 +69,7 @@ public class Article extends AbstractAggregatorItem implements IAggregatorItem {
 	 * 
 	 * @return the description
 	 */
-	String getDescription() {
+	public String getDescription() {
 		return description;
 	}
 
@@ -127,7 +127,7 @@ public class Article extends AbstractAggregatorItem implements IAggregatorItem {
 		return read;
 	}
 
-	boolean isValid() {
+	public boolean isValid() {
 		if (title == null || link == null || description == null
 				|| guid == null) {
 			return false;
@@ -207,7 +207,7 @@ public class Article extends AbstractAggregatorItem implements IAggregatorItem {
 	 * @param read
 	 *            <b>true</b> if the feed item has been read
 	 */
-	void setRead(boolean read) {
+	public void setRead(boolean read) {
 		this.read = read;
 	}
 
