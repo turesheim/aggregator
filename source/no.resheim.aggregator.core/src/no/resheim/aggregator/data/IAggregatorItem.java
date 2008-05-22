@@ -4,6 +4,11 @@ import java.util.UUID;
 
 public interface IAggregatorItem {
 
+	/**
+	 * Returns the parent of this item.
+	 * 
+	 * @return
+	 */
 	public abstract IAggregatorItem getParent();
 
 	/**
@@ -14,20 +19,25 @@ public interface IAggregatorItem {
 	public abstract UUID getUUID();
 
 	/**
-	 * Returns the registry instance of which this aggregator item belongs.
+	 * Returns the feed registry instance of which this item belongs.
 	 * 
 	 * @return The feed registry
 	 */
 	public abstract FeedRegistry getRegistry();
 
 	/**
-	 * Sets a new title for the aggregator item
+	 * Sets a new title for the item.
 	 * 
 	 * @param title
 	 *            The new title
 	 */
 	public abstract void setTitle(String title);
 
+	/**
+	 * Returns the title of the item.
+	 * 
+	 * @return The title string
+	 */
 	public abstract String getTitle();
 
 }
