@@ -1,11 +1,11 @@
 package no.resheim.aggregator.data.internal;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -520,7 +520,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			Class.forName(DB_DRIVER).newInstance();
 			connection = DriverManager.getConnection(JDBC_DERBY
 					+ path.toOSString() + CONNECT_OPTIONS);
-			if (!new File(path.toOSString()).exists()) {
+			DatabaseMetaData metadata = connection.getMetaData();
+			ResultSet rs = metadata.getTables(null, "APP", "FEEDS", null); //$NON-NLS-1$ //$NON-NLS-2$
+			if (!rs.next()) {
 				return createTables();
 			}
 		} catch (Exception e) {
