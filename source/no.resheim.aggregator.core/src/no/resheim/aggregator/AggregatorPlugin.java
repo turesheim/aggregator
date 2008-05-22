@@ -1,23 +1,32 @@
 package no.resheim.aggregator;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
+import no.resheim.aggregator.model.DerbySQLStorage;
 import no.resheim.aggregator.model.FeedRegistry;
 
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * The aggregator plug-in. This type is responsible for maintaning feed states
- * and notify listeners about any changes.
+ * This type is responsible for handling the feed registries that contains the
+ * actual feeds while managing the life cycle of the storage backend for these
+ * registries.
+ * <p>
+ * Once a feed registry has been declared, it can be retrieved from this plug-in
+ * using the registry's unique identifier.
+ * </p>
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -30,8 +39,18 @@ public class AggregatorPlugin extends Plugin {
 	/** The shared plug-in instance */
 	private static AggregatorPlugin plugin = null;
 
+	private static final UUID DEFAULT_ID = UUID
+			.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"); //$NON-NLS-1$
+
 	/** The feed registry that the plug-in is using */
 	private static FeedRegistry registry;
+	private static IAggregatorStorage storage;
+	/**
+	 * Registries are declared using a symbolic name, for instance
+	 * "com.foo.bar.registry". This member is used to map between the symbolic
+	 * name and the universally unique identifier that is required internally.
+	 */
+	private HashMap<String, UUID> registryMap;
 
 	/** Default feeds to add */
 	public static ArrayList<String[]> DEFAULT_FEEDS;
@@ -68,7 +87,10 @@ public class AggregatorPlugin extends Plugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		// Create a default feed registry
-		registry = new FeedRegistry();
+		registry = new FeedRegistry(DEFAULT_ID);
+		storage = new DerbySQLStorage(registry, getStorageLocation(registry));
+		storage.startup(new NullProgressMonitor());
+		registry.load(storage);
 
 		// Read in all the default feeds.
 		InputStream is = FileLocator.openStream(this.getBundle(), new Path(
@@ -92,7 +114,7 @@ public class AggregatorPlugin extends Plugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		registry.shutdown();
+		storage.shutdown();
 		super.stop(context);
 	}
 
@@ -119,7 +141,7 @@ public class AggregatorPlugin extends Plugin {
 	 * 
 	 * @return A pointer to the Aggregator configuration directory
 	 */
-	public File getConfigDir() {
+	private IPath getStorageLocation(FeedRegistry registry) {
 		// Location location = Platform.getConfigurationLocation();
 		// if (location != null) {
 		// URL configURL = location.getURL();
@@ -132,7 +154,8 @@ public class AggregatorPlugin extends Plugin {
 		// If the configuration directory is read-only,
 		// then return an alternate location
 		// rather than null or throwing an Exception.
-		return getStateLocation().toFile();
+		return getStateLocation().makeAbsolute().addTrailingSeparator().append(
+				registry.getUUID().toString());
 	}
 
 	public boolean isDebugging() {
