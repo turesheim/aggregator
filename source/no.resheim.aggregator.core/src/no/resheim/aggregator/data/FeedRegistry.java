@@ -203,11 +203,28 @@ public class FeedRegistry implements IAggregatorItem {
 		return database.getDescription(item);
 	}
 
-	public void setRead(Article item) {
-		item.setRead(true);
-		database.updateReadFlag(item);
-		notifyListerners(new AggregatorItemChangedEvent(item,
-				FeedChangeEventType.READ));
+	/**
+	 * Indicates that the given item has been read. If the item is an article
+	 * only the article is marked as read. If the item is a feed or folder the
+	 * contained articles are marked as read.
+	 * 
+	 * @param item
+	 */
+	public void setRead(IAggregatorItem item) {
+		if (item instanceof Article) {
+			((Article) item).setRead(true);
+			database.updateReadFlag(item);
+			notifyListerners(new AggregatorItemChangedEvent(item,
+					FeedChangeEventType.READ));
+		} else {
+			database.updateReadFlag(item);
+			IAggregatorItem[] children = getChildren(item);
+			for (IAggregatorItem child : children) {
+				if (child instanceof Article)
+					notifyListerners(new AggregatorItemChangedEvent(child,
+							FeedChangeEventType.READ));
+			}
+		}
 	}
 
 	/**

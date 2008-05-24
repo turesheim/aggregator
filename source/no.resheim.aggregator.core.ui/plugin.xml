@@ -55,6 +55,11 @@
             id="no.resheim.aggregator.core.ui.update"
             name="Update">
       </command>
+      <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.SetReadCommandHandler"
+            id="no.resheim.aggregator.core.ui.setRead"
+            name="Mark As Read">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">

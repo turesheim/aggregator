@@ -58,6 +58,10 @@
                commandId="no.resheim.aggregator.core.ui.properties"
                label="Properties">
          </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.setRead"
+               label="Mark As Read">
+         </command>
       </menuContribution>
    </extension>
 

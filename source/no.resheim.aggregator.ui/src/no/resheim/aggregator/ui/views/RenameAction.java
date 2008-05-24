@@ -50,13 +50,7 @@ public class RenameAction extends Action {
 	public void run() {
 		ISelection selection = treeView.getSelection();
 		Object obj = ((IStructuredSelection) selection).getFirstElement();
-		if (obj instanceof FeedCategory) {
-			renameItem(treeView.getTree().getSelection()[0], (FeedCategory) obj);
-		}
-		if (obj instanceof Feed) {
-			renameItem(treeView.getTree().getSelection()[0],
-					(IAggregatorItem) obj);
-		}
+		renameItem(treeView.getTree().getSelection()[0], (IAggregatorItem) obj);
 	} // run
 
 	private void renameItem(final TreeItem item,

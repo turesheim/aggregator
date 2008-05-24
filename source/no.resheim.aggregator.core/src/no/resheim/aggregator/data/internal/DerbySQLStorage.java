@@ -723,12 +723,18 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 * 
 	 * @see no.resheim.aggregator.model.IAggregatorStorage#updateReadFlag(no.resheim.aggregator.model.Article)
 	 */
-	public void updateReadFlag(Article item) {
+	public void updateReadFlag(IAggregatorItem item) {
 		try {
 			Statement s = connection.createStatement();
 			s.setEscapeProcessing(true);
-			s.executeUpdate("update articles set is_read=1 where guid='" //$NON-NLS-1$
-					+ item.getGuid() + "'"); //$NON-NLS-1$
+			if (item instanceof Article) {
+				s.executeUpdate("update articles set is_read=1 where uuid='" //$NON-NLS-1$
+						+ item.getUUID() + "'"); //$NON-NLS-1$
+			} else if (item instanceof FeedCategory || item instanceof Feed) {
+				s
+						.executeUpdate("update articles set is_read=1 where parent_uuid='" //$NON-NLS-1$
+								+ item.getUUID() + "'"); //$NON-NLS-1$				
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

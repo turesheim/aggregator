@@ -63,6 +63,7 @@ public abstract class AbstractAggregatorItem implements IAggregatorItem {
 		this.parent_uuid = parent_uuid;
 	}
 
+	// XXX: Should be not need to expose this
 	public FeedRegistry getRegistry() {
 		return registry;
 	}

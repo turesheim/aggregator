@@ -142,6 +142,6 @@ public interface IAggregatorStorage {
 	 * @param item
 	 *            The item to update
 	 */
-	public abstract void updateReadFlag(Article item);
+	public abstract void updateReadFlag(IAggregatorItem item);
 
 }
