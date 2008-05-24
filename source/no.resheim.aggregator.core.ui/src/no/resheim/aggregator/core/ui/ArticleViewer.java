@@ -1,7 +1,14 @@
-/****************************************************************************
- *   Copyright (c) 2007-2008 Torkild Ulvøy Resheim. All rights reserved.    *
- ****************************************************************************/
-
+/*******************************************************************************
+ * Copyright (c) 2007-2008 Torkild Ulvøy Resheim.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Torkild Ulvøy Resheim - initial API and implementation
+ *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
 import java.text.MessageFormat;
@@ -113,14 +120,15 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		title.setTitle(item.getTitle(), null);
 		browser.setText(description.toString());
 		if (item.getPublicationDate() > 0) {
-			setStatusText(MessageFormat.format(Messages.ArticleViewer_Published,
-					new Object[] {
+			setStatusText(MessageFormat.format(
+					Messages.ArticleViewer_Published, new Object[] {
 							new Date(item.getPublicationDate()),
 							item.getCreator()
 					}));
 		} else {
 			setStatusText(MessageFormat.format(
-					Messages.ArticleViewer_UnknownPublicationDate, new Object[] {
+					Messages.ArticleViewer_UnknownPublicationDate,
+					new Object[] {
 						new Date(item.getAdded())
 					}));
 		}
@@ -132,8 +140,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		browser.setText(FeedDescriptionFormatter.format(feed,
 				pPresentationFontFamily, pPresentationFontSize));
 		title.setTitle(feed.getTitle(), null);
-		setStatusText(MessageFormat.format(
-				Messages.ArticleViewer_Updated,
+		setStatusText(MessageFormat.format(Messages.ArticleViewer_Updated,
 				new Object[] {
 						feed.getTitle(), new Date(feed.getLastUpdate()),
 						new Date(feed.getLastUpdate() + feed.getUpdateTime())

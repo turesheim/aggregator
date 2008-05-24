@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2007-2008 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,15 +9,14 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-
 package no.resheim.aggregator.core.ui;
 
 import no.resheim.aggregator.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.FeedListener;
 import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.jface.viewers.IBasicPropertyConstants;
