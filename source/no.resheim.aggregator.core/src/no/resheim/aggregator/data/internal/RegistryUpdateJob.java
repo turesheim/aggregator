@@ -9,11 +9,15 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.data;
+package no.resheim.aggregator.data.internal;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Stack;
+
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedUpdateJob;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -21,6 +25,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
+ * Job that when run will iterate through all feeds that are held by the
+ * registry, determine if the feed needs to be updated and if that's the case
+ * create a new job to update the feed.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -39,7 +46,7 @@ public class RegistryUpdateJob extends Job {
 	}
 
 	public RegistryUpdateJob(FeedRegistry registry) {
-		super("Periodic feed update"); //$NON-NLS-1$
+		super(Messages.RegistryUpdateJob_Label);
 		this.registry = registry;
 	}
 

@@ -18,6 +18,7 @@ import java.util.UUID;
 import no.resheim.aggregator.IAggregatorStorage;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
 import no.resheim.aggregator.data.Feed.Archiving;
+import no.resheim.aggregator.data.internal.RegistryUpdateJob;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
