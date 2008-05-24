@@ -52,8 +52,11 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 			NewFeedWizard wizard = new NewFeedWizard(registry);
 			UUID parentUUID = registry.getUUID();
 			IAggregatorItem item = getSelection(event);
-			if (item != null)
-				parentUUID = item.getUUID();
+			String selectionRoot = event.getParameter("selectionRoot"); //$NON-NLS-1$
+			if (selectionRoot != null && selectionRoot.equals("true")) { //$NON-NLS-1$
+				if (item != null)
+					parentUUID = item.getUUID();
+			}
 			FeedWorkingCopy wc = new FeedWorkingCopy(UUID.randomUUID(),
 					parentUUID);
 			// Initialize with default values from the preference store.
@@ -84,7 +87,6 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 					.getActiveShell(event), wizard);
 			dialog.create();
 			if (dialog.open() == Window.OK) {
-				// Create a new UUI and assign the parent UUID
 				registry.add(wizard.getFeed());
 			}
 		}
