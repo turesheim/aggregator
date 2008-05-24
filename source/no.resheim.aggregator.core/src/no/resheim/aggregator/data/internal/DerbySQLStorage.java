@@ -20,7 +20,7 @@ import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.IAggregatorStorage;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedCategory;
+import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.FeedRegistry;
 import no.resheim.aggregator.data.IAggregatorItem;
 import no.resheim.aggregator.data.AbstractAggregatorItem.Mark;
@@ -214,14 +214,14 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 * @see no.resheim.aggregator.model.IAggregatorStorage#delete(no.resheim.aggregator.model.IAggregatorItem)
 	 */
 	public void delete(IAggregatorItem item) {
-		if (item instanceof FeedCategory) {
+		if (item instanceof Folder) {
 			try {
 				Statement s = connection.createStatement();
-				s.executeUpdate("delete from categories where uuid='" //$NON-NLS-1$
+				s.executeUpdate("delete from folders where uuid='" //$NON-NLS-1$
 						+ item.getUUID().toString() + "'"); //$NON-NLS-1$
 				s.executeUpdate("delete from articles where parent_uuid='" //$NON-NLS-1$
 						+ item.getUUID().toString() + "'"); //$NON-NLS-1$
-				s.executeUpdate("delete from categories where parent_uuid='" //$NON-NLS-1$
+				s.executeUpdate("delete from folders where parent_uuid='" //$NON-NLS-1$
 						+ item.getUUID().toString() + "'"); //$NON-NLS-1$
 				s.executeUpdate("delete from feeds where parent_uuid='" //$NON-NLS-1$
 						+ item.getUUID().toString() + "'"); //$NON-NLS-1$
@@ -237,7 +237,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 						+ item.getUUID().toString() + "'"); //$NON-NLS-1$
 				s.executeUpdate("delete from articles where parent_uuid='" //$NON-NLS-1$
 						+ item.getUUID().toString() + "'"); //$NON-NLS-1$
-				s.executeUpdate("delete from categories where parent_uuid='" //$NON-NLS-1$
+				s.executeUpdate("delete from folders where parent_uuid='" //$NON-NLS-1$
 						+ item.getUUID().toString() + "'"); //$NON-NLS-1$
 				s.executeUpdate("delete from feeds where parent_uuid='" //$NON-NLS-1$
 						+ item.getUUID().toString() + "'"); //$NON-NLS-1$
@@ -358,8 +358,8 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	public void add(IAggregatorItem item) {
 		if (item instanceof Article)
 			insert((Article) item);
-		if (item instanceof FeedCategory)
-			insert((FeedCategory) item);
+		if (item instanceof Folder)
+			insert((Folder) item);
 		if (item instanceof Feed)
 			insert((Feed) item);
 	}
@@ -442,9 +442,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 * @param item
 	 *            The item to insert.
 	 */
-	private void insert(FeedCategory category) {
+	private void insert(Folder category) {
 		StringBuffer sb = new StringBuffer();
-		sb.append("insert into categories values ("); //$NON-NLS-1$
+		sb.append("insert into folders values ("); //$NON-NLS-1$
 		addString(sb, category.getUUID().toString(), false);
 		addString(sb, category.getParentUUID().toString(), true);
 		addString(sb, category.getTitle(), true);
@@ -539,8 +539,8 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 */
 	public void rename(IAggregatorItem item) {
 		String query = null;
-		if (item instanceof FeedCategory) {
-			query = "update categories set title='" + item.getTitle() //$NON-NLS-1$
+		if (item instanceof Folder) {
+			query = "update folders set title='" + item.getTitle() //$NON-NLS-1$
 					+ "' where uuid='" + item.getUUID().toString() + "'"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		if (item instanceof Feed) {
@@ -570,11 +570,11 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			ArrayList<IAggregatorItem> feeds) throws SQLException {
 		Statement s = connection.createStatement();
 		String query = null;
-		query = "select * from categories where parent_uuid='" //$NON-NLS-1$
+		query = "select * from folders where parent_uuid='" //$NON-NLS-1$
 				+ item.getUUID().toString() + "'"; //$NON-NLS-1$
 		ResultSet rs = s.executeQuery(query);
 		while (rs.next()) {
-			FeedCategory folder = new FeedCategory(UUID.fromString(rs
+			Folder folder = new Folder(UUID.fromString(rs
 					.getString(1)), UUID.fromString(rs.getString(2)), rs
 					.getString(3));
 			folder.setParent(item);
@@ -730,7 +730,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			if (item instanceof Article) {
 				s.executeUpdate("update articles set is_read=1 where uuid='" //$NON-NLS-1$
 						+ item.getUUID() + "'"); //$NON-NLS-1$
-			} else if (item instanceof FeedCategory || item instanceof Feed) {
+			} else if (item instanceof Folder || item instanceof Feed) {
 				s
 						.executeUpdate("update articles set is_read=1 where parent_uuid='" //$NON-NLS-1$
 								+ item.getUUID() + "'"); //$NON-NLS-1$				

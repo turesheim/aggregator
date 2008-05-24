@@ -23,7 +23,7 @@ import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedCategory;
+import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.FeedRegistry;
 
 import org.eclipse.jface.action.Action;
@@ -267,7 +267,7 @@ public class RSSView extends ViewPart implements IFeedView {
 		drillDownAdapter.addNavigationActions(manager);
 		ISelection selection = treeView.getSelection();
 		Object obj = ((IStructuredSelection) selection).getFirstElement();
-		renameAction.setEnabled(obj instanceof FeedCategory);
+		renameAction.setEnabled(obj instanceof Folder);
 	}
 
 	/**
@@ -293,7 +293,7 @@ public class RSSView extends ViewPart implements IFeedView {
 				Object obj = ((IStructuredSelection) selection)
 						.getFirstElement();
 				String url = BLANK;
-				if (obj instanceof FeedCategory)
+				if (obj instanceof Folder)
 					return;
 				if (obj instanceof Feed)
 					url = ((Feed) obj).getURL();

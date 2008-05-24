@@ -18,7 +18,7 @@ import java.util.UUID;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class FeedCategory extends AbstractAggregatorItem {
+public class Folder extends AbstractAggregatorItem {
 	String title;
 
 	private IAggregatorItem parent;
@@ -27,7 +27,7 @@ public class FeedCategory extends AbstractAggregatorItem {
 	 * @param registryId
 	 * @param title
 	 */
-	public FeedCategory(UUID uuid, UUID parentUuid, String title) {
+	public Folder(UUID uuid, UUID parentUuid, String title) {
 		super();
 		this.parent_uuid = parentUuid;
 		this.uuid = uuid;

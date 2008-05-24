@@ -1,4 +1,4 @@
-CREATE TABLE categories (
+CREATE TABLE folders (
 		uuid CHAR(36) NOT NULL,
 		parent_uuid CHAR(36),
         title VARCHAR(32) NOT NULL,
@@ -43,12 +43,12 @@ CREATE TABLE articles (
 	);
 
 /* Selection, tree browsing */
-CREATE INDEX categories_parent ON categories (parent_uuid,uuid);
+CREATE INDEX folders_parent ON folders (parent_uuid,uuid);
 CREATE INDEX feeds_parent ON feeds (parent_uuid,uuid);
 CREATE INDEX articles_parent ON articles (parent_uuid,uuid);
 
 /* Unique index */
-CREATE INDEX categories_id ON categories (uuid);
+CREATE INDEX folders_id ON folders (uuid);
 CREATE INDEX feeds_id ON feeds (uuid);
 CREATE INDEX articles_id ON articles (uuid);
 

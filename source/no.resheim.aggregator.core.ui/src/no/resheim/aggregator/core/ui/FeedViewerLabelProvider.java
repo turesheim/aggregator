@@ -14,7 +14,7 @@ package no.resheim.aggregator.core.ui;
 import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedCategory;
+import no.resheim.aggregator.data.Folder;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -66,7 +66,7 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
 	 */
 	public Image getImage(Object element) {
-		if (element instanceof FeedCategory) {
+		if (element instanceof Folder) {
 			return PlatformUI.getWorkbench().getSharedImages().getImage(
 					ISharedImages.IMG_OBJ_FOLDER);
 		}
@@ -100,8 +100,8 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 		if (element instanceof Article)
 			return ((Article) element).getTitle();
 
-		if (element instanceof FeedCategory)
-			return ((FeedCategory) element).getTitle();
+		if (element instanceof Folder)
+			return ((Folder) element).getTitle();
 		// Fallback, should never happen
 		return element.toString();
 	}

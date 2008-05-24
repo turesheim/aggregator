@@ -15,7 +15,7 @@ package no.resheim.aggregator.core.ui;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedCategory;
+import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.FeedListener;
 import no.resheim.aggregator.data.FeedRegistry;
 import no.resheim.aggregator.data.IAggregatorItem;
@@ -125,7 +125,7 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 						break;
 					default:
 						if (event.getItem() instanceof Feed
-								|| event.getItem() instanceof FeedCategory)
+								|| event.getItem() instanceof Folder)
 							treeView.refresh();
 						break;
 					}

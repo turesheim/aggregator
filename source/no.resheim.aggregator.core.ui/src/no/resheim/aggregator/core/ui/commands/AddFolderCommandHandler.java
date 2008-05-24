@@ -14,7 +14,7 @@ package no.resheim.aggregator.core.ui.commands;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.ui.IFeedView;
-import no.resheim.aggregator.data.FeedCategory;
+import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.FeedRegistry;
 import no.resheim.aggregator.data.IAggregatorItem;
 
@@ -37,7 +37,7 @@ public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 				parentUUID = item.getUUID();
 			}
 			// Use the selected element
-			FeedCategory folder = new FeedCategory(UUID.randomUUID(),
+			Folder folder = new Folder(UUID.randomUUID(),
 					parentUUID, Messages.AddFolderCommandHandler_NewFolderName);
 			registry.add(folder);
 		}

@@ -88,8 +88,8 @@ public class FeedRegistry implements IAggregatorItem {
 				// Schedule an update immediately
 				FeedUpdateJob j = new FeedUpdateJob(this, feed);
 				j.schedule();
-			} else if (item instanceof FeedCategory) {
-				FeedCategory folder = (FeedCategory) item;
+			} else if (item instanceof Folder) {
+				Folder folder = (Folder) item;
 				folder.setRegistry(this);
 				database.add(folder);
 			} else if (item instanceof Article) {

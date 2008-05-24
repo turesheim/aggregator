@@ -12,7 +12,7 @@
 package no.resheim.aggregator.ui.views;
 
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedCategory;
+import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.jface.action.Action;
@@ -98,7 +98,7 @@ public class RenameAction extends Action {
 	public boolean isEnabled() {
 		ISelection selection = treeView.getSelection();
 		Object obj = ((IStructuredSelection) selection).getFirstElement();
-		return (obj instanceof FeedCategory || obj instanceof Feed);
+		return (obj instanceof Folder || obj instanceof Feed);
 	}
 
 }
