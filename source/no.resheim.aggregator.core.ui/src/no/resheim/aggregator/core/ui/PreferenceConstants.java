@@ -33,13 +33,13 @@ public class PreferenceConstants {
 	public static final String P_SHOW_UNREAD_COUNT = "show_unread_count"; //$NON-NLS-1$
 	/** The font to use when showing the article */
 	public static final String P_PREVIEW_FONT = "preview_font"; //$NON-NLS-1$
-	/** Which archiving method to use */
+	/** The default archiving method to use */
 	public static final String P_ARCHIVING_METHOD = "archiving_method"; //$NON-NLS-1$
-	/** The number of days to keep articles */
+	/** The default number of days to keep articles */
 	public static final String P_ARCHIVING_DAYS = "archiving_days"; //$NON-NLS-1$
-	/** The number of items to keep */
+	/** The default number of items to keep */
 	public static final String P_ARCHIVING_ITEMS = "archiving_items"; //$NON-NLS-1$
-	/** Update period */
+	/** The default update period */
 	public static final String P_UPDATING_PERIOD = "updating_period"; //$NON-NLS-1$
 	/** The update interval */
 	public static final String P_UPDATING_INTERVAL = "updating_interval"; //$NON-NLS-1$
