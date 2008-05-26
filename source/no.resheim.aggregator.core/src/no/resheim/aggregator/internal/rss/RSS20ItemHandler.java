@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedCollection;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -37,7 +37,7 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 	static final SimpleDateFormat date = new SimpleDateFormat(
 			"EEE, d MMM yyyy HH:mm:ss Z"); //$NON-NLS-1$
 
-	public RSS20ItemHandler(FeedRegistry registry, Feed feed) {
+	public RSS20ItemHandler(FeedCollection registry, Feed feed) {
 		this.registry = registry;
 		this.item = new Article(feed);
 		this.feed = feed;

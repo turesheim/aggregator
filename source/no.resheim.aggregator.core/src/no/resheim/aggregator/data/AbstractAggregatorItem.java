@@ -7,7 +7,7 @@ public abstract class AbstractAggregatorItem implements IAggregatorItem {
 
 	protected UUID uuid;
 	protected UUID parent_uuid;
-	protected FeedRegistry registry;
+	protected FeedCollection registry;
 
 	private EnumSet<Mark> marks = EnumSet.noneOf(Mark.class);
 
@@ -64,11 +64,11 @@ public abstract class AbstractAggregatorItem implements IAggregatorItem {
 	}
 
 	// XXX: Should be not need to expose this
-	public FeedRegistry getRegistry() {
+	public FeedCollection getRegistry() {
 		return registry;
 	}
 
-	public void setRegistry(FeedRegistry registry) {
+	public void setRegistry(FeedCollection registry) {
 		this.registry = registry;
 	}
 

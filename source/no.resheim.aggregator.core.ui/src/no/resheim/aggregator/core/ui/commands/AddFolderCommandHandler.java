@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -30,7 +30,7 @@ public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedRegistry registry = ((IFeedView) part).getFeedRegistry();
+			FeedCollection registry = ((IFeedView) part).getFeedRegistry();
 			UUID parentUUID = registry.getUUID();
 			IAggregatorItem item = getSelection(event);
 			if (item != null) {

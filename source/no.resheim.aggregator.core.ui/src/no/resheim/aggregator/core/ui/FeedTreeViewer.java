@@ -11,7 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.jface.viewers.IElementComparer;
@@ -136,10 +136,10 @@ public class FeedTreeViewer extends TreeViewer {
 					IAggregatorItem destination = (IAggregatorItem) item
 							.getData();
 					IAggregatorItem parent = destination.getParent();
-					while (!(parent instanceof FeedRegistry)) {
+					while (!(parent instanceof FeedCollection)) {
 						parent = parent.getParent();
 					}
-					((FeedRegistry) parent).move(source, destination);
+					((FeedCollection) parent).move(source, destination);
 					TreeItem newItem = new TreeItem(item, SWT.NONE);
 					newItem.setImage(dragSourceItem[0].getImage());
 					newItem.setText(dragSourceItem[0].getText());

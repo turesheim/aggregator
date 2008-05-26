@@ -14,7 +14,7 @@ package no.resheim.aggregator.core.ui;
 import no.resheim.aggregator.core.ui.internal.NewFeedWizardGeneralPage;
 import no.resheim.aggregator.core.ui.internal.NewFeedWizardOptionsPage;
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.FeedWorkingCopy;
 
 import org.eclipse.jface.wizard.IWizardPage;
@@ -31,12 +31,12 @@ public class NewFeedWizard extends Wizard {
 	IWizardPage general;
 	IWizardPage archiving;
 	FeedWorkingCopy workingCopy;
-	FeedRegistry registry;
+	FeedCollection registry;
 
 	/**
 	 * 
 	 */
-	public NewFeedWizard(FeedRegistry registry) {
+	public NewFeedWizard(FeedCollection registry) {
 		super();
 		this.registry = registry;
 		setWindowTitle(Messages.NewFeedWizard_Title);

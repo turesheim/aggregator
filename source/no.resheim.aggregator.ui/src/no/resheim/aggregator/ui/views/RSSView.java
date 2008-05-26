@@ -23,8 +23,8 @@ import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.FeedRegistry;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -60,10 +60,11 @@ import org.eclipse.ui.part.ViewPart;
  */
 public class RSSView extends ViewPart implements IFeedView {
 
+	private static final String DEFAULT_REGISTRY_ID = "no.resheim.aggregator.core.defaultFeedCollection"; //$NON-NLS-1$
 	private static final String BLANK = ""; //$NON-NLS-1$
 	private SashForm sashForm;
 
-	private FeedRegistry registry;
+	private FeedCollection registry;
 
 	/** The web browser we're using */
 	private IWebBrowser browser;
@@ -188,7 +189,8 @@ public class RSSView extends ViewPart implements IFeedView {
 		treeView.setContentProvider(new FeedViewerContentProvider());
 		treeView.setLabelProvider(new FeedViewerLabelProvider());
 		treeView.setComparator(new NameSorter());
-		registry = AggregatorPlugin.getRegistry();
+		registry = AggregatorPlugin.getDefault().getFeedCollection(
+				DEFAULT_REGISTRY_ID);
 		treeView.setInput(registry);
 		treeView.addSelectionChangedListener(new ViewSelectionListener());
 		getSite().setSelectionProvider(treeView);
@@ -328,7 +330,13 @@ public class RSSView extends ViewPart implements IFeedView {
 		treeView.getControl().setFocus();
 	}
 
-	public FeedRegistry getFeedRegistry() {
+	public FeedCollection getFeedRegistry() {
 		return registry;
+	}
+
+	public void setFeedRegistry(FeedCollection registry) {
+		this.registry = registry;
+		treeView.setInput(registry);
+
 	}
 }

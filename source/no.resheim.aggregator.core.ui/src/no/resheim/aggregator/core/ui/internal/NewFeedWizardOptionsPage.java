@@ -12,7 +12,7 @@
 package no.resheim.aggregator.core.ui.internal;
 
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.FeedWorkingCopy;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
@@ -54,13 +54,13 @@ public class NewFeedWizardOptionsPage extends WizardPage {
 	private Button radioKeepAll;
 	private Group aGroup;
 
-	FeedRegistry registry;
+	FeedCollection registry;
 	FeedWorkingCopy workingCopy;
 
 	/**
 	 * Create the wizard
 	 */
-	public NewFeedWizardOptionsPage(FeedRegistry registry,
+	public NewFeedWizardOptionsPage(FeedCollection registry,
 			FeedWorkingCopy workingCopy) {
 		super(Messages.NewFeedWizardOptionsPage_Title);
 		setTitle(Messages.NewFeedWizardOptionsPage_Title);

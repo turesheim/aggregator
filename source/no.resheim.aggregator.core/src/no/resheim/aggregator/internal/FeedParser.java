@@ -14,7 +14,7 @@ package no.resheim.aggregator.internal;
 import java.util.Stack;
 
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.internal.rss.IElementHandler;
 import no.resheim.aggregator.internal.rss.RSSFeedHandler;
 
@@ -31,7 +31,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class FeedParser extends DefaultHandler {
 	private Stack<IElementHandler> handlers;
 
-	public FeedParser(FeedRegistry registry, Feed feed) {
+	public FeedParser(FeedCollection registry, Feed feed) {
 		handlers = new Stack<IElementHandler>();
 		handlers.push(new RSSFeedHandler(registry, feed));
 	}

@@ -16,7 +16,7 @@ import java.util.Comparator;
 import java.util.Stack;
 
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.FeedUpdateJob;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,7 +35,7 @@ import org.eclipse.core.runtime.jobs.Job;
 public class RegistryUpdateJob extends Job {
 
 	/** The feed registry that we're updating */
-	private FeedRegistry registry;
+	private FeedCollection registry;
 
 	private class FeedComparator implements Comparator<Feed> {
 
@@ -45,7 +45,7 @@ public class RegistryUpdateJob extends Job {
 
 	}
 
-	public RegistryUpdateJob(FeedRegistry registry) {
+	public RegistryUpdateJob(FeedCollection registry) {
 		super(Messages.RegistryUpdateJob_Label);
 		this.registry = registry;
 	}

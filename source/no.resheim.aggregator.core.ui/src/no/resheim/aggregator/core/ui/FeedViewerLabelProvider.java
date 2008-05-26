@@ -11,7 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.Folder;
@@ -88,7 +87,7 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 			StringBuffer sb = new StringBuffer();
 			sb.append(feed.getTitle());
 			if (pShowUnreadCount) {
-				int unread = (AggregatorPlugin.getRegistry().getItemCount(feed));
+				int unread = feed.getRegistry().getItemCount(feed);
 				if (unread > 0) {
 					sb.append(" ("); //$NON-NLS-1$
 					sb.append(unread);

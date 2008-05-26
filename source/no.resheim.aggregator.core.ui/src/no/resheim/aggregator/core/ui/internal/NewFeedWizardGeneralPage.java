@@ -13,7 +13,7 @@ package no.resheim.aggregator.core.ui.internal;
 
 import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.FeedWorkingCopy;
 
 import org.eclipse.jface.wizard.WizardPage;
@@ -35,12 +35,12 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 	private Label urlLabel;
 	private Label titleLabel;
 	FeedWorkingCopy workingCopy;
-	FeedRegistry registry;
+	FeedCollection registry;
 
 	/**
 	 * Create the wizard
 	 */
-	public NewFeedWizardGeneralPage(FeedRegistry registry,
+	public NewFeedWizardGeneralPage(FeedCollection registry,
 			FeedWorkingCopy workingCopy) {
 		super(Messages.NewFeedWizardGeneralPage_Title);
 		setTitle(Messages.NewFeedWizardGeneralPage_Title);

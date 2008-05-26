@@ -34,6 +34,16 @@
          </command>
       </menuContribution>
       <menuContribution
+            locationURI="menu:no.resheim.aggregator.ui.RSSView?after=additions">
+         <menu
+               label="Collections">
+            <dynamic
+                  class="no.resheim.aggregator.core.ui.commands.FeedCollectionMenu"
+                  id="no.resheim.aggregator.ui.dynamic">
+            </dynamic>
+         </menu>
+      </menuContribution>
+      <menuContribution
             locationURI="popup:no.resheim.aggregator.ui.RSSView?before=selection">
          <command
                commandId="no.resheim.aggregator.core.ui.addFeed"
@@ -63,6 +73,14 @@
                label="Mark As Read">
          </command>
       </menuContribution>
+   </extension>
+   <extension
+         point="no.resheim.aggregator.core.feeds">
+      <collection
+            id="no.resheim.aggregator.ui.collection"
+            name="My Test Collection"
+            public="true">
+      </collection>
    </extension>
 
 </plugin>

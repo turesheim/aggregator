@@ -46,6 +46,13 @@ public interface IAggregatorStorage {
 
 	/**
 	 * 
+	 * @param parent
+	 * @return
+	 */
+	public abstract int getChildCount(IAggregatorItem parent);
+
+	/**
+	 * 
 	 * 
 	 * @param guid
 	 *            The globally unique identifier

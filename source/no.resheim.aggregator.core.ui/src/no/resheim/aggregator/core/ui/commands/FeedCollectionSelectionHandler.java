@@ -13,32 +13,24 @@ package no.resheim.aggregator.core.ui.commands;
 
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.IHandler;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-/**
- * Deletes the selected IAggregatorItem.
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
- */
-public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
-		implements IHandler {
+public class FeedCollectionSelectionHandler extends AbstractAggregatorCommandHandler {
+	public static final String PARM_COLLECTION = "collectionId"; //$NON-NLS-1$
 
+	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedCollection registry = ((IFeedView) part).getFeedRegistry();
-			IAggregatorItem item = getSelection(event);
-			if (item != null) {
-				registry.remove(item);
-			}
+			FeedCollection registry = (FeedCollection) event
+					.getObjectParameterForExecution(PARM_COLLECTION);
+			((IFeedView) part).setFeedRegistry(registry);
 		}
 		return null;
 	}
+
 }

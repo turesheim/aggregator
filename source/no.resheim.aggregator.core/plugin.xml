@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="feeds" name="Aggregator Feeds" schema="schema/feeds.exsd"/>
+   <extension
+         point="no.resheim.aggregator.core.feeds">
+      <collection
+            id="no.resheim.aggregator.core.defaultFeedCollection"
+            name="Default"
+            public="true">
+      </collection>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            collection="no.resheim.aggregator.core.defaultFeedCollection"
+            title="Resheim Software"
+            updatePeriod="DAYS"
+            updateInterval="1"
+            url="http://resheim.no/news/RSS">
+      </feed>
+   </extension>
+
+</plugin>

@@ -23,7 +23,7 @@ public interface IAggregatorItem {
 	 * 
 	 * @return The feed registry
 	 */
-	public abstract FeedRegistry getRegistry();
+	public abstract FeedCollection getRegistry();
 
 	/**
 	 * Sets a new title for the item.

@@ -17,7 +17,7 @@ import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.NewFeedWizard;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.FeedWorkingCopy;
 import no.resheim.aggregator.data.IAggregatorItem;
 import no.resheim.aggregator.data.Feed.Archiving;
@@ -48,7 +48,7 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedRegistry registry = ((IFeedView) part).getFeedRegistry();
+			FeedCollection registry = ((IFeedView) part).getFeedRegistry();
 			NewFeedWizard wizard = new NewFeedWizard(registry);
 			UUID parentUUID = registry.getUUID();
 			IAggregatorItem item = getSelection(event);
@@ -57,22 +57,7 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 				if (item != null)
 					parentUUID = item.getUUID();
 			}
-			FeedWorkingCopy wc = new FeedWorkingCopy(UUID.randomUUID(),
-					parentUUID);
-			// Initialize with default values from the preference store.
-			// This is done here as the preference system is a UI component.
-			IPreferenceStore store = AggregatorUIPlugin.getDefault()
-					.getPreferenceStore();
-			wc.setArchiving(Archiving.valueOf(store
-					.getString(PreferenceConstants.P_ARCHIVING_METHOD)));
-			wc.setArchivingDays(store
-					.getInt(PreferenceConstants.P_ARCHIVING_DAYS));
-			wc.setArchivingItems(store
-					.getInt(PreferenceConstants.P_ARCHIVING_ITEMS));
-			wc.setUpdateInterval(store
-					.getInt(PreferenceConstants.P_UPDATING_INTERVAL));
-			wc.setUpdatePeriod(UpdatePeriod.valueOf(store
-					.getString(PreferenceConstants.P_UPDATING_PERIOD)));
+			FeedWorkingCopy wc = getNewFeedWorkingCopy(parentUUID);
 			wizard.setFeed(wc);
 			IDialogSettings workbenchSettings = AggregatorUIPlugin.getDefault()
 					.getDialogSettings();
@@ -91,6 +76,26 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 			}
 		}
 		return null;
+	}
+
+	private FeedWorkingCopy getNewFeedWorkingCopy(UUID parentUUID) {
+		FeedWorkingCopy wc = new FeedWorkingCopy(UUID.randomUUID(),
+				parentUUID);
+		// Initialize with default values from the preference store.
+		// This is done here as the preference system is a UI component.
+		IPreferenceStore store = AggregatorUIPlugin.getDefault()
+				.getPreferenceStore();
+		wc.setArchiving(Archiving.valueOf(store
+				.getString(PreferenceConstants.P_ARCHIVING_METHOD)));
+		wc.setArchivingDays(store
+				.getInt(PreferenceConstants.P_ARCHIVING_DAYS));
+		wc.setArchivingItems(store
+				.getInt(PreferenceConstants.P_ARCHIVING_ITEMS));
+		wc.setUpdateInterval(store
+				.getInt(PreferenceConstants.P_UPDATING_INTERVAL));
+		wc.setUpdatePeriod(UpdatePeriod.valueOf(store
+				.getString(PreferenceConstants.P_UPDATING_PERIOD)));
+		return wc;
 	}
 
 }

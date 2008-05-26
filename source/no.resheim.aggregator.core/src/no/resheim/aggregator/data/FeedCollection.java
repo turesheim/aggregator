@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class FeedRegistry implements IAggregatorItem {
+public class FeedCollection implements IAggregatorItem {
 
 	public class AggregatorDatabase {
 	}
@@ -38,8 +38,9 @@ public class FeedRegistry implements IAggregatorItem {
 
 	/** The list of feed change listeners */
 	private static ArrayList<FeedListener> feedListeners = new ArrayList<FeedListener>();
+	private static final UUID DEFAULT_ID = UUID
+			.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"); //$NON-NLS-1$
 
-	private UUID uuid;
 	/**
 	 * List of <i>live</i> feeds that we must keep track of even if the any
 	 * viewers has not opened the feed for viewing so that it has had a chance
@@ -48,8 +49,23 @@ public class FeedRegistry implements IAggregatorItem {
 	 */
 	private HashMap<UUID, Feed> sites;
 
-	public FeedRegistry(UUID id) {
-		this.uuid = id;
+	/**
+	 * The identifier of the registry as specified when the registry was
+	 * declared.
+	 */
+	private String id;
+
+	private String title;
+
+	private boolean fPublic;
+
+	public FeedCollection(String id, boolean pub) {
+		this.id = id;
+		this.fPublic = pub;
+	}
+
+	public boolean isPublic() {
+		return fPublic;
 	}
 
 	/**
@@ -147,6 +163,15 @@ public class FeedRegistry implements IAggregatorItem {
 		return database.getChildren(item);
 	}
 
+	/**
+	 * 
+	 * @param parent
+	 * @return
+	 */
+	public int getChildCount(IAggregatorItem parent) {
+		return database.getChildCount(parent);
+	}
+
 	public String getFeedId() {
 		return null;
 	}
@@ -197,7 +222,15 @@ public class FeedRegistry implements IAggregatorItem {
 	}
 
 	public UUID getUUID() {
-		return uuid;
+		return DEFAULT_ID;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getId() {
+		return id;
 	}
 
 	public String getDescription(Article item) {
@@ -327,14 +360,15 @@ public class FeedRegistry implements IAggregatorItem {
 		}
 	}
 
-	public FeedRegistry getRegistry() {
+	public FeedCollection getRegistry() {
 		return this;
 	}
 
 	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getTitle() {
-		return null;
+		return title;
 	}
 }

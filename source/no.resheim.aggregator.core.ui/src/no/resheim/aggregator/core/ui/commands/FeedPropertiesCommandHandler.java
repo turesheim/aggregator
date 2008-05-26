@@ -15,7 +15,7 @@ import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.FeedPropertiesDialog;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.FeedWorkingCopy;
 import no.resheim.aggregator.data.IAggregatorItem;
 
@@ -32,7 +32,7 @@ public class FeedPropertiesCommandHandler extends
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedRegistry registry = ((IFeedView) part).getFeedRegistry();
+			FeedCollection registry = ((IFeedView) part).getFeedRegistry();
 			IAggregatorItem o = getSelection(event);
 			if (o instanceof Feed) {
 				Feed feed = (Feed) o;

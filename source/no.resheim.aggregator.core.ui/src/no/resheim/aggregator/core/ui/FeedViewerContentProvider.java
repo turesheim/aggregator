@@ -12,10 +12,9 @@
 package no.resheim.aggregator.core.ui;
 
 import no.resheim.aggregator.data.AggregatorItemChangedEvent;
-import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.FeedListener;
-import no.resheim.aggregator.data.FeedRegistry;
 import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.IAggregatorItem;
 
@@ -27,8 +26,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * This type provides structured viewers with feeds and feed contents. It is
- * suitable.
+ * This type provides structured viewers with feeds and feed contents. The given
+ * input should be an instance of a {@link FeedCollection}.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -39,7 +38,7 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 			IBasicPropertyConstants.P_TEXT, IBasicPropertyConstants.P_IMAGE
 	};
 	TreeViewer treeView;
-	FeedRegistry registry;
+	FeedCollection registry;
 
 	/**
 	 * 
@@ -52,11 +51,12 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 		if (v instanceof TreeViewer) {
 			treeView = (TreeViewer) v;
 		}
-		if (newInput instanceof FeedRegistry && !newInput.equals(this.registry)) {
+		if (newInput instanceof FeedCollection
+				&& !newInput.equals(this.registry)) {
 			if (registry != null) {
 				registry.removeFeedListener(this);
 			}
-			registry = (FeedRegistry) newInput;
+			registry = (FeedCollection) newInput;
 			registry.addFeedListener(this);
 		}
 	}
@@ -84,10 +84,17 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 		return new Object[0];
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
+	 */
 	public boolean hasChildren(Object parent) {
-		if (parent instanceof Article)
-			return false;
-		return true;
+		if (parent instanceof IAggregatorItem) {
+			return (((IAggregatorItem) parent).getRegistry().getChildCount(
+					(IAggregatorItem) parent) > 0);
+		}
+		return false;
 	}
 
 	/*

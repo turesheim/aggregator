@@ -4,17 +4,25 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
 
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.data.Feed.Archiving;
+import no.resheim.aggregator.data.Feed.UpdatePeriod;
 import no.resheim.aggregator.data.internal.DerbySQLStorage;
 
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
@@ -33,24 +41,22 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class AggregatorPlugin extends Plugin {
 
+	public static final String REGISTRY_EXTENSION_ID = "no.resheim.aggregator.core.feeds"; //$NON-NLS-1$
+
 	/** The plug-in identifier */
 	public static final String PLUGIN_ID = "no.resheim.aggregator"; //$NON-NLS-1$
 
 	/** The shared plug-in instance */
 	private static AggregatorPlugin plugin = null;
 
-	private static final UUID DEFAULT_ID = UUID
-			.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"); //$NON-NLS-1$
-
-	/** The feed registry that the plug-in is using */
-	private static FeedRegistry registry;
-	private static IAggregatorStorage storage;
 	/**
 	 * Registries are declared using a symbolic name, for instance
 	 * "com.foo.bar.registry". This member is used to map between the symbolic
 	 * name and the universally unique identifier that is required internally.
 	 */
-	private HashMap<String, UUID> registryMap;
+	private HashMap<String, FeedCollection> registryMap;
+
+	private ArrayList<IAggregatorStorage> storageList;
 
 	/** Default feeds to add */
 	public static ArrayList<String[]> DEFAULT_FEEDS;
@@ -63,6 +69,8 @@ public class AggregatorPlugin extends Plugin {
 	public AggregatorPlugin() {
 		plugin = this;
 		DEFAULT_FEEDS = new ArrayList<String[]>();
+		registryMap = new HashMap<String, FeedCollection>();
+		storageList = new ArrayList<IAggregatorStorage>();
 	}
 
 	/**
@@ -86,12 +94,7 @@ public class AggregatorPlugin extends Plugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		// Create a default feed registry
-		registry = new FeedRegistry(DEFAULT_ID);
-		storage = new DerbySQLStorage(registry, getStorageLocation(registry));
-		storage.startup(new NullProgressMonitor());
-		registry.initialize(storage);
-
+		initialize();
 		// Read in all the default feeds.
 		InputStream is = FileLocator.openStream(this.getBundle(), new Path(
 				"/feeds.txt"), false); //$NON-NLS-1$
@@ -114,7 +117,9 @@ public class AggregatorPlugin extends Plugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		storage.shutdown();
+		for (IAggregatorStorage storage : storageList) {
+			storage.shutdown();
+		}
 		super.stop(context);
 	}
 
@@ -130,8 +135,8 @@ public class AggregatorPlugin extends Plugin {
 	/**
 	 * @return the feeds
 	 */
-	public static FeedRegistry getRegistry() {
-		return registry;
+	public FeedCollection getFeedCollection(String id) {
+		return registryMap.get(id);
 	}
 
 	/**
@@ -141,7 +146,7 @@ public class AggregatorPlugin extends Plugin {
 	 * 
 	 * @return A pointer to the Aggregator configuration directory
 	 */
-	private IPath getStorageLocation(FeedRegistry registry) {
+	private IPath getStorageLocation(FeedCollection registry) {
 		// Location location = Platform.getConfigurationLocation();
 		// if (location != null) {
 		// URL configURL = location.getURL();
@@ -155,11 +160,93 @@ public class AggregatorPlugin extends Plugin {
 		// then return an alternate location
 		// rather than null or throwing an Exception.
 		return getStateLocation().makeAbsolute().addTrailingSeparator().append(
-				registry.getUUID().toString());
+				registry.getId().toString());
 	}
 
 	public boolean isDebugging() {
 		return true;
 	}
 
+	public Collection<FeedCollection> getCollections() {
+		return registryMap.values();
+	}
+
+	private void initialize() {
+		IExtensionRegistry ereg = Platform.getExtensionRegistry();
+		addCollections(ereg);
+		addFeeds(ereg);
+	}
+
+	private void addCollections(IExtensionRegistry ereg) {
+		IConfigurationElement[] elements = ereg
+				.getConfigurationElementsFor(REGISTRY_EXTENSION_ID);
+		for (IConfigurationElement element : elements) {
+			// We're not going to allow an exception here to disrupt.
+			try {
+				if (element.getName().equals("collection")) { //$NON-NLS-1$
+					String id = element.getAttribute("id"); //$NON-NLS-1$
+					String name = element.getAttribute("name"); //$NON-NLS-1$
+					boolean pub = Boolean.parseBoolean(element
+							.getAttribute("public")); //$NON-NLS-1$
+					FeedCollection registry = new FeedCollection(id, pub);
+					registry.setTitle(name);
+					registryMap.put(id, registry);
+					// Create the storage for the registry
+					IAggregatorStorage storage = new DerbySQLStorage(registry,
+							getStorageLocation(registry));
+					IStatus status = storage.startup(new NullProgressMonitor());
+					if (status.isOK()) {
+						registry.initialize(storage);
+						storageList.add(storage);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void addFeeds(IExtensionRegistry ereg) {
+		IConfigurationElement[] elements = ereg
+				.getConfigurationElementsFor(REGISTRY_EXTENSION_ID);
+		for (IConfigurationElement element : elements) {
+			// We're not going to allow an exception here to disrupt.
+			try {
+				if (element.getName().equals("feed")) { //$NON-NLS-1$
+					String url = element.getAttribute("url"); //$NON-NLS-1$
+					String id = element.getAttribute("collection"); //$NON-NLS-1$
+					FeedCollection collection = getFeedCollection(id);
+					if (collection != null) {
+						if (!collection.hasFeed(url)) {
+							collection.add(createNewFeed(collection, element));
+						}
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private Feed createNewFeed(FeedCollection parent,
+			IConfigurationElement element) {
+		Feed feed = new Feed();
+		feed.setUUID(UUID.randomUUID());
+		feed.setParentUUID(parent.getUUID());
+		// Initialize with default values from the preference store.
+		// This is done here as the preference system is a UI component.
+		feed.setTitle(element.getAttribute("title")); //$NON-NLS-1$
+		feed.setURL(element.getAttribute("url")); //$NON-NLS-1$
+		feed.setArchiving(Archiving.valueOf(element
+				.getAttribute("archivingMethod"))); //$NON-NLS-1$
+		feed.setArchivingDays(Integer.parseInt(element
+				.getAttribute("archivingDays"))); //$NON-NLS-1$
+		feed.setArchivingItems(Integer.parseInt(element
+				.getAttribute("archivingItems"))); //$NON-NLS-1$
+		feed.setUpdateInterval(Integer.parseInt(element
+				.getAttribute("updateInterval"))); //$NON-NLS-1$
+		feed.setUpdatePeriod(UpdatePeriod.valueOf(element
+				.getAttribute("updatePeriod"))); //$NON-NLS-1$
+		return feed;
+	}
 }

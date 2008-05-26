@@ -60,6 +60,23 @@
             id="no.resheim.aggregator.core.ui.setRead"
             name="Mark As Read">
       </command>
+      <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.FeedCollectionSelectionHandler"
+            id="no.resheim.aggregator.core.ui.selectCollection"
+            name="Select Collection">
+         <commandParameter
+               id="collectionId"
+               name="Collection Identifier"
+               optional="false"
+               typeId="no.resheim.aggregator.core.ui.collectionCommandParameterType"
+               values="no.resheim.aggregator.core.ui.commands.CollectionSelectionParameterValues">
+         </commandParameter>
+      </command>
+      <commandParameterType
+            converter="no.resheim.aggregator.core.ui.commands.CollectionParameterValueConverter"
+            id="no.resheim.aggregator.core.ui.collectionCommandParameterType"
+            type="no.resheim.aggregator.data.FeedRegistry">
+      </commandParameterType>
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">

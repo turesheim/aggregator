@@ -39,9 +39,9 @@ import org.xml.sax.SAXException;
 public class FeedUpdateJob extends Job {
 
 	private Feed feed;
-	private FeedRegistry registry;
+	private FeedCollection registry;
 
-	public FeedUpdateJob(FeedRegistry registry, Feed feed) {
+	public FeedUpdateJob(FeedCollection registry, Feed feed) {
 		super(feed.getTitle());
 		this.feed = feed;
 		this.registry = registry;

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedCollection;
 
 /**
  * 
@@ -24,5 +24,12 @@ public interface IFeedView {
 	 * 
 	 * @return The feed registry
 	 */
-	public FeedRegistry getFeedRegistry();
+	public FeedCollection getFeedRegistry();
+
+	/**
+	 * Sets the feed collection that the view is obtaining it's data from.
+	 * 
+	 * @param registry
+	 */
+	public void setFeedRegistry(FeedCollection registry);
 }

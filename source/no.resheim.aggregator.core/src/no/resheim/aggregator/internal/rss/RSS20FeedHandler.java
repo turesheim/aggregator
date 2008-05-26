@@ -12,7 +12,7 @@
 package no.resheim.aggregator.internal.rss;
 
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedCollection;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -31,7 +31,7 @@ public class RSS20FeedHandler extends AbstractElementHandler {
 	private static final String EDITOR = "managingEditor"; //$NON-NLS-1$
 	private static final String COPYRIGHT = "copyright"; //$NON-NLS-1$
 
-	public RSS20FeedHandler(FeedRegistry registry, Feed feed) {
+	public RSS20FeedHandler(FeedCollection registry, Feed feed) {
 		super();
 		this.registry = registry;
 		this.feed = feed;

@@ -26,6 +26,8 @@ import org.osgi.framework.BundleContext;
  */
 public class AggregatorUIPlugin extends AbstractUIPlugin {
 
+	public static final String CMD_SELECT_COLLECTION = "no.resheim.aggregator.core.ui.selectCollection"; //$NON-NLS-1$
+
 	// The plug-in ID
 	public static final String PLUGIN_ID = "no.resheim.aggregator.core.ui"; //$NON-NLS-1$
 

@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedRegistry;
+import no.resheim.aggregator.data.FeedCollection;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -60,7 +60,7 @@ public abstract class AbstractElementHandler implements IElementHandler {
 	protected Article item;
 
 	/** The feed registry we're working for */
-	protected FeedRegistry registry;
+	protected FeedCollection registry;
 
 	public AbstractElementHandler() {
 		buffer = new StringBuffer();
