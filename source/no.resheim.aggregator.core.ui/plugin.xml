@@ -75,7 +75,7 @@
       <commandParameterType
             converter="no.resheim.aggregator.core.ui.commands.CollectionParameterValueConverter"
             id="no.resheim.aggregator.core.ui.collectionCommandParameterType"
-            type="no.resheim.aggregator.data.FeedRegistry">
+            type="no.resheim.aggregator.data.FeedCollection">
       </commandParameterType>
    </extension>
    <extension
