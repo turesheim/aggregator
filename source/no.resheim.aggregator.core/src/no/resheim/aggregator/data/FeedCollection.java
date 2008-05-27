@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
 
+import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.IAggregatorStorage;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
 import no.resheim.aggregator.data.Feed.Archiving;
@@ -354,7 +355,9 @@ public class FeedCollection implements IAggregatorItem {
 	 *            The feed change event with details
 	 */
 	public void notifyListerners(AggregatorItemChangedEvent event) {
-		System.out.println(event);
+		if (AggregatorPlugin.getDefault().isDebugging()) {
+			System.out.println("[DEBUG] " + event); //$NON-NLS-1$
+		}
 		for (FeedListener listener : feedListeners) {
 			listener.feedChanged(event);
 		}

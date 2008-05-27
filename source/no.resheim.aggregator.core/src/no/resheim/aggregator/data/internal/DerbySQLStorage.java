@@ -105,7 +105,10 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 */
 	public IStatus shutdown() {
 		try {
-			System.out.println("Shutting down database"); //$NON-NLS-1$
+			if (AggregatorPlugin.getDefault().isDebugging()) {
+				System.out
+						.println("[DEBUG] Shutting down database at " + path.toOSString()); //$NON-NLS-1$
+			}
 			connection = DriverManager.getConnection(JDBC_DERBY
 					+ path.toOSString() + DISCONNECT_OPTIONS);
 			connection.close();
@@ -164,7 +167,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	}
 
 	private IStatus createTables() throws SQLException {
-		System.out.println("Creating tables"); //$NON-NLS-1$
+		if (AggregatorPlugin.getDefault().isDebugging()) {
+			System.out.println("- Creating tables"); //$NON-NLS-1$
+		}
 		InputStream is = DerbySQLStorage.class.getResourceAsStream(TABLES_SQL);
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		Statement s = connection.createStatement();
@@ -545,7 +550,10 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 * @see no.resheim.aggregator.internal.IRegistryExternalizer#open(java.lang.String)
 	 */
 	public IStatus startup(IProgressMonitor monitor) {
-		System.out.println("Opening database at " + path.toOSString()); //$NON-NLS-1$
+		if (AggregatorPlugin.getDefault().isDebugging()) {
+			System.out
+					.println("[DEBUG] Opening database at " + path.toOSString()); //$NON-NLS-1$
+		}
 		try {
 			Class.forName(DB_DRIVER).newInstance();
 			connection = DriverManager.getConnection(JDBC_DERBY

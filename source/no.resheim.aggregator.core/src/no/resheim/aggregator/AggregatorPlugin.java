@@ -163,10 +163,6 @@ public class AggregatorPlugin extends Plugin {
 				registry.getId().toString());
 	}
 
-	public boolean isDebugging() {
-		return true;
-	}
-
 	public Collection<FeedCollection> getCollections() {
 		return registryMap.values();
 	}
