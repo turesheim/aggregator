@@ -44,6 +44,7 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 
 	/** Preference: show unread items in header */
 	private boolean pShowUnreadCount = true;
+	private int fMode = AggregatorUIPlugin.MODE_TREE;
 
 	/**
 	 * 
@@ -51,6 +52,14 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 	public FeedViewerLabelProvider() {
 		super();
 		initialize();
+	}
+
+	/**
+	 * 
+	 */
+	public FeedViewerLabelProvider(int mode) {
+		this();
+		fMode = mode;
 	}
 
 	private void initialize() {
@@ -96,8 +105,19 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 			}
 			return sb.toString();
 		}
-		if (element instanceof Article)
-			return ((Article) element).getTitle();
+		if (element instanceof Article) {
+			if (fMode == AggregatorUIPlugin.MODE_TREE) {
+				return ((Article) element).getTitle();
+			} else {
+				Article article = ((Article) element);
+				StringBuilder sb = new StringBuilder();
+				sb.append(article.getTitle());
+				sb.append('\n');
+				sb.append(article.getRegistry().getDescription(article));
+				return sb.toString();
+			}
+
+		}
 
 		if (element instanceof Folder)
 			return ((Folder) element).getTitle();

@@ -25,10 +25,10 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plug-in life cycle
  */
 public class AggregatorUIPlugin extends AbstractUIPlugin {
-
+	/** Identifier for the select feed collection command */
 	public static final String CMD_SELECT_COLLECTION = "no.resheim.aggregator.core.ui.selectCollection"; //$NON-NLS-1$
 
-	// The plug-in ID
+	/** The plug-in ID */
 	public static final String PLUGIN_ID = "no.resheim.aggregator.core.ui"; //$NON-NLS-1$
 
 	/** Identifier for the view icon */
@@ -49,6 +49,10 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	public static final String IMG_NEW_FEED_WIZBAN = "new_feed_banner"; //$NON-NLS-1$
 
 	private static AggregatorUIPlugin plugin;
+
+	public static final int MODE_TREE = 0;
+
+	public static final int MODE_FLAT = 1;
 
 	/**
 	 * The constructor
@@ -82,13 +86,10 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 		super.initializeImageRegistry(reg);
 		reg.put(IMG_VIEW_ICON, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/feed-icon-16x16.png")); //$NON-NLS-1$
-		// TODO: Use the shared version of this resource
 		reg.put(IMG_ENABLED_REFRESH, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/clcl16/nav_refresh.gif")); //$NON-NLS-1$
-		// TODO: Use the shared version of this resource
 		reg.put(IMG_DISABLED_REFRESH, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/dlcl16/nav_refresh.gif")); //$NON-NLS-1$
-		// TODO: Use the shared version of this resource
 		reg.put(IMG_ADD_OBJ, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/obj16/add_obj.gif")); //$NON-NLS-1$
 		reg.put(IMG_FEED_OBJ, imageDescriptorFromPlugin(PLUGIN_ID,
@@ -110,9 +111,11 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	}
 
 	/**
+	 * Returns the instance of the image with the given key.
 	 * 
 	 * @param key
-	 * @return
+	 *            the key identifying the image
+	 * @return the image
 	 */
 	public Image getImage(String key) {
 		return this.getImageRegistry().get(key);
@@ -149,7 +152,6 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 
 	private static void displayErrorMessage(final String title,
 			final String message) {
-		System.err.println(message);
 		getStandardDisplay().asyncExec(new Runnable() {
 			public void run() {
 				Shell shell = getStandardDisplay().getActiveShell();
@@ -160,6 +162,6 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 			}
 		});
 
-	} // abortMessage
+	}
 
 }

@@ -33,7 +33,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 /**
- * Type to render aggregator items.
+ * Type to render articles. A {@link Browser} instance will be used to render
+ * the HTML.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -119,6 +120,9 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		description.append(FONT_FIX_5);
 		title.setTitle(item.getTitle(), null);
 		browser.setText(description.toString());
+		if (AggregatorUIPlugin.getDefault().isDebugging()) {
+			System.out.println(description.toString());
+		}
 		if (item.getPublicationDate() > 0) {
 			setStatusText(MessageFormat.format(
 					Messages.ArticleViewer_Published, new Object[] {

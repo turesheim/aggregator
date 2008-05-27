@@ -11,6 +11,8 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import java.util.ArrayList;
+
 import no.resheim.aggregator.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
@@ -21,7 +23,7 @@ import no.resheim.aggregator.data.IAggregatorItem;
 import org.eclipse.jface.viewers.IBasicPropertyConstants;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
@@ -37,35 +39,57 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 	protected static final String[] STATE_PROPERTIES = new String[] {
 			IBasicPropertyConstants.P_TEXT, IBasicPropertyConstants.P_IMAGE
 	};
-	TreeViewer treeView;
-	FeedCollection registry;
+	private StructuredViewer fViewer;
+	private FeedCollection fCollection;
+	private int fMode;
 
 	/**
 	 * 
 	 */
 	public FeedViewerContentProvider() {
 		super();
+		fMode = AggregatorUIPlugin.MODE_TREE;
+	}
+
+	public FeedViewerContentProvider(int mode) {
+		super();
+		fMode = mode;
 	}
 
 	public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-		if (v instanceof TreeViewer) {
-			treeView = (TreeViewer) v;
+		if (v instanceof StructuredViewer) {
+			fViewer = (StructuredViewer) v;
 		}
 		if (newInput instanceof FeedCollection
-				&& !newInput.equals(this.registry)) {
-			if (registry != null) {
-				registry.removeFeedListener(this);
+				&& !newInput.equals(this.fCollection)) {
+			if (fCollection != null) {
+				fCollection.removeFeedListener(this);
 			}
-			registry = (FeedCollection) newInput;
-			registry.addFeedListener(this);
+			fCollection = (FeedCollection) newInput;
+			fCollection.addFeedListener(this);
 		}
 	}
 
 	public void dispose() {
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
+	 */
 	public Object[] getElements(Object parent) {
-		return getChildren(parent);
+		if (fMode == AggregatorUIPlugin.MODE_FLAT) {
+			ArrayList<IAggregatorItem> articles = new ArrayList<IAggregatorItem>();
+			for (IAggregatorItem feed : fCollection.getFeeds()) {
+				for (IAggregatorItem article : fCollection.getChildren(feed)) {
+					articles.add(article);
+				}
+			}
+			return articles.toArray(new IAggregatorItem[articles.size()]);
+		} else {
+			return getChildren(parent);
+		}
 	}
 
 	public Object getParent(Object child) {
@@ -78,7 +102,7 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 	public Object[] getChildren(Object parent) {
 		if (parent != null) {
 			if (parent instanceof IAggregatorItem) {
-				return registry.getChildren((IAggregatorItem) parent);
+				return fCollection.getChildren((IAggregatorItem) parent);
 			}
 		}
 		return new Object[0];
@@ -105,34 +129,34 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 	public void feedChanged(final AggregatorItemChangedEvent event) {
 		Runnable update = new Runnable() {
 			public void run() {
-				if (treeView != null) {
+				if (fViewer != null) {
 					IAggregatorItem parent = event.getItem().getParent();
 					switch (event.getType()) {
 					case READ:
-						treeView.update(event.getItem(), STATE_PROPERTIES);
+						fViewer.update(event.getItem(), STATE_PROPERTIES);
 						if (parent != null)
-							treeView.update(parent, STATE_PROPERTIES);
+							fViewer.update(parent, STATE_PROPERTIES);
 						break;
 					case UPDATED:
-						treeView.update(event.getItem(), STATE_PROPERTIES);
+						fViewer.update(event.getItem(), STATE_PROPERTIES);
 						break;
 					case REMOVED:
-						treeView.refresh(parent, true);
+						fViewer.refresh(parent, true);
 						if (parent != null)
-							treeView.update(parent, STATE_PROPERTIES);
+							fViewer.update(parent, STATE_PROPERTIES);
 						break;
 					case CREATED:
-						treeView.refresh(parent, true);
+						fViewer.refresh(parent, true);
 						if (parent != null)
-							treeView.update(parent, STATE_PROPERTIES);
+							fViewer.update(parent, STATE_PROPERTIES);
 						break;
 					case UPDATING:
-						treeView.update(event.getItem(), STATE_PROPERTIES);
+						fViewer.update(event.getItem(), STATE_PROPERTIES);
 						break;
 					default:
 						if (event.getItem() instanceof Feed
 								|| event.getItem() instanceof Folder)
-							treeView.refresh();
+							fViewer.refresh();
 						break;
 					}
 				}
@@ -149,8 +173,8 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 	public void itemUpdated(final Object item) {
 		Runnable update = new Runnable() {
 			public void run() {
-				if (treeView != null) {
-					treeView.update(item, null);
+				if (fViewer != null) {
+					fViewer.update(item, null);
 				}
 			};
 		};
@@ -160,8 +184,8 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 	public void refreshItem(final Object item) {
 		Runnable update = new Runnable() {
 			public void run() {
-				if (treeView != null) {
-					treeView.refresh();
+				if (fViewer != null) {
+					fViewer.refresh();
 				}
 			};
 		};
