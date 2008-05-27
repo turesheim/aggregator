@@ -769,4 +769,22 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see no.resheim.aggregator.IAggregatorStorage#hasFeed(java.lang.String)
+	 */
+	public boolean hasFeed(String url) {
+		try {
+			Statement s = connection.createStatement();
+			String query = "select * from feeds where url='" //$NON-NLS-1$
+					+ url + "'"; //$NON-NLS-1$
+			ResultSet rs = s.executeQuery(query);
+			return rs.next();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }

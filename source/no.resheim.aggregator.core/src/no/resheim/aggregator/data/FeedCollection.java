@@ -205,7 +205,7 @@ public class FeedCollection implements IAggregatorItem {
 	 * @return <b>True</b> if the feed exists.
 	 */
 	public boolean hasFeed(String url) {
-		return sites.containsKey(url);
+		return database.hasFeed(url);
 	}
 
 	/**

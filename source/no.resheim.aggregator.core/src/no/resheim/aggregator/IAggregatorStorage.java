@@ -55,10 +55,19 @@ public interface IAggregatorStorage {
 	 * 
 	 * 
 	 * @param guid
-	 *            The globally unique identifier
-	 * @return The FeedItem or <i>null</i>
+	 *            the globally unique identifier
+	 * @return the FeedItem or <i>null</i>
 	 */
 	public abstract Article getItem(String guid);
+
+	/**
+	 * 
+	 * @param url
+	 *            the URL of the feed
+	 * @return <b>True</b> if a feed with the given URL exists in the
+	 *         collection
+	 */
+	public abstract boolean hasFeed(String url);
 
 	/**
 	 * 
