@@ -63,6 +63,8 @@ public class AggregatorPlugin extends Plugin {
 
 	private ServiceTracker serviceTracker;
 
+	public static final String DEFAULT_REGISTRY_ID = "no.resheim.aggregator.core.defaultFeedCollection"; //$NON-NLS-1$
+
 	/**
 	 * The constructor
 	 */
