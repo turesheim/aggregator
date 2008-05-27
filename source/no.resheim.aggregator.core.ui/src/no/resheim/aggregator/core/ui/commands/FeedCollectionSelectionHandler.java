@@ -16,10 +16,14 @@ import no.resheim.aggregator.data.FeedCollection;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class FeedCollectionSelectionHandler extends AbstractAggregatorCommandHandler {
+public class FeedCollectionSelectionHandler extends
+		AbstractAggregatorCommandHandler {
 	public static final String PARM_COLLECTION = "collectionId"; //$NON-NLS-1$
 
 	@Override
@@ -29,6 +33,12 @@ public class FeedCollectionSelectionHandler extends AbstractAggregatorCommandHan
 			FeedCollection registry = (FeedCollection) event
 					.getObjectParameterForExecution(PARM_COLLECTION);
 			((IFeedView) part).setFeedRegistry(registry);
+			if (event.getTrigger() instanceof Event) {
+				Widget w = ((Event) event.getTrigger()).widget;
+				if (w instanceof MenuItem) {
+					((MenuItem) w).setSelection(true);
+				}
+			}
 		}
 		return null;
 	}

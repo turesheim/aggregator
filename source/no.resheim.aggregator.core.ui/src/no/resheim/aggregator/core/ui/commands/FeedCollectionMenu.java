@@ -21,7 +21,6 @@ import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.data.FeedCollection;
 
 import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.swt.SWT;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.services.IServiceLocator;
@@ -56,10 +55,12 @@ public class FeedCollectionMenu extends
 				Map parms = new HashMap();
 				parms.put(FeedCollectionSelectionHandler.PARM_COLLECTION,
 						feedRegistry.getId());
-				actions.add(new CommandContributionItem(locator, feedRegistry
-						.getId(), AggregatorUIPlugin.CMD_SELECT_COLLECTION,
-						parms, null, null, null, feedRegistry.getTitle(), null,
-						null, SWT.RADIO));
+				CommandContributionItem item = new CommandContributionItem(
+						locator, feedRegistry.getId(),
+						AggregatorUIPlugin.CMD_SELECT_COLLECTION, parms, null,
+						null, null, feedRegistry.getTitle(), null, null,
+						CommandContributionItem.STYLE_CHECK);
+				actions.add(item);
 			}
 
 		}
