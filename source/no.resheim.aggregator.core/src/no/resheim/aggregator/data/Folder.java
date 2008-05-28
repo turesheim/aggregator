@@ -46,11 +46,11 @@ public class Folder extends AbstractAggregatorItem {
 		return null;
 	}
 
-	public IAggregatorItem getParent() {
+	public IAggregatorItem getParentItem() {
 		return parent;
 	}
 
-	public void setParent(IAggregatorItem parent) {
+	public void setParentItem(IAggregatorItem parent) {
 		this.parent = parent;
 	}
 }

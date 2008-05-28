@@ -9,7 +9,7 @@ public interface IAggregatorItem {
 	 * 
 	 * @return
 	 */
-	public abstract IAggregatorItem getParent();
+	public abstract IAggregatorItem getParentItem();
 
 	/**
 	 * Returns the unique identifier for this aggregator item.

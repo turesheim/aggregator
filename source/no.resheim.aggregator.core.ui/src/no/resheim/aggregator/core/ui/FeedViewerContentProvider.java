@@ -75,7 +75,7 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 
 	public Object getParent(Object child) {
 		if (child instanceof IAggregatorItem) {
-			return ((IAggregatorItem) child).getParent();
+			return ((IAggregatorItem) child).getParentItem();
 		}
 		return null;
 	}
@@ -111,7 +111,7 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 		Runnable update = new Runnable() {
 			public void run() {
 				if (fViewer != null) {
-					IAggregatorItem parent = event.getItem().getParent();
+					IAggregatorItem parent = event.getItem().getParentItem();
 					switch (event.getType()) {
 					case READ:
 						fViewer.update(event.getItem(), STATE_PROPERTIES);

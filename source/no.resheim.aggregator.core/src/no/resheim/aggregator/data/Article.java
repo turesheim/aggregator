@@ -98,7 +98,7 @@ public class Article extends AbstractAggregatorItem implements IAggregatorItem {
 	}
 
 	@Override
-	public IAggregatorItem getParent() {
+	public IAggregatorItem getParentItem() {
 		return parent;
 	}
 
@@ -187,7 +187,7 @@ public class Article extends AbstractAggregatorItem implements IAggregatorItem {
 		this.link = link;
 	}
 
-	public void setParent(IAggregatorItem parent) {
+	public void setParentItem(IAggregatorItem parent) {
 		this.parent = parent;
 	}
 

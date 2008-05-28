@@ -327,7 +327,7 @@ public class FeedCollection implements IAggregatorItem {
 	 * 
 	 * @return The parent (null).
 	 */
-	public IAggregatorItem getParent() {
+	public IAggregatorItem getParentItem() {
 		return null;
 	}
 

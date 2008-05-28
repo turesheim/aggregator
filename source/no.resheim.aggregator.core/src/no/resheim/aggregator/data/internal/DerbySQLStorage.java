@@ -373,10 +373,10 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		HashMap<UUID, Feed> feeds = new HashMap<UUID, Feed>();
 		try {
 			Statement s = connection.createStatement();
-			ResultSet rs = s.executeQuery("select * from feeds"); //$NON-NLS-1$
+			ResultSet rs = s.executeQuery("select uuid from feeds"); //$NON-NLS-1$
 			while (rs.next()) {
 				Feed f = composeFeed(rs);
-				f.setParent(registry);
+				f.setParentItem(registry);
 				feeds.put(f.getUUID(), f);
 			}
 			rs.close();
@@ -607,7 +607,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		while (rs.next()) {
 			Folder folder = new Folder(UUID.fromString(rs.getString(1)), UUID
 					.fromString(rs.getString(2)), rs.getString(3));
-			folder.setParent(item);
+			folder.setParentItem(item);
 			folder.setRegistry(registry);
 			feeds.add(folder);
 		}
@@ -655,7 +655,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		ResultSet rs = s.executeQuery(query);
 		while (rs.next()) {
 			Feed f = composeFeed(rs);
-			f.setParent(parent);
+			f.setParentItem(parent);
 			f.setRegistry(registry);
 			feeds.add(f);
 		}
@@ -702,7 +702,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			ResultSet rs = s.executeQuery(query);
 			while (rs.next()) {
 				Article i = composeItem(rs);
-				i.setParent(parent);
+				i.setParentItem(parent);
 				i.setRegistry(registry);
 				feeds.add(i);
 			}

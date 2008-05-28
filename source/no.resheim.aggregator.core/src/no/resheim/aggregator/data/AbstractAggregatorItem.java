@@ -15,7 +15,7 @@ public abstract class AbstractAggregatorItem implements IAggregatorItem {
 		FIRST_PRIORITY, SECOND_PRIORITY, THIRD_PRIORITY, TODO, IMPORTANT
 	};
 
-	public IAggregatorItem getParent() {
+	public IAggregatorItem getParentItem() {
 		return null;
 	}
 

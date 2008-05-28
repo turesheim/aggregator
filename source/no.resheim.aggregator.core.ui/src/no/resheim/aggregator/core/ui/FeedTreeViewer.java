@@ -135,9 +135,9 @@ public class FeedTreeViewer extends TreeViewer {
 					TreeItem item = (TreeItem) event.item;
 					IAggregatorItem destination = (IAggregatorItem) item
 							.getData();
-					IAggregatorItem parent = destination.getParent();
+					IAggregatorItem parent = destination.getParentItem();
 					while (!(parent instanceof FeedCollection)) {
-						parent = parent.getParent();
+						parent = parent.getParentItem();
 					}
 					((FeedCollection) parent).move(source, destination);
 					TreeItem newItem = new TreeItem(item, SWT.NONE);
