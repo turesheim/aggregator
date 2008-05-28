@@ -103,9 +103,6 @@ public class FeedCollection implements IAggregatorItem {
 				sites.put(feed.getUUID(), feed);
 				database.add(feed);
 				feed.setRegistry(this);
-				// Schedule an update immediately
-				FeedUpdateJob j = new FeedUpdateJob(this, feed);
-				j.schedule();
 			} else if (item instanceof Folder) {
 				Folder folder = (Folder) item;
 				folder.setRegistry(this);
