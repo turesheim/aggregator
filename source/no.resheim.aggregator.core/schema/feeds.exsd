@@ -3,7 +3,7 @@
 <schema targetNamespace="no.resheim.aggregator.core">
 <annotation>
       <appInfo>
-         <meta.schema plugin="no.resheim.aggregator.core" id="registry" name="Registry"/>
+         <meta.schema plugin="no.resheim.aggregator.core" id="feeds" name="Aggregator Feeds"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -85,28 +85,34 @@
          <attribute name="url" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  the full URL of the feed.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="title" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  the title of the feed as it will be shown in the user interface.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="collection" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  the collection identifier. Must be a declared &lt;i&gt;collection&lt;/i&gt;.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="archivingMethod" use="required">
             <annotation>
                <documentation>
-                  
+                  the archiving method.
+&lt;ul&gt;
+&lt;li&gt;KEEP_NONE - The feed is cleared for all articles before downloading new ones.&lt;/li&gt;
+&lt;li&gt;KEEP_ALL - No articles are deleted when updating.&lt;/li&gt;
+&lt;li&gt;KEEP_SOME - The number of articles specified in &lt;i&gt;archivingItems&lt;/i&gt; are kept.&lt;/li&gt;
+&lt;li&gt;KEEP_NEWEST - Articles newer than the number of days specified in &lt;i&gt;archivingDays&lt;/i&gt; are kept.&lt;/li&gt;
+&lt;/ul&gt;
                </documentation>
             </annotation>
             <simpleType>
@@ -125,28 +131,26 @@
          <attribute name="archivingDays" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  specifies the number of days articles are kept.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="archivingItems" type="string" use="required">
             <annotation>
                <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="updateInterval" type="string" use="required">
-            <annotation>
-               <documentation>
-                  
+                  specifies the number of articles that are kept.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="updatePeriod" use="required">
             <annotation>
                <documentation>
-                  
+                  specifies the update period of the feed.
+&lt;ul&gt;
+&lt;li&gt;MINUTES - The feed is updated every &lt;i&gt;updateInterval&lt;/i&gt; minutes.&lt;/li&gt;
+&lt;li&gt;HOURS - The feed is updated every &lt;i&gt;updateInterval&lt;/i&gt; hours.&lt;/li&gt;
+&lt;li&gt;DAYS - The feed is updated every &lt;i&gt;updateInterval&lt;/i&gt; days.&lt;/li&gt;
+&lt;/ul&gt;
                </documentation>
             </annotation>
             <simpleType>
@@ -160,6 +164,13 @@
                </restriction>
             </simpleType>
          </attribute>
+         <attribute name="updateInterval" type="string" use="required">
+            <annotation>
+               <documentation>
+                  specifies the update interval.
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
@@ -168,7 +179,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         1.0
       </documentation>
    </annotation>
 
@@ -204,7 +215,7 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         &amp;copy 2008 Resheim Software.
       </documentation>
    </annotation>
 
