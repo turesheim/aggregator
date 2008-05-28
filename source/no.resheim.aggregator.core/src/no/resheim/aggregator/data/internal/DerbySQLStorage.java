@@ -80,12 +80,6 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		sb.append(value);
 	}
 
-	private void addNull(StringBuffer sb, boolean comma) {
-		if (comma)
-			sb.append(',');
-		sb.append("NULL"); //$NON-NLS-1$
-	}
-
 	private void addString(StringBuffer sb, String value, boolean comma) {
 		if (comma)
 			sb.append(',');
@@ -319,26 +313,34 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 * 
 	 * @see no.resheim.aggregator.IAggregatorStorage#getChildCount(no.resheim.aggregator.data.IAggregatorItem)
 	 */
-	public int getChildCount(IAggregatorItem parent) {
+	public synchronized int getChildCount(IAggregatorItem parent) {
 		int count = 0;
+		Assert.isNotNull(parent);
+		Assert.isNotNull(parent.getUUID());
 		try {
+			if (connection.isClosed())
+				return 0;
 			Statement s = connection.createStatement();
 			ResultSet rs = s
-					.executeQuery("select count(title) from articles where parent_uuid='" //$NON-NLS-1$
+					.executeQuery("select count(uuid) from articles where parent_uuid='" //$NON-NLS-1$
 							+ parent.getUUID() + "'"); //$NON-NLS-1$
 			if (rs.next())
 				count += rs.getInt(1);
+			rs.close();
 			rs = s
-					.executeQuery("select count(title) from folders where parent_uuid='" //$NON-NLS-1$
+					.executeQuery("select count(uuid) from folders where parent_uuid='" //$NON-NLS-1$
 							+ parent.getUUID() + "'"); //$NON-NLS-1$
 			if (rs.next())
 				count += rs.getInt(1);
+			rs.close();
 			rs = s
-					.executeQuery("select count(title) from feeds where parent_uuid='" //$NON-NLS-1$
+					.executeQuery("select count(uuid) from feeds where parent_uuid='" //$NON-NLS-1$
 							+ parent.getUUID() + "'"); //$NON-NLS-1$
 			if (rs.next())
 				count += rs.getInt(1);
+			rs.close();
 		} catch (SQLException e) {
+			System.err.println(parent);
 			e.printStackTrace();
 		}
 		return count;
@@ -350,18 +352,20 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 * @see no.resheim.aggregator.model.IAggregatorStorage#getItem(java.lang.String)
 	 */
 	public Article getItem(String guid) {
+		Article article = null;
 		try {
 			Statement s = connection.createStatement();
 			String query = "select * from articles where guid='" //$NON-NLS-1$
 					+ guid + "'"; //$NON-NLS-1$
 			ResultSet rs = s.executeQuery(query);
 			if (rs.next()) {
-				return composeItem(rs);
+				article = composeItem(rs);
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return article;
 	}
 
 	/*
@@ -379,6 +383,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 				f.setParent(registry);
 				feeds.put(f.getUUID(), f);
 			}
+			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -407,30 +412,25 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 */
 	private void insert(Article item) {
 		Assert.isTrue(item.isValid());
-		StringBuffer sb = new StringBuffer();
-		sb.append("insert into articles values ("); //$NON-NLS-1$
-		addString(sb, item.getUUID().toString(), false);
-		addString(sb, item.getParentUUID().toString(), true);
-		addString(sb, item.getFeedUUID().toString(), true);
-		addString(sb, item.getGuid(), true);
-		addString(sb, item.getTitle(), true);
-		addString(sb, item.getLink(), true);
-		addString(sb, encode(item.getMarks()), true);
-		sb.append(',');
-		sb.append(item.isRead() ? 1 : 0);
-		addLong(sb, item.getPublicationDate(), true);
-		addLong(sb, item.getReadDate(), true);
-		addLong(sb, item.getAdded(), true);
-		addString(sb, item.getDescription(), true);
-		if (item.getCreator() != null)
-			addString(sb, item.getCreator(), true);
-		else
-			addNull(sb, true);
-		sb.append(")"); //$NON-NLS-1$
 		try {
-			Statement s = connection.createStatement();
-			s.setEscapeProcessing(true);
-			s.execute(sb.toString());
+			PreparedStatement ps = connection
+					.prepareStatement("insert into articles values(?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+			ps.setEscapeProcessing(true);
+			ps.setString(1, item.getUUID().toString());
+			ps.setString(2, item.getParentUUID().toString());
+			ps.setString(3, item.getFeedUUID().toString());
+			ps.setString(4, item.getGuid());
+			ps.setString(5, item.getTitle());
+			ps.setString(6, item.getLink());
+			ps.setString(7, encode(item.getMarks()));
+			ps.setInt(8, item.isRead() ? 1 : 0);
+			ps.setLong(9, item.getPublicationDate());
+			ps.setLong(10, item.getReadDate());
+			ps.setLong(11, item.getAdded());
+			ps.setString(12, item.getDescription());
+			ps.setString(13, item.getCreator());
+			ps.executeUpdate();
+			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -446,6 +446,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		try {
 			PreparedStatement ps = connection
 					.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) "); //$NON-NLS-1$
+			ps.setEscapeProcessing(true);
 			ps.setString(1, feed.getUUID().toString());
 			ps.setString(2, feed.getParentUUID().toString());
 			ps.setString(3, feed.getTitle()); // title
@@ -551,6 +552,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 */
 	public IStatus startup(IProgressMonitor monitor) {
 		if (AggregatorPlugin.getDefault().isDebugging()) {
+			System.setProperty("derby.language.logQueryPlan", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 			System.out
 					.println("[DEBUG] Opening database at " + path.toOSString()); //$NON-NLS-1$
 		}
@@ -618,6 +620,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			folder.setRegistry(registry);
 			feeds.add(folder);
 		}
+		rs.close();
 	}
 
 	/*
@@ -626,18 +629,20 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 * @see no.resheim.aggregator.model.IAggregatorStorage#selectDescription(no.resheim.aggregator.model.Article)
 	 */
 	public String getDescription(Article item) {
+		String description = null;
 		try {
 			Statement s = connection.createStatement();
 			String query = "select description from articles where guid='" //$NON-NLS-1$
 					+ item.getGuid() + "'"; //$NON-NLS-1$
 			ResultSet rs = s.executeQuery(query);
 			if (rs.next()) {
-				return rs.getString(1);
+				description = rs.getString(1);
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return description;
 
 	}
 
@@ -663,6 +668,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			f.setRegistry(registry);
 			feeds.add(f);
 		}
+		rs.close();
 	}
 
 	/*
@@ -673,12 +679,15 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	public int getUnreadCount(Feed feed) {
 		int count = 0;
 		try {
+			if (connection.isClosed())
+				return 0;
 			Statement s = connection.createStatement();
 			String query = "select count(title) from articles where parent_uuid='" //$NON-NLS-1$
 					+ feed.getUUID() + "' and is_read=0"; //$NON-NLS-1$
 			ResultSet rs = s.executeQuery(query);
 			if (rs.next())
 				count += rs.getInt(1);
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -698,7 +707,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		try {
 			Statement s = connection.createStatement();
 			String query = "select * from articles where parent_uuid='" //$NON-NLS-1$
-					+ parent.getUUID() + "'"; //$NON-NLS-1$
+					+ parent.getUUID() + "' order by publication_date desc"; //$NON-NLS-1$
 			ResultSet rs = s.executeQuery(query);
 			while (rs.next()) {
 				Article i = composeItem(rs);
@@ -706,6 +715,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 				i.setRegistry(registry);
 				feeds.add(i);
 			}
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -783,16 +793,18 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 * @see no.resheim.aggregator.IAggregatorStorage#hasFeed(java.lang.String)
 	 */
 	public boolean hasFeed(String url) {
+		boolean hasFeed = false;
 		try {
 			Statement s = connection.createStatement();
-			String query = "select * from feeds where url='" //$NON-NLS-1$
+			String query = "select uuid from feeds where url='" //$NON-NLS-1$
 					+ url + "'"; //$NON-NLS-1$
 			ResultSet rs = s.executeQuery(query);
-			return rs.next();
+			hasFeed = rs.next();
+			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return hasFeed;
 	}
 
 }

@@ -45,15 +45,12 @@ CREATE TABLE articles (
 /* Selection, tree browsing */
 CREATE INDEX folders_parent ON folders (parent_uuid,uuid);
 CREATE INDEX feeds_parent ON feeds (parent_uuid,uuid);
+CREATE INDEX feeds_url ON feeds (url,uuid);
 CREATE INDEX articles_parent ON articles (parent_uuid,uuid);
+CREATE INDEX articles_guid ON articles (guid,uuid);
 
 /* Unique index */
 CREATE INDEX folders_id ON folders (uuid);
 CREATE INDEX feeds_id ON feeds (uuid);
 CREATE INDEX articles_id ON articles (uuid);
-
-/* Deletion/cleaning up */
-CREATE INDEX articles_feed ON articles (feed_uuid, uuid);
-CREATE INDEX articles_added ON articles (feed_uuid, added_date DESC, uuid);
-CREATE INDEX articles_published ON articles (feed_uuid, publication_date DESC, uuid);
 
