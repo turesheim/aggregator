@@ -1,8 +1,6 @@
 package no.resheim.aggregator.data.internal;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -94,31 +92,6 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		}
 	}
 
-	private void analyzeIndices() {
-		File log = new File(
-				System.getProperty("user.dir") + File.separator + "derby.log"); //$NON-NLS-1$ //$NON-NLS-2$
-		if (log.exists()) {
-			System.out.println("Analyzing query plan log \"" //$NON-NLS-1$
-					+ log.getAbsolutePath() + "\""); //$NON-NLS-1$
-			try {
-				BufferedReader br = new BufferedReader(new FileReader(log));
-				String in = null;
-				String prev = null;
-				while ((in = br.readLine()) != null) {
-					if (in.indexOf("Table Scan") > 0) { //$NON-NLS-1$
-						if (prev != null)
-							System.out.println(prev);
-						System.out.println(in);
-					}
-					prev = in;
-				}
-				br.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -126,11 +99,6 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 */
 	public IStatus shutdown() {
 		try {
-			analyzeIndices();
-			if (AggregatorPlugin.getDefault().isDebugging()) {
-				System.out
-						.println("[DEBUG] Shutting down database at " + path.toOSString()); //$NON-NLS-1$
-			}
 			connection = DriverManager.getConnection(JDBC_DERBY
 					+ path.toOSString() + DISCONNECT_OPTIONS);
 			connection.close();
@@ -579,11 +547,6 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 * @see no.resheim.aggregator.internal.IRegistryExternalizer#open(java.lang.String)
 	 */
 	public IStatus startup(IProgressMonitor monitor) {
-		if (AggregatorPlugin.getDefault().isDebugging()) {
-			System.setProperty("derby.language.logQueryPlan", "true"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.out
-					.println("[DEBUG] Opening database at " + path.toOSString()); //$NON-NLS-1$
-		}
 		try {
 			Class.forName(DB_DRIVER).newInstance();
 			connection = DriverManager.getConnection(JDBC_DERBY
