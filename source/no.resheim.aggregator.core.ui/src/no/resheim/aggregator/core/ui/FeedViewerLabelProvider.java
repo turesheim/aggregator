@@ -97,13 +97,8 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 			return sb.toString();
 		}
 		if (element instanceof Article) {
-			Article article = ((Article) element);
-			StringBuilder sb = new StringBuilder();
-			sb.append(article.getTitle());
-			sb.append('\n');
-			sb.append(article.getRegistry().getDescription(article));
-			return sb.toString();
-		}
+				return ((Article) element).getTitle();
+				}
 
 		if (element instanceof Folder)
 			return ((Folder) element).getTitle();
