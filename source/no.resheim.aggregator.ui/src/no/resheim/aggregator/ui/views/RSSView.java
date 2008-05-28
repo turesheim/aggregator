@@ -60,7 +60,6 @@ import org.eclipse.ui.part.ViewPart;
  */
 public class RSSView extends ViewPart implements IFeedView {
 
-	private static final String DEFAULT_REGISTRY_ID = "no.resheim.aggregator.core.defaultFeedCollection"; //$NON-NLS-1$
 	private static final String BLANK = ""; //$NON-NLS-1$
 	private SashForm sashForm;
 
@@ -190,7 +189,7 @@ public class RSSView extends ViewPart implements IFeedView {
 		treeView.setLabelProvider(new FeedViewerLabelProvider());
 		treeView.setComparator(new NameSorter());
 		registry = AggregatorPlugin.getDefault().getFeedCollection(
-				DEFAULT_REGISTRY_ID);
+				AggregatorPlugin.DEFAULT_REGISTRY_ID);
 		treeView.setInput(registry);
 		treeView.addSelectionChangedListener(new ViewSelectionListener());
 		getSite().setSelectionProvider(treeView);

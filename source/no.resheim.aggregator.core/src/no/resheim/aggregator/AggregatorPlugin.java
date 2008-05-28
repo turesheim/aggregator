@@ -96,6 +96,7 @@ public class AggregatorPlugin extends Plugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		fDebugging = super.isDebugging();
 		initialize();
 		// Read in all the default feeds.
 		InputStream is = FileLocator.openStream(this.getBundle(), new Path(
@@ -112,6 +113,13 @@ public class AggregatorPlugin extends Plugin {
 		}
 	}
 
+	private boolean fDebugging;
+
+	@Override
+	public boolean isDebugging() {
+		return fDebugging;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -119,7 +127,11 @@ public class AggregatorPlugin extends Plugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		if (isDebugging()) {
+			System.out.println("[DEBUG] Shutting down storage"); //$NON-NLS-1$
+		}
 		for (IAggregatorStorage storage : storageList) {
+			System.out.println(" - " + storage);
 			storage.shutdown();
 		}
 		super.stop(context);
@@ -196,6 +208,8 @@ public class AggregatorPlugin extends Plugin {
 					if (status.isOK()) {
 						registry.initialize(storage);
 						storageList.add(storage);
+					} else {
+						System.out.println(status);
 					}
 				}
 			} catch (Exception e) {

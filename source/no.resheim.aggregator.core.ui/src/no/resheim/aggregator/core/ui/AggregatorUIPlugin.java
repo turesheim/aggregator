@@ -50,10 +50,6 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 
 	private static AggregatorUIPlugin plugin;
 
-	public static final int MODE_TREE = 0;
-
-	public static final int MODE_FLAT = 1;
-
 	/**
 	 * The constructor
 	 */

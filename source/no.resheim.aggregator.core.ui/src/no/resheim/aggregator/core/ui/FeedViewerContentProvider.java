@@ -11,8 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import java.util.ArrayList;
-
 import no.resheim.aggregator.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
@@ -41,19 +39,12 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 	};
 	private StructuredViewer fViewer;
 	private FeedCollection fCollection;
-	private int fMode;
 
 	/**
 	 * 
 	 */
 	public FeedViewerContentProvider() {
 		super();
-		fMode = AggregatorUIPlugin.MODE_TREE;
-	}
-
-	public FeedViewerContentProvider(int mode) {
-		super();
-		fMode = mode;
 	}
 
 	public void inputChanged(Viewer v, Object oldInput, Object newInput) {
@@ -79,17 +70,7 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 	 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
 	 */
 	public Object[] getElements(Object parent) {
-		if (fMode == AggregatorUIPlugin.MODE_FLAT) {
-			ArrayList<IAggregatorItem> articles = new ArrayList<IAggregatorItem>();
-			for (IAggregatorItem feed : fCollection.getFeeds()) {
-				for (IAggregatorItem article : fCollection.getChildren(feed)) {
-					articles.add(article);
-				}
-			}
-			return articles.toArray(new IAggregatorItem[articles.size()]);
-		} else {
-			return getChildren(parent);
-		}
+		return getChildren(parent);
 	}
 
 	public Object getParent(Object child) {
