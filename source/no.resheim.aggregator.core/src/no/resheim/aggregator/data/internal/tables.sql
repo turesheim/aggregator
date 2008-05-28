@@ -54,3 +54,5 @@ CREATE INDEX folders_id ON folders (uuid);
 CREATE INDEX feeds_id ON feeds (uuid);
 CREATE INDEX articles_id ON articles (uuid);
 
+/* Finding read articles */
+CREATE INDEX articles_old ON articles (feed_uuid,is_read);
