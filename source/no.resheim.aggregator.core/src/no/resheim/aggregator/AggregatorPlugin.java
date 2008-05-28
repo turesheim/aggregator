@@ -127,11 +127,7 @@ public class AggregatorPlugin extends Plugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		if (isDebugging()) {
-			System.out.println("[DEBUG] Shutting down storage"); //$NON-NLS-1$
-		}
 		for (IAggregatorStorage storage : storageList) {
-			System.out.println(" - " + storage);
 			storage.shutdown();
 		}
 		super.stop(context);
