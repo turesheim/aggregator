@@ -6,14 +6,14 @@
       provider-name="Resheim Software">
 
    <description>
-      Simple RSS and Atom feed reader for Eclipse.
+      Core feature for a simple RSS and Atom feed reader for Eclipse.
    </description>
 
    <copyright>
-      Copyright 2007 Resheim Software
+      Copyright 2007, 2008 Resheim Software
    </copyright>
 
-   <license>
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
       Eclipse Public License - v 1.0
 THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS
 ECLIPSE PUBLIC LICENSE (&quot;AGREEMENT&quot;). ANY USE, REPRODUCTION OR
@@ -213,7 +213,7 @@ litigation.
    </license>
 
    <url>
-      <update url="http://resheim.no/updatesite"/>
+      <update label="Resheim Aggregator Update Site" url="http://update.resheim.no/aggregator"/>
    </url>
 
    <plugin
