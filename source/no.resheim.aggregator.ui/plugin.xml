@@ -74,13 +74,5 @@
          </command>
       </menuContribution>
    </extension>
-   <extension
-         point="no.resheim.aggregator.core.feeds">
-      <collection
-            id="no.resheim.aggregator.ui.collection"
-            name="My Test Collection"
-            public="true">
-      </collection>
-   </extension>
 
 </plugin>
