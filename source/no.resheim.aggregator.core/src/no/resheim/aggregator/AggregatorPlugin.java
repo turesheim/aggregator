@@ -19,11 +19,13 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -178,12 +180,15 @@ public class AggregatorPlugin extends Plugin {
 	}
 
 	private void initialize() {
-		IExtensionRegistry ereg = Platform.getExtensionRegistry();
-		addCollections(ereg);
-		addFeeds(ereg);
+		final IExtensionRegistry ereg = Platform.getExtensionRegistry();
+		IStatus status = addCollections(ereg, new NullProgressMonitor());
+		if (status.isOK()) {
+			addFeeds(ereg);
+		}
 	}
 
-	private void addCollections(IExtensionRegistry ereg) {
+	private IStatus addCollections(IExtensionRegistry ereg,
+			IProgressMonitor monitor) {
 		IConfigurationElement[] elements = ereg
 				.getConfigurationElementsFor(REGISTRY_EXTENSION_ID);
 		for (IConfigurationElement element : elements) {
@@ -194,24 +199,24 @@ public class AggregatorPlugin extends Plugin {
 					String name = element.getAttribute("name"); //$NON-NLS-1$
 					boolean pub = Boolean.parseBoolean(element
 							.getAttribute("public")); //$NON-NLS-1$
-					FeedCollection registry = new FeedCollection(id, pub);
+					final FeedCollection registry = new FeedCollection(id, pub);
 					registry.setTitle(name);
 					registryMap.put(id, registry);
-					// Create the storage for the registry
 					IAggregatorStorage storage = new DerbySQLStorage(registry,
 							getStorageLocation(registry));
-					IStatus status = storage.startup(new NullProgressMonitor());
+					IStatus status = storage.startup(monitor);
 					if (status.isOK()) {
 						registry.initialize(storage);
 						storageList.add(storage);
 					} else {
-						System.out.println(status);
+						return status;
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		return Status.OK_STATUS;
 	}
 
 	private void addFeeds(IExtensionRegistry ereg) {
@@ -226,7 +231,8 @@ public class AggregatorPlugin extends Plugin {
 					FeedCollection collection = getFeedCollection(id);
 					if (collection != null) {
 						if (!collection.hasFeed(url)) {
-							collection.addNew(createNewFeed(collection, element));
+							collection
+									.addNew(createNewFeed(collection, element));
 						}
 					}
 				}

@@ -158,16 +158,15 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		return item;
 	}
 
-	private IStatus createTables() throws SQLException {
-		if (AggregatorPlugin.getDefault().isDebugging()) {
-			System.out.println("- Creating tables"); //$NON-NLS-1$
-		}
+	private IStatus createTables(IProgressMonitor monitor) throws SQLException {
+		monitor.subTask("Initializing database");
 		InputStream is = DerbySQLStorage.class.getResourceAsStream(TABLES_SQL);
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		Statement s = connection.createStatement();
 		StringBuffer create = new StringBuffer();
 		String in = null;
 		try {
+			monitor.subTask("Creating tables");
 			while ((in = br.readLine()) != null) {
 				if (in.contains("/*")) { //$NON-NLS-1$
 					while (!in.contains("*/")) { //$NON-NLS-1$
@@ -568,7 +567,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			DatabaseMetaData metadata = connection.getMetaData();
 			ResultSet rs = metadata.getTables(null, "APP", "FEEDS", null); //$NON-NLS-1$ //$NON-NLS-2$
 			if (!rs.next()) {
-				return createTables();
+				return createTables(monitor);
 			}
 		} catch (Exception e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,

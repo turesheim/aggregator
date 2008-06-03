@@ -160,9 +160,6 @@ public class RSSView extends ViewPart implements IFeedView {
 		drillDownAdapter = new DrillDownAdapter(treeView);
 		treeView.setContentProvider(new FeedViewerContentProvider());
 		treeView.setLabelProvider(new FeedViewerLabelProvider());
-		registry = AggregatorPlugin.getDefault().getFeedCollection(
-				AggregatorPlugin.DEFAULT_REGISTRY_ID);
-		treeView.setInput(registry);
 		treeView.addSelectionChangedListener(new ViewSelectionListener());
 		getSite().setSelectionProvider(treeView);
 
@@ -190,7 +187,21 @@ public class RSSView extends ViewPart implements IFeedView {
 			}
 
 		});
+		initRegistry();
 
+	}
+
+	private void initRegistry() {
+		Display d = getViewSite().getShell().getDisplay();
+		d.asyncExec(new Runnable() {
+
+			public void run() {
+				registry = AggregatorPlugin.getDefault().getFeedCollection(
+						AggregatorPlugin.DEFAULT_REGISTRY_ID);
+				treeView.setInput(registry);
+			}
+
+		});
 	}
 
 	private boolean createBrowser() {
