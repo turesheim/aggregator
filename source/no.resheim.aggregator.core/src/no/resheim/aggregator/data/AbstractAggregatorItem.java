@@ -8,6 +8,7 @@ public abstract class AbstractAggregatorItem implements IAggregatorItem {
 	protected UUID uuid;
 	protected UUID parent_uuid;
 	protected FeedCollection registry;
+	protected long fOrdering;
 
 	private EnumSet<Mark> marks = EnumSet.noneOf(Mark.class);
 
@@ -25,6 +26,14 @@ public abstract class AbstractAggregatorItem implements IAggregatorItem {
 
 	public void setMarks(EnumSet<Mark> mark) {
 		this.marks = mark;
+	}
+
+	public void setOrdering(long ordering) {
+		fOrdering = ordering;
+	}
+
+	public long getOrdering() {
+		return fOrdering;
 	}
 
 	/**

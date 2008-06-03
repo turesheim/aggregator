@@ -91,13 +91,22 @@ public class FeedCollection implements IAggregatorItem {
 
 	/**
 	 * Adds a new feed to the database and immediately stores it's data in the
-	 * persistent storage.
+	 * persistent storage. If the order of the item has not already been set the
+	 * current time will be used to set it. For articles the publication date
+	 * will be used instead if it has been set.
 	 * 
 	 * @param feed
-	 *            The feed to add
+	 *            The aggregator item to add
 	 */
-	public void add(IAggregatorItem item) {
+	public void addNew(AbstractAggregatorItem item) {
 		try {
+			if (item.getOrdering() == 0) {
+				item.setOrdering(System.currentTimeMillis());
+				if (item instanceof Article)
+					if (((Article) item).getPublicationDate() > 0) {
+						item.setOrdering(((Article) item).getPublicationDate());
+					}
+			}
 			if (item instanceof Feed) {
 				Feed feed = (Feed) item;
 				sites.put(feed.getUUID(), feed);
@@ -120,8 +129,10 @@ public class FeedCollection implements IAggregatorItem {
 		}
 	}
 
-	public void move(IAggregatorItem item, IAggregatorItem newParent) {
-		database.move(item, newParent);
+	public void move(IAggregatorItem item, IAggregatorItem newParent,
+			long newOrdering) {
+		database.move(item, newParent, newOrdering);
+		item.setOrdering(newOrdering);
 	}
 
 	/**
@@ -370,5 +381,15 @@ public class FeedCollection implements IAggregatorItem {
 
 	public String getTitle() {
 		return title;
+	}
+
+	public long getOrdering() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void setOrdering(long ordering) {
+		// TODO Auto-generated method stub
+
 	}
 }

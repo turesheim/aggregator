@@ -51,7 +51,7 @@ public class RSS10ItemHandler extends AbstractElementHandler {
 		}
 		if (qName.equals(ITEM)) {
 			if (!registry.hasArticle(item)) {
-				registry.add(item);
+				registry.addNew(item);
 			}
 		}
 	}

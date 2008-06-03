@@ -118,7 +118,8 @@ public interface IAggregatorStorage {
 	 * @param newParent
 	 *            The new parent
 	 */
-	public abstract void move(IAggregatorItem item, IAggregatorItem newParent);
+	public abstract void move(IAggregatorItem item, IAggregatorItem newParent,
+			long newOrdering);
 
 	/**
 	 * Renames the given item.

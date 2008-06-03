@@ -41,8 +41,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
@@ -123,31 +121,6 @@ public class RSSView extends ViewPart implements IFeedView {
 		}
 	}
 
-	class NameSorter extends ViewerComparator {
-
-		@Override
-		public int compare(Viewer viewer, Object e1, Object e2) {
-			if (e1 instanceof Article && e2 instanceof Article) {
-				Article i1 = (Article) e1;
-				Article i2 = (Article) e2;
-				long t1 = i1.getPublicationDate();
-				long t2 = i2.getPublicationDate();
-				if (t1 == 0)
-					t1 = i1.getAdded();
-				if (t2 == 0)
-					t2 = i2.getAdded();
-				// Note that we're putting the oldest items last!
-				if (t1 == t2)
-					return 0;
-				else if (t1 < t2)
-					return 1;
-				else
-					return -1;
-			}
-			return super.compare(viewer, e1, e2);
-		}
-	}
-
 	private void refreshView() {
 		Runnable update = new Runnable() {
 			public void run() {
@@ -187,7 +160,6 @@ public class RSSView extends ViewPart implements IFeedView {
 		drillDownAdapter = new DrillDownAdapter(treeView);
 		treeView.setContentProvider(new FeedViewerContentProvider());
 		treeView.setLabelProvider(new FeedViewerLabelProvider());
-		treeView.setComparator(new NameSorter());
 		registry = AggregatorPlugin.getDefault().getFeedCollection(
 				AggregatorPlugin.DEFAULT_REGISTRY_ID);
 		treeView.setInput(registry);

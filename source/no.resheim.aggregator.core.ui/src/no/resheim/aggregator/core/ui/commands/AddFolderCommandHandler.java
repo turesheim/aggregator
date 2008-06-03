@@ -39,7 +39,7 @@ public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 			// Use the selected element
 			Folder folder = new Folder(UUID.randomUUID(),
 					parentUUID, Messages.AddFolderCommandHandler_NewFolderName);
-			registry.add(folder);
+			registry.addNew(folder);
 		}
 		return null;
 	}

@@ -226,7 +226,7 @@ public class AggregatorPlugin extends Plugin {
 					FeedCollection collection = getFeedCollection(id);
 					if (collection != null) {
 						if (!collection.hasFeed(url)) {
-							collection.add(createNewFeed(collection, element));
+							collection.addNew(createNewFeed(collection, element));
 						}
 					}
 				}

@@ -40,4 +40,8 @@ public interface IAggregatorItem {
 	 */
 	public abstract String getTitle();
 
+	public abstract void setOrdering(long ordering);
+
+	public long getOrdering();
+
 }

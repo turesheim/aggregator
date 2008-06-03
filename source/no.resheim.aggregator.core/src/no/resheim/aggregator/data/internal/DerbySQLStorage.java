@@ -112,22 +112,23 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		Feed feed = new Feed();
 		feed.setUUID(UUID.fromString(rs.getString(1)));
 		feed.setParentUUID(UUID.fromString(rs.getString(2)));
-		feed.setTitle(rs.getString(3));
-		feed.setURL(rs.getString(4));
-		feed.setMarks(decode(rs.getString(5)));
-		feed.setArchiving(Archiving.valueOf(rs.getString(6)));
-		feed.setArchivingItems(rs.getInt(7));
-		feed.setArchivingDays(rs.getInt(8));
-		feed.setUpdateInterval(rs.getInt(9));
-		feed.setUpdatePeriod(UpdatePeriod.valueOf(rs.getString(10)));
-		feed.setLastUpdate(rs.getLong(11));
-		feed.setDescription(rs.getString(12));
-		feed.setLink(rs.getString(13));
-		feed.setWebmaster(rs.getString(14));
-		feed.setEditor(rs.getString(15));
-		feed.setCopyright(rs.getString(16));
-		feed.setType(rs.getString(17));
-		feed.setHidden(rs.getInt(18) != 0);
+		feed.setOrdering(rs.getLong(3));
+		feed.setTitle(rs.getString(4));
+		feed.setURL(rs.getString(5));
+		feed.setMarks(decode(rs.getString(6)));
+		feed.setArchiving(Archiving.valueOf(rs.getString(7)));
+		feed.setArchivingItems(rs.getInt(8));
+		feed.setArchivingDays(rs.getInt(9));
+		feed.setUpdateInterval(rs.getInt(10));
+		feed.setUpdatePeriod(UpdatePeriod.valueOf(rs.getString(11)));
+		feed.setLastUpdate(rs.getLong(12));
+		feed.setDescription(rs.getString(13));
+		feed.setLink(rs.getString(14));
+		feed.setWebmaster(rs.getString(15));
+		feed.setEditor(rs.getString(16));
+		feed.setCopyright(rs.getString(17));
+		feed.setType(rs.getString(18));
+		feed.setHidden(rs.getInt(19) != 0);
 		return feed;
 	}
 
@@ -143,15 +144,16 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		Article item = new Article();
 		item.setUUID(UUID.fromString(rs.getString(1)));
 		item.setParentUUID(UUID.fromString(rs.getString(2)));
-		item.setFeedUUID(UUID.fromString(rs.getString(3)));
-		item.setGuid(rs.getString(4));
-		item.setTitle(rs.getString(5));
-		item.setLink(rs.getString(6));
-		item.setMarks(decode(rs.getString(7)));
-		item.setRead(rs.getInt(8) != 0);
-		item.setPublicationDate(rs.getLong(9));
-		item.setReadDate(rs.getLong(10));
-		item.setAddedDate(rs.getLong(11));
+		item.setOrdering(rs.getLong(3));
+		item.setFeedUUID(UUID.fromString(rs.getString(4)));
+		item.setGuid(rs.getString(5));
+		item.setTitle(rs.getString(6));
+		item.setLink(rs.getString(7));
+		item.setMarks(decode(rs.getString(8)));
+		item.setRead(rs.getInt(9) != 0);
+		item.setPublicationDate(rs.getLong(10));
+		item.setReadDate(rs.getLong(11));
+		item.setAddedDate(rs.getLong(12));
 		item.setCreator(rs.getString(13));
 		return item;
 	}
@@ -373,7 +375,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		HashMap<UUID, Feed> feeds = new HashMap<UUID, Feed>();
 		try {
 			Statement s = connection.createStatement();
-			ResultSet rs = s.executeQuery("select uuid from feeds"); //$NON-NLS-1$
+			ResultSet rs = s.executeQuery("select * from feeds"); //$NON-NLS-1$
 			while (rs.next()) {
 				Feed f = composeFeed(rs);
 				f.setParentItem(registry);
@@ -410,21 +412,22 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		Assert.isTrue(item.isValid());
 		try {
 			PreparedStatement ps = connection
-					.prepareStatement("insert into articles values(?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+					.prepareStatement("insert into articles values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 			ps.setEscapeProcessing(true);
 			ps.setString(1, item.getUUID().toString());
 			ps.setString(2, item.getParentUUID().toString());
-			ps.setString(3, item.getFeedUUID().toString());
-			ps.setString(4, item.getGuid());
-			ps.setString(5, item.getTitle());
-			ps.setString(6, item.getLink());
-			ps.setString(7, encode(item.getMarks()));
-			ps.setInt(8, item.isRead() ? 1 : 0);
-			ps.setLong(9, item.getPublicationDate());
-			ps.setLong(10, item.getReadDate());
-			ps.setLong(11, item.getAdded());
-			ps.setString(12, item.getDescription());
-			ps.setString(13, item.getCreator());
+			ps.setLong(3, item.getOrdering());
+			ps.setString(4, item.getFeedUUID().toString());
+			ps.setString(5, item.getGuid());
+			ps.setString(6, item.getTitle());
+			ps.setString(7, item.getLink());
+			ps.setString(8, encode(item.getMarks()));
+			ps.setInt(9, item.isRead() ? 1 : 0);
+			ps.setLong(10, item.getPublicationDate());
+			ps.setLong(11, item.getReadDate());
+			ps.setLong(12, item.getAdded());
+			ps.setString(13, item.getDescription());
+			ps.setString(14, item.getCreator());
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {
@@ -441,26 +444,27 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	private void insert(Feed feed) {
 		try {
 			PreparedStatement ps = connection
-					.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) "); //$NON-NLS-1$
+					.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 			ps.setEscapeProcessing(true);
 			ps.setString(1, feed.getUUID().toString());
 			ps.setString(2, feed.getParentUUID().toString());
-			ps.setString(3, feed.getTitle()); // title
-			ps.setString(4, feed.getURL()); // url;
-			ps.setString(5, encode(feed.getMarks())); // marks
-			ps.setString(6, feed.getArchiving().toString()); // archiving
-			ps.setInt(7, feed.getArchivingItems()); // archiving_items
-			ps.setInt(8, feed.getArchivingDays()); // archiving_days
-			ps.setInt(9, feed.getUpdateInterval()); // update_interval
-			ps.setString(10, feed.getUpdatePeriod().toString()); // update_period
-			ps.setLong(11, feed.getLastUpdate()); // last_update
-			ps.setString(12, feed.getDescription()); // description
-			ps.setString(13, feed.getLink()); // link
-			ps.setString(14, feed.getWebmaster()); // webmaster
-			ps.setString(15, feed.getEditor()); // editor
-			ps.setString(16, feed.getCopyright()); // copyright
-			ps.setString(17, feed.getType()); // feed_type
-			ps.setInt(18, feed.isHidden() ? 1 : 0);
+			ps.setLong(3, feed.getOrdering());
+			ps.setString(4, feed.getTitle());
+			ps.setString(5, feed.getURL());
+			ps.setString(6, encode(feed.getMarks()));
+			ps.setString(7, feed.getArchiving().toString());
+			ps.setInt(8, feed.getArchivingItems());
+			ps.setInt(9, feed.getArchivingDays()); // archiving_days
+			ps.setInt(10, feed.getUpdateInterval()); // update_interval
+			ps.setString(11, feed.getUpdatePeriod().toString()); // update_period
+			ps.setLong(12, feed.getLastUpdate()); // last_update
+			ps.setString(13, feed.getDescription()); // description
+			ps.setString(14, feed.getLink()); // link
+			ps.setString(15, feed.getWebmaster()); // webmaster
+			ps.setString(16, feed.getEditor()); // editor
+			ps.setString(17, feed.getCopyright()); // copyright
+			ps.setString(18, feed.getType()); // feed_type
+			ps.setInt(19, feed.isHidden() ? 1 : 0);
 			ps.executeUpdate();
 			ps.close();
 		} catch (Exception e) {
@@ -475,17 +479,17 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 *            The item to insert.
 	 */
 	private void insert(Folder category) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("insert into folders values ("); //$NON-NLS-1$
-		addString(sb, category.getUUID().toString(), false);
-		addString(sb, category.getParentUUID().toString(), true);
-		addString(sb, category.getTitle(), true);
-		addString(sb, encode(category.getMarks()), true);
-		sb.append(")"); //$NON-NLS-1$
 		try {
-			Statement s = connection.createStatement();
-			s.setEscapeProcessing(true);
-			s.execute(sb.toString());
+			PreparedStatement ps = connection
+					.prepareStatement("insert into folders values(?,?,?,?,?) "); //$NON-NLS-1$
+			ps.setEscapeProcessing(true);
+			ps.setString(1, category.getUUID().toString());
+			ps.setString(2, category.getParentUUID().toString());
+			ps.setLong(3, category.getOrdering());
+			ps.setString(4, category.getTitle());
+			ps.setString(5, encode(category.getMarks()));
+			ps.executeUpdate();
+			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -525,16 +529,26 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 * @see no.resheim.aggregator.model.IAggregatorStorage#move(no.resheim.aggregator.model.IAggregatorItem,
 	 *      no.resheim.aggregator.model.IAggregatorItem)
 	 */
-	public void move(IAggregatorItem item, IAggregatorItem newParent) {
+	public void move(IAggregatorItem item, IAggregatorItem newParent,
+			long newOrdering) {
 		try {
+			String table = null;
 			if (item instanceof Feed) {
-				Statement s = connection.createStatement();
-				s.executeUpdate("update feeds set parent_uuid='" //$NON-NLS-1$
-						+ newParent.getUUID().toString() + "' where uuid='" //$NON-NLS-1$
-						+ item.getUUID().toString() + "'"); //$NON-NLS-1$
-				s.close();
-
+				table = "feeds"; //$NON-NLS-1$
 			}
+			if (item instanceof Article) {
+				table = "articles"; //$NON-NLS-1$
+			}
+			if (item instanceof Folder) {
+				table = "folders"; //$NON-NLS-1$
+			}
+			Statement s = connection.createStatement();
+			s.executeUpdate("update " + table + " set parent_uuid='" //$NON-NLS-1$ //$NON-NLS-2$
+					+ newParent.getUUID().toString() + "', ordering=" //$NON-NLS-1$
+					+ newOrdering + " where uuid='" //$NON-NLS-1$
+					+ item.getUUID().toString() + "'"); //$NON-NLS-1$
+			s.close();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -602,11 +616,12 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		Statement s = connection.createStatement();
 		String query = null;
 		query = "select * from folders where parent_uuid='" //$NON-NLS-1$
-				+ item.getUUID().toString() + "'"; //$NON-NLS-1$
+				+ item.getUUID().toString() + "' order by ordering desc"; //$NON-NLS-1$
 		ResultSet rs = s.executeQuery(query);
 		while (rs.next()) {
 			Folder folder = new Folder(UUID.fromString(rs.getString(1)), UUID
-					.fromString(rs.getString(2)), rs.getString(3));
+					.fromString(rs.getString(2)), rs.getString(4));
+			folder.setOrdering(rs.getLong(3));
 			folder.setParentItem(item);
 			folder.setRegistry(registry);
 			feeds.add(folder);
@@ -650,7 +665,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		Statement s = connection.createStatement();
 		String query = null;
 		query = "select * from feeds where parent_uuid='" //$NON-NLS-1$
-				+ parent.getUUID().toString() + "'"; //$NON-NLS-1$
+				+ parent.getUUID().toString() + "' order by ordering desc"; //$NON-NLS-1$
 
 		ResultSet rs = s.executeQuery(query);
 		while (rs.next()) {
@@ -698,7 +713,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		try {
 			Statement s = connection.createStatement();
 			String query = "select * from articles where parent_uuid='" //$NON-NLS-1$
-					+ parent.getUUID() + "' order by publication_date desc"; //$NON-NLS-1$
+					+ parent.getUUID() + "' order by ordering desc"; //$NON-NLS-1$
 			ResultSet rs = s.executeQuery(query);
 			while (rs.next()) {
 				Article i = composeItem(rs);
