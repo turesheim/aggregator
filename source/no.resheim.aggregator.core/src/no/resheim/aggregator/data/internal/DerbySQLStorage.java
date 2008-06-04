@@ -159,14 +159,14 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	}
 
 	private IStatus createTables(IProgressMonitor monitor) throws SQLException {
-		monitor.subTask("Initializing database");
+		monitor.subTask(Messages.DerbySQLStorage_Initializing_Database);
 		InputStream is = DerbySQLStorage.class.getResourceAsStream(TABLES_SQL);
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		Statement s = connection.createStatement();
 		StringBuffer create = new StringBuffer();
 		String in = null;
 		try {
-			monitor.subTask("Creating tables");
+			monitor.subTask(Messages.DerbySQLStorage_Creating_Tables);
 			while ((in = br.readLine()) != null) {
 				if (in.contains("/*")) { //$NON-NLS-1$
 					while (!in.contains("*/")) { //$NON-NLS-1$
@@ -561,6 +561,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 */
 	public IStatus startup(IProgressMonitor monitor) {
 		try {
+			monitor.subTask(Messages.DerbySQLStorage_Creating_Storage);
 			Class.forName(DB_DRIVER).newInstance();
 			connection = DriverManager.getConnection(JDBC_DERBY
 					+ path.toOSString() + CONNECT_OPTIONS);

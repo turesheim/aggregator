@@ -21,11 +21,11 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -55,10 +55,14 @@ public class AggregatorPlugin extends Plugin {
 	 * Collections are declared using a symbolic name, for instance
 	 * "com.foo.bar.registry". This member is used to map between the symbolic
 	 * name and the universally unique identifier that is required internally.
+	 * It's contents may be manipulated by different threads so it has been made
+	 * thread safe using synchronized blocks.
 	 */
 	private final HashMap<String, FeedCollection> registryMap = new HashMap<String, FeedCollection>();
 
 	private final ArrayList<IAggregatorStorage> storageList = new ArrayList<IAggregatorStorage>();
+
+	private final ArrayList<IFeedCollectionEventListener> fCollectionListeners = new ArrayList<IFeedCollectionEventListener>();
 
 	/** Default feeds to add */
 	public static ArrayList<String[]> DEFAULT_FEEDS;
@@ -75,6 +79,10 @@ public class AggregatorPlugin extends Plugin {
 	public AggregatorPlugin() {
 		plugin = this;
 		DEFAULT_FEEDS = new ArrayList<String[]>();
+	}
+
+	public void addFeedCollectionListener(IFeedCollectionEventListener listener) {
+		fCollectionListeners.add(listener);
 	}
 
 	/**
@@ -185,10 +193,17 @@ public class AggregatorPlugin extends Plugin {
 
 	private void initialize() {
 		final IExtensionRegistry ereg = Platform.getExtensionRegistry();
-		IStatus status = addCollections(ereg, new NullProgressMonitor());
-		if (status.isOK()) {
-			addFeeds(ereg);
-		}
+		Job job = new Job(Messages.AggregatorPlugin_Initializing) {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				IStatus status = addCollections(ereg, monitor);
+				if (status.isOK()) {
+					addFeeds(ereg);
+				}
+				return status;
+			}
+		};
+		job.schedule();
 	}
 
 	private IStatus addCollections(IExtensionRegistry ereg,
@@ -214,6 +229,9 @@ public class AggregatorPlugin extends Plugin {
 					if (status.isOK()) {
 						registry.initialize(storage);
 						storageList.add(storage);
+						for (IFeedCollectionEventListener listener : fCollectionListeners) {
+							listener.collectionInitialized(registry);
+						}
 					} else {
 						return status;
 					}

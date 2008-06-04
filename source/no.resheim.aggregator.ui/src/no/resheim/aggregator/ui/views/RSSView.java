@@ -14,6 +14,7 @@ package no.resheim.aggregator.ui.views;
 import java.net.URL;
 
 import no.resheim.aggregator.AggregatorPlugin;
+import no.resheim.aggregator.IFeedCollectionEventListener;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.ArticleViewer;
 import no.resheim.aggregator.core.ui.FeedTreeViewer;
@@ -56,7 +57,8 @@ import org.eclipse.ui.part.ViewPart;
 /**
  * 
  */
-public class RSSView extends ViewPart implements IFeedView {
+public class RSSView extends ViewPart implements IFeedView,
+		IFeedCollectionEventListener {
 
 	private static final String BLANK = ""; //$NON-NLS-1$
 	private SashForm sashForm;
@@ -187,21 +189,8 @@ public class RSSView extends ViewPart implements IFeedView {
 			}
 
 		});
-		initRegistry();
-
-	}
-
-	private void initRegistry() {
-		Display d = getViewSite().getShell().getDisplay();
-		d.asyncExec(new Runnable() {
-
-			public void run() {
-				registry = AggregatorPlugin.getDefault().getFeedCollection(
-						AggregatorPlugin.DEFAULT_REGISTRY_ID);
-				treeView.setInput(registry);
-			}
-
-		});
+		// Register for collection events
+		AggregatorPlugin.getDefault().addFeedCollectionListener(this);
 	}
 
 	private boolean createBrowser() {
@@ -320,5 +309,19 @@ public class RSSView extends ViewPart implements IFeedView {
 		this.registry = registry;
 		treeView.setInput(registry);
 
+	}
+
+	public void collectionInitialized(FeedCollection collection) {
+		System.out.println(collection);
+		if (collection.getId().equals(AggregatorPlugin.DEFAULT_COLLECTION_ID)) {
+			Display d = getViewSite().getShell().getDisplay();
+			d.asyncExec(new Runnable() {
+				public void run() {
+					registry = AggregatorPlugin.getDefault().getFeedCollection(
+							AggregatorPlugin.DEFAULT_COLLECTION_ID);
+					treeView.setInput(registry);
+				}
+			});
+		}
 	}
 }

@@ -69,6 +69,8 @@ public class FeedCollection implements IAggregatorItem {
 		return fPublic;
 	}
 
+	final RegistryUpdateJob fRegistryUpdateJob = new RegistryUpdateJob(this);
+
 	/**
 	 * Loads all feeds from the given backend storage and initializes.
 	 * 
@@ -79,14 +81,13 @@ public class FeedCollection implements IAggregatorItem {
 		sites = storage.initializeFeeds();
 		// Start a new update job that will periodically wake up and create
 		// FeedUpdateJobs when a feed is scheduled for an update.
-		final RegistryUpdateJob job = new RegistryUpdateJob(this);
-		job.addJobChangeListener(new JobChangeAdapter() {
+		fRegistryUpdateJob.addJobChangeListener(new JobChangeAdapter() {
 			@Override
 			public void done(IJobChangeEvent event) {
-				job.schedule(30000);
+				fRegistryUpdateJob.schedule(30000);
 			}
 		});
-		job.schedule();
+		fRegistryUpdateJob.schedule();
 	}
 
 	/**
@@ -112,6 +113,8 @@ public class FeedCollection implements IAggregatorItem {
 				sites.put(feed.getUUID(), feed);
 				database.add(feed);
 				feed.setRegistry(this);
+				FeedUpdateJob job = new FeedUpdateJob(this, feed);
+				job.schedule();
 			} else if (item instanceof Folder) {
 				Folder folder = (Folder) item;
 				folder.setRegistry(this);
