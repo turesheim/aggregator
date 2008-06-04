@@ -52,20 +52,22 @@ public class AggregatorPlugin extends Plugin {
 	private static AggregatorPlugin plugin = null;
 
 	/**
-	 * Registries are declared using a symbolic name, for instance
+	 * Collections are declared using a symbolic name, for instance
 	 * "com.foo.bar.registry". This member is used to map between the symbolic
 	 * name and the universally unique identifier that is required internally.
 	 */
-	private HashMap<String, FeedCollection> registryMap;
+	private final HashMap<String, FeedCollection> registryMap = new HashMap<String, FeedCollection>();
 
-	private ArrayList<IAggregatorStorage> storageList;
+	private final ArrayList<IAggregatorStorage> storageList = new ArrayList<IAggregatorStorage>();
 
 	/** Default feeds to add */
 	public static ArrayList<String[]> DEFAULT_FEEDS;
 
 	private ServiceTracker serviceTracker;
-
-	public static final String DEFAULT_REGISTRY_ID = "no.resheim.aggregator.core.defaultFeedCollection"; //$NON-NLS-1$
+	/**
+	 * Name of the default feed collection.
+	 */
+	public static final String DEFAULT_COLLECTION_ID = "no.resheim.aggregator.core.defaultFeedCollection"; //$NON-NLS-1$
 
 	/**
 	 * The constructor
@@ -73,8 +75,6 @@ public class AggregatorPlugin extends Plugin {
 	public AggregatorPlugin() {
 		plugin = this;
 		DEFAULT_FEEDS = new ArrayList<String[]>();
-		registryMap = new HashMap<String, FeedCollection>();
-		storageList = new ArrayList<IAggregatorStorage>();
 	}
 
 	/**
@@ -148,7 +148,9 @@ public class AggregatorPlugin extends Plugin {
 	 * @return the feeds
 	 */
 	public FeedCollection getFeedCollection(String id) {
-		return registryMap.get(id);
+		synchronized (registryMap) {
+			return registryMap.get(id);
+		}
 	}
 
 	/**
@@ -176,7 +178,9 @@ public class AggregatorPlugin extends Plugin {
 	}
 
 	public Collection<FeedCollection> getCollections() {
-		return registryMap.values();
+		synchronized (registryMap) {
+			return registryMap.values();
+		}
 	}
 
 	private void initialize() {
@@ -201,7 +205,9 @@ public class AggregatorPlugin extends Plugin {
 							.getAttribute("public")); //$NON-NLS-1$
 					final FeedCollection registry = new FeedCollection(id, pub);
 					registry.setTitle(name);
-					registryMap.put(id, registry);
+					synchronized (registryMap) {
+						registryMap.put(id, registry);
+					}
 					IAggregatorStorage storage = new DerbySQLStorage(registry,
 							getStorageLocation(registry));
 					IStatus status = storage.startup(monitor);
