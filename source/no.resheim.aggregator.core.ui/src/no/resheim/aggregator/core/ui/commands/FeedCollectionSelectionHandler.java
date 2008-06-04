@@ -32,7 +32,7 @@ public class FeedCollectionSelectionHandler extends
 		if (part instanceof IFeedView) {
 			FeedCollection registry = (FeedCollection) event
 					.getObjectParameterForExecution(PARM_COLLECTION);
-			((IFeedView) part).setFeedRegistry(registry);
+			((IFeedView) part).setFeedCollection(registry);
 			if (event.getTrigger() instanceof Event) {
 				Widget w = ((Event) event.getTrigger()).widget;
 				if (w instanceof MenuItem) {

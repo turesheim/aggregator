@@ -28,7 +28,10 @@ public class UpdateFeedCommandHandler extends AbstractAggregatorCommandHandler
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedCollection registry = ((IFeedView) part).getFeedRegistry();
+			FeedCollection registry = ((IFeedView) part).getFeedCollection();
+			if (registry == null) {
+				return null;
+			}
 			IAggregatorItem item = getSelection(event);
 			if (item != null && item instanceof Feed) {
 				registry.updateFeed((Feed) item);

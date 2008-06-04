@@ -301,11 +301,11 @@ public class RSSView extends ViewPart implements IFeedView,
 		treeView.getControl().setFocus();
 	}
 
-	public FeedCollection getFeedRegistry() {
+	public FeedCollection getFeedCollection() {
 		return registry;
 	}
 
-	public void setFeedRegistry(FeedCollection registry) {
+	public void setFeedCollection(FeedCollection registry) {
 		this.registry = registry;
 		treeView.setInput(registry);
 

@@ -48,7 +48,10 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedCollection registry = ((IFeedView) part).getFeedRegistry();
+			FeedCollection registry = ((IFeedView) part).getFeedCollection();
+			if (registry == null) {
+				return null;
+			}
 			NewFeedWizard wizard = new NewFeedWizard(registry);
 			UUID parentUUID = registry.getUUID();
 			IAggregatorItem item = getSelection(event);
@@ -79,16 +82,14 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 	}
 
 	private FeedWorkingCopy getNewFeedWorkingCopy(UUID parentUUID) {
-		FeedWorkingCopy wc = new FeedWorkingCopy(UUID.randomUUID(),
-				parentUUID);
+		FeedWorkingCopy wc = new FeedWorkingCopy(UUID.randomUUID(), parentUUID);
 		// Initialize with default values from the preference store.
 		// This is done here as the preference system is a UI component.
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()
 				.getPreferenceStore();
 		wc.setArchiving(Archiving.valueOf(store
 				.getString(PreferenceConstants.P_ARCHIVING_METHOD)));
-		wc.setArchivingDays(store
-				.getInt(PreferenceConstants.P_ARCHIVING_DAYS));
+		wc.setArchivingDays(store.getInt(PreferenceConstants.P_ARCHIVING_DAYS));
 		wc.setArchivingItems(store
 				.getInt(PreferenceConstants.P_ARCHIVING_ITEMS));
 		wc.setUpdateInterval(store

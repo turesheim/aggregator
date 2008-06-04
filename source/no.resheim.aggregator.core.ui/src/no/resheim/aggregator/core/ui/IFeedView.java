@@ -24,12 +24,12 @@ public interface IFeedView {
 	 * 
 	 * @return The feed registry
 	 */
-	public FeedCollection getFeedRegistry();
+	public FeedCollection getFeedCollection();
 
 	/**
 	 * Sets the feed collection that the view is obtaining it's data from.
 	 * 
 	 * @param registry
 	 */
-	public void setFeedRegistry(FeedCollection registry);
+	public void setFeedCollection(FeedCollection registry);
 }
