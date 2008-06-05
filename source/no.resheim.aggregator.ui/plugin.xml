@@ -44,10 +44,34 @@
          </menu>
       </menuContribution>
       <menuContribution
-            locationURI="popup:no.resheim.aggregator.ui.RSSView?before=navigation">
+            locationURI="popup:no.resheim.aggregator.ui.RSSView?after=modify">
          <command
                commandId="no.resheim.aggregator.core.ui.newFolder"
                label="Add Folder">
+         </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.renameFolder"
+               label="Rename">
+            <visibleWhen>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <adapt
+                           type="no.resheim.aggregator.data.Folder">
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.delete"
+               label="Delete">
+            <visibleWhen>
+               <count
+                     value="1">
+               </count>
+            </visibleWhen>
          </command>
       </menuContribution>
       <menuContribution
@@ -55,22 +79,45 @@
          <command
                commandId="no.resheim.aggregator.core.ui.update"
                label="Update">
-         </command>
-         <command
-               commandId="no.resheim.aggregator.core.ui.renameFolder"
-               label="Rename Folder">
+            <visibleWhen>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <adapt
+                           type="no.resheim.aggregator.data.Feed">
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
          </command>
          <command
                commandId="no.resheim.aggregator.core.ui.setRead"
                label="Mark As Read">
+            <visibleWhen>
+               <count
+                     value="1">
+               </count>
+            </visibleWhen>
          </command>
-         <command
-               commandId="no.resheim.aggregator.core.ui.delete"
-               label="Delete">
-         </command>
+         <separator
+               name="properties"
+               visible="true">
+         </separator>
          <command
                commandId="no.resheim.aggregator.core.ui.properties"
                label="Properties">
+            <visibleWhen>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <adapt
+                           type="no.resheim.aggregator.data.Feed">
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
          </command>
       </menuContribution>
    </extension>

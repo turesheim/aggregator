@@ -233,8 +233,8 @@ public class RSSView extends ViewPart implements IFeedView,
 	 *            The menu manager
 	 */
 	private void fillContextMenu(IMenuManager manager) {
-		manager.add(new Separator("navigation")); //$NON-NLS-1$
 		drillDownAdapter.addNavigationActions(manager);
+		manager.add(new Separator("modify")); //$NON-NLS-1$
 		manager.add(new Separator("selection")); //$NON-NLS-1$
 	}
 
