@@ -46,10 +46,6 @@
       <menuContribution
             locationURI="popup:no.resheim.aggregator.ui.RSSView?before=selection">
          <command
-               commandId="no.resheim.aggregator.core.ui.addFeed"
-               label="Add Feed">
-         </command>
-         <command
                commandId="no.resheim.aggregator.core.ui.newFolder"
                label="Add Folder">
          </command>
