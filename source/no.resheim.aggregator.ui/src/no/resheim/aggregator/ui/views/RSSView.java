@@ -42,6 +42,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
@@ -74,8 +75,6 @@ public class RSSView extends ViewPart implements IFeedView,
 	private DrillDownAdapter drillDownAdapter;
 
 	private Action doubleClickAction;
-
-	private Action renameAction;
 
 	/** Preference: mark previewed items as read */
 	private boolean pPreviewIsRead;
@@ -234,13 +233,9 @@ public class RSSView extends ViewPart implements IFeedView,
 	 *            The menu manager
 	 */
 	private void fillContextMenu(IMenuManager manager) {
-		manager.add(new Separator("selection")); //$NON-NLS-1$
-		manager.add(renameAction);
 		manager.add(new Separator("navigation")); //$NON-NLS-1$
 		drillDownAdapter.addNavigationActions(manager);
-		ISelection selection = treeView.getSelection();
-		Object obj = ((IStructuredSelection) selection).getFirstElement();
-		renameAction.setEnabled(obj instanceof Folder);
+		manager.add(new Separator("selection")); //$NON-NLS-1$
 	}
 
 	/**
@@ -255,10 +250,6 @@ public class RSSView extends ViewPart implements IFeedView,
 	}
 
 	private void makeActions() {
-
-		renameAction = new RenameAction(treeView);
-		renameAction.setText("Rename");
-		renameAction.setToolTipText("Renames the selected item");
 
 		doubleClickAction = new Action() {
 			public void run() {
@@ -323,5 +314,9 @@ public class RSSView extends ViewPart implements IFeedView,
 				}
 			});
 		}
+	}
+
+	public Viewer getFeedViewer() {
+		return treeView;
 	}
 }

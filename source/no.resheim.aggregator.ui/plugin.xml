@@ -44,7 +44,7 @@
          </menu>
       </menuContribution>
       <menuContribution
-            locationURI="popup:no.resheim.aggregator.ui.RSSView?before=selection">
+            locationURI="popup:no.resheim.aggregator.ui.RSSView?before=navigation">
          <command
                commandId="no.resheim.aggregator.core.ui.newFolder"
                label="Add Folder">
@@ -57,16 +57,20 @@
                label="Update">
          </command>
          <command
+               commandId="no.resheim.aggregator.core.ui.renameFolder"
+               label="Rename Folder">
+         </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.setRead"
+               label="Mark As Read">
+         </command>
+         <command
                commandId="no.resheim.aggregator.core.ui.delete"
                label="Delete">
          </command>
          <command
                commandId="no.resheim.aggregator.core.ui.properties"
                label="Properties">
-         </command>
-         <command
-               commandId="no.resheim.aggregator.core.ui.setRead"
-               label="Mark As Read">
          </command>
       </menuContribution>
    </extension>

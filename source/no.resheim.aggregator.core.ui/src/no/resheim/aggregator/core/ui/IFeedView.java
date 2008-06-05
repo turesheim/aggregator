@@ -11,6 +11,8 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import org.eclipse.jface.viewers.Viewer;
+
 import no.resheim.aggregator.data.FeedCollection;
 
 /**
@@ -32,4 +34,6 @@ public interface IFeedView {
 	 * @param registry
 	 */
 	public void setFeedCollection(FeedCollection registry);
+
+	public Viewer getFeedViewer();
 }

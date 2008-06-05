@@ -61,6 +61,11 @@
             name="Mark As Read">
       </command>
       <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.RenameFolderCommand"
+            id="no.resheim.aggregator.core.ui.renameFolder"
+            name="Rename Folder">
+      </command>
+      <command
             defaultHandler="no.resheim.aggregator.core.ui.commands.FeedCollectionSelectionHandler"
             id="no.resheim.aggregator.core.ui.selectCollection"
             name="Select Collection">
