@@ -129,6 +129,10 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		feed.setCopyright(rs.getString(17));
 		feed.setType(rs.getString(18));
 		feed.setHidden(rs.getInt(19) != 0);
+		feed.setUsername(rs.getString(20));
+		feed.setPassword(rs.getString(21));
+		feed.setLocked(rs.getInt(22) != 0);
+		feed.setLocked(rs.getInt(23) != 0);
 		return feed;
 	}
 
@@ -443,7 +447,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	private void insert(Feed feed) {
 		try {
 			PreparedStatement ps = connection
-					.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+					.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 			ps.setEscapeProcessing(true);
 			ps.setString(1, feed.getUUID().toString());
 			ps.setString(2, feed.getParentUUID().toString());
@@ -464,6 +468,10 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			ps.setString(17, feed.getCopyright()); // copyright
 			ps.setString(18, feed.getType()); // feed_type
 			ps.setInt(19, feed.isHidden() ? 1 : 0);
+			ps.setString(20, feed.getUsername());
+			ps.setString(21, feed.getPassword());
+			ps.setInt(22, feed.isLocked() ? 1 : 0);
+			ps.setInt(23, feed.isThreaded() ? 1 : 0);
 			ps.executeUpdate();
 			ps.close();
 		} catch (Exception e) {

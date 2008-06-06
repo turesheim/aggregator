@@ -63,8 +63,9 @@ public class Feed extends AbstractAggregatorItem {
 	protected long lastUpdate;
 
 	boolean updating;
-
 	boolean hidden;
+	boolean locked;
+	boolean threaded;
 
 	private IAggregatorItem parent;
 	private String description;
@@ -73,6 +74,8 @@ public class Feed extends AbstractAggregatorItem {
 	private String editor;
 	private String copyright;
 	private String type;
+	private String username;
+	private String password;
 
 	/**
 	 * @return the link
@@ -274,6 +277,38 @@ public class Feed extends AbstractAggregatorItem {
 
 	public void setHidden(boolean hidden) {
 		this.hidden = hidden;
+	}
+
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public boolean isThreaded() {
+		return threaded;
+	}
+
+	public void setThreaded(boolean threaded) {
+		this.threaded = threaded;
 	}
 
 }

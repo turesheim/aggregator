@@ -25,7 +25,11 @@ CREATE TABLE feeds (
 		editor VARCHAR(64),
 		copyright VARCHAR(64),
 		feed_type VARCHAR(32),
-		hidden INT NOT NULL
+		hidden INT NOT NULL,
+		username VARCHAR(64),
+		password VARCHAR(64),
+		locked INT,
+		threaded INT
 	);
 
 CREATE TABLE articles (
