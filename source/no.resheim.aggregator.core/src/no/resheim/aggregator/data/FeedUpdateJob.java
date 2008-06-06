@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.MessageFormat;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -42,7 +43,9 @@ public class FeedUpdateJob extends Job {
 	private FeedCollection registry;
 
 	public FeedUpdateJob(FeedCollection registry, Feed feed) {
-		super(feed.getTitle());
+		super(MessageFormat.format("Updating feed {0}", new Object[] {
+			feed.getTitle()
+		}));
 		this.feed = feed;
 		this.registry = registry;
 		setPriority(Job.DECORATE);
