@@ -43,7 +43,7 @@ public class FeedUpdateJob extends Job {
 	private FeedCollection registry;
 
 	public FeedUpdateJob(FeedCollection registry, Feed feed) {
-		super(MessageFormat.format("Updating feed {0}", new Object[] {
+		super(MessageFormat.format(Messages.FeedUpdateJob_Title, new Object[] {
 			feed.getTitle()
 		}));
 		this.feed = feed;
