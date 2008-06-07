@@ -49,6 +49,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
@@ -61,6 +64,7 @@ import org.eclipse.ui.part.ViewPart;
 public class RSSView extends ViewPart implements IFeedView,
 		IFeedCollectionEventListener {
 
+	private static final String MEMENTO_ORIENTATION = ".ORIENTATION"; //$NON-NLS-1$
 	private static final String BLANK = ""; //$NON-NLS-1$
 	private SashForm sashForm;
 
@@ -75,6 +79,10 @@ public class RSSView extends ViewPart implements IFeedView,
 	private DrillDownAdapter drillDownAdapter;
 
 	private Action doubleClickAction;
+
+	private Action verticalLayoutAction;
+
+	private Action horizontalLayoutAction;
 
 	/** Preference: mark previewed items as read */
 	private boolean pPreviewIsRead;
@@ -173,6 +181,7 @@ public class RSSView extends ViewPart implements IFeedView,
 		hookContextMenu();
 		hookDoubleClickAction();
 		contributeToActionBars();
+		contributeToMenu();
 		createBrowser();
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()
 				.getPreferenceStore();
@@ -192,6 +201,14 @@ public class RSSView extends ViewPart implements IFeedView,
 		AggregatorPlugin.getDefault().addFeedCollectionListener(this);
 	}
 
+	private void contributeToMenu() {
+		MenuManager mgr = new MenuManager(Messages.RSSView_LayoutMenuTitle,
+				"layout"); //$NON-NLS-1$
+		getViewSite().getActionBars().getMenuManager().add(mgr);
+		mgr.add(verticalLayoutAction);
+		mgr.add(horizontalLayoutAction);
+	}
+
 	private boolean createBrowser() {
 		try {
 			browser = PlatformUI.getWorkbench().getBrowserSupport()
@@ -199,8 +216,8 @@ public class RSSView extends ViewPart implements IFeedView,
 							IWorkbenchBrowserSupport.NAVIGATION_BAR
 									| IWorkbenchBrowserSupport.LOCATION_BAR
 									| IWorkbenchBrowserSupport.AS_EDITOR,
-							AggregatorPlugin.PLUGIN_ID, "Aggregator Feed",
-							BLANK);
+							AggregatorPlugin.PLUGIN_ID,
+							Messages.RSSView_BrowserTitle, BLANK);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -275,6 +292,39 @@ public class RSSView extends ViewPart implements IFeedView,
 				}
 			}
 		};
+
+		verticalLayoutAction = new Action(Messages.RSSView_VerticalActionTitle,
+				Action.AS_RADIO_BUTTON) {
+			public void run() {
+				sashForm.setOrientation(SWT.VERTICAL);
+				setChecked(true);
+				horizontalLayoutAction.setChecked(false);
+				fHorizontalLayout = false;
+			}
+		};
+		verticalLayoutAction.setImageDescriptor(AggregatorUIPlugin
+				.getImageDescriptor("icons/etool16/vertical.gif")); //$NON-NLS-1$
+
+		horizontalLayoutAction = new Action(
+				Messages.RSSView_HorizontalActionTitle, Action.AS_RADIO_BUTTON) {
+			public void run() {
+				sashForm.setOrientation(SWT.HORIZONTAL);
+				setChecked(true);
+				verticalLayoutAction.setChecked(false);
+				fHorizontalLayout = true;
+			}
+		};
+		horizontalLayoutAction.setImageDescriptor(AggregatorUIPlugin
+				.getImageDescriptor("icons/etool16/horizontal.gif")); //$NON-NLS-1$
+		if (fHorizontalLayout) {
+			horizontalLayoutAction.setChecked(true);
+			verticalLayoutAction.setChecked(false);
+			sashForm.setOrientation(SWT.HORIZONTAL);
+		} else {
+			horizontalLayoutAction.setChecked(false);
+			verticalLayoutAction.setChecked(true);
+			sashForm.setOrientation(SWT.VERTICAL);
+		}
 	}
 
 	private void hookDoubleClickAction() {
@@ -303,7 +353,6 @@ public class RSSView extends ViewPart implements IFeedView,
 	}
 
 	public void collectionInitialized(FeedCollection collection) {
-		System.out.println(collection);
 		if (collection.getId().equals(AggregatorPlugin.DEFAULT_COLLECTION_ID)) {
 			Display d = getViewSite().getShell().getDisplay();
 			d.asyncExec(new Runnable() {
@@ -318,5 +367,31 @@ public class RSSView extends ViewPart implements IFeedView,
 
 	public Viewer getFeedViewer() {
 		return treeView;
+	}
+
+	@Override
+	public void init(IViewSite site, IMemento memento) throws PartInitException {
+		super.init(site, memento);
+		// It's possible that no saved state exists yet
+		if (memento == null)
+			return;
+		final String name = this.getClass().getName();
+		if (memento.getString(name + MEMENTO_ORIENTATION) != null) {
+			if (memento.getString(name + MEMENTO_ORIENTATION) != null) {
+				fHorizontalLayout = Boolean.parseBoolean(memento.getString(name
+						+ MEMENTO_ORIENTATION));
+			}
+		}
+
+	}
+
+	boolean fHorizontalLayout;
+
+	@Override
+	public void saveState(IMemento memento) {
+		super.saveState(memento);
+		final String name = this.getClass().getName();
+		memento.putString(name + MEMENTO_ORIENTATION, Boolean
+				.toString(fHorizontalLayout));
 	}
 }
