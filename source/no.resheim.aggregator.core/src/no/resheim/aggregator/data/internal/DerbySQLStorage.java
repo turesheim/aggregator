@@ -374,7 +374,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 * 
 	 * @see no.resheim.aggregator.model.IAggregatorStorage#initializeFeeds()
 	 */
-	public HashMap<UUID, Feed> initializeFeeds() {
+	public HashMap<UUID, Feed> getFeeds() {
 		HashMap<UUID, Feed> feeds = new HashMap<UUID, Feed>();
 		try {
 			Statement s = connection.createStatement();

@@ -78,7 +78,7 @@ public class FeedCollection implements IAggregatorItem {
 	 */
 	public void initialize(IAggregatorStorage storage) {
 		this.database = storage;
-		sites = storage.initializeFeeds();
+		sites = storage.getFeeds();
 		// Start a new update job that will periodically wake up and create
 		// FeedUpdateJobs when a feed is scheduled for an update.
 		fRegistryUpdateJob.addJobChangeListener(new JobChangeAdapter() {

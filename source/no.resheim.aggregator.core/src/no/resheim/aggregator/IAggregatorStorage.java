@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2008 Torkild Ulvøy Resheim.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Torkild Ulvøy Resheim - initial API and implementation
+ *******************************************************************************/
+
 package no.resheim.aggregator;
 
 import java.util.HashMap;
@@ -10,6 +22,11 @@ import no.resheim.aggregator.data.IAggregatorItem;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
+/**
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
+ */
 public interface IAggregatorStorage {
 
 	/**
@@ -45,35 +62,42 @@ public interface IAggregatorStorage {
 	public abstract IAggregatorItem[] getChildren(IAggregatorItem item);
 
 	/**
+	 * Calculates and returns the number of children the <i>parent</i> item
+	 * has.
 	 * 
 	 * @param parent
-	 * @return
+	 *            the parent item
+	 * @return the number of children
 	 */
 	public abstract int getChildCount(IAggregatorItem parent);
 
 	/**
-	 * 
+	 * Returns the article with the given <i>guid</i>.
 	 * 
 	 * @param guid
 	 *            the globally unique identifier
-	 * @return the FeedItem or <i>null</i>
+	 * @return the Article or <i>null</i>
 	 */
 	public abstract Article getItem(String guid);
 
 	/**
+	 * Tests to see if the feed with the given URL already exists in the
+	 * database.
 	 * 
 	 * @param url
 	 *            the URL of the feed
-	 * @return <b>True</b> if a feed with the given URL exists in the
+	 * @return <b>true</b> if a feed with the given URL exists in the
 	 *         collection
 	 */
 	public abstract boolean hasFeed(String url);
 
 	/**
+	 * Returns a map of all feeds regardless of the placement in the tree
+	 * structure. The map key is the feeds' unique identifier.
 	 * 
-	 * @return
+	 * @return a map of all feeds
 	 */
-	public abstract HashMap<UUID, Feed> initializeFeeds();
+	public abstract HashMap<UUID, Feed> getFeeds();
 
 	/**
 	 * Shuts down the storage.
@@ -101,6 +125,8 @@ public interface IAggregatorStorage {
 
 	/**
 	 * Keeps the <i>keep</i> newest articles in the feed. The rest are deleted.
+	 * Articles are deleted even if they are not placed as a direct child of the
+	 * feed in the tree structure.
 	 * 
 	 * @param feed
 	 *            The feed to remove articles from
@@ -114,9 +140,11 @@ public interface IAggregatorStorage {
 	 * parent.
 	 * 
 	 * @param item
-	 *            The moved item
+	 *            the moved item
 	 * @param newParent
-	 *            The new parent
+	 *            the new parent
+	 * @param newOrdering
+	 *            the new order of the item
 	 */
 	public abstract void move(IAggregatorItem item, IAggregatorItem newParent,
 			long newOrdering);
@@ -125,6 +153,7 @@ public interface IAggregatorStorage {
 	 * Renames the given item.
 	 * 
 	 * @param item
+	 *            the item to rename
 	 */
 	public abstract void rename(IAggregatorItem item);
 
