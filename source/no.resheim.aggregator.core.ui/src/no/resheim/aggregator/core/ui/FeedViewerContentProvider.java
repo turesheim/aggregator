@@ -14,7 +14,7 @@ package no.resheim.aggregator.core.ui;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.FeedListener;
+import no.resheim.aggregator.data.IAggregatorEventListener;
 import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.IAggregatorItem;
 
@@ -33,7 +33,7 @@ import org.eclipse.swt.widgets.Display;
  * @since 1.0
  */
 public class FeedViewerContentProvider implements IStructuredContentProvider,
-		ITreeContentProvider, FeedListener {
+		ITreeContentProvider, IAggregatorEventListener {
 	protected static final String[] STATE_PROPERTIES = new String[] {
 			IBasicPropertyConstants.P_TEXT, IBasicPropertyConstants.P_IMAGE
 	};
@@ -107,7 +107,7 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 	 * 
 	 * @see no.resheim.aggregator.model.FeedListener#feedChanged(no.resheim.aggregator.model.FeedChangedEvent)
 	 */
-	public void feedChanged(final AggregatorItemChangedEvent event) {
+	public void aggregatorItemChanged(final AggregatorItemChangedEvent event) {
 		Runnable update = new Runnable() {
 			public void run() {
 				if (fViewer != null) {

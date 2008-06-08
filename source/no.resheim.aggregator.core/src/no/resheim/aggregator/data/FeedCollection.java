@@ -38,7 +38,7 @@ public class FeedCollection implements IAggregatorItem {
 	private IAggregatorStorage database;
 
 	/** The list of feed change listeners */
-	private static ArrayList<FeedListener> feedListeners = new ArrayList<FeedListener>();
+	private static ArrayList<IAggregatorEventListener> feedListeners = new ArrayList<IAggregatorEventListener>();
 	private static final UUID DEFAULT_ID = UUID
 			.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"); //$NON-NLS-1$
 
@@ -350,11 +350,11 @@ public class FeedCollection implements IAggregatorItem {
 	 * @param listener
 	 *            The listener to be notified
 	 */
-	public void addFeedListener(FeedListener listener) {
+	public void addFeedListener(IAggregatorEventListener listener) {
 		feedListeners.add(listener);
 	}
 
-	public void removeFeedListener(FeedListener listener) {
+	public void removeFeedListener(IAggregatorEventListener listener) {
 		feedListeners.remove(listener);
 	}
 
@@ -369,8 +369,8 @@ public class FeedCollection implements IAggregatorItem {
 		if (AggregatorPlugin.getDefault().isDebugging()) {
 			System.out.println("[DEBUG] " + event); //$NON-NLS-1$
 		}
-		for (FeedListener listener : feedListeners) {
-			listener.feedChanged(event);
+		for (IAggregatorEventListener listener : feedListeners) {
+			listener.aggregatorItemChanged(event);
 		}
 	}
 
