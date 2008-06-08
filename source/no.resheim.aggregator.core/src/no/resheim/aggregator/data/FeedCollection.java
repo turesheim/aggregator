@@ -22,6 +22,11 @@ import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.internal.RegistryUpdateJob;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 
@@ -233,13 +238,20 @@ public class FeedCollection implements IAggregatorItem {
 		return -1;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see no.resheim.aggregator.data.IAggregatorItem#getUUID()
+	 */
 	public UUID getUUID() {
 		return DEFAULT_ID;
 	}
 
 	/**
+	 * Returns the identifier of the feed collection as specified in the
+	 * collection declaration.
 	 * 
-	 * @return
+	 * @return the feed identifier string
 	 */
 	public String getId() {
 		return id;
@@ -289,19 +301,37 @@ public class FeedCollection implements IAggregatorItem {
 		return false;
 	}
 
+	public boolean isLocked(Feed feed) {
+		final IExtensionRegistry ereg = Platform.getExtensionRegistry();
+		IConfigurationElement[] elements = ereg
+				.getConfigurationElementsFor(AggregatorPlugin.REGISTRY_EXTENSION_ID);
+		for (IConfigurationElement element : elements) {
+			if (element.getName().equals("feed")) { //$NON-NLS-1$
+				if (element.getAttribute("locked") != null) { //$NON-NLS-1$
+					return Boolean.parseBoolean(element.getAttribute("locked")); //$NON-NLS-1$
+				}
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Removes the specified item from the database.
 	 * 
 	 * @param element
 	 *            The element to be removed.
 	 */
-	public void remove(IAggregatorItem element) {
+	public IStatus remove(IAggregatorItem element) {
 		if (element instanceof Feed) {
+			if (isLocked((Feed) element))
+				return new Status(IStatus.CANCEL, AggregatorPlugin.PLUGIN_ID,
+						Messages.FeedCollection_NoDelete_Locked);
 			sites.remove(((Feed) element).getUUID());
 		}
 		database.delete(element);
 		notifyListerners(new AggregatorItemChangedEvent(element,
 				FeedChangeEventType.REMOVED));
+		return Status.OK_STATUS;
 	}
 
 	/** The number of milliseconds in a day */

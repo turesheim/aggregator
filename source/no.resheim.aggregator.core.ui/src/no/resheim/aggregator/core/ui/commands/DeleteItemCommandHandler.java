@@ -18,8 +18,10 @@ import no.resheim.aggregator.data.IAggregatorItem;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.ui.statushandlers.StatusManager;
 
 /**
  * Deletes the selected IAggregatorItem.
@@ -39,7 +41,11 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
 			}
 			IAggregatorItem item = getSelection(event);
 			if (item != null) {
-				registry.remove(item);
+				IStatus status = registry.remove(item);
+				if (!status.isOK()) {
+					StatusManager.getManager().handle(status,
+							StatusManager.SHOW);
+				}
 			}
 		}
 		return null;

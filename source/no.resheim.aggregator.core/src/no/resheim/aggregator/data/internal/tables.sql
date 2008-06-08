@@ -28,7 +28,6 @@ CREATE TABLE feeds (
 		hidden INT NOT NULL,
 		username VARCHAR(64),
 		password VARCHAR(64),
-		locked INT,
 		threaded INT
 	);
 

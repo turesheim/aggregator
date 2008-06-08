@@ -14,9 +14,10 @@
             archivingItems="0"
             archivingMethod="KEEP_NEWEST"
             collection="no.resheim.aggregator.core.defaultFeedCollection"
+            locked="true"
             title="Resheim Software"
-            updatePeriod="DAYS"
             updateInterval="1"
+            updatePeriod="DAYS"
             url="http://resheim.no/news/RSS">
       </feed>
    </extension>

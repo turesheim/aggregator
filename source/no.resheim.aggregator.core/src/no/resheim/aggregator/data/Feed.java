@@ -64,7 +64,6 @@ public class Feed extends AbstractAggregatorItem {
 
 	boolean updating;
 	boolean hidden;
-	boolean locked;
 	boolean threaded;
 
 	private IAggregatorItem parent;
@@ -277,14 +276,6 @@ public class Feed extends AbstractAggregatorItem {
 
 	public void setHidden(boolean hidden) {
 		this.hidden = hidden;
-	}
-
-	public boolean isLocked() {
-		return locked;
-	}
-
-	public void setLocked(boolean locked) {
-		this.locked = locked;
 	}
 
 	public String getUsername() {
