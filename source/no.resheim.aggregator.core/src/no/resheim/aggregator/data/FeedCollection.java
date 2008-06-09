@@ -137,9 +137,8 @@ public class FeedCollection implements IAggregatorItem {
 		}
 	}
 
-	public void move(IAggregatorItem item, IAggregatorItem newParent,
-			long newOrdering) {
-		database.move(item, newParent, newOrdering);
+	public void move(IAggregatorItem item, UUID parentUuid, long newOrdering) {
+		database.move(item, parentUuid, newOrdering);
 		item.setOrdering(newOrdering);
 	}
 
@@ -178,6 +177,10 @@ public class FeedCollection implements IAggregatorItem {
 	 */
 	public IAggregatorItem[] getChildren(IAggregatorItem item) {
 		return database.getChildren(item);
+	}
+
+	public IAggregatorItem getItem(UUID uuid) {
+		return database.getItem(uuid);
 	}
 
 	/**
@@ -363,16 +366,6 @@ public class FeedCollection implements IAggregatorItem {
 	}
 
 	/**
-	 * The feed registry does not have a parent so this method will return
-	 * <b>null</b>.
-	 * 
-	 * @return The parent (null).
-	 */
-	public IAggregatorItem getParentItem() {
-		return null;
-	}
-
-	/**
 	 * Add listener to be notified about feed changes. The added listener will
 	 * be notified when feeds are added, removed and when their contents has
 	 * changed.
@@ -424,5 +417,15 @@ public class FeedCollection implements IAggregatorItem {
 	public void setOrdering(long ordering) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setRegistry(FeedCollection registry) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public UUID getParentUUID() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

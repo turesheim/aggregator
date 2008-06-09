@@ -21,8 +21,6 @@ import java.util.UUID;
 public class Folder extends AbstractAggregatorItem {
 	String title;
 
-	private IAggregatorItem parent;
-
 	/**
 	 * @param registryId
 	 * @param title
@@ -44,13 +42,5 @@ public class Folder extends AbstractAggregatorItem {
 
 	public String getFeedId() {
 		return null;
-	}
-
-	public IAggregatorItem getParentItem() {
-		return parent;
-	}
-
-	public void setParentItem(IAggregatorItem parent) {
-		this.parent = parent;
 	}
 }

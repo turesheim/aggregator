@@ -54,6 +54,10 @@ public class FeedUpdateJob extends Job {
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
+		// We won't update these
+		if (feed.getURL().startsWith("test://")) { //$NON-NLS-1$
+			return Status.OK_STATUS;
+		}
 		feed.setUpdating(true);
 		boolean debug = AggregatorPlugin.getDefault().isDebugging();
 		registry.notifyListerners(new AggregatorItemChangedEvent(feed,

@@ -30,6 +30,14 @@ import org.eclipse.core.runtime.IStatus;
 public interface IAggregatorStorage {
 
 	/**
+	 * Adds the given aggregator item to the storage.
+	 * 
+	 * @param item
+	 *            The item to add
+	 */
+	public abstract void add(IAggregatorItem item);
+
+	/**
 	 * Deletes the specified item from the storage.
 	 * 
 	 * @param item
@@ -50,6 +58,16 @@ public interface IAggregatorStorage {
 	public abstract void deleteOutdated(Feed feed, long date);
 
 	/**
+	 * Calculates and returns the number of children the <i>parent</i> item
+	 * has.
+	 * 
+	 * @param parent
+	 *            the parent item
+	 * @return the number of children
+	 */
+	public abstract int getChildCount(IAggregatorItem parent);
+
+	/**
 	 * Retrieves all the child articles of the given parent node. If the node is
 	 * <i>null</i>; all registries are returned. if it's a registry; categories
 	 * and feeds are returned, if it's a category; categories and feeds are
@@ -62,14 +80,21 @@ public interface IAggregatorStorage {
 	public abstract IAggregatorItem[] getChildren(IAggregatorItem item);
 
 	/**
-	 * Calculates and returns the number of children the <i>parent</i> item
-	 * has.
+	 * Returns the description string of the aggregator item if such a
+	 * description does exist.
 	 * 
-	 * @param parent
-	 *            the parent item
-	 * @return the number of children
+	 * @param item
+	 * @return
 	 */
-	public abstract int getChildCount(IAggregatorItem parent);
+	public abstract String getDescription(Article item);
+
+	/**
+	 * Returns a map of all feeds regardless of the placement in the tree
+	 * structure. The map key is the feeds' unique identifier.
+	 * 
+	 * @return a map of all feeds
+	 */
+	public abstract HashMap<UUID, Feed> getFeeds();
 
 	/**
 	 * Returns the article with the given <i>guid</i>.
@@ -79,6 +104,17 @@ public interface IAggregatorStorage {
 	 * @return the Article or <i>null</i>
 	 */
 	public abstract Article getItem(String guid);
+
+	public abstract IAggregatorItem getItem(UUID item);
+
+	/**
+	 * Returns the number of unread articles the given feed has.
+	 * 
+	 * @param parent
+	 *            The parent item
+	 * @return The number of child items
+	 */
+	public abstract int getUnreadCount(Feed parent);
 
 	/**
 	 * Tests to see if the feed with the given URL already exists in the
@@ -90,38 +126,6 @@ public interface IAggregatorStorage {
 	 *         collection
 	 */
 	public abstract boolean hasFeed(String url);
-
-	/**
-	 * Returns a map of all feeds regardless of the placement in the tree
-	 * structure. The map key is the feeds' unique identifier.
-	 * 
-	 * @return a map of all feeds
-	 */
-	public abstract HashMap<UUID, Feed> getFeeds();
-
-	/**
-	 * Shuts down the storage.
-	 * 
-	 * @return
-	 */
-	public IStatus shutdown();
-
-	/**
-	 * Starts up the storage
-	 * 
-	 * @param monitor
-	 *            A monitor for reporting progress
-	 * @return
-	 */
-	public IStatus startup(IProgressMonitor monitor);
-
-	/**
-	 * Adds the given aggregator item to the storage.
-	 * 
-	 * @param item
-	 *            The item to add
-	 */
-	public abstract void add(IAggregatorItem item);
 
 	/**
 	 * Keeps the <i>keep</i> newest articles in the feed. The rest are deleted.
@@ -146,7 +150,7 @@ public interface IAggregatorStorage {
 	 * @param newOrdering
 	 *            the new order of the item
 	 */
-	public abstract void move(IAggregatorItem item, IAggregatorItem newParent,
+	public abstract void move(IAggregatorItem item, UUID parentUUID,
 			long newOrdering);
 
 	/**
@@ -158,22 +162,20 @@ public interface IAggregatorStorage {
 	public abstract void rename(IAggregatorItem item);
 
 	/**
-	 * Returns the description string of the aggregator item if such a
-	 * description does exist.
+	 * Shuts down the storage.
 	 * 
-	 * @param item
 	 * @return
 	 */
-	public abstract String getDescription(Article item);
+	public IStatus shutdown();
 
 	/**
-	 * Returns the number of unread articles the given feed has.
+	 * Starts up the storage
 	 * 
-	 * @param parent
-	 *            The parent item
-	 * @return The number of child items
+	 * @param monitor
+	 *            A monitor for reporting progress
+	 * @return
 	 */
-	public abstract int getUnreadCount(Feed parent);
+	public IStatus startup(IProgressMonitor monitor);
 
 	/**
 	 * Updates the database with feed data.

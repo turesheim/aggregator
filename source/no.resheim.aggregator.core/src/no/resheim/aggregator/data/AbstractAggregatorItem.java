@@ -16,10 +16,6 @@ public abstract class AbstractAggregatorItem implements IAggregatorItem {
 		FIRST_PRIORITY, SECOND_PRIORITY, THIRD_PRIORITY, TODO, IMPORTANT
 	};
 
-	public IAggregatorItem getParentItem() {
-		return null;
-	}
-
 	public EnumSet<Mark> getMarks() {
 		return marks;
 	}

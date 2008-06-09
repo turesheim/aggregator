@@ -5,18 +5,13 @@ import java.util.UUID;
 public interface IAggregatorItem {
 
 	/**
-	 * Returns the parent of this item.
-	 * 
-	 * @return
-	 */
-	public abstract IAggregatorItem getParentItem();
-
-	/**
 	 * Returns the unique identifier for this aggregator item.
 	 * 
 	 * @return The item identifier
 	 */
 	public abstract UUID getUUID();
+
+	public abstract UUID getParentUUID();
 
 	/**
 	 * Returns the feed registry instance of which this item belongs.
@@ -42,6 +37,8 @@ public interface IAggregatorItem {
 
 	public abstract void setOrdering(long ordering);
 
-	public long getOrdering();
+	public abstract void setRegistry(FeedCollection registry);
+
+	public abstract long getOrdering();
 
 }

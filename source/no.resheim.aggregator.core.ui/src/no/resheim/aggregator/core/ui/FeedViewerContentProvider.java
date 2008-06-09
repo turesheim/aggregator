@@ -14,8 +14,8 @@ package no.resheim.aggregator.core.ui;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.IAggregatorEventListener;
 import no.resheim.aggregator.data.Folder;
+import no.resheim.aggregator.data.IAggregatorEventListener;
 import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.jface.viewers.IBasicPropertyConstants;
@@ -75,7 +75,7 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 
 	public Object getParent(Object child) {
 		if (child instanceof IAggregatorItem) {
-			return ((IAggregatorItem) child).getParentItem();
+			fCollection.getItem(((IAggregatorItem) child).getParentUUID());
 		}
 		return null;
 	}
@@ -111,7 +111,8 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 		Runnable update = new Runnable() {
 			public void run() {
 				if (fViewer != null) {
-					IAggregatorItem parent = event.getItem().getParentItem();
+					IAggregatorItem parent = fCollection.getItem(event
+							.getItem().getParentUUID());
 					switch (event.getType()) {
 					case READ:
 						fViewer.update(event.getItem(), STATE_PROPERTIES);
@@ -143,33 +144,6 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 				}
 			};
 		};
-		Display.getDefault().asyncExec(update);
-	}
-
-	/**
-	 * Asynchronously refreshes the submitted item.
-	 * 
-	 * @param item
-	 */
-	public void itemUpdated(final Object item) {
-		Runnable update = new Runnable() {
-			public void run() {
-				if (fViewer != null) {
-					fViewer.update(item, null);
-				}
-			};
-		};
-		Display.getDefault().asyncExec(update);
-	}
-
-	public void refreshItem(final Object item) {
-		Runnable update = new Runnable() {
-			public void run() {
-				if (fViewer != null) {
-					fViewer.refresh();
-				}
-			};
-		};
-		Display.getDefault().asyncExec(update);
+		Display.getDefault().syncExec(update);
 	}
 }

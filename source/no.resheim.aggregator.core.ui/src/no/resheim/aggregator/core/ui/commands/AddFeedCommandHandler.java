@@ -53,14 +53,14 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 				return null;
 			}
 			NewFeedWizard wizard = new NewFeedWizard(registry);
-			UUID parentUUID = registry.getUUID();
+			IAggregatorItem parent = registry;
 			IAggregatorItem item = getSelection(event);
 			String selectionRoot = event.getParameter("selectionRoot"); //$NON-NLS-1$
 			if (selectionRoot != null && selectionRoot.equals("true")) { //$NON-NLS-1$
 				if (item != null)
-					parentUUID = item.getUUID();
+					parent = registry;
 			}
-			FeedWorkingCopy wc = getNewFeedWorkingCopy(parentUUID);
+			FeedWorkingCopy wc = getNewFeedWorkingCopy(parent);
 			wizard.setFeed(wc);
 			IDialogSettings workbenchSettings = AggregatorUIPlugin.getDefault()
 					.getDialogSettings();
@@ -81,8 +81,10 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 		return null;
 	}
 
-	private FeedWorkingCopy getNewFeedWorkingCopy(UUID parentUUID) {
-		FeedWorkingCopy wc = new FeedWorkingCopy(UUID.randomUUID(), parentUUID);
+	private FeedWorkingCopy getNewFeedWorkingCopy(IAggregatorItem parent) {
+		FeedWorkingCopy wc = new FeedWorkingCopy(UUID.randomUUID(), parent
+				.getUUID());
+		wc.setParentItem(parent);
 		// Initialize with default values from the preference store.
 		// This is done here as the preference system is a UI component.
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()

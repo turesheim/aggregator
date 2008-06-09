@@ -191,16 +191,16 @@ public class FeedTreeViewer extends TreeViewer {
 											.getOrdering()) / 2);
 							newItem = getNewItem(item, 0);
 							source.getRegistry().move(source,
-									source.getParentItem(), newOrder);
+									source.getParentUUID(), newOrder);
 						} else if (pt.y > rect.y + rect.height - 3) {
 							newOrder = destination.getOrdering()
 									- ((destination.getOrdering() - getOrderAfter(item)) / 2);
 							newItem = getNewItem(item, 1);
 							source.getRegistry().move(source,
-									source.getParentItem(), newOrder);
+									source.getParentUUID(), newOrder);
 						} else {
-							source.getRegistry().move(source, destination,
-									newOrder);
+							source.getRegistry().move(source,
+									destination.getUUID(), newOrder);
 							newItem = new TreeItem(item, SWT.NONE, 0);
 						}
 						newItem.setImage(dragSourceItem[0].getImage());

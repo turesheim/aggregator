@@ -97,11 +97,6 @@ public class Article extends AbstractAggregatorItem implements IAggregatorItem {
 		return link;
 	}
 
-	@Override
-	public IAggregatorItem getParentItem() {
-		return parent;
-	}
-
 	/**
 	 * Returns the publication date of the feed item. For some feeds, such as
 	 * RSS 1.0 this value is most likely zero.
