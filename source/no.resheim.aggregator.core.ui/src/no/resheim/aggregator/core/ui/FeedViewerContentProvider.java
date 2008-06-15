@@ -19,9 +19,8 @@ import no.resheim.aggregator.data.IAggregatorEventListener;
 import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.jface.viewers.IBasicPropertyConstants;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.ILazyTreeContentProvider;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
@@ -32,12 +31,12 @@ import org.eclipse.swt.widgets.Display;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class FeedViewerContentProvider implements IStructuredContentProvider,
-		ITreeContentProvider, IAggregatorEventListener {
+public class FeedViewerContentProvider implements ILazyTreeContentProvider,
+		IAggregatorEventListener {
 	protected static final String[] STATE_PROPERTIES = new String[] {
 			IBasicPropertyConstants.P_TEXT, IBasicPropertyConstants.P_IMAGE
 	};
-	private StructuredViewer fViewer;
+	private TreeViewer fViewer;
 	private FeedCollection fCollection;
 
 	/**
@@ -48,8 +47,8 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 	}
 
 	public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-		if (v instanceof StructuredViewer) {
-			fViewer = (StructuredViewer) v;
+		if (v instanceof TreeViewer) {
+			fViewer = (TreeViewer) v;
 		}
 		if (newInput instanceof FeedCollection
 				&& !newInput.equals(this.fCollection)) {
@@ -70,7 +69,12 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 	 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
 	 */
 	public Object[] getElements(Object parent) {
-		return getChildren(parent);
+		if (parent != null) {
+			if (parent instanceof IAggregatorItem) {
+				return fCollection.getChildren((IAggregatorItem) parent);
+			}
+		}
+		return new Object[0];
 	}
 
 	public Object getParent(Object child) {
@@ -80,57 +84,45 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 		return null;
 	}
 
-	public Object[] getChildren(Object parent) {
-		if (parent != null) {
-			if (parent instanceof IAggregatorItem) {
-				return fCollection.getChildren((IAggregatorItem) parent);
-			}
-		}
-		return new Object[0];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
-	 */
-	public boolean hasChildren(Object parent) {
-		if (parent instanceof IAggregatorItem) {
-			return (((IAggregatorItem) parent).getRegistry().getChildCount(
-					(IAggregatorItem) parent) > 0);
-		}
-		return false;
-	}
-
+	// FIXME: Stale order of the tree items after removing an item.
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see no.resheim.aggregator.model.FeedListener#feedChanged(no.resheim.aggregator.model.FeedChangedEvent)
 	 */
 	public void aggregatorItemChanged(final AggregatorItemChangedEvent event) {
-		Runnable update = new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				if (fViewer != null) {
+					// FIXME: Stale ordering after removing an item (using
+					// shuffle)
 					IAggregatorItem parent = fCollection.getItem(event
 							.getItem().getParentUUID());
 					switch (event.getType()) {
 					case READ:
 						fViewer.update(event.getItem(), STATE_PROPERTIES);
-						if (parent != null)
-							fViewer.update(parent, STATE_PROPERTIES);
+						fViewer.update(parent, STATE_PROPERTIES);
 						break;
 					case UPDATED:
+						// fViewer.refresh(parent, true);
 						fViewer.update(event.getItem(), STATE_PROPERTIES);
 						break;
+					case MOVED:
+						// Make sure the item reference is updated as the one
+						// in the viewer has wrong "ordering" member variable.
+						fViewer.replace(parent, event.getItem().getOrdering(),
+								event.getItem());
+						break;
 					case REMOVED:
-						fViewer.refresh(parent, true);
-						if (parent != null)
-							fViewer.update(parent, STATE_PROPERTIES);
+						// Maybe the number of "read" has changed
+						fViewer.update(parent, STATE_PROPERTIES);
+						// Remove the item itself
+						fViewer.remove(event.getItem());
 						break;
 					case CREATED:
-						fViewer.refresh(parent, true);
-						if (parent != null)
-							fViewer.update(parent, STATE_PROPERTIES);
+						fViewer.add(parent, event.getItem());
+						// The number of "read" items has most likey changed
+						fViewer.update(parent, STATE_PROPERTIES);
 						break;
 					case UPDATING:
 						fViewer.update(event.getItem(), STATE_PROPERTIES);
@@ -142,8 +134,33 @@ public class FeedViewerContentProvider implements IStructuredContentProvider,
 						break;
 					}
 				}
-			};
-		};
-		Display.getDefault().syncExec(update);
+			}
+		});
+	}
+
+	public void updateChildCount(final Object element,
+			final int currentChildCount) {
+		if (element instanceof IAggregatorItem) {
+			int length = 0;
+			IAggregatorItem node = (IAggregatorItem) element;
+			length = fCollection.getChildCount(node);
+			if (length != currentChildCount) {
+				fViewer.setChildCount(element, length);
+			}
+		}
+	}
+
+	public void updateElement(final Object parent, final int index) {
+		if (parent instanceof IAggregatorItem) {
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+
+					Object element = fCollection.getItemAt(
+							((IAggregatorItem) parent).getUUID(), index);
+					fViewer.replace(parent, index, element);
+					updateChildCount(element, -1);
+				}
+			});
+		}
 	}
 }

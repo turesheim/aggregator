@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.IAggregatorStorage;
@@ -21,11 +23,12 @@ import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.internal.RegistryUpdateJob;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
@@ -37,15 +40,31 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
  */
 public class FeedCollection implements IAggregatorItem {
 
-	public class AggregatorDatabase {
-	}
-
-	private IAggregatorStorage database;
+	private static final UUID DEFAULT_ID = UUID
+			.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"); //$NON-NLS-1$
 
 	/** The list of feed change listeners */
 	private static ArrayList<IAggregatorEventListener> feedListeners = new ArrayList<IAggregatorEventListener>();
-	private static final UUID DEFAULT_ID = UUID
-			.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"); //$NON-NLS-1$
+	private IAggregatorStorage database;
+
+	/** The number of milliseconds in a day */
+	private final long DAY = 86400000;
+
+	private boolean fPublic;
+
+	final RegistryUpdateJob fRegistryUpdateJob = new RegistryUpdateJob(this);
+
+	/**
+	 * The identifier of the registry as specified when the registry was
+	 * declared.
+	 */
+	private String id;
+
+	/**
+	 * Handles concurrency for the database, making sure that no readers get
+	 * access while writing and only one writer gets access at the time.
+	 */
+	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
 	/**
 	 * List of <i>live</i> feeds that we must keep track of even if the any
@@ -55,26 +74,269 @@ public class FeedCollection implements IAggregatorItem {
 	 */
 	private HashMap<UUID, Feed> sites;
 
-	/**
-	 * The identifier of the registry as specified when the registry was
-	 * declared.
-	 */
-	private String id;
-
 	private String title;
-
-	private boolean fPublic;
 
 	public FeedCollection(String id, boolean pub) {
 		this.id = id;
 		this.fPublic = pub;
 	}
 
-	public boolean isPublic() {
-		return fPublic;
+	/**
+	 * Add listener to be notified about feed changes. The added listener will
+	 * be notified when feeds are added, removed and when their contents has
+	 * changed.
+	 * 
+	 * @param listener
+	 *            The listener to be notified
+	 */
+	public void addFeedListener(IAggregatorEventListener listener) {
+		feedListeners.add(listener);
 	}
 
-	final RegistryUpdateJob fRegistryUpdateJob = new RegistryUpdateJob(this);
+	/**
+	 * Adds a new feed to the database and immediately stores it's data in the
+	 * persistent storage.
+	 * 
+	 * @param feed
+	 *            The aggregator item to add
+	 */
+	public void addNew(AbstractAggregatorItem item) {
+		try {
+			lock.writeLock().lock();
+			try {
+				if (item.getParentUUID().equals(this.getUUID())) {
+					item.setOrdering(getChildCount(this));
+				} else {
+					IAggregatorItem parent = getItem(item.getParentUUID());
+					item.setOrdering(getChildCount(parent));
+				}
+				if (item instanceof Feed) {
+					Feed feed = (Feed) item;
+					sites.put(feed.getUUID(), feed);
+					database.add(feed);
+					feed.setRegistry(this);
+					FeedUpdateJob job = new FeedUpdateJob(this, feed);
+					job.schedule();
+				} else if (item instanceof Folder) {
+					Folder folder = (Folder) item;
+					folder.setRegistry(this);
+					database.add(folder);
+				} else if (item instanceof Article) {
+					Article feedItem = (Article) item;
+					feedItem.setAddedDate(System.currentTimeMillis());
+					feedItem.setRegistry(this);
+					database.add(feedItem);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} finally {
+			lock.writeLock().unlock();
+		}
+		notifyListerners(new AggregatorItemChangedEvent(item,
+				FeedChangeEventType.CREATED));
+	}
+
+	/**
+	 * Uses the archiving rules of the site to remove articles from the feed.
+	 * Should only be called after a FeedUpdateJob has been executed.
+	 * 
+	 * @param site
+	 */
+	void cleanUp(Feed site) {
+		try {
+			lock.writeLock().lock();
+			Archiving archiving = site.getArchiving();
+			int days = site.getArchivingDays();
+			int articles = site.getArchivingItems();
+			switch (archiving) {
+			case KEEP_ALL:
+				break;
+			case KEEP_NEWEST:
+				long lim = System.currentTimeMillis() - ((long) days * DAY);
+				database.deleteOutdated(site, lim);
+				break;
+			case KEEP_SOME:
+				database.keepMaximum(site, articles);
+				break;
+			default:
+				break;
+			}
+		} finally {
+			lock.writeLock().unlock();
+		}
+	}
+
+	/**
+	 * Updates the feed data in the persistent storage. Should only be called by
+	 * {@link FeedUpdateJob} after the feed has be updated with new information.
+	 * 
+	 * @param feed
+	 *            The feed to update
+	 */
+	void feedUpdated(Feed feed) {
+		try {
+			lock.writeLock().lock();
+			database.updateFeed(feed);
+		} finally {
+			lock.writeLock().unlock();
+		}
+	}
+
+	/**
+	 * 
+	 * @param parent
+	 * @return
+	 */
+	public int getChildCount(IAggregatorItem parent) {
+		try {
+			lock.readLock().lock();
+			return database.getChildCount(parent);
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
+
+	/**
+	 * 
+	 * @param item
+	 * @return
+	 */
+	public IAggregatorItem[] getChildren(IAggregatorItem item) {
+		try {
+			lock.readLock().lock();
+			return database.getChildren(item);
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
+
+	public String getDescription(Article item) {
+		try {
+			lock.readLock().lock();
+			return database.getDescription(item);
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
+
+	public String getFeedId() {
+		return null;
+	}
+
+	/**
+	 * Returns the complete list of feeds that this registry is maintaining.
+	 * Note
+	 * 
+	 * @return The list of feeds
+	 */
+	public Collection<Feed> getFeeds() {
+		return sites.values();
+	}
+
+	/**
+	 * Returns the identifier of the feed collection as specified in the
+	 * collection declaration.
+	 * 
+	 * @return the feed identifier string
+	 */
+	public String getId() {
+		return id;
+	}
+
+	public IAggregatorItem getItem(UUID uuid) {
+		try {
+			lock.readLock().lock();
+			if (uuid.equals(getUUID()))
+				return this;
+			return database.getItem(uuid);
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
+
+	public IAggregatorItem getItemAt(UUID parentUUID, int index) {
+		try {
+			lock.readLock().lock();
+			return database.getItem(parentUUID, index);
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
+
+	/**
+	 * Returns the number of <b>unread</b> articles.
+	 * 
+	 * @param element
+	 * @return
+	 */
+	public int getItemCount(IAggregatorItem element) {
+		try {
+			lock.readLock().lock();
+			if (element instanceof Feed) {
+				return database.getUnreadCount(((Feed) element));
+			}
+			return -1;
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
+
+	public UUID getParentUUID() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public FeedCollection getRegistry() {
+		return this;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see no.resheim.aggregator.data.IAggregatorItem#getUUID()
+	 */
+	public UUID getUUID() {
+		return DEFAULT_ID;
+	}
+
+	/**
+	 * Tests to see if the item already exists in the database. If this is the
+	 * case <i>true</i> is returned. This method relies on the globally unique
+	 * identifier of the feed item.
+	 * 
+	 * @param item
+	 * @return
+	 */
+	public boolean hasArticle(Article item) {
+		try {
+			lock.readLock().lock();
+			if (database.getItem(item.getGuid()) != null) {
+				return true;
+			}
+			return false;
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
+
+	/**
+	 * Tests if the feed exists in the repository.
+	 * 
+	 * @return <b>True</b> if the feed exists.
+	 */
+	public boolean hasFeed(String url) {
+		try {
+			lock.readLock().lock();
+			return database.hasFeed(url);
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
 
 	/**
 	 * Loads all feeds from the given backend storage and initializes.
@@ -95,51 +357,100 @@ public class FeedCollection implements IAggregatorItem {
 		fRegistryUpdateJob.schedule();
 	}
 
-	/**
-	 * Adds a new feed to the database and immediately stores it's data in the
-	 * persistent storage. If the order of the item has not already been set the
-	 * current time will be used to set it. For articles the publication date
-	 * will be used instead if it has been set.
-	 * 
-	 * @param feed
-	 *            The aggregator item to add
-	 */
-	public void addNew(AbstractAggregatorItem item) {
-		try {
-			if (item.getOrdering() == 0) {
-				item.setOrdering(System.currentTimeMillis());
-				if (item instanceof Article)
-					if (((Article) item).getPublicationDate() > 0) {
-						item.setOrdering(((Article) item).getPublicationDate());
-					}
+	public boolean isLocked(Feed feed) {
+		final IExtensionRegistry ereg = Platform.getExtensionRegistry();
+		IConfigurationElement[] elements = ereg
+				.getConfigurationElementsFor(AggregatorPlugin.REGISTRY_EXTENSION_ID);
+		for (IConfigurationElement element : elements) {
+			if (element.getName().equals("feed") && element.getAttribute("url").equals(feed.getURL())) { //$NON-NLS-1$ //$NON-NLS-2$
+				if (element.getAttribute("locked") != null) { //$NON-NLS-1$
+					return Boolean.parseBoolean(element.getAttribute("locked")); //$NON-NLS-1$
+				}
 			}
-			if (item instanceof Feed) {
-				Feed feed = (Feed) item;
-				sites.put(feed.getUUID(), feed);
-				database.add(feed);
-				feed.setRegistry(this);
-				FeedUpdateJob job = new FeedUpdateJob(this, feed);
-				job.schedule();
-			} else if (item instanceof Folder) {
-				Folder folder = (Folder) item;
-				folder.setRegistry(this);
-				database.add(folder);
-			} else if (item instanceof Article) {
-				Article feedItem = (Article) item;
-				feedItem.setAddedDate(System.currentTimeMillis());
-				feedItem.setRegistry(this);
-				database.add(feedItem);
+		}
+		return false;
+	}
+
+	public boolean isPublic() {
+		return fPublic;
+	}
+
+	private void shuffle(IAggregatorItem item) {
+		IAggregatorItem parent = getItem(item.getParentUUID());
+		IAggregatorItem[] children = getChildren(parent);
+		for (IAggregatorItem child : children) {
+			int ordering = child.getOrdering();
+			if (ordering > item.getOrdering()) {
+				move(child, parent.getUUID(), (ordering - 1));
 			}
-			notifyListerners(new AggregatorItemChangedEvent(item,
-					FeedChangeEventType.CREATED));
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
-	public void move(IAggregatorItem item, UUID parentUuid, long newOrdering) {
-		database.move(item, parentUuid, newOrdering);
-		item.setOrdering(newOrdering);
+	public void move(IAggregatorItem item, UUID parentUuid, int newOrdering) {
+		try {
+			lock.writeLock().lock();
+			database.move(item, parentUuid, newOrdering);
+			item.setOrdering(newOrdering);
+			notifyListerners(new AggregatorItemChangedEvent(item,
+					FeedChangeEventType.MOVED));
+		} finally {
+			lock.writeLock().unlock();
+		}
+	}
+
+	/**
+	 * Notify feed listeners about the feed change. If the feed change was
+	 * caused by a update, a new update is scheduled.
+	 * 
+	 * @param event
+	 *            The feed change event with details
+	 */
+	public void notifyListerners(final AggregatorItemChangedEvent event) {
+		if (AggregatorPlugin.getDefault().isDebugging()) {
+			System.out.println("[DEBUG] " + event); //$NON-NLS-1$
+		}
+		for (final IAggregatorEventListener listener : feedListeners) {
+			SafeRunner.run(new ISafeRunnable() {
+				public void handleException(Throwable exception) {
+					exception.printStackTrace();
+				}
+
+				public void run() throws Exception {
+					listener.aggregatorItemChanged(event);
+				}
+
+			});
+		}
+	}
+
+	/**
+	 * Removes the specified item from the database.
+	 * 
+	 * @param element
+	 *            The element to be removed.
+	 */
+	public IStatus remove(IAggregatorItem element) {
+		try {
+			lock.writeLock().lock();
+			if (element instanceof Feed) {
+				if (isLocked((Feed) element))
+					return new Status(IStatus.CANCEL,
+							AggregatorPlugin.PLUGIN_ID,
+							Messages.FeedCollection_NoDelete_Locked);
+				sites.remove(((Feed) element).getUUID());
+			}
+			database.delete(element);
+		} finally {
+			lock.writeLock().unlock();
+		}
+		notifyListerners(new AggregatorItemChangedEvent(element,
+				FeedChangeEventType.REMOVED));
+		shuffle(element);
+		return Status.OK_STATUS;
+	}
+
+	public void removeFeedListener(IAggregatorEventListener listener) {
+		feedListeners.remove(listener);
 	}
 
 	/**
@@ -148,62 +459,52 @@ public class FeedCollection implements IAggregatorItem {
 	 * @param item
 	 */
 	public void rename(IAggregatorItem item) {
-		database.rename(item);
-	}
-
-	/**
-	 * Updates the feed data in the persistent storage. Should only be called by
-	 * {@link FeedUpdateJob} after the feed has be updated with new information.
-	 * 
-	 * @param feed
-	 *            The feed to update
-	 */
-	void feedUpdated(Feed feed) {
-		database.updateFeed(feed);
-	}
-
-	public void updateFeedData(IAggregatorItem item) {
-		if (item instanceof Feed) {
-			// Ensure that the local list has a copy of the same instance.
-			sites.put(item.getUUID(), (Feed) item);
-			database.updateFeed((Feed) item);
+		try {
+			lock.writeLock().lock();
+			database.rename(item);
+		} finally {
+			lock.writeLock().unlock();
 		}
 	}
 
+	public void setOrdering(long ordering) {
+		// TODO Auto-generated method stub
+	}
+
 	/**
+	 * Indicates that the given item has been read. If the item is an article
+	 * only the article is marked as read. If the item is a feed or folder the
+	 * contained articles are marked as read.
 	 * 
 	 * @param item
-	 * @return
 	 */
-	public IAggregatorItem[] getChildren(IAggregatorItem item) {
-		return database.getChildren(item);
+	public void setRead(IAggregatorItem item) {
+		try {
+			lock.writeLock().lock();
+			database.updateReadFlag(item);
+		} finally {
+			lock.writeLock().unlock();
+		}
+		if (item instanceof Article) {
+			((Article) item).setRead(true);
+			notifyListerners(new AggregatorItemChangedEvent(item,
+					FeedChangeEventType.READ));
+		} else {
+			IAggregatorItem[] children = getChildren(item);
+			for (IAggregatorItem child : children) {
+				if (child instanceof Article)
+					notifyListerners(new AggregatorItemChangedEvent(child,
+							FeedChangeEventType.READ));
+			}
+		}
 	}
 
-	public IAggregatorItem getItem(UUID uuid) {
-		return database.getItem(uuid);
+	public void setRegistry(FeedCollection registry) {
+		// TODO Auto-generated method stub
 	}
 
-	/**
-	 * 
-	 * @param parent
-	 * @return
-	 */
-	public int getChildCount(IAggregatorItem parent) {
-		return database.getChildCount(parent);
-	}
-
-	public String getFeedId() {
-		return null;
-	}
-
-	/**
-	 * Returns the complete list of feeds that this registry is maintaining.
-	 * Note
-	 * 
-	 * @return The list of feeds
-	 */
-	public Collection<Feed> getFeeds() {
-		return sites.values();
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public void updateAllFeeds() {
@@ -219,213 +520,26 @@ public class FeedCollection implements IAggregatorItem {
 		}
 	}
 
-	/**
-	 * Tests if the feed exists in the repository.
-	 * 
-	 * @return <b>True</b> if the feed exists.
-	 */
-	public boolean hasFeed(String url) {
-		return database.hasFeed(url);
-	}
-
-	/**
-	 * Returns the number of <b>unread</b> articles.
-	 * 
-	 * @param element
-	 * @return
-	 */
-	public int getItemCount(IAggregatorItem element) {
-		if (element instanceof Feed) {
-			return database.getUnreadCount(((Feed) element));
-		}
-		return -1;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see no.resheim.aggregator.data.IAggregatorItem#getUUID()
-	 */
-	public UUID getUUID() {
-		return DEFAULT_ID;
-	}
-
-	/**
-	 * Returns the identifier of the feed collection as specified in the
-	 * collection declaration.
-	 * 
-	 * @return the feed identifier string
-	 */
-	public String getId() {
-		return id;
-	}
-
-	public String getDescription(Article item) {
-		return database.getDescription(item);
-	}
-
-	/**
-	 * Indicates that the given item has been read. If the item is an article
-	 * only the article is marked as read. If the item is a feed or folder the
-	 * contained articles are marked as read.
-	 * 
-	 * @param item
-	 */
-	public void setRead(IAggregatorItem item) {
-		if (item instanceof Article) {
-			((Article) item).setRead(true);
-			database.updateReadFlag(item);
-			notifyListerners(new AggregatorItemChangedEvent(item,
-					FeedChangeEventType.READ));
-		} else {
-			database.updateReadFlag(item);
-			IAggregatorItem[] children = getChildren(item);
-			for (IAggregatorItem child : children) {
-				if (child instanceof Article)
-					notifyListerners(new AggregatorItemChangedEvent(child,
-							FeedChangeEventType.READ));
+	public void updateFeedData(IAggregatorItem item) {
+		try {
+			lock.writeLock().lock();
+			if (item instanceof Feed) {
+				// Ensure that the local list has a copy of the same instance.
+				sites.put(item.getUUID(), (Feed) item);
+				database.updateFeed((Feed) item);
 			}
+		} finally {
+			lock.writeLock().unlock();
 		}
 	}
 
-	/**
-	 * Tests to see if the item already exists in the database. If this is the
-	 * case <i>true</i> is returned. This method relies on the globally unique
-	 * identifier of the feed item.
-	 * 
-	 * @param item
-	 * @return
-	 */
-	public boolean hasArticle(Article item) {
-		Assert.isNotNull(item.getGuid());
-		if (database.getItem(item.getGuid()) != null) {
-			return true;
-		}
-		return false;
-	}
-
-	public boolean isLocked(Feed feed) {
-		final IExtensionRegistry ereg = Platform.getExtensionRegistry();
-		IConfigurationElement[] elements = ereg
-				.getConfigurationElementsFor(AggregatorPlugin.REGISTRY_EXTENSION_ID);
-		for (IConfigurationElement element : elements) {
-			if (element.getName().equals("feed")) { //$NON-NLS-1$
-				if (element.getAttribute("locked") != null) { //$NON-NLS-1$
-					return Boolean.parseBoolean(element.getAttribute("locked")); //$NON-NLS-1$
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Removes the specified item from the database.
-	 * 
-	 * @param element
-	 *            The element to be removed.
-	 */
-	public IStatus remove(IAggregatorItem element) {
-		if (element instanceof Feed) {
-			if (isLocked((Feed) element))
-				return new Status(IStatus.CANCEL, AggregatorPlugin.PLUGIN_ID,
-						Messages.FeedCollection_NoDelete_Locked);
-			sites.remove(((Feed) element).getUUID());
-		}
-		database.delete(element);
-		notifyListerners(new AggregatorItemChangedEvent(element,
-				FeedChangeEventType.REMOVED));
-		return Status.OK_STATUS;
-	}
-
-	/** The number of milliseconds in a day */
-	private final long DAY = 86400000;
-
-	/**
-	 * Uses the archiving rules of the site to remove articles from the feed.
-	 * Should only be called after a FeedUpdateJob has been executed.
-	 * 
-	 * @param site
-	 */
-	void cleanUp(Feed site) {
-		Archiving archiving = site.getArchiving();
-		int days = site.getArchivingDays();
-		int articles = site.getArchivingItems();
-		switch (archiving) {
-		case KEEP_ALL:
-			break;
-		case KEEP_NEWEST:
-			long lim = System.currentTimeMillis() - ((long) days * DAY);
-			database.deleteOutdated(site, lim);
-			break;
-		case KEEP_SOME:
-			database.keepMaximum(site, articles);
-			break;
-		default:
-			break;
-		}
-	}
-
-	/**
-	 * Add listener to be notified about feed changes. The added listener will
-	 * be notified when feeds are added, removed and when their contents has
-	 * changed.
-	 * 
-	 * @param listener
-	 *            The listener to be notified
-	 */
-	public void addFeedListener(IAggregatorEventListener listener) {
-		feedListeners.add(listener);
-	}
-
-	public void removeFeedListener(IAggregatorEventListener listener) {
-		feedListeners.remove(listener);
-	}
-
-	/**
-	 * Notify feed listeners about the feed change. If the feed change was
-	 * caused by a update, a new update is scheduled.
-	 * 
-	 * @param event
-	 *            The feed change event with details
-	 */
-	public void notifyListerners(AggregatorItemChangedEvent event) {
-		if (AggregatorPlugin.getDefault().isDebugging()) {
-			System.out.println("[DEBUG] " + event); //$NON-NLS-1$
-		}
-		for (IAggregatorEventListener listener : feedListeners) {
-			listener.aggregatorItemChanged(event);
-		}
-	}
-
-	public FeedCollection getRegistry() {
-		return this;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public long getOrdering() {
+	public int getOrdering() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public void setOrdering(long ordering) {
+	public void setOrdering(int ordering) {
 		// TODO Auto-generated method stub
 
-	}
-
-	public void setRegistry(FeedCollection registry) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public UUID getParentUUID() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

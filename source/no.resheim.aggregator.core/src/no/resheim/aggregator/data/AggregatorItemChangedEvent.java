@@ -10,16 +10,20 @@ public class AggregatorItemChangedEvent {
 	public enum FeedChangeEventType {
 		/** The feed has been restored from the database */
 		RESTORED,
-		/** The feed has been created */
+		/** The item has been created */
 		CREATED,
-		/** The feed has been removed */
+		/** The item has been removed */
 		REMOVED,
-		/** The feed has been updated */
+		/** The item has been updated */
 		UPDATED,
-		/** The feed item has been read */
+		/** The article has been read */
 		READ,
-		/** The feed is being updated */
-		UPDATING, MOVED, FAILED
+		/** The item is being updated */
+		UPDATING,
+		/** The item was moved */
+		MOVED,
+		/** Something bad happened */
+		FAILED
 	}
 
 	private IAggregatorItem feed;

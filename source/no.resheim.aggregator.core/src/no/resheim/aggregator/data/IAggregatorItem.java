@@ -35,10 +35,10 @@ public interface IAggregatorItem {
 	 */
 	public abstract String getTitle();
 
-	public abstract void setOrdering(long ordering);
+	public abstract void setOrdering(int ordering);
 
 	public abstract void setRegistry(FeedCollection registry);
 
-	public abstract long getOrdering();
+	public abstract int getOrdering();
 
 }

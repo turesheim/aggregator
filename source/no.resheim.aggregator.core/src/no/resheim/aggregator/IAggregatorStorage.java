@@ -107,6 +107,8 @@ public interface IAggregatorStorage {
 
 	public abstract IAggregatorItem getItem(UUID item);
 
+	public abstract IAggregatorItem getItem(UUID parent, int index);
+
 	/**
 	 * Returns the number of unread articles the given feed has.
 	 * 

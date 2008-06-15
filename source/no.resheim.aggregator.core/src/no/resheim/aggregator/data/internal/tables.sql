@@ -1,7 +1,7 @@
 CREATE TABLE folders (
 		uuid CHAR(36) NOT NULL,
 		parent_uuid CHAR(36),
-		ordering BIGINT NOT NULL,
+		ordering INTEGER NOT NULL,
         title VARCHAR(32) NOT NULL,
 		marks VARCHAR(64) NOT NULL		
 	);
@@ -9,7 +9,7 @@ CREATE TABLE folders (
 CREATE TABLE feeds (
         uuid CHAR(36) NOT NULL,
 		parent_uuid CHAR(36) NOT NULL,
-		ordering BIGINT NOT NULL,
+		ordering INTEGER NOT NULL,
 		title VARCHAR(32) NOT NULL,
 		url VARCHAR(256) NOT NULL,
 		marks VARCHAR(64) NOT NULL,		
@@ -34,7 +34,7 @@ CREATE TABLE feeds (
 CREATE TABLE articles (
         uuid CHAR(36) NOT NULL,
 		parent_uuid CHAR(36) NOT NULL,
-		ordering BIGINT NOT NULL,
+		ordering INTEGER NOT NULL,
 		feed_uuid CHAR(36) NOT NULL,
 		guid VARCHAR(256) NOT NULL,
 		title VARCHAR(128) NOT NULL,
@@ -48,12 +48,17 @@ CREATE TABLE articles (
 		creator VARCHAR(128)
 	);
 
-/* Selection, tree browsing */
+/* Selection*/
 CREATE INDEX folders_parent ON folders (parent_uuid,uuid);
 CREATE INDEX feeds_parent ON feeds (parent_uuid,uuid);
 CREATE INDEX feeds_url ON feeds (url,uuid);
 CREATE INDEX articles_parent ON articles (parent_uuid,uuid);
 CREATE INDEX articles_guid ON articles (guid,uuid);
+
+/* Virtual tree browsing */
+CREATE INDEX folders_tree ON folders (parent_uuid,ordering);
+CREATE INDEX feeds_tree ON feeds (parent_uuid,ordering);
+CREATE INDEX articles_tree ON articles (parent_uuid,ordering);
 
 /* Unique index */
 CREATE INDEX folders_id ON folders (uuid);
