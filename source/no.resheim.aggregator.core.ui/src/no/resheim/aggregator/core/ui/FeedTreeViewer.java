@@ -17,7 +17,6 @@ import no.resheim.aggregator.data.IAggregatorItem;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -62,34 +61,8 @@ public class FeedTreeViewer extends TreeViewer {
 
 	};
 
-	class OrderedSorter extends ViewerComparator {
-
-		@Override
-		public int compare(Viewer viewer, Object e1, Object e2) {
-			if (e1 instanceof AbstractAggregatorItem
-					&& e2 instanceof AbstractAggregatorItem) {
-				AbstractAggregatorItem i1 = (AbstractAggregatorItem) e1;
-				AbstractAggregatorItem i2 = (AbstractAggregatorItem) e2;
-
-				long t1 = i1.getOrdering();
-				long t2 = i2.getOrdering();
-				// Note that we're putting the oldest items last!
-				if (t1 == t2)
-					return 0;
-				else if (t1 < t2)
-					return 1;
-				else
-					return -1;
-			}
-			return super.compare(viewer, e1, e2);
-		}
-	}
-
 	public FeedTreeViewer(Composite parent) {
-		super(parent);
-		setComparer(comparer);
-		super.setComparator(new OrderedSorter());
-		initDND();
+		this(parent, SWT.NONE);
 	}
 
 	/**
@@ -97,19 +70,10 @@ public class FeedTreeViewer extends TreeViewer {
 	 * @param style
 	 */
 	public FeedTreeViewer(Composite parent, int style) {
-		super(parent, style);
+		super(parent, style | SWT.VIRTUAL);
 		setComparer(comparer);
-		super.setComparator(new OrderedSorter());
-		initDND();
-	}
-
-	/**
-	 * @param tree
-	 */
-	public FeedTreeViewer(Tree tree) {
-		super(tree);
-		setComparer(comparer);
-		super.setComparator(new OrderedSorter());
+		// Must be true
+		setUseHashlookup(true);
 		initDND();
 	}
 
@@ -179,7 +143,7 @@ public class FeedTreeViewer extends TreeViewer {
 					TreeItem item = (TreeItem) event.item;
 					AbstractAggregatorItem destination = (AbstractAggregatorItem) item
 							.getData();
-					long newOrder = 0;
+					int newOrder = 0;
 					TreeItem newItem = null;
 					Rectangle rect = item.getBounds();
 					Point pt = tree.toControl(event.x, event.y);
@@ -243,10 +207,10 @@ public class FeedTreeViewer extends TreeViewer {
 				}
 			}
 
-			private long getOrderBefore(TreeItem item) {
+			private int getOrderBefore(TreeItem item) {
 				int index = getItemIndex(item);
 				if (index == 0) {
-					return Long.MAX_VALUE;
+					return Integer.MAX_VALUE;
 				}
 				if (item.getParentItem() == null) {
 					AbstractAggregatorItem aItem = (AbstractAggregatorItem) item
@@ -259,7 +223,7 @@ public class FeedTreeViewer extends TreeViewer {
 				}
 			}
 
-			private long getOrderAfter(TreeItem item) {
+			private int getOrderAfter(TreeItem item) {
 				int index = getItemIndex(item);
 				if (item.getParentItem() == null) {
 					int count = item.getParent().getItemCount();
