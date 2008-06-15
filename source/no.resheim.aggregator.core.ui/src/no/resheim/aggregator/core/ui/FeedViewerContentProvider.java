@@ -104,8 +104,9 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 						fViewer.update(parent, STATE_PROPERTIES);
 						break;
 					case UPDATED:
-						// fViewer.refresh(parent, true);
-						fViewer.update(event.getItem(), STATE_PROPERTIES);
+						// We _have_ to refresh deeply after adding new articles
+						// or the viewer will become confused.
+						fViewer.refresh(parent, true);
 						break;
 					case MOVED:
 						// Make sure the item reference is updated as the one
@@ -152,15 +153,10 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 
 	public void updateElement(final Object parent, final int index) {
 		if (parent instanceof IAggregatorItem) {
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-
-					Object element = fCollection.getItemAt(
-							((IAggregatorItem) parent).getUUID(), index);
-					fViewer.replace(parent, index, element);
-					updateChildCount(element, -1);
-				}
-			});
+			Object element = fCollection.getItemAt(((IAggregatorItem) parent)
+					.getUUID(), index);
+			fViewer.replace(parent, index, element);
+			updateChildCount(element, -1);
 		}
 	}
 }
