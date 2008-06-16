@@ -150,18 +150,15 @@ public class FeedTreeViewer extends TreeViewer {
 					try {
 						// TODO: Fix setting of new order, it's fragile
 						if (pt.y < rect.y + 3) {
-							newOrder = destination.getOrdering()
-									+ ((getOrderBefore(item) - destination
-											.getOrdering()) / 2);
+							newOrder = getOrderBefore(item);
+							source.getRegistry().move(source,
+									source.getParentUUID(), newOrder);
 							newItem = getNewItem(item, 0);
-							source.getRegistry().move(source,
-									source.getParentUUID(), newOrder);
 						} else if (pt.y > rect.y + rect.height - 3) {
-							newOrder = destination.getOrdering()
-									- ((destination.getOrdering() - getOrderAfter(item)) / 2);
-							newItem = getNewItem(item, 1);
+							newOrder = getOrderAfter(item);
 							source.getRegistry().move(source,
 									source.getParentUUID(), newOrder);
+							newItem = getNewItem(item, 1);
 						} else {
 							source.getRegistry().move(source,
 									destination.getUUID(), newOrder);
