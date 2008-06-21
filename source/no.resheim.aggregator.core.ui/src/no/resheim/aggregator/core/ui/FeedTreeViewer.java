@@ -11,6 +11,9 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import java.text.MessageFormat;
+import java.util.UUID;
+
 import no.resheim.aggregator.data.AbstractAggregatorItem;
 import no.resheim.aggregator.data.IAggregatorItem;
 
@@ -28,6 +31,7 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
@@ -40,6 +44,7 @@ import org.eclipse.swt.widgets.TreeItem;
  * @since 1.0
  */
 public class FeedTreeViewer extends TreeViewer {
+	private static final int DND_OFFSET = 3;
 	/**
 	 * Element comparer that uses the UUID of the aggregator item instead of the
 	 * object's hash code to compare two items. This ensures that the item is
@@ -112,9 +117,10 @@ public class FeedTreeViewer extends TreeViewer {
 			}
 
 			public void dragFinished(DragSourceEvent event) {
-				if (event.detail == DND.DROP_MOVE)
+				if (event.detail == DND.DROP_MOVE) {
 					dragSourceItem[0].dispose();
-				dragSourceItem[0] = null;
+					dragSourceItem[0] = null;
+				}
 			}
 		});
 		DropTarget target = new DropTarget(tree, operations);
@@ -125,9 +131,9 @@ public class FeedTreeViewer extends TreeViewer {
 				if (event.item != null) {
 					Rectangle rect = ((TreeItem) event.item).getBounds();
 					Point pt = tree.toControl(event.x, event.y);
-					if (pt.y < rect.y + 3)
+					if (pt.y < rect.y + DND_OFFSET)
 						event.feedback = DND.FEEDBACK_INSERT_BEFORE;
-					if (pt.y > rect.y + rect.height - 3)
+					if (pt.y > rect.y + rect.height - DND_OFFSET)
 						event.feedback = DND.FEEDBACK_INSERT_AFTER;
 				}
 				event.feedback |= DND.FEEDBACK_SCROLL | DND.FEEDBACK_EXPAND;
@@ -137,54 +143,141 @@ public class FeedTreeViewer extends TreeViewer {
 				IAggregatorItem source = (IAggregatorItem) ((IStructuredSelection) getSelection())
 						.getFirstElement();
 				// We must drop in something
-				if (event.item == null) {
+				if (event.item == null || event.item.equals(dragSourceItem[0])) {
 					event.detail = DND.DROP_NONE;
 				} else {
 					TreeItem item = (TreeItem) event.item;
+					Image image = dragSourceItem[0].getImage();
+					String text = dragSourceItem[0].getText();
+					int children = dragSourceItem[0].getItemCount();
 					AbstractAggregatorItem destination = (AbstractAggregatorItem) item
 							.getData();
 					int newOrder = 0;
+					int oldOrder = source.getOrdering();
 					TreeItem newItem = null;
 					Rectangle rect = item.getBounds();
 					Point pt = tree.toControl(event.x, event.y);
+					UUID newParent;
+					boolean before = false;
 					try {
-						// TODO: Fix setting of new order, it's fragile
-						if (pt.y < rect.y + 3) {
-							newOrder = getOrderBefore(item);
-							source.getRegistry().move(source,
-									source.getParentUUID(), newOrder);
-							newItem = getNewItem(item, 0);
-						} else if (pt.y > rect.y + rect.height - 3) {
-							newOrder = getOrderAfter(item);
-							source.getRegistry().move(source,
-									source.getParentUUID(), newOrder);
-							newItem = getNewItem(item, 1);
+						if (pt.y < rect.y + DND_OFFSET) {
+							// Before
+							newOrder = getItemIndex(item) - 1;
+							newParent = source.getParentUUID();
+							before = true;
+						} else if (pt.y > rect.y + rect.height - DND_OFFSET) {
+							// After
+							newOrder = getItemIndex(item);
+							newParent = source.getParentUUID();
 						} else {
-							source.getRegistry().move(source,
-									destination.getUUID(), newOrder);
-							newItem = new TreeItem(item, SWT.NONE, 0);
+							// Drop into
+							newParent = destination.getUUID();
 						}
-						newItem.setImage(dragSourceItem[0].getImage());
-						newItem.setText(dragSourceItem[0].getText());
-						newItem.setItemCount(dragSourceItem[0].getItemCount());
+
+						// Create a new tree item to hold the position
+						newItem = getNewItem(item, newOrder);
+						newItem.setImage(image);
+						newItem.setText(text);
+						newItem.setItemCount(children);
 						newItem.setData(source);
+						// Create a
+						if (newOrder > oldOrder) {
+							if (before) {
+								System.out.println(MessageFormat.format(
+										"Item {0} moved down before {1}",
+										new Object[] {
+												newItem, item
+										}));
+								moveUp(item, oldOrder, newOrder);
+								source.getRegistry().move(source, newParent,
+										newOrder);
+							} else {
+								// OK
+								System.out.println(MessageFormat.format(
+										"Item {0} moved down after {1}",
+										new Object[] {
+												newItem, item
+										}));
+								moveUp(item, oldOrder, newOrder);
+								source.getRegistry().move(source, newParent,
+										newOrder);
+							}
+						} else {
+							if (before) {
+								System.out.println(MessageFormat.format(
+										"Item {0} moved up before {1}",
+										new Object[] {
+												newItem, item
+										}));
+								moveDown(item, oldOrder, newOrder);
+								source.getRegistry().move(source, newParent,
+										newOrder + 1);
+							} else {
+								System.out.println(MessageFormat.format(
+										"Item {0} moved up after {1}",
+										new Object[] {
+												newItem, item
+										}));
+								moveDown(item, oldOrder, newOrder);
+								source.getRegistry().move(source, newParent,
+										newOrder + 1);
+							}
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 			}
 
-			private TreeItem getNewItem(TreeItem item, int offset) {
-				int newIndex;
+			/**
+			 * Updates the tree items and the associated aggregator item
+			 * following the given tree item by incrementing the ordering
+			 * property by one.
+			 * 
+			 * @param treeItem
+			 *            The tree item that was moved
+			 */
+			private void moveDown(TreeItem treeItem, int from, int to) {
+				TreeItem child;
+
+				for (int i = to + 2; i <= from; i++) {
+					child = getSiblingAt(treeItem, i);
+					IAggregatorItem data = (IAggregatorItem) child.getData();
+					data.getRegistry().move(data, data.getParentUUID(),
+							data.getOrdering() + 1);
+				}
+			}
+
+			// OK
+			private void moveUp(TreeItem treeItem, int from, int to) {
+				TreeItem child;
+				for (int i = from + 1; i <= to; i++) {
+					child = getSiblingAt(treeItem, i);
+					IAggregatorItem data = (IAggregatorItem) child.getData();
+					data.getRegistry().move(data, data.getParentUUID(),
+							data.getOrdering() - 1);
+				}
+			}
+
+			private TreeItem getSiblingAt(TreeItem treeItem, int i) {
+				TreeItem child;
+				if (treeItem.getParentItem() == null) {
+					child = treeItem.getParent().getItem(i);
+				} else {
+					child = treeItem.getParentItem().getItem(i);
+				}
+				return child;
+			}
+
+			private TreeItem getNewItem(TreeItem item, int index) {
 				TreeItem newItem;
 				if (item.getParentItem() == null) {
 					Tree parent = item.getParent();
-					newIndex = parent.indexOf(item);
-					newItem = new TreeItem(parent, SWT.NONE, newIndex + offset);
+					// Is this not zero-relative?
+					newItem = new TreeItem(parent, SWT.NONE, index + 1);
 				} else {
 					TreeItem parent = item.getParentItem();
-					newIndex = parent.indexOf(item);
-					newItem = new TreeItem(parent, SWT.NONE, newIndex + offset);
+					newItem = new TreeItem(parent, SWT.NONE, index + 1);
 				}
 				return newItem;
 			}
@@ -203,45 +296,6 @@ public class FeedTreeViewer extends TreeViewer {
 					return item.getParentItem().indexOf(item);
 				}
 			}
-
-			private int getOrderBefore(TreeItem item) {
-				int index = getItemIndex(item);
-				if (index == 0) {
-					return Integer.MAX_VALUE;
-				}
-				if (item.getParentItem() == null) {
-					AbstractAggregatorItem aItem = (AbstractAggregatorItem) item
-							.getParent().getItem(index - 1).getData();
-					return aItem.getOrdering();
-				} else {
-					AbstractAggregatorItem aItem = (AbstractAggregatorItem) item
-							.getParentItem().getItem(index - 1).getData();
-					return aItem.getOrdering();
-				}
-			}
-
-			private int getOrderAfter(TreeItem item) {
-				int index = getItemIndex(item);
-				if (item.getParentItem() == null) {
-					int count = item.getParent().getItemCount();
-					if (index == count - 1) {
-						return 0;
-					}
-					AbstractAggregatorItem aItem = (AbstractAggregatorItem) item
-							.getParent().getItem(index + 1).getData();
-					return aItem.getOrdering();
-				} else {
-					int count = item.getParentItem().getItemCount();
-					if (index == count - 1) {
-						return 0;
-					}
-					AbstractAggregatorItem aItem = (AbstractAggregatorItem) item
-							.getParentItem().getItem(index + 1).getData();
-					return aItem.getOrdering();
-				}
-			}
-
 		});
-
 	}
 }

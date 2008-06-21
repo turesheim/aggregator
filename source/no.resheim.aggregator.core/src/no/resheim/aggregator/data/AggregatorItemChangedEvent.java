@@ -26,13 +26,21 @@ public class AggregatorItemChangedEvent {
 		FAILED
 	}
 
+	private IAggregatorItem oldItem;
 	private IAggregatorItem feed;
 	private FeedChangeEventType type;
+	private int oldOrder;
 
 	public AggregatorItemChangedEvent(IAggregatorItem feed,
 			FeedChangeEventType type) {
 		this.feed = feed;
 		this.type = type;
+	}
+
+	public AggregatorItemChangedEvent(IAggregatorItem feed,
+			FeedChangeEventType type, int oldOrder) {
+		this(feed, type);
+		this.oldOrder = oldOrder;
 	}
 
 	public IAggregatorItem getItem() {
@@ -53,5 +61,9 @@ public class AggregatorItemChangedEvent {
 		sb.append(": "); //$NON-NLS-1$
 		sb.append(feed.toString());
 		return sb.toString();
+	}
+
+	public int getOldOrder() {
+		return oldOrder;
 	}
 }

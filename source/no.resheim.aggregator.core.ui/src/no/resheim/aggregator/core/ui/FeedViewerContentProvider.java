@@ -111,8 +111,12 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 					case MOVED:
 						// Make sure the item reference is updated as the one
 						// in the viewer has wrong "ordering" member variable.
+						// We're assuming that the view already knows about the
+						// change but only needs to get it's data updated.
 						fViewer.replace(parent, event.getItem().getOrdering(),
 								event.getItem());
+						// Update label and image too
+						fViewer.update(event.getItem(), STATE_PROPERTIES);
 						break;
 					case REMOVED:
 						// Maybe the number of "read" has changed
@@ -122,7 +126,7 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 						break;
 					case CREATED:
 						fViewer.add(parent, event.getItem());
-						// The number of "read" items has most likey changed
+						// The number of "read" items has most likely changed
 						fViewer.update(parent, STATE_PROPERTIES);
 						break;
 					case UPDATING:

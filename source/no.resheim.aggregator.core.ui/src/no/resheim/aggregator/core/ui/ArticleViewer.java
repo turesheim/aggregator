@@ -121,7 +121,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		title.setTitle(item.getTitle(), null);
 		browser.setText(description.toString());
 		if (AggregatorUIPlugin.getDefault().isDebugging()) {
-			System.out.println(description.toString());
+			System.out.println(item);
 		}
 		if (item.getPublicationDate() > 0) {
 			setStatusText(MessageFormat.format(

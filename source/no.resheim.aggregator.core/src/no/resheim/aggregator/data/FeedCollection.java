@@ -375,21 +375,35 @@ public class FeedCollection implements IAggregatorItem {
 		return fPublic;
 	}
 
-	private void shuffle(IAggregatorItem item) {
+	private void shuffle(IAggregatorItem item, int amount) {
 		IAggregatorItem parent = getItem(item.getParentUUID());
 		IAggregatorItem[] children = getChildren(parent);
 		for (IAggregatorItem child : children) {
 			int ordering = child.getOrdering();
 			if (ordering > item.getOrdering()) {
-				move(child, parent.getUUID(), (ordering - 1));
+				move(child, parent.getUUID(), (ordering + amount));
 			}
 		}
 	}
 
+	/**
+	 * The given instance will be updated with new information and which can be
+	 * used after the storage update.
+	 * 
+	 * @param item
+	 * @param parentUuid
+	 * @param newOrdering
+	 */
 	public void move(IAggregatorItem item, UUID parentUuid, int newOrdering) {
 		try {
+			// XXX: Debugging drag & drop
+			if (item.getTitle().startsWith("Article #")) {
+				item.setTitle("Article #" + newOrdering + " ("
+						+ item.getOrdering() + ")");
+			}
 			lock.writeLock().lock();
 			database.move(item, parentUuid, newOrdering);
+			// TODO: Set parentUUID
 			item.setOrdering(newOrdering);
 			notifyListerners(new AggregatorItemChangedEvent(item,
 					FeedChangeEventType.MOVED));
@@ -443,9 +457,9 @@ public class FeedCollection implements IAggregatorItem {
 		} finally {
 			lock.writeLock().unlock();
 		}
+		shuffle(element, -1);
 		notifyListerners(new AggregatorItemChangedEvent(element,
 				FeedChangeEventType.REMOVED));
-		shuffle(element);
 		return Status.OK_STATUS;
 	}
 

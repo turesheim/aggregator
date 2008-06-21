@@ -373,14 +373,18 @@ public class RSSView extends ViewPart implements IFeedView,
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
 		// It's possible that no saved state exists yet
-		if (memento == null)
+		if (memento == null) {
+			fHorizontalLayout = true;
 			return;
+		}
 		final String name = this.getClass().getName();
 		if (memento.getString(name + MEMENTO_ORIENTATION) != null) {
 			if (memento.getString(name + MEMENTO_ORIENTATION) != null) {
 				fHorizontalLayout = Boolean.parseBoolean(memento.getString(name
 						+ MEMENTO_ORIENTATION));
 			}
+		} else {
+			fHorizontalLayout = true;
 		}
 
 	}
