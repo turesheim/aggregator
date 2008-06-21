@@ -149,6 +149,9 @@ public class AggregatorPlugin extends Plugin {
 	 * @return the shared instance
 	 */
 	public static AggregatorPlugin getDefault() {
+		if (plugin == null) {
+			new AggregatorPlugin();
+		}
 		return plugin;
 	}
 
@@ -218,19 +221,21 @@ public class AggregatorPlugin extends Plugin {
 					String name = element.getAttribute("name"); //$NON-NLS-1$
 					boolean pub = Boolean.parseBoolean(element
 							.getAttribute("public")); //$NON-NLS-1$
-					final FeedCollection registry = new FeedCollection(id, pub);
-					registry.setTitle(name);
+
+					final FeedCollection collection = new FeedCollection(id,
+							pub);
+					collection.setTitle(name);
 					synchronized (registryMap) {
-						registryMap.put(id, registry);
+						registryMap.put(id, collection);
 					}
-					IAggregatorStorage storage = new DerbySQLStorage(registry,
-							getStorageLocation(registry));
+					IAggregatorStorage storage = new DerbySQLStorage(
+							collection, getStorageLocation(collection));
 					IStatus status = storage.startup(monitor);
 					if (status.isOK()) {
-						registry.initialize(storage);
+						collection.initialize(storage);
 						storageList.add(storage);
 						for (IFeedCollectionEventListener listener : fCollectionListeners) {
-							listener.collectionInitialized(registry);
+							listener.collectionInitialized(collection);
 						}
 					} else {
 						return status;
