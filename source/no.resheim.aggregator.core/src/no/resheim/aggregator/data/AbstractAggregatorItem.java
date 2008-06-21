@@ -66,11 +66,11 @@ public abstract class AbstractAggregatorItem implements IAggregatorItem {
 	}
 
 	// XXX: Should be not need to expose this
-	public FeedCollection getRegistry() {
+	public FeedCollection getCollection() {
 		return registry;
 	}
 
-	public void setRegistry(FeedCollection registry) {
+	public void setCollection(FeedCollection registry) {
 		this.registry = registry;
 	}
 

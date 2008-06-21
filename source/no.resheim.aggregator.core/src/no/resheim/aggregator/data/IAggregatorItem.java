@@ -18,7 +18,7 @@ public interface IAggregatorItem {
 	 * 
 	 * @return The feed registry
 	 */
-	public abstract FeedCollection getRegistry();
+	public abstract FeedCollection getCollection();
 
 	/**
 	 * Sets a new title for the item.
@@ -37,7 +37,7 @@ public interface IAggregatorItem {
 
 	public abstract void setOrdering(int ordering);
 
-	public abstract void setRegistry(FeedCollection registry);
+	public abstract void setCollection(FeedCollection registry);
 
 	public abstract int getOrdering();
 

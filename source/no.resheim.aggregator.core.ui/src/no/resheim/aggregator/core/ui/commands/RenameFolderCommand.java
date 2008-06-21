@@ -56,7 +56,7 @@ public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 			public void focusLost(FocusEvent event) {
 				item.setText(text.getText());
 				aggregatorItem.setTitle(text.getText());
-				aggregatorItem.getRegistry().rename(aggregatorItem);
+				aggregatorItem.getCollection().rename(aggregatorItem);
 				text.dispose();
 			}
 		});
@@ -71,7 +71,7 @@ public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 					// Enter hit--set the text into the tree and drop through
 					item.setText(text.getText());
 					aggregatorItem.setTitle(text.getText());
-					aggregatorItem.getRegistry().rename(aggregatorItem);
+					aggregatorItem.getCollection().rename(aggregatorItem);
 				case SWT.ESC:
 					// End editing session
 					text.dispose();

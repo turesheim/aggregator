@@ -114,17 +114,17 @@ public class FeedCollection implements IAggregatorItem {
 					Feed feed = (Feed) item;
 					sites.put(feed.getUUID(), feed);
 					database.add(feed);
-					feed.setRegistry(this);
+					feed.setCollection(this);
 					FeedUpdateJob job = new FeedUpdateJob(this, feed);
 					job.schedule();
 				} else if (item instanceof Folder) {
 					Folder folder = (Folder) item;
-					folder.setRegistry(this);
+					folder.setCollection(this);
 					database.add(folder);
 				} else if (item instanceof Article) {
 					Article feedItem = (Article) item;
 					feedItem.setAddedDate(System.currentTimeMillis());
-					feedItem.setRegistry(this);
+					feedItem.setCollection(this);
 					database.add(feedItem);
 				}
 			} catch (Exception e) {
@@ -287,7 +287,7 @@ public class FeedCollection implements IAggregatorItem {
 		return null;
 	}
 
-	public FeedCollection getRegistry() {
+	public FeedCollection getCollection() {
 		return this;
 	}
 
@@ -397,11 +397,16 @@ public class FeedCollection implements IAggregatorItem {
 	public void move(IAggregatorItem item, UUID parentUuid, int newOrdering) {
 		try {
 			lock.writeLock().lock();
+			int details = 0;
+			if (!parentUuid.equals(item.getParentUUID())) {
+				details |= AggregatorItemChangedEvent.NEW_PARENT;
+			}
 			database.move(item, parentUuid, newOrdering);
 			// TODO: Set parentUUID
+			item.setParentUUID(parentUuid);
 			item.setOrdering(newOrdering);
 			notifyListerners(new AggregatorItemChangedEvent(item,
-					FeedChangeEventType.MOVED));
+					FeedChangeEventType.MOVED, details));
 		} finally {
 			lock.writeLock().unlock();
 		}
@@ -508,7 +513,7 @@ public class FeedCollection implements IAggregatorItem {
 		}
 	}
 
-	public void setRegistry(FeedCollection registry) {
+	public void setCollection(FeedCollection registry) {
 		// TODO Auto-generated method stub
 	}
 
@@ -550,5 +555,8 @@ public class FeedCollection implements IAggregatorItem {
 	public void setOrdering(int ordering) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setParentUUID(UUID parent_uuid) {
 	}
 }

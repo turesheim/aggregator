@@ -87,7 +87,7 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 			StringBuffer sb = new StringBuffer();
 			sb.append(feed.getTitle());
 			if (pShowUnreadCount) {
-				int unread = feed.getRegistry().getItemCount(feed);
+				int unread = feed.getCollection().getItemCount(feed);
 				if (unread > 0) {
 					sb.append(" ("); //$NON-NLS-1$
 					sb.append(unread);
@@ -97,8 +97,8 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 			return sb.toString();
 		}
 		if (element instanceof Article) {
-				return ((Article) element).getTitle();
-				}
+			return ((Article) element).getTitle();
+		}
 
 		if (element instanceof Folder)
 			return ((Folder) element).getTitle();

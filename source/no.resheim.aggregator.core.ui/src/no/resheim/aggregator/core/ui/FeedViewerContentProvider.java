@@ -117,6 +117,9 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 								event.getItem());
 						// Update label and image too
 						fViewer.update(event.getItem(), STATE_PROPERTIES);
+						if ((event.getDetails() & AggregatorItemChangedEvent.NEW_PARENT) == AggregatorItemChangedEvent.NEW_PARENT) {
+							fViewer.refresh();
+						}
 						break;
 					case REMOVED:
 						// Maybe the number of "read" has changed

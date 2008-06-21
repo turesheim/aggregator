@@ -14,6 +14,7 @@ package no.resheim.aggregator.core.ui;
 import java.util.UUID;
 
 import no.resheim.aggregator.data.AbstractAggregatorItem;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.jface.viewers.IElementComparer;
@@ -38,6 +39,8 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
 /**
+ * Virtual tree viewer supporting drag and drop while presenting
+ * IAggregatorItems.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -126,6 +129,8 @@ public class FeedTreeViewer extends TreeViewer {
 		target.setTransfer(types);
 		target.addDropListener(new DropTargetAdapter() {
 
+			private FeedCollection collection;
+
 			public void dragOver(DropTargetEvent event) {
 				if (event.item != null) {
 					Rectangle rect = ((TreeItem) event.item).getBounds();
@@ -141,6 +146,8 @@ public class FeedTreeViewer extends TreeViewer {
 			public void drop(DropTargetEvent event) {
 				IAggregatorItem source = (IAggregatorItem) ((IStructuredSelection) getSelection())
 						.getFirstElement();
+				collection = source.getCollection();
+
 				// We must drop in something
 				if (event.item == null || event.item.equals(dragSourceItem[0])) {
 					event.detail = DND.DROP_NONE;
@@ -157,37 +164,44 @@ public class FeedTreeViewer extends TreeViewer {
 					Rectangle rect = item.getBounds();
 					Point pt = tree.toControl(event.x, event.y);
 					UUID newParent;
-					boolean before = false;
 					try {
 						if (pt.y < rect.y + DND_OFFSET) {
 							// Before
 							newOrder = getItemIndex(item) - 1;
 							newParent = source.getParentUUID();
-							before = true;
+							newItem = getNewItem(item, newOrder + 1);
 						} else if (pt.y > rect.y + rect.height - DND_OFFSET) {
 							// After
 							newOrder = getItemIndex(item);
 							newParent = source.getParentUUID();
+							newItem = getNewItem(item, newOrder + 1);
 						} else {
 							// Drop into
 							newParent = destination.getUUID();
+							newOrder = collection.getChildCount(collection
+									.getItem(newParent));
+							newItem = getNewItem(item, newOrder);
 						}
 
 						// Create a new tree item to hold the position
-						newItem = getNewItem(item, newOrder);
 						newItem.setImage(image);
 						newItem.setText(text);
 						newItem.setItemCount(children);
 						newItem.setData(source);
-						// Create a
-						if (newOrder > oldOrder) {
-							moveUp(item, oldOrder, newOrder);
-							source.getRegistry().move(source, newParent,
-									newOrder);
+
+						if (newParent.equals(source.getParentUUID())) {
+							if (newOrder > oldOrder) {
+								moveUp(item, oldOrder, newOrder);
+								collection.move(source, newParent, newOrder);
+							} else {
+								moveDown(item, oldOrder, newOrder);
+								collection
+										.move(source, newParent, newOrder + 1);
+							}
 						} else {
-							moveDown(item, oldOrder, newOrder);
-							source.getRegistry().move(source, newParent,
-									newOrder + 1);
+							moveUp(item, oldOrder + 1,
+									getParentChildCount(item) - 1);
+							collection.move(source, newParent, newOrder);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -209,8 +223,8 @@ public class FeedTreeViewer extends TreeViewer {
 				for (int i = to + 2; i <= from; i++) {
 					child = getSiblingAt(treeItem, i);
 					IAggregatorItem data = (IAggregatorItem) child.getData();
-					data.getRegistry().move(data, data.getParentUUID(),
-							data.getOrdering() + 1);
+					collection.move(data, data.getParentUUID(), data
+							.getOrdering() + 1);
 				}
 			}
 
@@ -220,8 +234,17 @@ public class FeedTreeViewer extends TreeViewer {
 				for (int i = from + 1; i <= to; i++) {
 					child = getSiblingAt(treeItem, i);
 					IAggregatorItem data = (IAggregatorItem) child.getData();
-					data.getRegistry().move(data, data.getParentUUID(),
-							data.getOrdering() - 1);
+					// If the tree item is virtual it will have no data so we
+					// need to obtain the aggregator item directly from the
+					// collection.
+					if (data == null) {
+						IAggregatorItem itemData = (IAggregatorItem) treeItem
+								.getData();
+						data = collection.getItemAt(itemData.getParentUUID(),
+								i - 1);
+					}
+					collection.move(data, data.getParentUUID(), data
+							.getOrdering() - 1);
 				}
 			}
 
@@ -240,10 +263,10 @@ public class FeedTreeViewer extends TreeViewer {
 				if (item.getParentItem() == null) {
 					Tree parent = item.getParent();
 					// Is this not zero-relative?
-					newItem = new TreeItem(parent, SWT.NONE, index + 1);
+					newItem = new TreeItem(parent, SWT.NONE, index);
 				} else {
 					TreeItem parent = item.getParentItem();
-					newItem = new TreeItem(parent, SWT.NONE, index + 1);
+					newItem = new TreeItem(parent, SWT.NONE, index);
 				}
 				return newItem;
 			}
@@ -260,6 +283,21 @@ public class FeedTreeViewer extends TreeViewer {
 					return item.getParent().indexOf(item);
 				} else {
 					return item.getParentItem().indexOf(item);
+				}
+			}
+
+			/**
+			 * Calculates and returns the index of the tree item in its parent.
+			 * 
+			 * @param item
+			 *            the tree item
+			 * @return the index of the item
+			 */
+			private int getParentChildCount(TreeItem item) {
+				if (item.getParentItem() == null) {
+					return item.getParent().getItemCount();
+				} else {
+					return item.getParentItem().getItemCount();
 				}
 			}
 		});

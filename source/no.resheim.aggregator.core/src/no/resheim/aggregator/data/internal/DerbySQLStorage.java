@@ -643,7 +643,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			Folder folder = new Folder(UUID.fromString(rs.getString(1)), UUID
 					.fromString(rs.getString(2)), rs.getString(4));
 			folder.setOrdering(rs.getInt(3));
-			folder.setRegistry(registry);
+			folder.setCollection(registry);
 			feeds.add(folder);
 		}
 		rs.close();
@@ -667,7 +667,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			folder = new Folder(UUID.fromString(rs.getString(1)), UUID
 					.fromString(rs.getString(2)), rs.getString(4));
 			folder.setOrdering(rs.getInt(3));
-			folder.setRegistry(registry);
+			folder.setCollection(registry);
 		}
 		rs.close();
 		return folder;
@@ -715,7 +715,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		while (rs.next()) {
 			Feed f = composeFeed(rs);
 			f.setParentItem(parent);
-			f.setRegistry(registry);
+			f.setCollection(registry);
 			feeds.add(f);
 		}
 		rs.close();
@@ -737,7 +737,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		ResultSet rs = s.executeQuery(query);
 		while (rs.next()) {
 			feed = composeFeed(rs);
-			feed.setRegistry(registry);
+			feed.setCollection(registry);
 		}
 		rs.close();
 		return feed;
@@ -784,7 +784,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			while (rs.next()) {
 				Article i = composeItem(rs);
 				i.setParentItem(parent);
-				i.setRegistry(registry);
+				i.setCollection(registry);
 				feeds.add(i);
 			}
 			rs.close();
@@ -808,7 +808,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		ResultSet rs = s.executeQuery(query);
 		while (rs.next()) {
 			article = composeItem(rs);
-			article.setRegistry(registry);
+			article.setCollection(registry);
 		}
 		rs.close();
 		return article;

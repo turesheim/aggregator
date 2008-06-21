@@ -7,6 +7,9 @@ package no.resheim.aggregator.data;
  * @since 1.0
  */
 public class AggregatorItemChangedEvent {
+
+	public static final int NEW_PARENT = 0x1;
+
 	public enum FeedChangeEventType {
 		/** The feed has been restored from the database */
 		RESTORED,
@@ -26,10 +29,10 @@ public class AggregatorItemChangedEvent {
 		FAILED
 	}
 
-	private IAggregatorItem oldItem;
 	private IAggregatorItem feed;
 	private FeedChangeEventType type;
-	private int oldOrder;
+
+	private int details;
 
 	public AggregatorItemChangedEvent(IAggregatorItem feed,
 			FeedChangeEventType type) {
@@ -38,9 +41,9 @@ public class AggregatorItemChangedEvent {
 	}
 
 	public AggregatorItemChangedEvent(IAggregatorItem feed,
-			FeedChangeEventType type, int oldOrder) {
+			FeedChangeEventType type, int details) {
 		this(feed, type);
-		this.oldOrder = oldOrder;
+		this.details = details;
 	}
 
 	public IAggregatorItem getItem() {
@@ -63,7 +66,7 @@ public class AggregatorItemChangedEvent {
 		return sb.toString();
 	}
 
-	public int getOldOrder() {
-		return oldOrder;
+	public int getDetails() {
+		return details;
 	}
 }
