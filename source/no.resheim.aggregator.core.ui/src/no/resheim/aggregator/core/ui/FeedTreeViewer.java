@@ -11,7 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import java.text.MessageFormat;
 import java.util.UUID;
 
 import no.resheim.aggregator.data.AbstractAggregatorItem;
@@ -182,46 +181,13 @@ public class FeedTreeViewer extends TreeViewer {
 						newItem.setData(source);
 						// Create a
 						if (newOrder > oldOrder) {
-							if (before) {
-								System.out.println(MessageFormat.format(
-										"Item {0} moved down before {1}",
-										new Object[] {
-												newItem, item
-										}));
-								moveUp(item, oldOrder, newOrder);
-								source.getRegistry().move(source, newParent,
-										newOrder);
-							} else {
-								// OK
-								System.out.println(MessageFormat.format(
-										"Item {0} moved down after {1}",
-										new Object[] {
-												newItem, item
-										}));
-								moveUp(item, oldOrder, newOrder);
-								source.getRegistry().move(source, newParent,
-										newOrder);
-							}
+							moveUp(item, oldOrder, newOrder);
+							source.getRegistry().move(source, newParent,
+									newOrder);
 						} else {
-							if (before) {
-								System.out.println(MessageFormat.format(
-										"Item {0} moved up before {1}",
-										new Object[] {
-												newItem, item
-										}));
-								moveDown(item, oldOrder, newOrder);
-								source.getRegistry().move(source, newParent,
-										newOrder + 1);
-							} else {
-								System.out.println(MessageFormat.format(
-										"Item {0} moved up after {1}",
-										new Object[] {
-												newItem, item
-										}));
-								moveDown(item, oldOrder, newOrder);
-								source.getRegistry().move(source, newParent,
-										newOrder + 1);
-							}
+							moveDown(item, oldOrder, newOrder);
+							source.getRegistry().move(source, newParent,
+									newOrder + 1);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();

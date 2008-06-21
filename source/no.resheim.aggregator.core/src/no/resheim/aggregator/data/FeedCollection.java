@@ -396,11 +396,6 @@ public class FeedCollection implements IAggregatorItem {
 	 */
 	public void move(IAggregatorItem item, UUID parentUuid, int newOrdering) {
 		try {
-			// XXX: Debugging drag & drop
-			if (item.getTitle().startsWith("Article #")) {
-				item.setTitle("Article #" + newOrdering + " ("
-						+ item.getOrdering() + ")");
-			}
 			lock.writeLock().lock();
 			database.move(item, parentUuid, newOrdering);
 			// TODO: Set parentUUID
