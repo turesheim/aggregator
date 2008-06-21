@@ -14,20 +14,31 @@ public class Article extends AbstractAggregatorItem implements IAggregatorItem {
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 	/** The date and time the feed was added to the database */
 	private long addedDate;
+
+	/** The creator of the feed */
 	private String creator;
+
 	/** The description or content */
 	private String description = EMPTY_STRING;
+
+	/** The UUID of the feed this article belongs to */
 	protected UUID feed_uuid;
+
+	/** The globally unique identifier */
 	private String guid = EMPTY_STRING;
+
 	/** Link of the item */
 	private String link = EMPTY_STRING;
-	/** Only used in the UI as a link to the parent element */
-	private IAggregatorItem parent;
+
+	/** The publication date */
 	private long publicationDate;
+
 	/** Read flag */
 	private boolean read = false;
 
+	/** The read date */
 	private long readDate;
+
 	/** Title of the item */
 	private String title = EMPTY_STRING;
 
