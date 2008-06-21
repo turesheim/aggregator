@@ -41,4 +41,10 @@ public interface IAggregatorItem {
 
 	public abstract int getOrdering();
 
+	/**
+	 * 
+	 * @param parent_uuid
+	 */
+	public void setParentUUID(UUID parent_uuid);
+
 }

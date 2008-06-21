@@ -61,10 +61,6 @@ public abstract class AbstractAggregatorItem implements IAggregatorItem {
 		return parent_uuid;
 	}
 
-	/**
-	 * 
-	 * @param parent_uuid
-	 */
 	public void setParentUUID(UUID parent_uuid) {
 		this.parent_uuid = parent_uuid;
 	}
