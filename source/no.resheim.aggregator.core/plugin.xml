@@ -9,17 +9,6 @@
             name="Default"
             public="true">
       </collection>
-      <feed
-            archivingDays="30"
-            archivingItems="0"
-            archivingMethod="KEEP_NEWEST"
-            collection="no.resheim.aggregator.core.defaultFeedCollection"
-            locked="true"
-            title="Resheim Software"
-            updateInterval="1"
-            updatePeriod="DAYS"
-            url="http://resheim.no/news/RSS">
-      </feed>
    </extension>
 
 </plugin>
