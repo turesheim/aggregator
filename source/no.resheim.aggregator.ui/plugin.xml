@@ -7,7 +7,7 @@
             category="org.eclipse.ui"
             allowMultiple="false"
             class="no.resheim.aggregator.ui.views.RSSView"
-            icon="icons/feed-icon-16x16.png"
+            icon="icons/view.gif"
             id="no.resheim.aggregator.ui.RSSView"
             name="Aggregator">
       </view>
