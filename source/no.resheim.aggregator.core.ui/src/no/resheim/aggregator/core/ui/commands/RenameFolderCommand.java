@@ -21,7 +21,6 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 
-	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {

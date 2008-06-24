@@ -14,6 +14,12 @@ package no.resheim.aggregator.core.ui.internal;
 
 import no.resheim.aggregator.data.Feed;
 
+/**
+ * This type formats information about a given {@link Feed} as HTML.
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
+ */
 public class FeedDescriptionFormatter {
 
 	private static final String LINEFEED = System.getProperty("line.separator"); //$NON-NLS-1$

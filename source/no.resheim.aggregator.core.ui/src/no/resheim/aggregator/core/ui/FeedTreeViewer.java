@@ -11,6 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import java.text.MessageFormat;
 import java.util.UUID;
 
 import no.resheim.aggregator.data.AbstractAggregatorItem;
@@ -152,6 +153,8 @@ public class FeedTreeViewer extends TreeViewer {
 				if (event.item == null || event.item.equals(dragSourceItem[0])) {
 					event.detail = DND.DROP_NONE;
 				} else {
+					System.out
+							.println("========================================================");
 					TreeItem item = (TreeItem) event.item;
 					Image image = dragSourceItem[0].getImage();
 					String text = dragSourceItem[0].getText();
@@ -199,9 +202,14 @@ public class FeedTreeViewer extends TreeViewer {
 										.move(source, newParent, newOrder + 1);
 							}
 						} else {
+							System.out.println(MessageFormat.format(
+									"Dropping {0} into {1} at {2}",
+									new Object[] {
+											source, newParent, newOrder
+									}));
+							collection.move(source, newParent, newOrder);
 							moveUp(item, oldOrder + 1,
 									getParentChildCount(item) - 1);
-							collection.move(source, newParent, newOrder);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -243,6 +251,11 @@ public class FeedTreeViewer extends TreeViewer {
 						data = collection.getItemAt(itemData.getParentUUID(),
 								i - 1);
 					}
+					System.out.println(MessageFormat.format(
+							"Moving {0} in {1} from {2} to {3}", new Object[] {
+									data, child, data.getOrdering(),
+									data.getOrdering() - 1
+							}));
 					collection.move(data, data.getParentUUID(), data
 							.getOrdering() - 1);
 				}

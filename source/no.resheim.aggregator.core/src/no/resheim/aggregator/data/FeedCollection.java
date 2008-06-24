@@ -421,7 +421,7 @@ public class FeedCollection implements IAggregatorItem {
 	 */
 	public void notifyListerners(final AggregatorItemChangedEvent event) {
 		if (AggregatorPlugin.getDefault().isDebugging()) {
-			System.out.println("[DEBUG] " + event); //$NON-NLS-1$
+			// System.out.println("[DEBUG] " + event); //$NON-NLS-1$
 		}
 		for (final IAggregatorEventListener listener : feedListeners) {
 			SafeRunner.run(new ISafeRunnable() {

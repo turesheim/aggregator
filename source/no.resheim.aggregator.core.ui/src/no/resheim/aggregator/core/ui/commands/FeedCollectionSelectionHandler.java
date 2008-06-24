@@ -26,7 +26,6 @@ public class FeedCollectionSelectionHandler extends
 		AbstractAggregatorCommandHandler {
 	public static final String PARM_COLLECTION = "collectionId"; //$NON-NLS-1$
 
-	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {

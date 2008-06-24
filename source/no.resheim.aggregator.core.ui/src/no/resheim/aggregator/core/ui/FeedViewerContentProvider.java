@@ -84,7 +84,6 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 		return null;
 	}
 
-	// FIXME: Stale order of the tree items after removing an item.
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -113,13 +112,15 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 						// in the viewer has wrong "ordering" member variable.
 						// We're assuming that the view already knows about the
 						// change but only needs to get it's data updated.
+						if ((event.getDetails() & AggregatorItemChangedEvent.NEW_PARENT) == AggregatorItemChangedEvent.NEW_PARENT) {
+							fViewer.refresh(true);
+
+						} else {
+							// Update label and image too
+							fViewer.update(event.getItem(), STATE_PROPERTIES);
+						}
 						fViewer.replace(parent, event.getItem().getOrdering(),
 								event.getItem());
-						// Update label and image too
-						fViewer.update(event.getItem(), STATE_PROPERTIES);
-						if ((event.getDetails() & AggregatorItemChangedEvent.NEW_PARENT) == AggregatorItemChangedEvent.NEW_PARENT) {
-							fViewer.refresh();
-						}
 						break;
 					case REMOVED:
 						// Maybe the number of "read" has changed
