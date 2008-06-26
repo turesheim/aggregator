@@ -210,7 +210,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.model.IAggregatorStorage#delete(no.resheim.aggregator.model.IAggregatorItem)
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#delete(no.resheim.aggregator
+	 * .model.IAggregatorItem)
 	 */
 	public void delete(IAggregatorItem item) {
 		if (item instanceof Folder) {
@@ -261,8 +263,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.model.IAggregatorStorage#deleteOutdated(no.resheim.aggregator.model.Feed,
-	 *      long)
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#deleteOutdated(no.resheim
+	 * .aggregator.model.Feed, long)
 	 */
 	public void deleteOutdated(Feed feed, long date) {
 		try {
@@ -293,7 +296,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.model.IAggregatorStorage#getChildren(no.resheim.aggregator.model.IAggregatorItem)
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#getChildren(no.resheim
+	 * .aggregator.model.IAggregatorItem)
 	 */
 	public IAggregatorItem[] getChildren(IAggregatorItem item) {
 		Assert.isNotNull(item);
@@ -311,7 +316,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.IAggregatorStorage#getChildCount(no.resheim.aggregator.data.IAggregatorItem)
+	 * @see
+	 * no.resheim.aggregator.IAggregatorStorage#getChildCount(no.resheim.aggregator
+	 * .data.IAggregatorItem)
 	 */
 	public synchronized int getChildCount(IAggregatorItem parent) {
 		int count = 0;
@@ -365,7 +372,8 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.model.IAggregatorStorage#getItem(java.lang.String)
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#getItem(java.lang.String)
 	 */
 	public Article getItem(String guid) {
 		Article article = null;
@@ -409,7 +417,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.model.IAggregatorStorage#add(no.resheim.aggregator.model.IAggregatorItem)
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#add(no.resheim.aggregator
+	 * .model.IAggregatorItem)
 	 */
 	public void add(IAggregatorItem item) {
 		if (item instanceof Article)
@@ -519,8 +529,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.model.IAggregatorStorage#keepMaximum(no.resheim.aggregator.model.Feed,
-	 *      int)
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#keepMaximum(no.resheim
+	 * .aggregator.model.Feed, int)
 	 */
 	public void keepMaximum(Feed feed, int keep) {
 		try {
@@ -547,8 +558,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.model.IAggregatorStorage#move(no.resheim.aggregator.model.IAggregatorItem,
-	 *      no.resheim.aggregator.model.IAggregatorItem)
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#move(no.resheim.aggregator
+	 * .model.IAggregatorItem, no.resheim.aggregator.model.IAggregatorItem)
 	 */
 	public void move(IAggregatorItem item, UUID parentUUID, long newOrdering) {
 		try {
@@ -572,13 +584,14 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.internal.IRegistryExternalizer#open(java.lang.String)
+	 * @see
+	 * no.resheim.aggregator.internal.IRegistryExternalizer#open(java.lang.String
+	 * )
 	 */
 	public IStatus startup(IProgressMonitor monitor) {
 		try {
@@ -586,6 +599,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			Class.forName(DB_DRIVER).newInstance();
 			connection = DriverManager.getConnection(JDBC_DERBY
 					+ path.toOSString() + CONNECT_OPTIONS);
+			connection.setAutoCommit(true);
 			DatabaseMetaData metadata = connection.getMetaData();
 			ResultSet rs = metadata.getTables(null, "APP", "FEEDS", null); //$NON-NLS-1$ //$NON-NLS-2$
 			if (!rs.next()) {
@@ -601,7 +615,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.model.IAggregatorStorage#rename(no.resheim.aggregator.model.IAggregatorItem)
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#rename(no.resheim.aggregator
+	 * .model.IAggregatorItem)
 	 */
 	public void rename(IAggregatorItem item) {
 		String query = null;
@@ -676,7 +692,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.model.IAggregatorStorage#selectDescription(no.resheim.aggregator.model.Article)
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#selectDescription(no.resheim
+	 * .aggregator.model.Article)
 	 */
 	public String getDescription(Article item) {
 		String description = null;
@@ -746,7 +764,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.model.IAggregatorStorage#selectItemCount(no.resheim.aggregator.model.Feed)
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#selectItemCount(no.resheim
+	 * .aggregator.model.Feed)
 	 */
 	public int getUnreadCount(Feed feed) {
 		int count = 0;
@@ -817,7 +837,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.model.IAggregatorStorage#updateFeed(no.resheim.aggregator.model.Feed)
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#updateFeed(no.resheim.
+	 * aggregator.model.Feed)
 	 */
 	public void updateFeed(Feed feed) {
 		try {
@@ -861,7 +883,9 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.model.IAggregatorStorage#updateReadFlag(no.resheim.aggregator.model.Article)
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#updateReadFlag(no.resheim
+	 * .aggregator.model.Article)
 	 */
 	public void updateReadFlag(IAggregatorItem item) {
 		try {
