@@ -58,8 +58,7 @@ public interface IAggregatorStorage {
 	public abstract void deleteOutdated(Feed feed, long date);
 
 	/**
-	 * Calculates and returns the number of children the <i>parent</i> item
-	 * has.
+	 * Calculates and returns the number of children the <i>parent</i> item has.
 	 * 
 	 * @param parent
 	 *            the parent item
@@ -124,8 +123,7 @@ public interface IAggregatorStorage {
 	 * 
 	 * @param url
 	 *            the URL of the feed
-	 * @return <b>true</b> if a feed with the given URL exists in the
-	 *         collection
+	 * @return <b>true</b> if a feed with the given URL exists in the collection
 	 */
 	public abstract boolean hasFeed(String url);
 
@@ -153,7 +151,7 @@ public interface IAggregatorStorage {
 	 *            the new order of the item
 	 */
 	public abstract void move(IAggregatorItem item, UUID parentUUID,
-			long newOrdering);
+			int newOrdering);
 
 	/**
 	 * Renames the given item.

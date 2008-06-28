@@ -562,7 +562,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	 * no.resheim.aggregator.model.IAggregatorStorage#move(no.resheim.aggregator
 	 * .model.IAggregatorItem, no.resheim.aggregator.model.IAggregatorItem)
 	 */
-	public void move(IAggregatorItem item, UUID parentUUID, long newOrdering) {
+	public void move(IAggregatorItem item, UUID parentUUID, int newOrdering) {
 		try {
 			String table = null;
 			if (item instanceof Feed) {
@@ -580,7 +580,6 @@ public class DerbySQLStorage implements IAggregatorStorage {
 					+ newOrdering + " where uuid='" //$NON-NLS-1$
 					+ item.getUUID().toString() + "'"); //$NON-NLS-1$
 			s.close();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
