@@ -11,6 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.data;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -94,21 +95,18 @@ public class FeedCollection extends AggregatorItem {
 	 */
 	public Feed newFeedInstance(IAggregatorItem parent) {
 		Feed feed = new Feed(parent);
-		feed.setCollection(this);
 		feed.setUUID(UUID.randomUUID());
 		return feed;
 	}
 
 	public Folder newFolderInstance(IAggregatorItem parent) {
 		Folder folder = new Folder(parent);
-		folder.setCollection(this);
 		folder.setUUID(UUID.randomUUID());
 		return folder;
 	}
 
 	public Article newArticleInstance(IAggregatorItem parent) {
 		Article article = new Article(parent);
-		article.setCollection(this);
 		article.setUUID(UUID.randomUUID());
 		return article;
 	}
@@ -145,17 +143,14 @@ public class FeedCollection extends AggregatorItem {
 					Feed feed = (Feed) item;
 					sites.put(feed.getUUID(), feed);
 					database.add(feed);
-					feed.setCollection(this);
 					FeedUpdateJob job = new FeedUpdateJob(this, feed);
 					job.schedule();
 				} else if (item instanceof Folder) {
 					Folder folder = (Folder) item;
-					folder.setCollection(this);
 					database.add(folder);
 				} else if (item instanceof Article) {
 					Article feedItem = (Article) item;
 					feedItem.setAddedDate(System.currentTimeMillis());
-					feedItem.setCollection(this);
 					database.add(feedItem);
 				}
 			} catch (Exception e) {
@@ -278,6 +273,10 @@ public class FeedCollection extends AggregatorItem {
 	public IAggregatorItem getItemAt(IAggregatorItem parent, int index) {
 		try {
 			lock.readLock().lock();
+			System.out.println(MessageFormat.format(
+					"[DEBUG] Retrieving \"{1},{0}\"", new Object[] {
+							index, parent
+					}));
 			return database.getItem(parent, index);
 		} finally {
 			lock.readLock().unlock();

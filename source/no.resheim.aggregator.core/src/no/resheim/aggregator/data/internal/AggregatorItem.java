@@ -77,14 +77,6 @@ public abstract class AggregatorItem implements IAggregatorItem {
 		this.uuid = uuid;
 	}
 
-	public FeedCollection getCollection() {
-		return registry;
-	}
-
-	public void setCollection(FeedCollection registry) {
-		this.registry = registry;
-	}
-
 	public IAggregatorItem getParent() {
 		return parent;
 	}

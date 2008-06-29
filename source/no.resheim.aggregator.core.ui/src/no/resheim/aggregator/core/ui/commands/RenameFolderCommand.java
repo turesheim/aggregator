@@ -24,22 +24,23 @@ public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedCollection registry = ((IFeedView) part).getFeedCollection();
-			if (registry == null) {
+			FeedCollection collection = ((IFeedView) part).getFeedCollection();
+			if (collection == null) {
 				return null;
 			}
 			Viewer viewer = ((IFeedView) part).getFeedViewer();
 			if (viewer instanceof TreeViewer) {
 				TreeViewer treeViewer = (TreeViewer) viewer;
 				renameItem(treeViewer.getTree().getSelection()[0], treeViewer,
-						getSelection(event));
+						getSelection(event), collection);
 			}
 		}
 		return null;
 	}
 
 	private void renameItem(final TreeItem item, final TreeViewer treeView,
-			final IAggregatorItem aggregatorItem) {
+			final IAggregatorItem aggregatorItem,
+			final FeedCollection collection) {
 		TreeEditor treeEditor = new TreeEditor(treeView.getTree());
 		treeEditor.horizontalAlignment = SWT.LEFT;
 		treeEditor.grabHorizontal = true;
@@ -55,7 +56,7 @@ public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 			public void focusLost(FocusEvent event) {
 				item.setText(text.getText());
 				aggregatorItem.setTitle(text.getText());
-				aggregatorItem.getCollection().rename(aggregatorItem);
+				collection.rename(aggregatorItem);
 				text.dispose();
 			}
 		});
@@ -70,7 +71,7 @@ public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 					// Enter hit--set the text into the tree and drop through
 					item.setText(text.getText());
 					aggregatorItem.setTitle(text.getText());
-					aggregatorItem.getCollection().rename(aggregatorItem);
+					collection.rename(aggregatorItem);
 				case SWT.ESC:
 					// End editing session
 					text.dispose();

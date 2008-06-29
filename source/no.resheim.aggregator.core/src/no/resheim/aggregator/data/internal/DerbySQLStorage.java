@@ -158,7 +158,8 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		item.setPublicationDate(rs.getLong(10));
 		item.setReadDate(rs.getLong(11));
 		item.setAddedDate(rs.getLong(12));
-		item.setCreator(rs.getString(13));
+		item.setDescription(rs.getString(13));
+		item.setCreator(rs.getString(14));
 		return item;
 	}
 
@@ -646,7 +647,6 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			Folder folder = registry.newFolderInstance(parent);
 			folder.setTitle(rs.getString(2));
 			folder.setOrdering(rs.getInt(3));
-			folder.setCollection(registry);
 			feeds.add(folder);
 		}
 		rs.close();
@@ -671,7 +671,6 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			folder.setUUID(UUID.fromString(rs.getString(1)));
 			folder.setTitle(rs.getString(4));
 			folder.setOrdering(rs.getInt(3));
-			folder.setCollection(registry);
 		}
 		rs.close();
 		return folder;
@@ -721,7 +720,6 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		ResultSet rs = s.executeQuery(query);
 		while (rs.next()) {
 			Feed f = composeFeed(parent, rs);
-			f.setCollection(registry);
 			feeds.add(f);
 		}
 		rs.close();
@@ -743,7 +741,6 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		ResultSet rs = s.executeQuery(query);
 		while (rs.next()) {
 			feed = composeFeed(parent, rs);
-			feed.setCollection(registry);
 		}
 		rs.close();
 		return feed;
@@ -793,7 +790,6 @@ public class DerbySQLStorage implements IAggregatorStorage {
 			while (rs.next()) {
 				Article i = composeArticle(parent, rs);
 				i.setParentItem(parent);
-				i.setCollection(registry);
 				feeds.add(i);
 			}
 			rs.close();
@@ -812,7 +808,6 @@ public class DerbySQLStorage implements IAggregatorStorage {
 						+ "' and ordering=" + index); //$NON-NLS-1$);
 		while (rs.next()) {
 			article = composeArticle(parent, rs);
-			article.setCollection(registry);
 		}
 		rs.close();
 		return article;

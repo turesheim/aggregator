@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.TreeItem;
  * @since 1.0
  */
 public class FeedTreeViewer extends TreeViewer {
+
 	private static final int DND_OFFSET = 3;
 
 	public FeedTreeViewer(Composite parent) {
@@ -124,7 +125,11 @@ public class FeedTreeViewer extends TreeViewer {
 			public void drop(DropTargetEvent event) {
 				IAggregatorItem source = (IAggregatorItem) ((IStructuredSelection) getSelection())
 						.getFirstElement();
-				collection = source.getCollection();
+				Object input = getInput();
+				if (!(input instanceof FeedCollection)) {
+					return;
+				}
+				collection = ((FeedCollection) input);
 
 				// We must drop in something
 				if (event.item == null || event.item.equals(dragSourceItem[0])) {
@@ -230,6 +235,7 @@ public class FeedTreeViewer extends TreeViewer {
 								.getData();
 						data = collection.getItemAt(getParent(child), i - 1);
 					}
+					System.out.println(data);
 					collection.move(data, getParent(child), data.getOrdering(),
 							getParent(child), data.getOrdering() - 1);
 				}

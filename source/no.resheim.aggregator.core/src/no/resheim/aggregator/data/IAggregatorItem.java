@@ -8,13 +8,6 @@ package no.resheim.aggregator.data;
 public interface IAggregatorItem {
 
 	/**
-	 * Returns the feed registry instance of which this item belongs.
-	 * 
-	 * @return The feed registry
-	 */
-	public abstract FeedCollection getCollection();
-
-	/**
 	 * Sets a new title for the item.
 	 * 
 	 * @param title
@@ -36,8 +29,6 @@ public interface IAggregatorItem {
 	 *            the new order of the item
 	 */
 	public abstract void setOrdering(int ordering);
-
-	public abstract void setCollection(FeedCollection registry);
 
 	/**
 	 * Returns the order of the item.

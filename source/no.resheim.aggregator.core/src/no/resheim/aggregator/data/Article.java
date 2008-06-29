@@ -75,9 +75,6 @@ public class Article extends AggregatorItem {
 	 * @return the description
 	 */
 	public String getDescription() {
-		if (description == null) {
-			return getCollection().getDescription(this);
-		}
 		return description;
 	}
 
