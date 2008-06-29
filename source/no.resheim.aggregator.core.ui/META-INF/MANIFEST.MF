@@ -14,3 +14,4 @@ Export-Package: no.resheim.aggregator.core.ui,
  no.resheim.aggregator.core.ui.commands,
  no.resheim.aggregator.core.ui.internal;x-internal:=true,
  no.resheim.aggregator.core.ui.internal.preferences;x-internal:=true
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
