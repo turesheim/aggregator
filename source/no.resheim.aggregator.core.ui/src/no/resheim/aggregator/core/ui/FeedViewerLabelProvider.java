@@ -13,6 +13,7 @@ package no.resheim.aggregator.core.ui;
 
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
 
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -44,6 +45,16 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 
 	/** Preference: show unread items in header */
 	private boolean pShowUnreadCount = true;
+
+	private FeedCollection collection;
+
+	public FeedCollection getCollection() {
+		return collection;
+	}
+
+	public void setCollection(FeedCollection collection) {
+		this.collection = collection;
+	}
 
 	/**
 	 * 
@@ -86,14 +97,13 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 			Feed feed = (Feed) element;
 			StringBuffer sb = new StringBuffer();
 			sb.append(feed.getTitle());
-			if (pShowUnreadCount) {
-				// FIXME: asdfadsf
-				// int unread = feed.getCollection().getItemCount(feed);
-				// if (unread > 0) {
-				//					sb.append(" ("); //$NON-NLS-1$
-				// sb.append(unread);
-				//					sb.append(")"); //$NON-NLS-1$
-				// }
+			if (pShowUnreadCount && collection != null) {
+				int unread = collection.getItemCount(feed);
+				if (unread > 0) {
+					sb.append(" ("); //$NON-NLS-1$
+					sb.append(unread);
+					sb.append(")"); //$NON-NLS-1$
+				}
 			}
 			return sb.toString();
 		}

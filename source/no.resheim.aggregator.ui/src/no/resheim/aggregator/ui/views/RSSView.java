@@ -168,7 +168,8 @@ public class RSSView extends ViewPart implements IFeedView,
 				| SWT.V_SCROLL);
 		drillDownAdapter = new DrillDownAdapter(treeView);
 		treeView.setContentProvider(new FeedViewerContentProvider());
-		treeView.setLabelProvider(new FeedViewerLabelProvider());
+		treeView
+				.setLabelProvider(labelProvider = new FeedViewerLabelProvider());
 		treeView.addSelectionChangedListener(new ViewSelectionListener());
 		getSite().setSelectionProvider(treeView);
 
@@ -349,7 +350,7 @@ public class RSSView extends ViewPart implements IFeedView,
 	public void setFeedCollection(FeedCollection registry) {
 		this.registry = registry;
 		treeView.setInput(registry);
-
+		labelProvider.setCollection(registry);
 	}
 
 	public void collectionInitialized(FeedCollection collection) {
@@ -360,6 +361,7 @@ public class RSSView extends ViewPart implements IFeedView,
 					registry = AggregatorPlugin.getDefault().getFeedCollection(
 							AggregatorPlugin.DEFAULT_COLLECTION_ID);
 					treeView.setInput(registry);
+					labelProvider.setCollection(registry);
 				}
 			});
 		}
@@ -390,6 +392,7 @@ public class RSSView extends ViewPart implements IFeedView,
 	}
 
 	boolean fHorizontalLayout;
+	private FeedViewerLabelProvider labelProvider;
 
 	@Override
 	public void saveState(IMemento memento) {
