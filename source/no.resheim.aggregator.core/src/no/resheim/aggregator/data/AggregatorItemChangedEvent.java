@@ -1,4 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2008 Torkild Ulvøy Resheim.
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Torkild Ulvøy Resheim - initial API and implementation
+ *******************************************************************************/
 package no.resheim.aggregator.data;
+
+import java.text.MessageFormat;
 
 /**
  * This event type is used to add information to feed changed events.
@@ -7,7 +20,10 @@ package no.resheim.aggregator.data;
  * @since 1.0
  */
 public class AggregatorItemChangedEvent {
-
+	/**
+	 * Used in conjunction with the MOVED event type indicating that not only
+	 * was the item moved, but it also got a new parent.
+	 */
 	public static final int NEW_PARENT = 0x1;
 
 	public enum FeedChangeEventType {
@@ -23,20 +39,37 @@ public class AggregatorItemChangedEvent {
 		READ,
 		/** The item is being updated */
 		UPDATING,
-		/** The item was moved */
+		/** The item has been moved */
 		MOVED,
 		/** Something bad happened */
 		FAILED
 	}
 
-	private IAggregatorItem feed;
+	private IAggregatorItem item;
+
+	private IAggregatorItem oldParent;
+
+	private int oldOrder;
+
+	private IAggregatorItem newParent;
+
+	private int newOrder;
+
+	public int getOldOrder() {
+		return oldOrder;
+	}
+
+	public IAggregatorItem getOldParent() {
+		return oldParent;
+	}
+
 	private FeedChangeEventType type;
 
 	private int details;
 
 	public AggregatorItemChangedEvent(IAggregatorItem feed,
 			FeedChangeEventType type) {
-		this.feed = feed;
+		this.item = feed;
 		this.type = type;
 	}
 
@@ -46,23 +79,47 @@ public class AggregatorItemChangedEvent {
 		this.details = details;
 	}
 
+	public AggregatorItemChangedEvent(IAggregatorItem feed,
+			FeedChangeEventType type, int details, IAggregatorItem oldParent,
+			int oldOrder, IAggregatorItem newParent, int newOrder) {
+		this(feed, type, details);
+		this.oldParent = oldParent;
+		this.oldOrder = oldOrder;
+		this.newParent = newParent;
+		this.newOrder = newOrder;
+	}
+
+	public IAggregatorItem getNewParent() {
+		return newParent;
+	}
+
+	public int getNewOrder() {
+		return newOrder;
+	}
+
 	public IAggregatorItem getItem() {
-		return feed;
+		return item;
 	}
 
 	public FeedChangeEventType getType() {
 		return type;
 	}
 
-	public void setType(FeedChangeEventType type) {
-		this.type = type;
-	}
-
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(type.toString());
 		sb.append(": "); //$NON-NLS-1$
-		sb.append(feed.toString());
+		sb.append(item.toString());
+		switch (type) {
+		case MOVED:
+			sb.append(MessageFormat.format(" from \"{0},{1}\" to \"{2},{3}\"", //$NON-NLS-1$
+					new Object[] {
+							oldParent, oldOrder, newParent, newOrder
+					}));
+			break;
+		default:
+			break;
+		}
 		return sb.toString();
 	}
 
