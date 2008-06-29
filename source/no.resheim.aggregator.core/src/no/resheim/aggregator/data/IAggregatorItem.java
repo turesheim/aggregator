@@ -2,6 +2,11 @@ package no.resheim.aggregator.data;
 
 import java.util.UUID;
 
+/**
+ * 
+ * @author Torkild Ulvøy Resheim
+ * 
+ */
 public interface IAggregatorItem {
 
 	/**
@@ -35,10 +40,21 @@ public interface IAggregatorItem {
 	 */
 	public abstract String getTitle();
 
+	/**
+	 * Sets the order of the item.
+	 * 
+	 * @param ordering
+	 *            the new order of the item
+	 */
 	public abstract void setOrdering(int ordering);
 
 	public abstract void setCollection(FeedCollection registry);
 
+	/**
+	 * Returns the order of the item.
+	 * 
+	 * @return the item order
+	 */
 	public abstract int getOrdering();
 
 	/**
