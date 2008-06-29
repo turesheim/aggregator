@@ -224,18 +224,15 @@ public class FeedTreeViewer extends TreeViewer {
 			private void moveUp(final TreeItem treeItem, final int from,
 					final int to) {
 				TreeItem child;
-				for (int i = from; i < to; i++) {
+				for (int i = from; i <= to; i++) {
 					child = getSiblingAt(treeItem, i);
 					IAggregatorItem data = (IAggregatorItem) child.getData();
 					// If the tree item is virtual it will have no data
 					// so we need to obtain the aggregator item directly from
 					// the collection.
 					if (data == null) {
-						IAggregatorItem itemData = (IAggregatorItem) treeItem
-								.getData();
-						data = collection.getItemAt(getParent(child), i - 1);
+						data = collection.getItemAt(getParent(child), i);
 					}
-					System.out.println(data);
 					collection.move(data, getParent(child), data.getOrdering(),
 							getParent(child), data.getOrdering() - 1);
 				}
