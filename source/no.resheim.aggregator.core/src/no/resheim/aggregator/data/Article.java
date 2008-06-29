@@ -231,6 +231,6 @@ public class Article extends AbstractAggregatorItem implements IAggregatorItem {
 
 	@Override
 	public String toString() {
-		return getTitle() + " (" + getOrdering() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+		return getTitle();
 	}
 }
