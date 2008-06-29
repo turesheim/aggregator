@@ -11,8 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.commands;
 
-import java.util.UUID;
-
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.NewFeedWizard;
@@ -82,10 +80,8 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 	}
 
 	private FeedWorkingCopy getNewFeedWorkingCopy(IAggregatorItem parent) {
-		FeedWorkingCopy wc = new FeedWorkingCopy(UUID.randomUUID(), parent
-				.getUUID());
-		wc.setParentItem(parent);
-		// Initialize with default values from the preference store.
+		FeedWorkingCopy wc = FeedWorkingCopy.newInstance(parent);
+		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()
 				.getPreferenceStore();

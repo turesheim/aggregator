@@ -5,13 +5,17 @@ package no.resheim.aggregator.data;
 
 import java.util.UUID;
 
+import no.resheim.aggregator.data.internal.AggregatorItem;
+
 /**
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class Article extends AbstractAggregatorItem implements IAggregatorItem {
+public class Article extends AggregatorItem {
+
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+
 	/** The date and time the feed was added to the database */
 	private long addedDate;
 
@@ -19,7 +23,7 @@ public class Article extends AbstractAggregatorItem implements IAggregatorItem {
 	private String creator;
 
 	/** The description or content */
-	private String description = EMPTY_STRING;
+	private String description = null;
 
 	/** The UUID of the feed this article belongs to */
 	protected UUID feed_uuid;
@@ -42,21 +46,11 @@ public class Article extends AbstractAggregatorItem implements IAggregatorItem {
 	/** Title of the item */
 	private String title = EMPTY_STRING;
 
-	public Article() {
-	}
-
 	/**
-	 * This constructor should only be called from one of the feed handlers as
-	 * it will
-	 * 
-	 * @param feedId
-	 *            The feed identifier
+	 * Access to the constructor is limited as we
 	 */
-	public Article(Feed feed) {
-		this.parent = feed;
-		this.feed_uuid = feed.getUUID();
-		this.parent_uuid = feed.getUUID();
-		this.uuid = UUID.randomUUID();
+	Article(IAggregatorItem parent) {
+		super(parent);
 	}
 
 	/**
@@ -81,6 +75,9 @@ public class Article extends AbstractAggregatorItem implements IAggregatorItem {
 	 * @return the description
 	 */
 	public String getDescription() {
+		if (description == null) {
+			return getCollection().getDescription(this);
+		}
 		return description;
 	}
 
@@ -131,17 +128,6 @@ public class Article extends AbstractAggregatorItem implements IAggregatorItem {
 
 	public boolean isRead() {
 		return read;
-	}
-
-	public boolean isValid() {
-		if (title == null || link == null || description == null
-				|| guid == null) {
-			return false;
-		}
-		if (uuid == null || parent_uuid == null || feed_uuid == null) {
-			return false;
-		}
-		return true;
 	}
 
 	/**

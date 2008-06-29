@@ -61,7 +61,8 @@ public class NewFeedWizard extends Wizard {
 	}
 
 	public Feed getFeed() {
-		return workingCopy.getFeed();
+		Feed feed = workingCopy.getFeed();
+		return feed;
 	}
 
 }

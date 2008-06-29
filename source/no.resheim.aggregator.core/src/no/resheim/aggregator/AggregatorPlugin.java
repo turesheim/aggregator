@@ -13,6 +13,7 @@ import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
 import no.resheim.aggregator.data.internal.DerbySQLStorage;
+import no.resheim.aggregator.data.internal.IAggregatorStorage;
 
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.FileLocator;
@@ -102,7 +103,9 @@ public class AggregatorPlugin extends Plugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -133,7 +136,9 @@ public class AggregatorPlugin extends Plugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+	 * )
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
@@ -273,10 +278,9 @@ public class AggregatorPlugin extends Plugin {
 
 	private Feed createNewFeed(FeedCollection parent,
 			IConfigurationElement element) {
-		Feed feed = new Feed();
+		Feed feed = parent.newFeedInstance(parent);
 		feed.setUUID(UUID.randomUUID());
-		feed.setParentUUID(parent.getUUID());
-		// Initialize with default values from the preference store.
+		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.
 		feed.setTitle(element.getAttribute("title")); //$NON-NLS-1$
 		feed.setURL(element.getAttribute("url")); //$NON-NLS-1$

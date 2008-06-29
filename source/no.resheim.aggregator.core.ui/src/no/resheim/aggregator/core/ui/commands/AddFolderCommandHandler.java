@@ -11,8 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.commands;
 
-import java.util.UUID;
-
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
@@ -30,19 +28,16 @@ public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedCollection registry = ((IFeedView) part).getFeedCollection();
-			if (registry == null) {
+			FeedCollection collection = ((IFeedView) part).getFeedCollection();
+			if (collection == null) {
 				return null;
 			}
-			UUID parentUUID = registry.getUUID();
-			IAggregatorItem item = getSelection(event);
-			if (item != null) {
-				parentUUID = item.getUUID();
-			}
-			// Use the selected element
-			Folder folder = new Folder(UUID.randomUUID(), parentUUID,
-					Messages.AddFolderCommandHandler_NewFolderName);
-			registry.addNew(folder);
+			IAggregatorItem parent = getSelection(event);
+			if (parent == null)
+				parent = collection;
+			Folder folder = collection.newFolderInstance(parent);
+			folder.setTitle(Messages.AddFolderCommandHandler_NewFolderName);
+			collection.addNew(folder);
 		}
 		return null;
 	}

@@ -10,7 +10,7 @@
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
 
-package no.resheim.aggregator;
+package no.resheim.aggregator.data.internal;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -23,6 +23,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
 /**
+ * This interface is internal and is not intended to be implemented by clients.
+ * Standard implementations of the various storage methods are already supplied
+ * so there should be no real need to add another.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -102,11 +105,17 @@ public interface IAggregatorStorage {
 	 *            the globally unique identifier
 	 * @return the Article or <i>null</i>
 	 */
-	public abstract Article getItem(String guid);
+	public abstract boolean hasArticle(String guid);
 
-	public abstract IAggregatorItem getItem(UUID item);
-
-	public abstract IAggregatorItem getItem(UUID parent, int index);
+	/**
+	 * Returns the item at the given index in the specified parent item. If no
+	 * item could be found <i>null</i> is returned.
+	 * 
+	 * @param parent
+	 * @param index
+	 * @return
+	 */
+	public abstract IAggregatorItem getItem(IAggregatorItem parent, int index);
 
 	/**
 	 * Returns the number of unread articles the given feed has.
@@ -145,13 +154,13 @@ public interface IAggregatorStorage {
 	 * 
 	 * @param item
 	 *            the moved item
-	 * @param newParent
+	 * @param parent
 	 *            the new parent
-	 * @param newOrdering
+	 * @param order
 	 *            the new order of the item
 	 */
-	public abstract void move(IAggregatorItem item, UUID parentUUID,
-			int newOrdering);
+	public abstract void move(IAggregatorItem item, IAggregatorItem parent,
+			int order);
 
 	/**
 	 * Renames the given item.

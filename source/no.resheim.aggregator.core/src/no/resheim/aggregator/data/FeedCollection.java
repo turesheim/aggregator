@@ -1,4 +1,5 @@
 /*******************************************************************************
+ * Copyright (c) 2008 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,9 +19,10 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import no.resheim.aggregator.AggregatorPlugin;
-import no.resheim.aggregator.IAggregatorStorage;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
 import no.resheim.aggregator.data.Feed.Archiving;
+import no.resheim.aggregator.data.internal.AggregatorItem;
+import no.resheim.aggregator.data.internal.IAggregatorStorage;
 import no.resheim.aggregator.data.internal.RegistryUpdateJob;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -38,7 +40,7 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class FeedCollection implements IAggregatorItem {
+public class FeedCollection extends AggregatorItem {
 
 	private static final UUID DEFAULT_ID = UUID
 			.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"); //$NON-NLS-1$
@@ -77,8 +79,38 @@ public class FeedCollection implements IAggregatorItem {
 	private String title;
 
 	public FeedCollection(String id, boolean pub) {
+		super(null);
 		this.id = id;
 		this.fPublic = pub;
+	}
+
+	/**
+	 * Factory method to create a new feed instance associated with this feed
+	 * collection and with an unique identifier.
+	 * 
+	 * @param parent
+	 *            the parent item
+	 * @return a new feed instance
+	 */
+	public Feed newFeedInstance(IAggregatorItem parent) {
+		Feed feed = new Feed(parent);
+		feed.setCollection(this);
+		feed.setUUID(UUID.randomUUID());
+		return feed;
+	}
+
+	public Folder newFolderInstance(IAggregatorItem parent) {
+		Folder folder = new Folder(parent);
+		folder.setCollection(this);
+		folder.setUUID(UUID.randomUUID());
+		return folder;
+	}
+
+	public Article newArticleInstance(IAggregatorItem parent) {
+		Article article = new Article(parent);
+		article.setCollection(this);
+		article.setUUID(UUID.randomUUID());
+		return article;
 	}
 
 	/**
@@ -100,15 +132,14 @@ public class FeedCollection implements IAggregatorItem {
 	 * @param feed
 	 *            The aggregator item to add
 	 */
-	public void addNew(AbstractAggregatorItem item) {
+	public void addNew(AggregatorItem item) {
 		try {
 			lock.writeLock().lock();
 			try {
-				if (item.getParentUUID().equals(this.getUUID())) {
+				if (item.getParent().equals(this)) {
 					item.setOrdering(getChildCount(this));
 				} else {
-					IAggregatorItem parent = getItem(item.getParentUUID());
-					item.setOrdering(getChildCount(parent));
+					item.setOrdering(getChildCount(item.getParent()));
 				}
 				if (item instanceof Feed) {
 					Feed feed = (Feed) item;
@@ -191,7 +222,7 @@ public class FeedCollection implements IAggregatorItem {
 	public int getChildCount(IAggregatorItem parent) {
 		try {
 			lock.readLock().lock();
-			return database.getChildCount(parent);
+			return database.getChildCount((AggregatorItem) parent);
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -205,7 +236,7 @@ public class FeedCollection implements IAggregatorItem {
 	public IAggregatorItem[] getChildren(IAggregatorItem item) {
 		try {
 			lock.readLock().lock();
-			return database.getChildren(item);
+			return database.getChildren((AggregatorItem) item);
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -244,21 +275,10 @@ public class FeedCollection implements IAggregatorItem {
 		return id;
 	}
 
-	public IAggregatorItem getItem(UUID uuid) {
+	public IAggregatorItem getItemAt(IAggregatorItem parent, int index) {
 		try {
 			lock.readLock().lock();
-			if (uuid.equals(getUUID()))
-				return this;
-			return database.getItem(uuid);
-		} finally {
-			lock.readLock().unlock();
-		}
-	}
-
-	public IAggregatorItem getItemAt(UUID parentUUID, int index) {
-		try {
-			lock.readLock().lock();
-			return database.getItem(parentUUID, index);
+			return database.getItem(parent, index);
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -283,7 +303,6 @@ public class FeedCollection implements IAggregatorItem {
 	}
 
 	public UUID getParentUUID() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -315,10 +334,7 @@ public class FeedCollection implements IAggregatorItem {
 	public boolean hasArticle(Article item) {
 		try {
 			lock.readLock().lock();
-			if (database.getItem(item.getGuid()) != null) {
-				return true;
-			}
-			return false;
+			return database.hasArticle(item.getGuid());
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -376,52 +392,55 @@ public class FeedCollection implements IAggregatorItem {
 	}
 
 	private void shuffle(IAggregatorItem item, int amount) {
-		IAggregatorItem parent = getItem(item.getParentUUID());
-		IAggregatorItem[] children = getChildren(parent);
-		for (IAggregatorItem child : children) {
-			int ordering = child.getOrdering();
-			if (ordering > item.getOrdering()) {
-				move(child, parent.getUUID(), (ordering + amount));
-			}
-		}
+		// IAggregatorItem parent = getItem(item.getParentUUID());
+		// IAggregatorItem[] children = getChildren(parent);
+		// for (IAggregatorItem child : children) {
+		// int ordering = child.getOrdering();
+		// if (ordering > item.getOrdering()) {
+		// move(child, parent.getUUID(), (ordering + amount));
+		// }
+		// }
 	}
 
 	/**
-	 * The given instance will be updated with new information and which can be
-	 * used after the storage update.
+	 * Moves an aggregator item from one location to another. The given instance
+	 * will be updated with new information and which can be used after the
+	 * storage update.
 	 * 
 	 * @param item
+	 *            the item that is being moved
 	 * @param parentUuid
+	 *            the new parent of the moved item
 	 * @param newOrdering
+	 *            the new order of the item
 	 */
-	public void move(IAggregatorItem item, UUID parentUuid, int newOrdering) {
+	public void move(IAggregatorItem item, IAggregatorItem oldParent,
+			int oldOrder, IAggregatorItem newParent, int newOrdering) {
 		try {
 			lock.writeLock().lock();
 			int details = 0;
-			if (!parentUuid.equals(item.getParentUUID())) {
+			if (!oldParent.equals(newParent)) {
 				details |= AggregatorItemChangedEvent.NEW_PARENT;
 			}
-			database.move(item, parentUuid, newOrdering);
-			// TODO: Set parentUUID
-			item.setParentUUID(parentUuid);
-			item.setOrdering(newOrdering);
+			database.move(item, newParent, newOrdering);
 			notifyListerners(new AggregatorItemChangedEvent(item,
-					FeedChangeEventType.MOVED, details));
+					FeedChangeEventType.MOVED,
+					AggregatorItemChangedEvent.NEW_PARENT, oldParent, oldOrder,
+					newParent, newOrdering));
 		} finally {
 			lock.writeLock().unlock();
 		}
 	}
 
 	/**
-	 * Notify feed listeners about the feed change. If the feed change was
-	 * caused by a update, a new update is scheduled.
+	 * Notify feed listeners about the aggregator item change.
 	 * 
 	 * @param event
-	 *            The feed change event with details
+	 *            The change event with details
 	 */
 	public void notifyListerners(final AggregatorItemChangedEvent event) {
 		if (AggregatorPlugin.getDefault().isDebugging()) {
-			// System.out.println("[DEBUG] " + event); //$NON-NLS-1$
+			System.out.println("[DEBUG] " + event); //$NON-NLS-1$
 		}
 		for (final IAggregatorEventListener listener : feedListeners) {
 			SafeRunner.run(new ISafeRunnable() {
@@ -482,7 +501,6 @@ public class FeedCollection implements IAggregatorItem {
 	}
 
 	public void setOrdering(long ordering) {
-		// TODO Auto-generated method stub
 	}
 
 	/**
@@ -514,7 +532,6 @@ public class FeedCollection implements IAggregatorItem {
 	}
 
 	public void setCollection(FeedCollection registry) {
-		// TODO Auto-generated method stub
 	}
 
 	public void setTitle(String title) {
@@ -539,7 +556,7 @@ public class FeedCollection implements IAggregatorItem {
 			lock.writeLock().lock();
 			if (item instanceof Feed) {
 				// Ensure that the local list has a copy of the same instance.
-				sites.put(item.getUUID(), (Feed) item);
+				sites.put(((Feed) item).getUUID(), (Feed) item);
 				database.updateFeed((Feed) item);
 			}
 		} finally {
@@ -548,15 +565,16 @@ public class FeedCollection implements IAggregatorItem {
 	}
 
 	public int getOrdering() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	public void setOrdering(int ordering) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setParentUUID(UUID parent_uuid) {
+	}
+
+	public IAggregatorItem getParent() {
+		return null;
 	}
 }

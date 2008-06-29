@@ -56,9 +56,9 @@ CREATE INDEX articles_parent ON articles (parent_uuid,uuid);
 CREATE INDEX articles_guid ON articles (guid,uuid);
 
 /* Virtual tree browsing */
-CREATE INDEX folders_tree ON folders (parent_uuid,ordering);
-CREATE INDEX feeds_tree ON feeds (parent_uuid,ordering);
-CREATE INDEX articles_tree ON articles (parent_uuid,ordering);
+CREATE INDEX folders_tree ON folders (parent_uuid,ordering,uuid);
+CREATE INDEX feeds_tree ON feeds (parent_uuid,ordering,uuid);
+CREATE INDEX articles_tree ON articles (parent_uuid,ordering,uuid);
 
 /* Unique index */
 CREATE INDEX folders_id ON folders (uuid);

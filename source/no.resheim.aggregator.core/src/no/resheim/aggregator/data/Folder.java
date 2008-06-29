@@ -11,25 +11,22 @@
  *******************************************************************************/
 package no.resheim.aggregator.data;
 
-import java.util.UUID;
+import no.resheim.aggregator.data.internal.AggregatorItem;
 
 /**
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class Folder extends AbstractAggregatorItem {
+public class Folder extends AggregatorItem {
 	String title;
 
 	/**
 	 * @param registryId
 	 * @param title
 	 */
-	public Folder(UUID uuid, UUID parentUuid, String title) {
-		super();
-		this.parent_uuid = parentUuid;
-		this.uuid = uuid;
-		this.title = title;
+	Folder(IAggregatorItem parent) {
+		super(parent);
 	}
 
 	public String getTitle() {

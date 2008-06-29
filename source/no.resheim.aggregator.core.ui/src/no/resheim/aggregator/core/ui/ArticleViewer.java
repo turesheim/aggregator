@@ -116,13 +116,10 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		description.append(FONT_FIX_3);
 		description.append(pPresentationFontSize);
 		description.append(FONT_FIX_4);
-		description.append(item.getCollection().getDescription(item));
+		description.append(item.getDescription());
 		description.append(FONT_FIX_5);
 		title.setTitle(item.getTitle(), null);
 		browser.setText(description.toString());
-		if (AggregatorUIPlugin.getDefault().isDebugging()) {
-			System.out.println(item);
-		}
 		if (item.getPublicationDate() > 0) {
 			setStatusText(MessageFormat.format(
 					Messages.ArticleViewer_Published, new Object[] {

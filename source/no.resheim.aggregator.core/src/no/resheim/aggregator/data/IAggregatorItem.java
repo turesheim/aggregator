@@ -1,22 +1,11 @@
 package no.resheim.aggregator.data;
 
-import java.util.UUID;
-
 /**
  * 
  * @author Torkild Ulvøy Resheim
  * 
  */
 public interface IAggregatorItem {
-
-	/**
-	 * Returns the unique identifier for this aggregator item.
-	 * 
-	 * @return The item identifier
-	 */
-	public abstract UUID getUUID();
-
-	public abstract UUID getParentUUID();
 
 	/**
 	 * Returns the feed registry instance of which this item belongs.
@@ -57,10 +46,6 @@ public interface IAggregatorItem {
 	 */
 	public abstract int getOrdering();
 
-	/**
-	 * 
-	 * @param parent_uuid
-	 */
-	public void setParentUUID(UUID parent_uuid);
+	public abstract IAggregatorItem getParent();
 
 }

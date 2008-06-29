@@ -11,7 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.internal.rss;
 
-import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 
@@ -30,7 +29,9 @@ public class RSS10ItemHandler extends AbstractElementHandler {
 	public RSS10ItemHandler(FeedCollection registry, Feed feed) {
 		this.registry = registry;
 		this.feed = feed;
-		this.item = new Article(feed);
+		this.item = registry.newArticleInstance(feed);
+		this.item.setFeedUUID(feed.getUUID());
+
 	}
 
 	public void endElement(String qName) throws SAXException {

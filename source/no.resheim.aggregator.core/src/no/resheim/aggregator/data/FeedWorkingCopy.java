@@ -13,12 +13,14 @@ import java.util.UUID;
 public class FeedWorkingCopy extends Feed {
 	Feed feed;
 
-	public FeedWorkingCopy(UUID uuid, UUID parentUuid) {
-		this.uuid = uuid;
-		this.parent_uuid = parentUuid;
+	public static FeedWorkingCopy newInstance(IAggregatorItem parent) {
+		Feed feed = new Feed(parent);
+		feed.setUUID(UUID.randomUUID());
+		return new FeedWorkingCopy(feed);
 	}
 
 	public FeedWorkingCopy(Feed feed) {
+		super(feed.getParent());
 		this.feed = feed;
 		this.title = feed.title;
 		this.url = feed.url;
@@ -31,19 +33,17 @@ public class FeedWorkingCopy extends Feed {
 	}
 
 	public Feed getFeed() {
-		if (feed == null) {
-			feed = new Feed();
+		if (feed != null) {
+			feed.setParent(getParent());
+			feed.title = title;
+			feed.url = url;
+			feed.archiving = archiving;
+			feed.archivingItems = archivingItems;
+			feed.archivingDays = archivingDays;
+			feed.updateInterval = updateInterval;
+			feed.updatePeriod = updatePeriod;
+			feed.hidden = hidden;
 		}
-		feed.title = title;
-		feed.url = url;
-		feed.archiving = archiving;
-		feed.archivingItems = archivingItems;
-		feed.archivingDays = archivingDays;
-		feed.updateInterval = updateInterval;
-		feed.updatePeriod = updatePeriod;
-		feed.uuid = uuid;
-		feed.parent_uuid = parent_uuid;
-		feed.hidden = hidden;
 		return feed;
 	}
 

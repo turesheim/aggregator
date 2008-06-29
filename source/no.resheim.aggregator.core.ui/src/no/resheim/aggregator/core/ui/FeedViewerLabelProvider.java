@@ -87,12 +87,13 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 			StringBuffer sb = new StringBuffer();
 			sb.append(feed.getTitle());
 			if (pShowUnreadCount) {
-				int unread = feed.getCollection().getItemCount(feed);
-				if (unread > 0) {
-					sb.append(" ("); //$NON-NLS-1$
-					sb.append(unread);
-					sb.append(")"); //$NON-NLS-1$
-				}
+				// FIXME: asdfadsf
+				// int unread = feed.getCollection().getItemCount(feed);
+				// if (unread > 0) {
+				//					sb.append(" ("); //$NON-NLS-1$
+				// sb.append(unread);
+				//					sb.append(")"); //$NON-NLS-1$
+				// }
 			}
 			return sb.toString();
 		}
@@ -109,7 +110,8 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
+	 * @see
+	 * org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
 	 */
 	public Color getBackground(Object element) {
 		return null;
@@ -118,7 +120,8 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
+	 * @see
+	 * org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
 	 */
 	public Color getForeground(Object element) {
 		if (element instanceof Article) {
@@ -143,7 +146,9 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+	 * @see
+	 * org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse
+	 * .jface.util.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent event) {
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()

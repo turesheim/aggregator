@@ -11,6 +11,8 @@
  *******************************************************************************/
 package no.resheim.aggregator.data;
 
+import no.resheim.aggregator.data.internal.AggregatorItem;
+
 /**
  * Feeds are created by the user and immediately inserted into the database,
  * thus it's not the parsing of the feed stream that will result in a feed being
@@ -19,9 +21,16 @@ package no.resheim.aggregator.data;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class Feed extends AbstractAggregatorItem {
+public class Feed extends AggregatorItem {
 
 	private static final String BLANK_STRING = ""; //$NON-NLS-1$
+
+	/**
+	 * @param parent
+	 */
+	Feed(IAggregatorItem parent) {
+		super(parent);
+	}
 
 	/**
 	 * 
@@ -66,7 +75,6 @@ public class Feed extends AbstractAggregatorItem {
 	boolean hidden;
 	boolean threaded;
 
-	private IAggregatorItem parent;
 	private String description;
 	private String link;
 	private String webmaster;
@@ -99,9 +107,6 @@ public class Feed extends AbstractAggregatorItem {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public Feed() {
 	}
 
 	/**
@@ -207,14 +212,6 @@ public class Feed extends AbstractAggregatorItem {
 
 	public void setUpdating(boolean updating) {
 		this.updating = updating;
-	}
-
-	public IAggregatorItem getParentItem() {
-		return parent;
-	}
-
-	public void setParentItem(IAggregatorItem parent) {
-		this.parent = parent;
 	}
 
 	public String getDescription() {
