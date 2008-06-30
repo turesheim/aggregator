@@ -391,14 +391,14 @@ public class FeedCollection extends AggregatorItem {
 	}
 
 	private void shuffle(IAggregatorItem item, int amount) {
-		// IAggregatorItem parent = getItem(item.getParentUUID());
-		// IAggregatorItem[] children = getChildren(parent);
-		// for (IAggregatorItem child : children) {
-		// int ordering = child.getOrdering();
-		// if (ordering > item.getOrdering()) {
-		// move(child, parent.getUUID(), (ordering + amount));
-		// }
-		// }
+		IAggregatorItem parent = item.getParent();
+		IAggregatorItem[] children = getChildren(parent);
+		for (IAggregatorItem child : children) {
+			int ordering = child.getOrdering();
+			if (ordering > item.getOrdering()) {
+				move(child, parent, ordering, parent, (ordering + amount));
+			}
+		}
 	}
 
 	/**
@@ -456,10 +456,10 @@ public class FeedCollection extends AggregatorItem {
 	}
 
 	/**
-	 * Removes the specified item from the database.
+	 * Removes the specified item from the collection and underlying database.
 	 * 
 	 * @param element
-	 *            The element to be removed.
+	 *            the element to remove
 	 */
 	public IStatus remove(IAggregatorItem element) {
 		try {
