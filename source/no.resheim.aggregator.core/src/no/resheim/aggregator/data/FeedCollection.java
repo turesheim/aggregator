@@ -465,7 +465,7 @@ public class FeedCollection extends AggregatorItem {
 			if (!oldParent.equals(newParent)) {
 				// The item is moved into a new parent
 				details |= AggregatorItemChangedEvent.NEW_PARENT;
-				moveUp(item, oldOrder, newOrder);
+				shuffle((AggregatorItem) item, -1);
 				database.move(item, newParent, newOrder);
 			} else if (newOrder > oldOrder) {
 				// The item is moved down (new order is higher)
