@@ -551,6 +551,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		try {
 			AggregatorItem aItem = (AggregatorItem) item;
 			aItem.setParent(parent);
+			aItem.setOrdering(order);
 			String table = null;
 			if (item instanceof Feed) {
 				table = "feeds"; //$NON-NLS-1$
