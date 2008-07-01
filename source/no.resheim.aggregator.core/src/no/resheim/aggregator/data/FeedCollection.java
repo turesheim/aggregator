@@ -15,6 +15,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -273,11 +274,12 @@ public class FeedCollection extends AggregatorItem {
 	public IAggregatorItem getItemAt(IAggregatorItem parent, int index) {
 		try {
 			lock.readLock().lock();
+			IAggregatorItem item = database.getItem(parent, index);
 			System.out.println(MessageFormat.format(
-					"[DEBUG] Retrieving \"{1},{0}\"", new Object[] {
-							index, parent
+					"[DEBUG] Retrieving \"{1},{0}\" = {2}", new Object[] {
+							index, parent, item
 					}));
-			return database.getItem(parent, index);
+			return item;
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -390,15 +392,57 @@ public class FeedCollection extends AggregatorItem {
 		return fPublic;
 	}
 
-	private void shuffle(IAggregatorItem item, int amount) {
+	private void shuffle(AggregatorItem item, int amount) {
 		IAggregatorItem parent = item.getParent();
 		IAggregatorItem[] children = getChildren(parent);
 		for (IAggregatorItem child : children) {
-			int ordering = child.getOrdering();
-			if (ordering > item.getOrdering()) {
+			int ordering = ((AggregatorItem) child).getOrdering();
+			if (ordering > ((AggregatorItem) item).getOrdering()) {
 				move(child, parent, ordering, parent, (ordering + amount));
 			}
 		}
+	}
+
+	/**
+	 * Updates the tree items and the associated aggregator item following the
+	 * given tree item by incrementing the ordering property by one.
+	 * 
+	 * @param treeItem
+	 *            The tree item that was moved
+	 */
+	private void moveDown(IAggregatorItem item, int from, int to) {
+		IAggregatorItem parent = item.getParent();
+		System.out.println(MessageFormat.format("Moving items [{0},{1}]",
+				new Object[] {
+						from - 1, to
+				}));
+		for (int i = from - 1; i >= to; i--) {
+			AggregatorItem sibling = (AggregatorItem) getItemAt(parent, i);
+			int oldOrder = sibling.getOrdering();
+			database.move(sibling, parent, sibling.getOrdering() + 1);
+			notifyListerners(new AggregatorItemChangedEvent(sibling,
+					FeedChangeEventType.SHUFFLED,
+					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder));
+		}
+	}
+
+	private List<AggregatorItemChangedEvent> moveUp(IAggregatorItem item,
+			final int from, final int to) {
+		IAggregatorItem parent = item.getParent();
+		System.out.println(MessageFormat.format("Moving items [{0},{1}]",
+				new Object[] {
+						from + 1, to
+				}));
+		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
+		for (int i = from + 1; i <= to; i++) {
+			AggregatorItem sibling = (AggregatorItem) getItemAt(parent, i);
+			int oldOrder = sibling.getOrdering();
+			database.move(sibling, parent, sibling.getOrdering() - 1);
+			events.add(new AggregatorItemChangedEvent(sibling,
+					FeedChangeEventType.SHUFFLED,
+					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder));
+		}
+		return events;
 	}
 
 	/**
@@ -410,22 +454,31 @@ public class FeedCollection extends AggregatorItem {
 	 *            the item that is being moved
 	 * @param parentUuid
 	 *            the new parent of the moved item
-	 * @param newOrdering
+	 * @param newOrder
 	 *            the new order of the item
 	 */
 	public void move(IAggregatorItem item, IAggregatorItem oldParent,
-			int oldOrder, IAggregatorItem newParent, int newOrdering) {
+			int oldOrder, IAggregatorItem newParent, int newOrder) {
 		try {
 			lock.writeLock().lock();
 			int details = 0;
 			if (!oldParent.equals(newParent)) {
+				// The item is moved into a new parent
 				details |= AggregatorItemChangedEvent.NEW_PARENT;
+				moveUp(item, oldOrder, newOrder);
+				database.move(item, newParent, newOrder);
+			} else if (newOrder > oldOrder) {
+				// The item is moved down (new order is higher)
+				moveUp(item, oldOrder, newOrder);
+				database.move(item, newParent, newOrder);
+			} else {
+				// The item is moved up
+				moveDown(item, oldOrder, newOrder);
+				database.move(item, newParent, newOrder);
 			}
-			database.move(item, newParent, newOrdering);
 			notifyListerners(new AggregatorItemChangedEvent(item,
 					FeedChangeEventType.MOVED,
-					AggregatorItemChangedEvent.NEW_PARENT, oldParent, oldOrder,
-					newParent, newOrdering));
+					AggregatorItemChangedEvent.NEW_PARENT, oldParent, oldOrder));
 		} finally {
 			lock.writeLock().unlock();
 		}
@@ -475,7 +528,7 @@ public class FeedCollection extends AggregatorItem {
 		} finally {
 			lock.writeLock().unlock();
 		}
-		shuffle(element, -1);
+		shuffle((AggregatorItem) element, -1);
 		notifyListerners(new AggregatorItemChangedEvent(element,
 				FeedChangeEventType.REMOVED));
 		return Status.OK_STATUS;

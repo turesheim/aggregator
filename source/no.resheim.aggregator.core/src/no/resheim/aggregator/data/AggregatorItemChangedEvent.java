@@ -11,7 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.data;
 
-import java.text.MessageFormat;
 
 /**
  * This event type is used to add information to feed changed events.
@@ -41,6 +40,8 @@ public class AggregatorItemChangedEvent {
 		UPDATING,
 		/** The item has been moved */
 		MOVED,
+		/** The item has been moved */
+		SHUFFLED,
 		/** Something bad happened */
 		FAILED
 	}
@@ -50,10 +51,6 @@ public class AggregatorItemChangedEvent {
 	private IAggregatorItem oldParent;
 
 	private int oldOrder;
-
-	private IAggregatorItem newParent;
-
-	private int newOrder;
 
 	public int getOldOrder() {
 		return oldOrder;
@@ -81,20 +78,10 @@ public class AggregatorItemChangedEvent {
 
 	public AggregatorItemChangedEvent(IAggregatorItem feed,
 			FeedChangeEventType type, int details, IAggregatorItem oldParent,
-			int oldOrder, IAggregatorItem newParent, int newOrder) {
+			int oldOrder) {
 		this(feed, type, details);
 		this.oldParent = oldParent;
 		this.oldOrder = oldOrder;
-		this.newParent = newParent;
-		this.newOrder = newOrder;
-	}
-
-	public IAggregatorItem getNewParent() {
-		return newParent;
-	}
-
-	public int getNewOrder() {
-		return newOrder;
 	}
 
 	public IAggregatorItem getItem() {
@@ -112,10 +99,11 @@ public class AggregatorItemChangedEvent {
 		sb.append(item.toString());
 		switch (type) {
 		case MOVED:
-			sb.append(MessageFormat.format(" from \"{0},{1}\" to \"{2},{3}\"", //$NON-NLS-1$
-					new Object[] {
-							oldParent, oldOrder, newParent, newOrder
-					}));
+			//			sb.append(MessageFormat.format(" from \"{0},{1}\" to \"{2},{3}\"", //$NON-NLS-1$
+			// new Object[] {
+			// oldParent, oldOrder, item.getParent(),
+			// item.getOrdering()
+			// }));
 			break;
 		default:
 			break;

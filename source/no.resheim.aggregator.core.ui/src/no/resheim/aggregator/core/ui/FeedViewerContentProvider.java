@@ -12,9 +12,7 @@
 package no.resheim.aggregator.core.ui;
 
 import no.resheim.aggregator.data.AggregatorItemChangedEvent;
-import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.IAggregatorEventListener;
 import no.resheim.aggregator.data.IAggregatorItem;
 
@@ -112,27 +110,8 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 							fViewer.refresh(event.getItem().getParent(), true);
 							break;
 						case MOVED:
-							// Make sure the item reference is updated as the
-							// one in the viewer has wrong "ordering" member
-							// variable. We're assuming that the view already
-							// knows about the change but only needs to get it's
-							// data updated.
-							if ((event.getDetails() & AggregatorItemChangedEvent.NEW_PARENT) == AggregatorItemChangedEvent.NEW_PARENT) {
-								fViewer.replace(event.getItem().getParent(),
-										event.getItem().getOrdering(), event
-												.getItem());
-								fViewer.refresh(event.getOldParent(), true);
-								fViewer.refresh(event.getItem().getParent(),
-										true);
-							} else {
-								// Update label and image too
-								fViewer.update(event.getItem(),
-										STATE_PROPERTIES);
-								fViewer.replace(event.getOldParent(), event
-										.getItem().getOrdering(), event
-										.getItem());
-							}
-
+							System.out.println("[DEBUG] Refreshing viewer");
+							fViewer.refresh();
 							break;
 						case REMOVED:
 							// Maybe the number of "read" has changed
@@ -151,9 +130,9 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 							fViewer.update(event.getItem(), STATE_PROPERTIES);
 							break;
 						default:
-							if (event.getItem() instanceof Feed
-									|| event.getItem() instanceof Folder)
-								fViewer.refresh();
+							// if (event.getItem() instanceof Feed
+							// || event.getItem() instanceof Folder)
+							// fViewer.refresh();
 							break;
 						}
 					}

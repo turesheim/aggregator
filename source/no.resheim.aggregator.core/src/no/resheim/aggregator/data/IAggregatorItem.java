@@ -11,32 +11,22 @@ public interface IAggregatorItem {
 	 * Sets a new title for the item.
 	 * 
 	 * @param title
-	 *            The new title
+	 *            the new title
 	 */
 	public abstract void setTitle(String title);
 
 	/**
 	 * Returns the title of the item.
 	 * 
-	 * @return The title string
+	 * @return the title string
 	 */
 	public abstract String getTitle();
 
 	/**
-	 * Sets the order of the item.
+	 * Returns the parent of the item.
 	 * 
-	 * @param ordering
-	 *            the new order of the item
+	 * @return the parent item
 	 */
-	public abstract void setOrdering(int ordering);
-
-	/**
-	 * Returns the order of the item.
-	 * 
-	 * @return the item order
-	 */
-	public abstract int getOrdering();
-
 	public abstract IAggregatorItem getParent();
 
 }
