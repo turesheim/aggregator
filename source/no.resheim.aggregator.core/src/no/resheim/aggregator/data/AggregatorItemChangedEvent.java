@@ -63,6 +63,15 @@ public class AggregatorItemChangedEvent {
 
 	private int details;
 
+	private long time;
+
+	public AggregatorItemChangedEvent(IAggregatorItem feed,
+			FeedChangeEventType type, long time) {
+		this.item = feed;
+		this.type = type;
+		this.time = time;
+	}
+
 	public AggregatorItemChangedEvent(IAggregatorItem feed,
 			FeedChangeEventType type) {
 		this.item = feed;
@@ -70,17 +79,18 @@ public class AggregatorItemChangedEvent {
 	}
 
 	public AggregatorItemChangedEvent(IAggregatorItem feed,
-			FeedChangeEventType type, int details) {
-		this(feed, type);
+			FeedChangeEventType type, long time, int details) {
+		this(feed, type, time);
 		this.details = details;
 	}
 
 	public AggregatorItemChangedEvent(IAggregatorItem feed,
 			FeedChangeEventType type, int details, IAggregatorItem oldParent,
-			int oldOrder) {
+			int oldOrder, long time) {
 		this(feed, type, details);
 		this.oldParent = oldParent;
 		this.oldOrder = oldOrder;
+		this.time = time;
 	}
 
 	public IAggregatorItem getItem() {
@@ -96,6 +106,11 @@ public class AggregatorItemChangedEvent {
 		sb.append(type.toString());
 		sb.append(": "); //$NON-NLS-1$
 		sb.append(item.toString());
+		if (time > 0) {
+			sb.append(" in "); //$NON-NLS-1$
+			sb.append(time);
+			sb.append("ms"); //$NON-NLS-1$
+		}
 		switch (type) {
 		case MOVED:
 			//			sb.append(MessageFormat.format(" from \"{0},{1}\" to \"{2},{3}\"", //$NON-NLS-1$

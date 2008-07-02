@@ -105,6 +105,7 @@ public class FeedCollection extends AggregatorItem {
 	 *            The aggregator item to add
 	 */
 	public void addNew(AggregatorItem item) {
+		long start = System.currentTimeMillis();
 		try {
 			lock.writeLock().lock();
 			try {
@@ -134,7 +135,7 @@ public class FeedCollection extends AggregatorItem {
 			lock.writeLock().unlock();
 		}
 		notifyListerners(new AggregatorItemChangedEvent(item,
-				FeedChangeEventType.CREATED));
+				FeedChangeEventType.CREATED, System.currentTimeMillis() - start));
 	}
 
 	/**
@@ -385,6 +386,7 @@ public class FeedCollection extends AggregatorItem {
 			int oldOrder, IAggregatorItem newParent, int newOrder) {
 		try {
 			lock.writeLock().lock();
+			long start = System.currentTimeMillis();
 			int details = 0;
 			if (!oldParent.equals(newParent)) {
 				// The item is moved into a new parent
@@ -399,10 +401,11 @@ public class FeedCollection extends AggregatorItem {
 				// The item is moved up
 				shiftDown(item, oldOrder, newOrder);
 				database.move(item, newParent, newOrder);
+				notifyListerners(new AggregatorItemChangedEvent(item,
+						FeedChangeEventType.MOVED,
+						AggregatorItemChangedEvent.NEW_PARENT, oldParent,
+						oldOrder, System.currentTimeMillis() - start));
 			}
-			notifyListerners(new AggregatorItemChangedEvent(item,
-					FeedChangeEventType.MOVED,
-					AggregatorItemChangedEvent.NEW_PARENT, oldParent, oldOrder));
 		} finally {
 			lock.writeLock().unlock();
 		}
@@ -467,6 +470,7 @@ public class FeedCollection extends AggregatorItem {
 	public IStatus remove(IAggregatorItem element) {
 		try {
 			lock.writeLock().lock();
+			long start = System.currentTimeMillis();
 			if (element instanceof Feed) {
 				if (isLocked((Feed) element))
 					return new Status(IStatus.CANCEL,
@@ -474,18 +478,15 @@ public class FeedCollection extends AggregatorItem {
 							Messages.FeedCollection_NoDelete_Locked);
 				sites.remove(((Feed) element).getUUID());
 			}
-			try {
-				database.delete(element);
-				shiftUp((AggregatorItem) element);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			database.delete(element);
+			shiftUp((AggregatorItem) element);
+			notifyListerners(new AggregatorItemChangedEvent(element,
+					FeedChangeEventType.REMOVED, System.currentTimeMillis()
+							- start));
+			return Status.OK_STATUS;
 		} finally {
 			lock.writeLock().unlock();
 		}
-		notifyListerners(new AggregatorItemChangedEvent(element,
-				FeedChangeEventType.REMOVED));
-		return Status.OK_STATUS;
 	}
 
 	public void removeFeedListener(IAggregatorEventListener listener) {
@@ -526,6 +527,7 @@ public class FeedCollection extends AggregatorItem {
 	 * @param item
 	 */
 	public void setRead(IAggregatorItem item) {
+		long start = System.currentTimeMillis();
 		try {
 			lock.writeLock().lock();
 			database.updateReadFlag(item);
@@ -535,13 +537,16 @@ public class FeedCollection extends AggregatorItem {
 		if (item instanceof Article) {
 			((Article) item).setRead(true);
 			notifyListerners(new AggregatorItemChangedEvent(item,
-					FeedChangeEventType.READ));
+					FeedChangeEventType.READ, System.currentTimeMillis()
+							- start));
 		} else {
 			IAggregatorItem[] children = getChildren(item);
 			for (IAggregatorItem child : children) {
 				if (child instanceof Article)
 					notifyListerners(new AggregatorItemChangedEvent(child,
-							FeedChangeEventType.READ));
+							FeedChangeEventType.READ, System
+									.currentTimeMillis()
+									- start));
 			}
 		}
 	}
@@ -560,12 +565,14 @@ public class FeedCollection extends AggregatorItem {
 	private void shiftDown(IAggregatorItem item, int from, int to) {
 		IAggregatorItem parent = item.getParent();
 		for (int i = from - 1; i >= to; i--) {
+			long start = System.currentTimeMillis();
 			AggregatorItem sibling = (AggregatorItem) getItemAt(parent, i);
 			int oldOrder = sibling.getOrdering();
 			database.move(sibling, parent, sibling.getOrdering() + 1);
 			notifyListerners(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
-					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder));
+					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
+					System.currentTimeMillis() - start));
 		}
 	}
 
@@ -574,12 +581,14 @@ public class FeedCollection extends AggregatorItem {
 		int count = getChildCount(parent);
 		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
 		for (int i = item.getOrdering() + 1; i < count; i++) {
+			long start = System.currentTimeMillis();
 			AggregatorItem sibling = (AggregatorItem) getItemAt(parent, i);
 			int oldOrder = sibling.getOrdering();
 			database.move(sibling, parent, sibling.getOrdering() - 1);
 			events.add(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
-					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder));
+					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
+					System.currentTimeMillis() - start));
 		}
 		return events;
 	}
@@ -589,12 +598,14 @@ public class FeedCollection extends AggregatorItem {
 		IAggregatorItem parent = item.getParent();
 		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
 		for (int i = from + 1; i <= to; i++) {
+			long start = System.currentTimeMillis();
 			AggregatorItem sibling = (AggregatorItem) getItemAt(parent, i);
 			int oldOrder = sibling.getOrdering();
 			database.move(sibling, parent, sibling.getOrdering() - 1);
 			events.add(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
-					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder));
+					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
+					System.currentTimeMillis() - start));
 		}
 		return events;
 	}
