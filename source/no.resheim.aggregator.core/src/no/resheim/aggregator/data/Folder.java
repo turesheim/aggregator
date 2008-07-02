@@ -14,6 +14,8 @@ package no.resheim.aggregator.data;
 import no.resheim.aggregator.data.internal.AggregatorItem;
 
 /**
+ * Aggregator item representing a folder. Folders are used to hold any other
+ * type of aggregator items such as feeds, articles and other folders.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -37,7 +39,12 @@ public class Folder extends AggregatorItem {
 		this.title = title;
 	}
 
-	public String getFeedId() {
-		return null;
+	public String toString() {
+		StringBuilder sb = new StringBuilder(title);
+		sb.append(" ["); //$NON-NLS-1$
+		sb.append(getOrdering());
+		sb.append(']');
+		return sb.toString();
 	}
+
 }
