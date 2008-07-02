@@ -11,7 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.data;
 
-
 /**
  * This event type is used to add information to feed changed events.
  * 
@@ -40,8 +39,8 @@ public class AggregatorItemChangedEvent {
 		UPDATING,
 		/** The item has been moved */
 		MOVED,
-		/** The item has been moved */
-		SHUFFLED,
+		/** The item has been moved as a result of another item being moved */
+		SHIFTED,
 		/** Something bad happened */
 		FAILED
 	}

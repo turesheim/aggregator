@@ -11,7 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.data;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -84,32 +83,6 @@ public class FeedCollection extends AggregatorItem {
 		super(null);
 		this.id = id;
 		this.fPublic = pub;
-	}
-
-	/**
-	 * Factory method to create a new feed instance associated with this feed
-	 * collection and with an unique identifier.
-	 * 
-	 * @param parent
-	 *            the parent item
-	 * @return a new feed instance
-	 */
-	public Feed newFeedInstance(IAggregatorItem parent) {
-		Feed feed = new Feed(parent);
-		feed.setUUID(UUID.randomUUID());
-		return feed;
-	}
-
-	public Folder newFolderInstance(IAggregatorItem parent) {
-		Folder folder = new Folder(parent);
-		folder.setUUID(UUID.randomUUID());
-		return folder;
-	}
-
-	public Article newArticleInstance(IAggregatorItem parent) {
-		Article article = new Article(parent);
-		article.setUUID(UUID.randomUUID());
-		return article;
 	}
 
 	/**
@@ -238,6 +211,10 @@ public class FeedCollection extends AggregatorItem {
 		}
 	}
 
+	public FeedCollection getCollection() {
+		return this;
+	}
+
 	public String getDescription(Article item) {
 		try {
 			lock.readLock().lock();
@@ -275,10 +252,6 @@ public class FeedCollection extends AggregatorItem {
 		try {
 			lock.readLock().lock();
 			IAggregatorItem item = database.getItem(parent, index);
-			System.out.println(MessageFormat.format(
-					"[DEBUG] Retrieving \"{1},{0}\" = {2}", new Object[] {
-							index, parent, item
-					}));
 			return item;
 		} finally {
 			lock.readLock().unlock();
@@ -303,12 +276,16 @@ public class FeedCollection extends AggregatorItem {
 		}
 	}
 
-	public UUID getParentUUID() {
+	public int getOrdering() {
+		return 0;
+	}
+
+	public IAggregatorItem getParent() {
 		return null;
 	}
 
-	public FeedCollection getCollection() {
-		return this;
+	public UUID getParentUUID() {
+		return null;
 	}
 
 	public String getTitle() {
@@ -392,59 +369,6 @@ public class FeedCollection extends AggregatorItem {
 		return fPublic;
 	}
 
-	private void shuffle(AggregatorItem item, int amount) {
-		IAggregatorItem parent = item.getParent();
-		IAggregatorItem[] children = getChildren(parent);
-		for (IAggregatorItem child : children) {
-			int ordering = ((AggregatorItem) child).getOrdering();
-			if (ordering > ((AggregatorItem) item).getOrdering()) {
-				move(child, parent, ordering, parent, (ordering + amount));
-			}
-		}
-	}
-
-	/**
-	 * Updates the tree items and the associated aggregator item following the
-	 * given tree item by incrementing the ordering property by one.
-	 * 
-	 * @param treeItem
-	 *            The tree item that was moved
-	 */
-	private void moveDown(IAggregatorItem item, int from, int to) {
-		IAggregatorItem parent = item.getParent();
-		System.out.println(MessageFormat.format("Moving items [{0},{1}]",
-				new Object[] {
-						from - 1, to
-				}));
-		for (int i = from - 1; i >= to; i--) {
-			AggregatorItem sibling = (AggregatorItem) getItemAt(parent, i);
-			int oldOrder = sibling.getOrdering();
-			database.move(sibling, parent, sibling.getOrdering() + 1);
-			notifyListerners(new AggregatorItemChangedEvent(sibling,
-					FeedChangeEventType.SHUFFLED,
-					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder));
-		}
-	}
-
-	private List<AggregatorItemChangedEvent> moveUp(IAggregatorItem item,
-			final int from, final int to) {
-		IAggregatorItem parent = item.getParent();
-		System.out.println(MessageFormat.format("Moving items [{0},{1}]",
-				new Object[] {
-						from + 1, to
-				}));
-		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
-		for (int i = from + 1; i <= to; i++) {
-			AggregatorItem sibling = (AggregatorItem) getItemAt(parent, i);
-			int oldOrder = sibling.getOrdering();
-			database.move(sibling, parent, sibling.getOrdering() - 1);
-			events.add(new AggregatorItemChangedEvent(sibling,
-					FeedChangeEventType.SHUFFLED,
-					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder));
-		}
-		return events;
-	}
-
 	/**
 	 * Moves an aggregator item from one location to another. The given instance
 	 * will be updated with new information and which can be used after the
@@ -465,15 +389,15 @@ public class FeedCollection extends AggregatorItem {
 			if (!oldParent.equals(newParent)) {
 				// The item is moved into a new parent
 				details |= AggregatorItemChangedEvent.NEW_PARENT;
-				shuffle((AggregatorItem) item, -1);
+				shiftUp((AggregatorItem) item);
 				database.move(item, newParent, newOrder);
 			} else if (newOrder > oldOrder) {
 				// The item is moved down (new order is higher)
-				moveUp(item, oldOrder, newOrder);
+				shiftUp(item, oldOrder, newOrder);
 				database.move(item, newParent, newOrder);
 			} else {
 				// The item is moved up
-				moveDown(item, oldOrder, newOrder);
+				shiftDown(item, oldOrder, newOrder);
 				database.move(item, newParent, newOrder);
 			}
 			notifyListerners(new AggregatorItemChangedEvent(item,
@@ -482,6 +406,32 @@ public class FeedCollection extends AggregatorItem {
 		} finally {
 			lock.writeLock().unlock();
 		}
+	}
+
+	public Article newArticleInstance(IAggregatorItem parent) {
+		Article article = new Article(parent);
+		article.setUUID(UUID.randomUUID());
+		return article;
+	}
+
+	/**
+	 * Factory method to create a new feed instance associated with this feed
+	 * collection and with an unique identifier.
+	 * 
+	 * @param parent
+	 *            the parent item
+	 * @return a new feed instance
+	 */
+	public Feed newFeedInstance(IAggregatorItem parent) {
+		Feed feed = new Feed(parent);
+		feed.setUUID(UUID.randomUUID());
+		return feed;
+	}
+
+	public Folder newFolderInstance(IAggregatorItem parent) {
+		Folder folder = new Folder(parent);
+		folder.setUUID(UUID.randomUUID());
+		return folder;
 	}
 
 	/**
@@ -524,11 +474,15 @@ public class FeedCollection extends AggregatorItem {
 							Messages.FeedCollection_NoDelete_Locked);
 				sites.remove(((Feed) element).getUUID());
 			}
-			database.delete(element);
+			try {
+				database.delete(element);
+				shiftUp((AggregatorItem) element);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} finally {
 			lock.writeLock().unlock();
 		}
-		shuffle((AggregatorItem) element, -1);
 		notifyListerners(new AggregatorItemChangedEvent(element,
 				FeedChangeEventType.REMOVED));
 		return Status.OK_STATUS;
@@ -552,7 +506,16 @@ public class FeedCollection extends AggregatorItem {
 		}
 	}
 
+	public void setCollection(FeedCollection registry) {
+	}
+
+	public void setOrdering(int ordering) {
+	}
+
 	public void setOrdering(long ordering) {
+	}
+
+	public void setParentUUID(UUID parent_uuid) {
 	}
 
 	/**
@@ -583,11 +546,57 @@ public class FeedCollection extends AggregatorItem {
 		}
 	}
 
-	public void setCollection(FeedCollection registry) {
-	}
-
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	/**
+	 * Updates the tree items and the associated aggregator item following the
+	 * given tree item by incrementing the ordering property by one.
+	 * 
+	 * @param treeItem
+	 *            The tree item that was moved
+	 */
+	private void shiftDown(IAggregatorItem item, int from, int to) {
+		IAggregatorItem parent = item.getParent();
+		for (int i = from - 1; i >= to; i--) {
+			AggregatorItem sibling = (AggregatorItem) getItemAt(parent, i);
+			int oldOrder = sibling.getOrdering();
+			database.move(sibling, parent, sibling.getOrdering() + 1);
+			notifyListerners(new AggregatorItemChangedEvent(sibling,
+					FeedChangeEventType.SHIFTED,
+					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder));
+		}
+	}
+
+	private List<AggregatorItemChangedEvent> shiftUp(AggregatorItem item) {
+		IAggregatorItem parent = item.getParent();
+		int count = getChildCount(parent);
+		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
+		for (int i = item.getOrdering() + 1; i < count; i++) {
+			AggregatorItem sibling = (AggregatorItem) getItemAt(parent, i);
+			int oldOrder = sibling.getOrdering();
+			database.move(sibling, parent, sibling.getOrdering() - 1);
+			events.add(new AggregatorItemChangedEvent(sibling,
+					FeedChangeEventType.SHIFTED,
+					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder));
+		}
+		return events;
+	}
+
+	private List<AggregatorItemChangedEvent> shiftUp(IAggregatorItem item,
+			final int from, final int to) {
+		IAggregatorItem parent = item.getParent();
+		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
+		for (int i = from + 1; i <= to; i++) {
+			AggregatorItem sibling = (AggregatorItem) getItemAt(parent, i);
+			int oldOrder = sibling.getOrdering();
+			database.move(sibling, parent, sibling.getOrdering() - 1);
+			events.add(new AggregatorItemChangedEvent(sibling,
+					FeedChangeEventType.SHIFTED,
+					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder));
+		}
+		return events;
 	}
 
 	public void updateAllFeeds() {
@@ -614,19 +623,5 @@ public class FeedCollection extends AggregatorItem {
 		} finally {
 			lock.writeLock().unlock();
 		}
-	}
-
-	public int getOrdering() {
-		return 0;
-	}
-
-	public void setOrdering(int ordering) {
-	}
-
-	public void setParentUUID(UUID parent_uuid) {
-	}
-
-	public IAggregatorItem getParent() {
-		return null;
 	}
 }
