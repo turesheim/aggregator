@@ -214,6 +214,10 @@ public class Article extends AggregatorItem {
 
 	@Override
 	public String toString() {
-		return getTitle();
+		StringBuilder sb = new StringBuilder(title);
+		sb.append(" ["); //$NON-NLS-1$
+		sb.append(getOrdering());
+		sb.append(']');
+		return sb.toString();
 	}
 }

@@ -23,8 +23,60 @@ import no.resheim.aggregator.data.internal.AggregatorItem;
  */
 public class Feed extends AggregatorItem {
 
+	/**
+	 * 
+	 */
+	public enum Archiving {
+		/** Archive all items */
+		KEEP_ALL,
+		/** Archive items no older than a number of days */
+		KEEP_NEWEST,
+		/** Do not archive items */
+		KEEP_NONE,
+		/** Archive a specified number of items */
+		KEEP_SOME
+	}
+
+	public enum UpdatePeriod {
+		/** Update every n days */
+		DAYS,
+		/** Update every n hours */
+		HOURS,
+		/** Update every n minutes */
+		MINUTES
+	}
+
 	private static final String BLANK_STRING = ""; //$NON-NLS-1$
 
+	protected Archiving archiving = Archiving.KEEP_ALL;
+
+	protected int archivingDays = 30;
+
+	protected int archivingItems = 100;
+
+	private String copyright;
+
+	private String description;
+
+	private String editor;
+
+	boolean hidden;
+
+	protected long lastUpdate;
+
+	private String link;
+
+	private String password;
+	boolean threaded;
+	protected String title = BLANK_STRING;
+
+	private String type;
+	protected int updateInterval = 1;
+	protected UpdatePeriod updatePeriod;
+	boolean updating;
+	protected String url = BLANK_STRING;
+	private String username;
+	private String webmaster;
 	/**
 	 * @param parent
 	 */
@@ -32,67 +84,40 @@ public class Feed extends AggregatorItem {
 		super(parent);
 	}
 
-	/**
-	 * 
-	 */
-	public enum Archiving {
-		/** Do not archive items */
-		KEEP_NONE,
-		/** Archive all items */
-		KEEP_ALL,
-		/** Archive a specified number of items */
-		KEEP_SOME,
-		/** Archive items no older than a number of days */
-		KEEP_NEWEST
+	public Archiving getArchiving() {
+		return archiving;
 	}
 
-	public enum UpdatePeriod {
-		/** Update every n minutes */
-		MINUTES,
-		/** Update every n hours */
-		HOURS,
-		/** Update every n days */
-		DAYS
+	public int getArchivingDays() {
+		return archivingDays;
 	}
 
-	protected String title = BLANK_STRING;
-
-	protected String url = BLANK_STRING;
-
-	protected Archiving archiving = Archiving.KEEP_ALL;
-
-	protected int archivingItems = 100;
-
-	protected int archivingDays = 30;
-
-	protected int updateInterval = 1;
-
-	protected UpdatePeriod updatePeriod;
-
-	protected long lastUpdate;
-
-	boolean updating;
-	boolean hidden;
-	boolean threaded;
-
-	private String description;
-	private String link;
-	private String webmaster;
-	private String editor;
-	private String copyright;
-	private String type;
-	private String username;
-	private String password;
-
-	/**
-	 * @return the link
-	 */
-	public String getURL() {
-		return url;
+	public int getArchivingItems() {
+		return archivingItems;
 	}
 
-	public void setURL(String link) {
-		this.url = link;
+	public String getCopyright() {
+		return copyright;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public String getEditor() {
+		return editor;
+	}
+
+	public long getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public String getPassword() {
+		return password;
 	}
 
 	/**
@@ -105,8 +130,16 @@ public class Feed extends AggregatorItem {
 			return BLANK_STRING;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public String getType() {
+		return type;
+	}
+
+	public int getUpdateInterval() {
+		return updateInterval;
+	}
+
+	public UpdatePeriod getUpdatePeriod() {
+		return updatePeriod;
 	}
 
 	/**
@@ -132,6 +165,61 @@ public class Feed extends AggregatorItem {
 	}
 
 	/**
+	 * @return the link
+	 */
+	public String getURL() {
+		return url;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public String getWebmaster() {
+		return webmaster;
+	}
+
+	public boolean isHidden() {
+		return hidden;
+	}
+
+	public boolean isThreaded() {
+		return threaded;
+	}
+
+	public boolean isUpdating() {
+		return updating;
+	}
+
+	public void setArchiving(Archiving archiving) {
+		this.archiving = archiving;
+	}
+
+	public void setArchivingDays(int archivingDays) {
+		this.archivingDays = archivingDays;
+	}
+
+	public void setArchivingItems(int archivingItems) {
+		this.archivingItems = archivingItems;
+	}
+
+	public void setCopyright(String copyright) {
+		this.copyright = copyright;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setEditor(String editor) {
+		this.editor = editor;
+	}
+
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
+	}
+
+	/**
 	 * Sets the time and date of the last feed update.
 	 * 
 	 * @param lastUpdate
@@ -141,44 +229,24 @@ public class Feed extends AggregatorItem {
 		this.lastUpdate = lastUpdate;
 	}
 
-	public long getLastUpdate() {
-		return lastUpdate;
+	public void setLink(String link) {
+		this.link = link;
 	}
 
-	public Archiving getArchiving() {
-		return archiving;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public void setArchiving(Archiving archiving) {
-		this.archiving = archiving;
+	public void setThreaded(boolean threaded) {
+		this.threaded = threaded;
 	}
 
-	public int getArchivingDays() {
-		return archivingDays;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public void setArchivingDays(int archivingDays) {
-		this.archivingDays = archivingDays;
-	}
-
-	public int getArchivingItems() {
-		return archivingItems;
-	}
-
-	public void setArchivingItems(int archivingItems) {
-		this.archivingItems = archivingItems;
-	}
-
-	public UpdatePeriod getUpdatePeriod() {
-		return updatePeriod;
-	}
-
-	public void setUpdatePeriod(UpdatePeriod updatePeriod) {
-		this.updatePeriod = updatePeriod;
-	}
-
-	public int getUpdateInterval() {
-		return updateInterval;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	/**
@@ -188,6 +256,35 @@ public class Feed extends AggregatorItem {
 	 */
 	public void setUpdateInterval(int updateInterval) {
 		this.updateInterval = updateInterval;
+	}
+
+	public void setUpdatePeriod(UpdatePeriod updatePeriod) {
+		this.updatePeriod = updatePeriod;
+	}
+
+	public void setUpdating(boolean updating) {
+		this.updating = updating;
+	}
+
+	public void setURL(String link) {
+		this.url = link;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setWebmaster(String webmaster) {
+		this.webmaster = webmaster;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder(title);
+		sb.append(" ["); //$NON-NLS-1$
+		sb.append(getOrdering());
+		sb.append(']');
+		return sb.toString();
 	}
 
 	/**
@@ -204,99 +301,6 @@ public class Feed extends AggregatorItem {
 		this.updateInterval = wc.updateInterval;
 		this.updatePeriod = wc.updatePeriod;
 		this.hidden = wc.hidden;
-	}
-
-	public boolean isUpdating() {
-		return updating;
-	}
-
-	public void setUpdating(boolean updating) {
-		this.updating = updating;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getLink() {
-		return link;
-	}
-
-	public void setLink(String link) {
-		this.link = link;
-	}
-
-	public String getWebmaster() {
-		return webmaster;
-	}
-
-	public void setWebmaster(String webmaster) {
-		this.webmaster = webmaster;
-	}
-
-	public String getEditor() {
-		return editor;
-	}
-
-	public void setEditor(String editor) {
-		this.editor = editor;
-	}
-
-	public String getCopyright() {
-		return copyright;
-	}
-
-	public void setCopyright(String copyright) {
-		this.copyright = copyright;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	@Override
-	public String toString() {
-		return getTitle();
-	}
-
-	public boolean isHidden() {
-		return hidden;
-	}
-
-	public void setHidden(boolean hidden) {
-		this.hidden = hidden;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public boolean isThreaded() {
-		return threaded;
-	}
-
-	public void setThreaded(boolean threaded) {
-		this.threaded = threaded;
 	}
 
 }
