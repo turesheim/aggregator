@@ -57,6 +57,8 @@ public class FeedCollection extends AggregatorItem {
 
 	private boolean fPublic;
 
+	private boolean fDefault;
+
 	final RegistryUpdateJob fRegistryUpdateJob = new RegistryUpdateJob(this);
 
 	/**
@@ -82,10 +84,15 @@ public class FeedCollection extends AggregatorItem {
 	/** The title of the feed collection */
 	private String title;
 
-	public FeedCollection(String id, boolean pub) {
+	public FeedCollection(String id, boolean pub, boolean def) {
 		super(null);
 		this.id = id;
 		this.fPublic = pub;
+		this.fDefault = def;
+	}
+
+	public boolean isDefault() {
+		return fDefault;
 	}
 
 	/**
