@@ -163,6 +163,17 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		return item;
 	}
 
+	private Folder composeFolder(IAggregatorItem parent, ResultSet rs)
+			throws SQLException {
+		Folder item = registry.newFolderInstance(parent);
+		item.setUUID(UUID.fromString(rs.getString(1)));
+		item.setParent(parent);
+		item.setOrdering(rs.getInt(3));
+		item.setTitle(rs.getString(4));
+		item.setMarks(decode(rs.getString(5)));
+		return item;
+	}
+
 	private IStatus createTables(IProgressMonitor monitor) throws SQLException {
 		monitor.subTask(Messages.DerbySQLStorage_Initializing_Database);
 		InputStream is = DerbySQLStorage.class.getResourceAsStream(TABLES_SQL);
@@ -223,12 +234,17 @@ public class DerbySQLStorage implements IAggregatorStorage {
 				Statement s = connection.createStatement();
 				s.executeUpdate("delete from folders where uuid='" //$NON-NLS-1$
 						+ aItem.getUUID().toString() + "'"); //$NON-NLS-1$
-				s.executeUpdate("delete from articles where parent_uuid='" //$NON-NLS-1$
-						+ aItem.getUUID().toString() + "'"); //$NON-NLS-1$
-				s.executeUpdate("delete from folders where parent_uuid='" //$NON-NLS-1$
-						+ aItem.getUUID().toString() + "'"); //$NON-NLS-1$
-				s.executeUpdate("delete from feeds where parent_uuid='" //$NON-NLS-1$
-						+ aItem.getUUID().toString() + "'"); //$NON-NLS-1$
+				/*
+				 * s.executeUpdate("delete from articles where parent_uuid='"
+				 * //$NON-NLS-1$ + aItem.getUUID().toString() + "'");
+				 * //$NON-NLS-1$
+				 * s.executeUpdate("delete from folders where parent_uuid='"
+				 * //$NON-NLS-1$ + aItem.getUUID().toString() + "'");
+				 * //$NON-NLS-1$
+				 * s.executeUpdate("delete from feeds where parent_uuid='"
+				 * //$NON-NLS-1$ + aItem.getUUID().toString() + "'");
+				 * //$NON-NLS-1$
+				 */
 				s.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -239,12 +255,17 @@ public class DerbySQLStorage implements IAggregatorStorage {
 				Statement s = connection.createStatement();
 				s.executeUpdate("delete from feeds where uuid='" //$NON-NLS-1$
 						+ aItem.getUUID().toString() + "'"); //$NON-NLS-1$
-				s.executeUpdate("delete from articles where parent_uuid='" //$NON-NLS-1$
-						+ aItem.getUUID().toString() + "'"); //$NON-NLS-1$
-				s.executeUpdate("delete from folders where parent_uuid='" //$NON-NLS-1$
-						+ aItem.getUUID().toString() + "'"); //$NON-NLS-1$
-				s.executeUpdate("delete from feeds where parent_uuid='" //$NON-NLS-1$
-						+ aItem.getUUID().toString() + "'"); //$NON-NLS-1$
+				/*
+				 * s.executeUpdate("delete from articles where parent_uuid='"
+				 * //$NON-NLS-1$ + aItem.getUUID().toString() + "'");
+				 * //$NON-NLS-1$
+				 * s.executeUpdate("delete from folders where parent_uuid='"
+				 * //$NON-NLS-1$ + aItem.getUUID().toString() + "'");
+				 * //$NON-NLS-1$
+				 * s.executeUpdate("delete from feeds where parent_uuid='"
+				 * //$NON-NLS-1$ + aItem.getUUID().toString() + "'");
+				 * //$NON-NLS-1$
+				 */
 				s.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -307,7 +328,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 		Assert.isNotNull(item);
 		ArrayList<IAggregatorItem> items = new ArrayList<IAggregatorItem>();
 		try {
-			selectCategories(item, items);
+			selectFolders(item, items);
 			selectFeeds(item, items);
 			selectItems(item, items);
 		} catch (Exception e) {
@@ -629,14 +650,16 @@ public class DerbySQLStorage implements IAggregatorStorage {
 	}
 
 	/**
+	 * Finds all folders with the given parent item and adds the instance to the
+	 * list.
 	 * 
 	 * @param parent
-	 *            The parent item
+	 *            the parent item
 	 * @param feeds
-	 *            The list of aggregator articles to append to
+	 *            the list of aggregator articles to append to
 	 * @throws SQLException
 	 */
-	private void selectCategories(IAggregatorItem parent,
+	private void selectFolders(IAggregatorItem parent,
 			ArrayList<IAggregatorItem> feeds) throws SQLException {
 		Statement s = connection.createStatement();
 		String query = null;
@@ -645,10 +668,7 @@ public class DerbySQLStorage implements IAggregatorStorage {
 				+ "' order by ordering"; //$NON-NLS-1$
 		ResultSet rs = s.executeQuery(query);
 		while (rs.next()) {
-			Folder folder = registry.newFolderInstance(parent);
-			folder.setTitle(rs.getString(2));
-			folder.setOrdering(rs.getInt(3));
-			feeds.add(folder);
+			feeds.add(composeFolder(parent, rs));
 		}
 		rs.close();
 	}
