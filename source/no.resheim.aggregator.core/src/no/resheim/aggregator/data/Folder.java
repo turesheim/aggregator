@@ -21,7 +21,9 @@ import no.resheim.aggregator.data.internal.AggregatorItem;
  * @since 1.0
  */
 public class Folder extends AggregatorItem {
-	String title;
+
+	/** The folder title */
+	private String title;
 
 	/**
 	 * @param registryId
@@ -46,5 +48,4 @@ public class Folder extends AggregatorItem {
 		sb.append(']');
 		return sb.toString();
 	}
-
 }

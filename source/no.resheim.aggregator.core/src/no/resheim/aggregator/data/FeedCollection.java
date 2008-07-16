@@ -48,6 +48,8 @@ public class FeedCollection extends AggregatorItem {
 
 	/** The list of feed change listeners */
 	private static ArrayList<IAggregatorEventListener> feedListeners = new ArrayList<IAggregatorEventListener>();
+
+	/** The storage for our data */
 	private IAggregatorStorage database;
 
 	/** The number of milliseconds in a day */
@@ -70,13 +72,14 @@ public class FeedCollection extends AggregatorItem {
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
 	/**
-	 * List of <i>live</i> feeds that we must keep track of even if the any
-	 * viewers has not opened the feed for viewing so that it has had a chance
-	 * of being created. This list is populated at startup and maintained
+	 * List of <i>live</i> feeds that we must keep track of even if none of the
+	 * viewers has opened the feed for viewing so that it has had a chance of
+	 * being created. This list is populated at startup and maintained
 	 * thereafter.
 	 */
 	private HashMap<UUID, Feed> sites;
 
+	/** The title of the feed collection */
 	private String title;
 
 	public FeedCollection(String id, boolean pub) {
@@ -91,7 +94,7 @@ public class FeedCollection extends AggregatorItem {
 	 * changed.
 	 * 
 	 * @param listener
-	 *            The listener to be notified
+	 *            the listener to be notified
 	 */
 	public void addFeedListener(IAggregatorEventListener listener) {
 		feedListeners.add(listener);
@@ -102,7 +105,7 @@ public class FeedCollection extends AggregatorItem {
 	 * persistent storage.
 	 * 
 	 * @param feed
-	 *            The aggregator item to add
+	 *            the aggregator item to add
 	 */
 	public void addNew(AggregatorItem item) {
 		long start = System.currentTimeMillis();
@@ -173,7 +176,7 @@ public class FeedCollection extends AggregatorItem {
 	 * {@link FeedUpdateJob} after the feed has be updated with new information.
 	 * 
 	 * @param feed
-	 *            The feed to update
+	 *            the feed to update
 	 */
 	void feedUpdated(Feed feed) {
 		try {
@@ -185,9 +188,11 @@ public class FeedCollection extends AggregatorItem {
 	}
 
 	/**
+	 * Returns the number of items contained within the given parent item.
 	 * 
 	 * @param parent
-	 * @return
+	 *            the parent item
+	 * @return the number of child items
 	 */
 	public int getChildCount(IAggregatorItem parent) {
 		try {
@@ -199,9 +204,11 @@ public class FeedCollection extends AggregatorItem {
 	}
 
 	/**
+	 * Returns the child items of the given parent item.
 	 * 
 	 * @param item
-	 * @return
+	 *            the parent item
+	 * @return the child items
 	 */
 	public IAggregatorItem[] getChildren(IAggregatorItem item) {
 		try {
@@ -210,6 +217,15 @@ public class FeedCollection extends AggregatorItem {
 		} finally {
 			lock.readLock().unlock();
 		}
+	}
+
+	private List<IAggregatorItem> getDescendants(IAggregatorItem item) {
+		ArrayList<IAggregatorItem> descendants = new ArrayList<IAggregatorItem>();
+		for (IAggregatorItem aggregatorItem : getChildren(item)) {
+			descendants.add(aggregatorItem);
+			descendants.addAll(getDescendants(aggregatorItem));
+		}
+		return descendants;
 	}
 
 	public FeedCollection getCollection() {
@@ -465,23 +481,27 @@ public class FeedCollection extends AggregatorItem {
 	/**
 	 * Removes the specified item from the collection and underlying database.
 	 * 
-	 * @param element
+	 * @param item
 	 *            the element to remove
 	 */
-	public IStatus remove(IAggregatorItem element) {
+	public IStatus delete(IAggregatorItem item) {
 		try {
 			lock.writeLock().lock();
 			long start = System.currentTimeMillis();
-			if (element instanceof Feed) {
-				if (isLocked((Feed) element))
-					return new Status(IStatus.CANCEL,
-							AggregatorPlugin.PLUGIN_ID,
-							Messages.FeedCollection_NoDelete_Locked);
-				sites.remove(((Feed) element).getUUID());
+			List<IAggregatorItem> deletables = getDescendants(item);
+			deletables.add(item);
+			for (IAggregatorItem aggregatorItem : deletables) {
+				if (aggregatorItem instanceof Feed) {
+					sites.remove(((Feed) aggregatorItem).getUUID());
+					if (isLocked((Feed) item))
+						return new Status(IStatus.CANCEL,
+								AggregatorPlugin.PLUGIN_ID,
+								Messages.FeedCollection_NoDelete_Locked);
+				}
+				database.delete(aggregatorItem);
 			}
-			database.delete(element);
-			shiftUp((AggregatorItem) element);
-			notifyListerners(new AggregatorItemChangedEvent(element,
+			shiftUp((AggregatorItem) item);
+			notifyListerners(new AggregatorItemChangedEvent(item,
 					FeedChangeEventType.REMOVED, System.currentTimeMillis()
 							- start));
 			return Status.OK_STATUS;
@@ -490,6 +510,13 @@ public class FeedCollection extends AggregatorItem {
 		}
 	}
 
+	/**
+	 * Removes the event listener from the list. The specified listener will no
+	 * longer be notified of aggregator events.
+	 * 
+	 * @param listener
+	 *            the event listener to remove
+	 */
 	public void removeFeedListener(IAggregatorEventListener listener) {
 		feedListeners.remove(listener);
 	}
@@ -498,6 +525,7 @@ public class FeedCollection extends AggregatorItem {
 	 * Renames the given aggregator item, but does not fire an event.
 	 * 
 	 * @param item
+	 *            the item to rename
 	 */
 	public void rename(IAggregatorItem item) {
 		try {
@@ -506,9 +534,6 @@ public class FeedCollection extends AggregatorItem {
 		} finally {
 			lock.writeLock().unlock();
 		}
-	}
-
-	public void setCollection(FeedCollection registry) {
 	}
 
 	public void setOrdering(int ordering) {
@@ -526,6 +551,7 @@ public class FeedCollection extends AggregatorItem {
 	 * contained articles are marked as read.
 	 * 
 	 * @param item
+	 *            the item to mark as read
 	 */
 	public void setRead(IAggregatorItem item) {
 		long start = System.currentTimeMillis();
@@ -557,11 +583,14 @@ public class FeedCollection extends AggregatorItem {
 	}
 
 	/**
-	 * Updates the tree items and the associated aggregator item following the
-	 * given tree item by incrementing the ordering property by one.
+	 * Updates the sibling item positions by shifting them downwards.
 	 * 
-	 * @param treeItem
-	 *            The tree item that was moved
+	 * @param item
+	 *            the item that was moved
+	 * @param from
+	 *            the initial position of the moved item
+	 * @param to
+	 *            the new position of the moved item
 	 */
 	private void shiftDown(IAggregatorItem item, int from, int to) {
 		IAggregatorItem parent = item.getParent();
@@ -594,6 +623,16 @@ public class FeedCollection extends AggregatorItem {
 		return events;
 	}
 
+	/**
+	 * Updates the sibling item positions by shifting them upwards.
+	 * 
+	 * @param item
+	 *            the item that was moved
+	 * @param from
+	 *            the initial position of the moved item
+	 * @param to
+	 *            the new position of the moved item
+	 */
 	private List<AggregatorItemChangedEvent> shiftUp(IAggregatorItem item,
 			final int from, final int to) {
 		IAggregatorItem parent = item.getParent();

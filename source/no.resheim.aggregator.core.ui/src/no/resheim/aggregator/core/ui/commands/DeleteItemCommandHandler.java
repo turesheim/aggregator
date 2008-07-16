@@ -41,7 +41,7 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
 			}
 			IAggregatorItem item = getSelection(event);
 			if (item != null) {
-				IStatus status = registry.remove(item);
+				IStatus status = registry.delete(item);
 				if (!status.isOK()) {
 					StatusManager.getManager().handle(status,
 							StatusManager.SHOW);
