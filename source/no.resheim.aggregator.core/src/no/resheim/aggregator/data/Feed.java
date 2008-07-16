@@ -38,12 +38,7 @@ public class Feed extends AggregatorItem {
 	}
 
 	public enum UpdatePeriod {
-		/** Update every n days */
-		DAYS,
-		/** Update every n hours */
-		HOURS,
-		/** Update every n minutes */
-		MINUTES
+		MINUTES, HOURS, DAYS
 	}
 
 	private static final String BLANK_STRING = ""; //$NON-NLS-1$
@@ -77,6 +72,7 @@ public class Feed extends AggregatorItem {
 	protected String url = BLANK_STRING;
 	private String username;
 	private String webmaster;
+
 	/**
 	 * @param parent
 	 */

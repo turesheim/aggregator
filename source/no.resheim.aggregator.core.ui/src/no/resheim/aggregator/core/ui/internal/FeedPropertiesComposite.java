@@ -120,6 +120,7 @@ public class FeedPropertiesComposite extends Composite {
 		intervalField.setSelection(feed.getUpdateInterval());
 		days.setSelection(feed.getArchivingDays());
 		itemCount.setSelection(feed.getArchivingItems());
+		// XXX: The order better not change
 		periodCombo.select(feed.getUpdatePeriod().ordinal());
 	}
 
