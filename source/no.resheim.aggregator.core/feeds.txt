@@ -1,9 +1,0 @@
-# In this file default feeds are added.
-Linux Journal, http://www.linuxjournal.com/node/feed
-Linux Journal Breaking News, http://www.linuxjournal.com/breaking_news/feed
-AVR Freaks, http://www.avrfreaks.net/forumrss.php
-Resheim Software News, http://resheim.no/news/RSS
-Planet Eclipse Blogs, http://planeteclipse.org/planet/rss20.xml
-SlashDot, http://rss.slashdot.org/Slashdot/slashdot
-Eclipse Plugin Central, http://www.eclipseplugincentral.com/pluginfeed.rss
-APML Update Feed, http://feeds.feedburner.com/apmlspec

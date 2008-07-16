@@ -5,6 +5,7 @@
    <extension
          point="no.resheim.aggregator.core.feeds">
       <collection
+            default="true"
             id="no.resheim.aggregator.core.defaultFeedCollection"
             name="Default"
             public="true">

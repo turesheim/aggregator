@@ -1,16 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="no.resheim.aggregator.core">
+<schema targetNamespace="no.resheim.aggregator.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
-      <appInfo>
+      <appinfo>
          <meta.schema plugin="no.resheim.aggregator.core" id="feeds" name="Aggregator Feeds"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          [Enter description of this extension point.]
       </documentation>
    </annotation>
 
    <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
       <complexType>
          <sequence>
             <element ref="collection" minOccurs="0" maxOccurs="unbounded"/>
@@ -35,9 +40,9 @@
                <documentation>
                   
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute translatable="true"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>
@@ -57,9 +62,9 @@
                <documentation>
                   
                </documentation>
-               <appInfo>
+               <appinfo>
                   <meta.attribute translatable="true"/>
-               </appInfo>
+               </appinfo>
             </annotation>
          </attribute>
          <attribute name="public" type="boolean" use="required">
@@ -69,14 +74,21 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="default" type="boolean">
+            <annotation>
+               <documentation>
+                  whether or not the collection is the default collection. Note that only one collection should be the default.
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
    <element name="feed">
       <annotation>
-         <appInfo>
+         <appinfo>
             <meta.element labelAttribute="title"/>
-         </appInfo>
+         </appinfo>
          <documentation>
             Adds the declared feed to the feed collection identified by the &lt;i&gt;collection&lt;/i&gt; if a feed with the same &lt;i&gt;url&lt;/i&gt; does not already exist in the collection. Note that since any UI preference settings are not available when declared feeds are being added one must specify archiving and update options in the declaration.
          </documentation>
@@ -96,10 +108,10 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="collection" type="string" use="required">
+         <attribute name="collection" type="string">
             <annotation>
                <documentation>
-                  the collection identifier. Must be a declared &lt;i&gt;collection&lt;/i&gt;.
+                  the collection identifier. Must be a declared &lt;i&gt;collection&lt;/i&gt;. If not specified the default collection is used.
                </documentation>
             </annotation>
          </attribute>
@@ -178,49 +190,56 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="create" type="boolean">
+            <annotation>
+               <documentation>
+                  whether or not to create the feed automatically. In either case the feed will be available for adding using a &lt;q&gt;New feed wizardz&lt;/q&gt;.
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="since"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          1.0
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="examples"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          [Enter extension point usage example here.]
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="apiInfo"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          [Enter API information here.]
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="implementation"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          [Enter information about supplied implementation of this extension point.]
       </documentation>
    </annotation>
 
    <annotation>
-      <appInfo>
+      <appinfo>
          <meta.section type="copyright"/>
-      </appInfo>
+      </appinfo>
       <documentation>
          &amp;copy 2008 Resheim Software.
       </documentation>

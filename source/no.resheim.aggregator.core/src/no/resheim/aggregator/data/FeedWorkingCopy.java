@@ -22,6 +22,10 @@ public class FeedWorkingCopy extends Feed {
 	public FeedWorkingCopy(Feed feed) {
 		super(feed.getParent());
 		this.feed = feed;
+		copy(feed);
+	}
+
+	public void copy(Feed feed) {
 		this.title = feed.title;
 		this.url = feed.url;
 		this.archiving = feed.archiving;

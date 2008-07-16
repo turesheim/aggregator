@@ -12,7 +12,7 @@
 package no.resheim.aggregator.core.ui.internal;
 
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
-import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.core.ui.NewFeedWizard;
 import no.resheim.aggregator.data.FeedWorkingCopy;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
@@ -54,21 +54,18 @@ public class NewFeedWizardOptionsPage extends WizardPage {
 	private Button radioKeepAll;
 	private Group aGroup;
 
-	FeedCollection registry;
-	FeedWorkingCopy workingCopy;
+	private NewFeedWizard wizard;
 
 	/**
 	 * Create the wizard
 	 */
-	public NewFeedWizardOptionsPage(FeedCollection registry,
-			FeedWorkingCopy workingCopy) {
+	public NewFeedWizardOptionsPage(NewFeedWizard wizard) {
 		super(Messages.NewFeedWizardOptionsPage_Title);
 		setTitle(Messages.NewFeedWizardOptionsPage_Title);
 		setDescription(Messages.NewFeedWizardOptionsPage_Description);
 		setImageDescriptor(AggregatorUIPlugin
 				.getImageDescriptor("icons/wizban/new_feed_wizard.png")); //$NON-NLS-1$
-		this.registry = registry;
-		this.workingCopy = workingCopy;
+		this.wizard = wizard;
 	}
 
 	/**
@@ -78,6 +75,7 @@ public class NewFeedWizardOptionsPage extends WizardPage {
 	 */
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
+		final FeedWorkingCopy workingCopy = wizard.getWorkingCopy();
 		final GridLayout gridLayout_1 = new GridLayout();
 		gridLayout_1.numColumns = 2;
 		container.setLayout(gridLayout_1);
@@ -199,7 +197,15 @@ public class NewFeedWizardOptionsPage extends WizardPage {
 		updateRefreshWidgets();
 	}
 
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		updateArchivingWidgets();
+		updateRefreshWidgets();
+	}
+
 	private void updateArchivingWidgets() {
+		FeedWorkingCopy workingCopy = wizard.getWorkingCopy();
 		switch (workingCopy.getArchiving()) {
 		case KEEP_ALL:
 			radioKeepAll.setSelection(true);
@@ -227,6 +233,7 @@ public class NewFeedWizardOptionsPage extends WizardPage {
 	}
 
 	private void updateRefreshWidgets() {
+		FeedWorkingCopy workingCopy = wizard.getWorkingCopy();
 		switch (workingCopy.getUpdatePeriod()) {
 		case MINUTES:
 			periodCombo.setEnabled(true);

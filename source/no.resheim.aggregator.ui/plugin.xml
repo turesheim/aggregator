@@ -121,5 +121,63 @@
          </command>
       </menuContribution>
    </extension>
+   <extension
+         point="no.resheim.aggregator.core.feeds">
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            locked="false"
+            title="Linux Journal"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://www.linuxjournal.com/node/feed">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            locked="false"
+            title="AVR Freaks Forums"
+            updateInterval="10"
+            updatePeriod="MINUTES"
+            url="http://www.avrfreaks.net/forumrss.php">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            locked="false"
+            title="Resheim Software News"
+            updateInterval="1"
+            updatePeriod="DAYS"
+            url="http://resheim.no/news/RSS">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            locked="false"
+            title="Planet Eclipse Blogs"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://planeteclipse.org/planet/rss20.xml">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            locked="false"
+            title="SlashDot"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://rss.slashdot.org/Slashdot/slashdot">
+      </feed>
+   </extension>
 
 </plugin>

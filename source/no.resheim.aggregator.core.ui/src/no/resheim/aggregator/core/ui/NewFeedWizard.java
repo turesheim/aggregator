@@ -28,18 +28,41 @@ import org.eclipse.jface.wizard.Wizard;
  */
 public class NewFeedWizard extends Wizard {
 
-	IWizardPage general;
 	IWizardPage archiving;
+	IWizardPage general;
+	FeedCollection collection;
+
+	public FeedCollection getCollection() {
+		return collection;
+	}
+
 	FeedWorkingCopy workingCopy;
-	FeedCollection registry;
 
 	/**
 	 * 
 	 */
-	public NewFeedWizard(FeedCollection registry) {
+	public NewFeedWizard(FeedCollection collection) {
 		super();
-		this.registry = registry;
+		this.collection = collection;
 		setWindowTitle(Messages.NewFeedWizard_Title);
+	}
+
+	@Override
+	public void addPages() {
+		super.addPages();
+		archiving = new NewFeedWizardOptionsPage(this);
+		general = new NewFeedWizardGeneralPage(this);
+		addPage(general);
+		addPage(archiving);
+	}
+
+	public Feed getFeed() {
+		Feed feed = workingCopy.getFeed();
+		return feed;
+	}
+
+	public FeedWorkingCopy getWorkingCopy() {
+		return workingCopy;
 	}
 
 	@Override
@@ -47,22 +70,8 @@ public class NewFeedWizard extends Wizard {
 		return true;
 	}
 
-	@Override
-	public void addPages() {
-		super.addPages();
-		archiving = new NewFeedWizardOptionsPage(registry, workingCopy);
-		general = new NewFeedWizardGeneralPage(registry, workingCopy);
-		addPage(general);
-		addPage(archiving);
-	}
-
 	public void setFeed(FeedWorkingCopy workingCopy) {
 		this.workingCopy = workingCopy;
-	}
-
-	public Feed getFeed() {
-		Feed feed = workingCopy.getFeed();
-		return feed;
 	}
 
 }

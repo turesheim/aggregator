@@ -11,9 +11,12 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal;
 
+import java.util.ArrayList;
+
 import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
-import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.core.ui.NewFeedWizard;
+import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedWorkingCopy;
 
 import org.eclipse.jface.wizard.WizardPage;
@@ -31,24 +34,21 @@ import org.eclipse.swt.widgets.Text;
 
 public class NewFeedWizardGeneralPage extends WizardPage {
 	private Combo combo;
-	private Text text;
+	private Text urlText;
 	private Label urlLabel;
 	private Label titleLabel;
-	FeedWorkingCopy workingCopy;
-	FeedCollection registry;
+	private NewFeedWizard wizard;
 
 	/**
 	 * Create the wizard
 	 */
-	public NewFeedWizardGeneralPage(FeedCollection registry,
-			FeedWorkingCopy workingCopy) {
+	public NewFeedWizardGeneralPage(NewFeedWizard wizard) {
 		super(Messages.NewFeedWizardGeneralPage_Title);
 		setTitle(Messages.NewFeedWizardGeneralPage_Title);
 		setDescription(Messages.NewFeedWizardGeneralPage_Description);
 		setImageDescriptor(AggregatorUIPlugin
 				.getImageDescriptor("icons/wizban/new_feed_wizard.png")); //$NON-NLS-1$
-		this.workingCopy = workingCopy;
-		this.registry = registry;
+		this.wizard = wizard;
 		// The wizard page starts out as incomplete
 		setPageComplete(false);
 	}
@@ -65,21 +65,27 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		container.setLayout(gridLayout);
 		setControl(container);
 
+		final FeedWorkingCopy workingCopy = wizard.getWorkingCopy();
+
 		titleLabel = new Label(container, SWT.NONE);
 		titleLabel.setText(Messages.NewFeedWizardGeneralPage_Label_Title);
 
 		combo = new Combo(container, SWT.NONE);
+		final ArrayList<Feed> feeds = AggregatorPlugin.getDefault()
+				.getDefaultFeeds();
 		combo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				if (combo.getSelectionIndex() >= 0) {
-					text.setText(AggregatorPlugin.DEFAULT_FEEDS.get(combo
-							.getSelectionIndex())[1]);
+					workingCopy.copy(feeds.get(combo.getSelectionIndex()));
+					urlText.setText(workingCopy.getURL());
+
 				}
 				validate();
 			}
 		});
-		for (String[] item : AggregatorPlugin.DEFAULT_FEEDS) {
-			combo.add(item[0]);
+		for (Feed feed : feeds) {
+			combo.add(feed.getTitle());
+
 		}
 		combo.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -92,17 +98,19 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		urlLabel = new Label(container, SWT.NONE);
 		urlLabel.setText(Messages.NewFeedWizardGeneralPage_Label_URL);
 
-		text = new Text(container, SWT.BORDER);
-		text.addModifyListener(new ModifyListener() {
+		urlText = new Text(container, SWT.BORDER);
+		urlText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				workingCopy.setURL(text.getText());
+				workingCopy.setURL(urlText.getText());
 				validate();
 			}
 		});
-		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		urlText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 	}
 
 	private void validate() {
+		FeedWorkingCopy workingCopy = wizard.getWorkingCopy();
+
 		if (workingCopy.getTitle().length() == 0) {
 			setMessage(Messages.NewFeedWizardGeneralPage_Error_Missing_title);
 			setPageComplete(false);
@@ -113,7 +121,7 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 			setPageComplete(false);
 			return;
 		}
-		if (registry.hasFeed(workingCopy.getURL())) {
+		if (wizard.getCollection().hasFeed(workingCopy.getURL())) {
 			setErrorMessage(Messages.NewFeedWizardGeneralPage_Error_Existing_Feed);
 			setPageComplete(false);
 			return;

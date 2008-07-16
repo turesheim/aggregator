@@ -1,8 +1,5 @@
 package no.resheim.aggregator;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,13 +13,11 @@ import no.resheim.aggregator.data.internal.DerbySQLStorage;
 import no.resheim.aggregator.data.internal.IAggregatorStorage;
 
 import org.eclipse.core.net.proxy.IProxyService;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
@@ -66,7 +61,13 @@ public class AggregatorPlugin extends Plugin {
 	private final ArrayList<IFeedCollectionEventListener> fCollectionListeners = new ArrayList<IFeedCollectionEventListener>();
 
 	/** Default feeds to add */
-	public static ArrayList<String[]> DEFAULT_FEEDS;
+	private ArrayList<Feed> defaultFeeds;
+
+	private FeedCollection defaultCollection;
+
+	public ArrayList<Feed> getDefaultFeeds() {
+		return defaultFeeds;
+	}
 
 	private ServiceTracker serviceTracker;
 	/**
@@ -79,7 +80,8 @@ public class AggregatorPlugin extends Plugin {
 	 */
 	public AggregatorPlugin() {
 		plugin = this;
-		DEFAULT_FEEDS = new ArrayList<String[]>();
+		// DEFAULT_FEEDS = new ArrayList<String[]>();
+		defaultFeeds = new ArrayList<Feed>();
 	}
 
 	public void addFeedCollectionListener(IFeedCollectionEventListener listener) {
@@ -111,19 +113,6 @@ public class AggregatorPlugin extends Plugin {
 		super.start(context);
 		fDebugging = super.isDebugging();
 		initialize();
-		// Read in all the default feeds.
-		InputStream is = FileLocator.openStream(this.getBundle(), new Path(
-				"/feeds.txt"), false); //$NON-NLS-1$
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		String line = null;
-		while ((line = br.readLine()) != null) {
-			if (!line.startsWith("#")) { //$NON-NLS-1$
-				String[] fields = line.split(","); //$NON-NLS-1$
-				DEFAULT_FEEDS.add(new String[] {
-						fields[0].trim(), fields[1].trim()
-				});
-			}
-		}
 	}
 
 	private boolean fDebugging;
@@ -161,9 +150,15 @@ public class AggregatorPlugin extends Plugin {
 	}
 
 	/**
-	 * @return the feeds
+	 * By passing an identifier the corresponding feed collection is returned.
+	 * If <b>null</b> is passed, the default collection is returned. If the
+	 * collection is not found <b>null</b> is returned.
+	 * 
+	 * @return the feed collection
 	 */
 	public FeedCollection getFeedCollection(String id) {
+		if (id == null)
+			return defaultCollection;
 		synchronized (registryMap) {
 			return registryMap.get(id);
 		}
@@ -226,9 +221,11 @@ public class AggregatorPlugin extends Plugin {
 					String name = element.getAttribute("name"); //$NON-NLS-1$
 					boolean pub = Boolean.parseBoolean(element
 							.getAttribute("public")); //$NON-NLS-1$
+					boolean def = Boolean.parseBoolean(element
+							.getAttribute("default")); //$NON-NLS-1$
 
 					final FeedCollection collection = new FeedCollection(id,
-							pub);
+							pub, def);
 					collection.setTitle(name);
 					synchronized (registryMap) {
 						registryMap.put(id, collection);
@@ -239,6 +236,9 @@ public class AggregatorPlugin extends Plugin {
 					if (status.isOK()) {
 						collection.initialize(storage);
 						storageList.add(storage);
+						if (def) {
+							defaultCollection = collection;
+						}
 						for (IFeedCollectionEventListener listener : fCollectionListeners) {
 							listener.collectionInitialized(collection);
 						}
@@ -261,13 +261,18 @@ public class AggregatorPlugin extends Plugin {
 			try {
 				if (element.getName().equals("feed")) { //$NON-NLS-1$
 					String url = element.getAttribute("url"); //$NON-NLS-1$
-					String id = element.getAttribute("collection"); //$NON-NLS-1$
-					FeedCollection collection = getFeedCollection(id);
+					String collectionId = element.getAttribute("collection"); //$NON-NLS-1$
+					boolean add = Boolean.parseBoolean(element
+							.getAttribute("create")); //$NON-NLS-1$
+					// Will use the default collection if the collectionId is
+					// null.
+					FeedCollection collection = getFeedCollection(collectionId);
 					if (collection != null) {
-						if (!collection.hasFeed(url)) {
-							collection
-									.addNew(createNewFeed(collection, element));
+						Feed feed = createNewFeed(collection, element);
+						if (add && !collection.hasFeed(url)) {
+							collection.addNew(feed);
 						}
+						defaultFeeds.add(feed);
 					}
 				}
 			} catch (Exception e) {
