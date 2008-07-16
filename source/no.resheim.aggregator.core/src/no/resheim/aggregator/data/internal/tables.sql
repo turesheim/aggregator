@@ -2,7 +2,7 @@ CREATE TABLE folders (
 		uuid CHAR(36) NOT NULL,
 		parent_uuid CHAR(36),
 		ordering INTEGER NOT NULL,
-        title VARCHAR(32) NOT NULL,
+        title VARCHAR(256) NOT NULL,
 		marks VARCHAR(64) NOT NULL		
 	);
 
@@ -10,7 +10,7 @@ CREATE TABLE feeds (
         uuid CHAR(36) NOT NULL,
 		parent_uuid CHAR(36) NOT NULL,
 		ordering INTEGER NOT NULL,
-		title VARCHAR(32) NOT NULL,
+		title VARCHAR(256) NOT NULL,
 		url VARCHAR(256) NOT NULL,
 		marks VARCHAR(64) NOT NULL,		
 		archiving VARCHAR(32) NOT NULL,			
@@ -37,7 +37,7 @@ CREATE TABLE articles (
 		ordering INTEGER NOT NULL,
 		feed_uuid CHAR(36) NOT NULL,
 		guid VARCHAR(256) NOT NULL,
-		title VARCHAR(128) NOT NULL,
+		title VARCHAR(256) NOT NULL,
 		url VARCHAR(128) NOT NULL,
 		marks VARCHAR(64) NOT NULL,		
 		is_read INT NOT NULL,
