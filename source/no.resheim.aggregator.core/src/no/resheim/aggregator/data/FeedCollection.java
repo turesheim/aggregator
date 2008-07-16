@@ -401,11 +401,12 @@ public class FeedCollection extends AggregatorItem {
 				// The item is moved up
 				shiftDown(item, oldOrder, newOrder);
 				database.move(item, newParent, newOrder);
-				notifyListerners(new AggregatorItemChangedEvent(item,
-						FeedChangeEventType.MOVED,
-						AggregatorItemChangedEvent.NEW_PARENT, oldParent,
-						oldOrder, System.currentTimeMillis() - start));
 			}
+			// Tell our listeners that the deed is done
+			notifyListerners(new AggregatorItemChangedEvent(item,
+					FeedChangeEventType.MOVED,
+					AggregatorItemChangedEvent.NEW_PARENT, oldParent, oldOrder,
+					System.currentTimeMillis() - start));
 		} finally {
 			lock.writeLock().unlock();
 		}

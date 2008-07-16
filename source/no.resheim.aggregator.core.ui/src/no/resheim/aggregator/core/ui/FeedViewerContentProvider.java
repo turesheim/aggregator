@@ -105,12 +105,10 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 							break;
 						case UPDATED:
 							// We _have_ to refresh deeply after adding new
-							// articles
-							// or the viewer will become confused.
+							// articles or the viewer will become confused.
 							fViewer.refresh(event.getItem().getParent(), true);
 							break;
 						case MOVED:
-							System.out.println("[DEBUG] Refreshing viewer");
 							fViewer.refresh();
 							break;
 						case REMOVED:
@@ -130,9 +128,7 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 							fViewer.update(event.getItem(), STATE_PROPERTIES);
 							break;
 						default:
-							// if (event.getItem() instanceof Feed
-							// || event.getItem() instanceof Folder)
-							// fViewer.refresh();
+							fViewer.refresh();
 							break;
 						}
 					}
