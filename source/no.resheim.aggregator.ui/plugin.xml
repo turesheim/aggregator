@@ -149,7 +149,7 @@
             archivingDays="30"
             archivingItems="0"
             archivingMethod="KEEP_NEWEST"
-            create="false"
+            create="true"
             locked="false"
             title="Resheim Software News"
             updateInterval="1"
@@ -177,6 +177,28 @@
             updateInterval="1"
             updatePeriod="HOURS"
             url="http://rss.slashdot.org/Slashdot/slashdot">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            locked="false"
+            title="ECF Developer Mailing List"
+            updateInterval="5"
+            updatePeriod="MINUTES"
+            url="http://dev.eclipse.org/mhonarc/lists/ecf-dev/maillist.rss">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            locked="false"
+            title="Photran Developer Mailing List"
+            updateInterval="5"
+            updatePeriod="MINUTES"
+            url="http://dev.eclipse.org/mhonarc/lists/photran-dev/maillist.rss">
       </feed>
    </extension>
 
