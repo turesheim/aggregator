@@ -42,7 +42,9 @@ public class FeedCollectionMenu extends
 		super(id);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings( {
+			"unchecked", "deprecation"
+	})
 	@Override
 	protected IContributionItem[] getContributionItems() {
 		ArrayList<IContributionItem> actions = new ArrayList<IContributionItem>();
@@ -50,6 +52,7 @@ public class FeedCollectionMenu extends
 				.getCollections();
 		IServiceLocator locator = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow();
+		// TODO: Fix this deprecation issue when no longer supporting 3.3
 		for (FeedCollection feedRegistry : collections) {
 			if (feedRegistry.isPublic()) {
 				Map parms = new HashMap();
