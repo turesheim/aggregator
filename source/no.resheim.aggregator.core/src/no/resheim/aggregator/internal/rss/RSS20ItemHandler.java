@@ -33,6 +33,9 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 
 	public static final String GUID = "guid"; //$NON-NLS-1$
 
+	/** WordPress full content element */
+	public static final String CONTENT_ENCODED = "content:encoded"; //$NON-NLS-1$
+
 	static final SimpleDateFormat date = new SimpleDateFormat(
 			"EEE, d MMM yyyy HH:mm:ss Z"); //$NON-NLS-1$
 
@@ -54,6 +57,13 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 			setCapture(false);
 		}
 		if (qName.equals(DESCRIPTION)) {
+			// Make sure we don't overwrite description added by content:encoded
+			if (item.getDescription() == null) {
+				item.setDescription(getBuffer().toString());
+			}
+			setCapture(false);
+		}
+		if (qName.equals(CONTENT_ENCODED)) {
 			item.setDescription(getBuffer().toString());
 			setCapture(false);
 		}
@@ -83,7 +93,7 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 		super.startElement(qName, atts);
 		if (qName.equals(TITLE) || qName.equals(LINK)
 				|| qName.equals(DESCRIPTION) || qName.equals(PUBDATE)
-				|| qName.equals(GUID)) {
+				|| qName.equals(GUID) || qName.equals(CONTENT_ENCODED)) {
 			setCapture(true);
 		}
 		return this;
