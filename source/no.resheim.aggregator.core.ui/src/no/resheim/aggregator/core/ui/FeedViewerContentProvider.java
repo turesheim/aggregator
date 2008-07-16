@@ -119,10 +119,11 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 							fViewer.remove(event.getItem());
 							break;
 						case CREATED:
-							fViewer.add(event.getItem().getParent(), event
-									.getItem());
-							fViewer.update(event.getItem().getParent(),
-									STATE_PROPERTIES);
+							// fViewer.add(event.getItem().getParent(), event
+							// .getItem());
+							// fViewer.update(event.getItem().getParent(),
+							// STATE_PROPERTIES);
+							fViewer.refresh();
 							break;
 						case UPDATING:
 							fViewer.update(event.getItem(), STATE_PROPERTIES);
