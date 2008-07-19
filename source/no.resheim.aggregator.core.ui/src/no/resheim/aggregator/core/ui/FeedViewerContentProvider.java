@@ -62,22 +62,6 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 	public void dispose() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java
-	 * .lang.Object)
-	 */
-	public Object[] getElements(Object parent) {
-		if (parent != null) {
-			if (parent instanceof IAggregatorItem) {
-				return fCollection.getChildren((IAggregatorItem) parent);
-			}
-		}
-		return new Object[0];
-	}
-
 	public Object getParent(Object child) {
 		if (child instanceof IAggregatorItem) {
 			return ((IAggregatorItem) child).getParent();
