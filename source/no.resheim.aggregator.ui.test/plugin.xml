@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="no.resheim.aggregator.ui.test.CreateArticlesHandler"
+            id="no.resheim.aggregator.ui.test.addArticles"
+            name="name">
+         <commandParameter
+               id="count"
+               name="Article count"
+               optional="false">
+         </commandParameter>
+      </command>
+      <command
+            defaultHandler="no.resheim.aggregator.ui.test.PrintTreeCommand"
+            id="no.resheim.aggregator.ui.test.printTreeCommand"
+            name="Print Tree">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:no.resheim.aggregator.ui.RSSView?after=additions">
+         <separator
+               name="no.resheim.aggregator.ui.test.separator1"
+               visible="true">
+         </separator>
+         <command
+               commandId="no.resheim.aggregator.ui.test.addArticles"
+               label="Add 1000 articles">
+            <parameter
+                  name="count"
+                  value="1000">
+            </parameter>
+         </command>
+         <command
+               commandId="no.resheim.aggregator.ui.test.addArticles"
+               label="Add 10 articles">
+            <parameter
+                  name="count"
+                  value="10">
+            </parameter>
+         </command>
+         <command
+               commandId="no.resheim.aggregator.ui.test.printTreeCommand"
+               label="Print Tree"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+<!--   
+   <extension
+         point="no.resheim.aggregator.core.feeds">
+      <collection
+            id="no.resheim.aggregator.ui.test.collection"
+            name="Test Collection"
+            public="false">
+      </collection>
+   </extension>
+-->
+</plugin>

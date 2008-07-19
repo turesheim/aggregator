@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test Plug-in
+Bundle-SymbolicName: no.resheim.aggregator.ui.test;singleton:=true
+Bundle-Version: 1.0.0
+Require-Bundle: org.eclipse.ui,
+ no.resheim.aggregator.core,
+ no.resheim.aggregator.core.ui,
+ org.eclipse.core.runtime,
+ org.junit
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: no.resheim.aggregator.ui.test.TestPlugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
