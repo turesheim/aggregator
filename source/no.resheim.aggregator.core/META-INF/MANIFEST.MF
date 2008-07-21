@@ -13,7 +13,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: no.resheim.aggregator,
  no.resheim.aggregator.data,
- no.resheim.aggregator.data.internal;x-internal:=true,
- no.resheim.aggregator.internal;x-internal:=true,
- no.resheim.aggregator.internal.rss;x-internal:=true
+ no.resheim.aggregator.data.internal;x-internal:=true
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

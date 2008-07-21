@@ -1,4 +1,4 @@
-package no.resheim.aggregator.internal.rss;
+package no.resheim.aggregator.rss.internal;
 
 import org.eclipse.osgi.util.NLS;
 

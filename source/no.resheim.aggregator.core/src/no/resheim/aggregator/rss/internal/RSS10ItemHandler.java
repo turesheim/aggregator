@@ -9,7 +9,7 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.internal.rss;
+package no.resheim.aggregator.rss.internal;
 
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
@@ -18,47 +18,53 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
- * Handles RSS version 1.0 streams. See the specifications at
- * http://web.resource.org/rss/1.0/spec.
+ * Handles RSS 1.0 stream items.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
+ * 
  */
-public class RSS10FeedHandler extends AbstractElementHandler {
+public class RSS10ItemHandler extends AbstractElementHandler {
 
-	public RSS10FeedHandler(FeedCollection registry, Feed feed) {
-		super();
+	public RSS10ItemHandler(FeedCollection registry, Feed feed) {
 		this.registry = registry;
 		this.feed = feed;
+		this.item = registry.newArticleInstance(feed);
+		this.item.setFeedUUID(feed.getUUID());
+
 	}
 
 	public void endElement(String qName) throws SAXException {
+		super.endElement(qName);
 		if (qName.equals(TITLE)) {
-			// Only set the title if it has not already been specified
-			if (feed.getTitle() == null || feed.getTitle().length() == 0) {
-				feed.setTitle(getBuffer().toString());
-			}
-			setCapture(false);
-		}
-		if (qName.equals(DESCRIPTION)) {
-			feed.setDescription(getBuffer().toString());
+			item.setTitle(getBuffer().toString());
 			setCapture(false);
 		}
 		if (qName.equals(LINK)) {
-			feed.setLink(getBuffer().toString());
+			item.setLink(getBuffer().toString());
+			// RSS 1.0 does not have a GUID
+			item.setGuid(getBuffer().toString());
 			setCapture(false);
+		}
+		if (qName.equals(DESCRIPTION)) {
+			item.setDescription(getBuffer().toString());
+			setCapture(false);
+		}
+		if (qName.equals(ITEM)) {
+			if (!registry.hasArticle(item)) {
+				registry.addNew(item);
+			}
 		}
 	}
 
 	public IElementHandler startElement(String qName, Attributes atts)
 			throws SAXException {
-		if (qName.equals(TITLE) || qName.equals(DESCRIPTION)
-				|| qName.equals(LINK)) {
+		super.startElement(qName, atts);
+		if (qName.equals(TITLE) || qName.equals(LINK)
+				|| qName.equals(DESCRIPTION)) {
 			setCapture(true);
-		}
-		if (qName.equals(ITEM)) {
-			return new RSS10ItemHandler(registry, feed);
 		}
 		return this;
 	}
+
 }

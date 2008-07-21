@@ -9,7 +9,7 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.internal.rss;
+package no.resheim.aggregator.rss.internal;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

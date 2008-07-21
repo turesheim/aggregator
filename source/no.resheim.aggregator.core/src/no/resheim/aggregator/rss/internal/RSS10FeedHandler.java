@@ -9,7 +9,7 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.internal.rss;
+package no.resheim.aggregator.rss.internal;
 
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
@@ -18,14 +18,15 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
- * Handles RSS version 0.92 streams.
+ * Handles RSS version 1.0 streams. See the specifications at
+ * http://web.resource.org/rss/1.0/spec.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class RSS092FeedHandler extends AbstractElementHandler {
+public class RSS10FeedHandler extends AbstractElementHandler {
 
-	public RSS092FeedHandler(FeedCollection registry, Feed feed) {
+	public RSS10FeedHandler(FeedCollection registry, Feed feed) {
 		super();
 		this.registry = registry;
 		this.feed = feed;
@@ -39,17 +40,25 @@ public class RSS092FeedHandler extends AbstractElementHandler {
 			}
 			setCapture(false);
 		}
+		if (qName.equals(DESCRIPTION)) {
+			feed.setDescription(getBuffer().toString());
+			setCapture(false);
+		}
+		if (qName.equals(LINK)) {
+			feed.setLink(getBuffer().toString());
+			setCapture(false);
+		}
 	}
 
 	public IElementHandler startElement(String qName, Attributes atts)
 			throws SAXException {
-		if (qName.equals(TITLE)) {
+		if (qName.equals(TITLE) || qName.equals(DESCRIPTION)
+				|| qName.equals(LINK)) {
 			setCapture(true);
 		}
 		if (qName.equals(ITEM)) {
-			return new RSS092ItemHandler(registry, feed);
+			return new RSS10ItemHandler(registry, feed);
 		}
 		return this;
 	}
-
 }
