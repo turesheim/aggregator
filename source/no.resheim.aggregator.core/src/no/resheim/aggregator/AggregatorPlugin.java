@@ -13,6 +13,7 @@ import no.resheim.aggregator.data.internal.DerbySQLStorage;
 import no.resheim.aggregator.data.internal.IAggregatorStorage;
 
 import org.eclipse.core.net.proxy.IProxyService;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
@@ -242,6 +243,9 @@ public class AggregatorPlugin extends Plugin {
 						for (IFeedCollectionEventListener listener : fCollectionListeners) {
 							listener.collectionInitialized(collection);
 						}
+						ResourcesPlugin.getWorkspace().addSaveParticipant(this,
+								storage);
+
 					} else {
 						return status;
 					}
