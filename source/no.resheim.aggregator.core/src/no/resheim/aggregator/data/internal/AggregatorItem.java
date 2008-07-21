@@ -25,12 +25,21 @@ import no.resheim.aggregator.data.IAggregatorItem;
  */
 public abstract class AggregatorItem implements IAggregatorItem {
 
-	protected UUID uuid;
-	protected IAggregatorItem parent;
-	protected FeedCollection registry;
-	protected int fOrdering;
+	public enum Mark {
+		DONE, FIRST_PRIORITY, IMPORTANT, SECOND_PRIORITY, THIRD_PRIORITY, TODO
+	}
 
 	private EnumSet<Mark> marks = EnumSet.noneOf(Mark.class);
+
+	protected int ordering;
+
+	protected IAggregatorItem parent;
+
+	protected FeedCollection registry;
+
+	protected boolean serialized;
+
+	protected UUID uuid;
 
 	/**
 	 * @param parent
@@ -39,24 +48,16 @@ public abstract class AggregatorItem implements IAggregatorItem {
 		this.parent = parent;
 	}
 
-	public enum Mark {
-		FIRST_PRIORITY, SECOND_PRIORITY, THIRD_PRIORITY, TODO, IMPORTANT
-	};
-
 	public EnumSet<Mark> getMarks() {
 		return marks;
 	}
 
-	public void setMarks(EnumSet<Mark> mark) {
-		this.marks = mark;
-	}
-
-	public void setOrdering(int ordering) {
-		fOrdering = ordering;
-	}
-
 	public int getOrdering() {
-		return fOrdering;
+		return ordering;
+	};
+
+	public IAggregatorItem getParent() {
+		return parent;
 	}
 
 	/**
@@ -68,6 +69,32 @@ public abstract class AggregatorItem implements IAggregatorItem {
 		return uuid;
 	}
 
+	public boolean isSerialized() {
+		return serialized;
+	}
+
+	public void setMarks(EnumSet<Mark> mark) {
+		this.marks = mark;
+	}
+
+	public void setOrdering(int ordering) {
+		this.ordering = ordering;
+	}
+
+	public void setParent(IAggregatorItem parent) {
+		this.parent = parent;
+	}
+
+	/**
+	 * Marks the item as serialised. This is done whenever serialised or
+	 * deserialised such as when read from a database.
+	 * 
+	 * @param serialized
+	 */
+	public void setSerialized(boolean serialized) {
+		this.serialized = serialized;
+	}
+
 	/**
 	 * Sets the identifier of this feed item.
 	 * 
@@ -75,14 +102,6 @@ public abstract class AggregatorItem implements IAggregatorItem {
 	 */
 	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
-	}
-
-	public IAggregatorItem getParent() {
-		return parent;
-	}
-
-	public void setParent(IAggregatorItem parent) {
-		this.parent = parent;
 	}
 
 }
