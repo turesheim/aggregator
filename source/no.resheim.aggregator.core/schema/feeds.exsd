@@ -81,7 +81,7 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="persistent" type="boolean" use="default" value="true">
+         <attribute name="persistent" type="boolean" use="required">
             <annotation>
                <documentation>
                   whether or not the feed data are persisted.
