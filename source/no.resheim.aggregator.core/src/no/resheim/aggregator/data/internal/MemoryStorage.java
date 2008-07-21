@@ -20,7 +20,6 @@ import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorItem;
 
-import org.eclipse.core.resources.ISaveParticipant;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,9 +28,9 @@ import org.eclipse.core.runtime.Status;
 
 /**
  * An implementation of the aggregator storage that only keeps the items in
- * memory. The data is not persisted in any way. However a sub-class will have
- * the opportunity to store the data by implementing the
- * {@link ISaveParticipant} methods.
+ * memory. The data is not persisted in any way.
+ * 
+ * FIXME: Implement missing methods
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
