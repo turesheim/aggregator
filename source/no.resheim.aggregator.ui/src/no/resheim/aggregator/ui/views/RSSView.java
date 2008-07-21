@@ -64,46 +64,6 @@ import org.eclipse.ui.part.ViewPart;
 public class RSSView extends ViewPart implements IFeedView,
 		IFeedCollectionEventListener {
 
-	private static final String MEMENTO_ORIENTATION = ".ORIENTATION"; //$NON-NLS-1$
-	private static final String BLANK = ""; //$NON-NLS-1$
-	private SashForm sashForm;
-
-	private FeedCollection registry;
-
-	/** The web browser we're using */
-	private IWebBrowser browser;
-
-	/** Tree viewer to show all the feeds and articles */
-	private FeedTreeViewer treeView;
-
-	private DrillDownAdapter drillDownAdapter;
-
-	private Action doubleClickAction;
-
-	private Action verticalLayoutAction;
-
-	private Action horizontalLayoutAction;
-
-	/** Preference: mark previewed items as read */
-	private boolean pPreviewIsRead;
-
-	/** The item that was last selected by the user */
-	private Article fLastSelectionItem;
-
-	/**
-	 * Marks the last selected item as read and updates it's and the parent's
-	 * labels.
-	 */
-	private Runnable markAsRead = new Runnable() {
-		public void run() {
-			if (fLastSelectionItem != null) {
-				registry.setRead(fLastSelectionItem);
-			}
-		}
-	};
-
-	private ArticleViewer preview;
-
 	/**
 	 * Listens to selection events in the
 	 */
@@ -129,30 +89,99 @@ public class RSSView extends ViewPart implements IFeedView,
 			}
 		}
 	}
+	private static final String BLANK = ""; //$NON-NLS-1$
+	public static final String DEFAULT_COLLECTION_ID = "no.resheim.aggregator.ui.defaultFeedCollection"; //$NON-NLS-1$
+	private static final String MEMENTO_ORIENTATION = ".ORIENTATION"; //$NON-NLS-1$
 
-	private void refreshView() {
-		Runnable update = new Runnable() {
-			public void run() {
-				if (treeView != null) {
-					treeView.refresh();
+	/** The web browser we're using */
+	private IWebBrowser browser;
 
-				}
-			};
-		};
-		Display.getDefault().asyncExec(update);
-	}
+	private Action doubleClickAction;
 
-	private void updateFromPreferences() {
-		IPreferenceStore store = AggregatorUIPlugin.getDefault()
-				.getPreferenceStore();
-		pPreviewIsRead = store
-				.getBoolean(PreferenceConstants.P_PREVIEW_IS_READ);
-	}
+	private DrillDownAdapter drillDownAdapter;
+
+	boolean fHorizontalLayout;
+
+	/** The item that was last selected by the user */
+	private Article fLastSelectionItem;
+
+	private Action horizontalLayoutAction;
+
+	private FeedViewerLabelProvider labelProvider;
+
+	/**
+	 * Marks the last selected item as read and updates it's and the parent's
+	 * labels.
+	 */
+	private Runnable markAsRead = new Runnable() {
+		public void run() {
+			if (fLastSelectionItem != null) {
+				registry.setRead(fLastSelectionItem);
+			}
+		}
+	};
+
+	/** Preference: mark previewed items as read */
+	private boolean pPreviewIsRead;
+
+	private ArticleViewer preview;
+
+	private FeedCollection registry;
+
+	private SashForm sashForm;
+
+	/** Tree viewer to show all the feeds and articles */
+	private FeedTreeViewer treeView;
+
+	private Action verticalLayoutAction;
 
 	/**
 	 * The constructor.
 	 */
 	public RSSView() {
+	}
+
+	public void collectionInitialized(FeedCollection collection) {
+		if (collection.getId().equals(DEFAULT_COLLECTION_ID)) {
+			Display d = getViewSite().getShell().getDisplay();
+			d.asyncExec(new Runnable() {
+				public void run() {
+					registry = AggregatorPlugin.getDefault().getFeedCollection(
+							DEFAULT_COLLECTION_ID);
+					treeView.setInput(registry);
+					labelProvider.setCollection(registry);
+				}
+			});
+		}
+	}
+
+	private void contributeToActionBars() {
+		IActionBars bars = getViewSite().getActionBars();
+		fillLocalToolBar(bars.getToolBarManager());
+	}
+
+	private void contributeToMenu() {
+		MenuManager mgr = new MenuManager(Messages.RSSView_LayoutMenuTitle,
+				"layout"); //$NON-NLS-1$
+		getViewSite().getActionBars().getMenuManager().add(mgr);
+		mgr.add(verticalLayoutAction);
+		mgr.add(horizontalLayoutAction);
+	}
+
+	private boolean createBrowser() {
+		try {
+			browser = PlatformUI.getWorkbench().getBrowserSupport()
+					.createBrowser(
+							IWorkbenchBrowserSupport.NAVIGATION_BAR
+									| IWorkbenchBrowserSupport.LOCATION_BAR
+									| IWorkbenchBrowserSupport.AS_EDITOR,
+							AggregatorPlugin.PLUGIN_ID,
+							Messages.RSSView_BrowserTitle, BLANK);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	/**
@@ -202,48 +231,6 @@ public class RSSView extends ViewPart implements IFeedView,
 		AggregatorPlugin.getDefault().addFeedCollectionListener(this);
 	}
 
-	private void contributeToMenu() {
-		MenuManager mgr = new MenuManager(Messages.RSSView_LayoutMenuTitle,
-				"layout"); //$NON-NLS-1$
-		getViewSite().getActionBars().getMenuManager().add(mgr);
-		mgr.add(verticalLayoutAction);
-		mgr.add(horizontalLayoutAction);
-	}
-
-	private boolean createBrowser() {
-		try {
-			browser = PlatformUI.getWorkbench().getBrowserSupport()
-					.createBrowser(
-							IWorkbenchBrowserSupport.NAVIGATION_BAR
-									| IWorkbenchBrowserSupport.LOCATION_BAR
-									| IWorkbenchBrowserSupport.AS_EDITOR,
-							AggregatorPlugin.PLUGIN_ID,
-							Messages.RSSView_BrowserTitle, BLANK);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
-		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			public void menuAboutToShow(IMenuManager manager) {
-				RSSView.this.fillContextMenu(manager);
-			}
-		});
-		Menu menu = menuMgr.createContextMenu(treeView.getControl());
-		treeView.getControl().setMenu(menu);
-		getSite().registerContextMenu(menuMgr, treeView);
-	}
-
-	private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
-		fillLocalToolBar(bars.getToolBarManager());
-	}
-
 	/**
 	 * Fills the context menu with actions.
 	 * 
@@ -265,6 +252,55 @@ public class RSSView extends ViewPart implements IFeedView,
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(new Separator());
 		drillDownAdapter.addNavigationActions(manager);
+	}
+
+	public FeedCollection getFeedCollection() {
+		return registry;
+	}
+
+	public Viewer getFeedViewer() {
+		return treeView;
+	}
+
+	private void hookContextMenu() {
+		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager manager) {
+				RSSView.this.fillContextMenu(manager);
+			}
+		});
+		Menu menu = menuMgr.createContextMenu(treeView.getControl());
+		treeView.getControl().setMenu(menu);
+		getSite().registerContextMenu(menuMgr, treeView);
+	}
+
+	private void hookDoubleClickAction() {
+		treeView.addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(DoubleClickEvent event) {
+				doubleClickAction.run();
+			}
+		});
+	}
+
+	@Override
+	public void init(IViewSite site, IMemento memento) throws PartInitException {
+		super.init(site, memento);
+		// It's possible that no saved state exists yet
+		if (memento == null) {
+			fHorizontalLayout = true;
+			return;
+		}
+		final String name = this.getClass().getName();
+		if (memento.getString(name + MEMENTO_ORIENTATION) != null) {
+			if (memento.getString(name + MEMENTO_ORIENTATION) != null) {
+				fHorizontalLayout = Boolean.parseBoolean(memento.getString(name
+						+ MEMENTO_ORIENTATION));
+			}
+		} else {
+			fHorizontalLayout = true;
+		}
+
 	}
 
 	private void makeActions() {
@@ -328,71 +364,17 @@ public class RSSView extends ViewPart implements IFeedView,
 		}
 	}
 
-	private void hookDoubleClickAction() {
-		treeView.addDoubleClickListener(new IDoubleClickListener() {
-			public void doubleClick(DoubleClickEvent event) {
-				doubleClickAction.run();
-			}
-		});
-	}
+	private void refreshView() {
+		Runnable update = new Runnable() {
+			public void run() {
+				if (treeView != null) {
+					treeView.refresh();
 
-	/**
-	 * Passing the focus request to the viewer's control.
-	 */
-	public void setFocus() {
-		treeView.getControl().setFocus();
-	}
-
-	public FeedCollection getFeedCollection() {
-		return registry;
-	}
-
-	public void setFeedCollection(FeedCollection registry) {
-		this.registry = registry;
-		treeView.setInput(registry);
-		labelProvider.setCollection(registry);
-	}
-
-	public void collectionInitialized(FeedCollection collection) {
-		if (collection.getId().equals(AggregatorPlugin.DEFAULT_COLLECTION_ID)) {
-			Display d = getViewSite().getShell().getDisplay();
-			d.asyncExec(new Runnable() {
-				public void run() {
-					registry = AggregatorPlugin.getDefault().getFeedCollection(
-							AggregatorPlugin.DEFAULT_COLLECTION_ID);
-					treeView.setInput(registry);
-					labelProvider.setCollection(registry);
 				}
-			});
-		}
+			};
+		};
+		Display.getDefault().asyncExec(update);
 	}
-
-	public Viewer getFeedViewer() {
-		return treeView;
-	}
-
-	@Override
-	public void init(IViewSite site, IMemento memento) throws PartInitException {
-		super.init(site, memento);
-		// It's possible that no saved state exists yet
-		if (memento == null) {
-			fHorizontalLayout = true;
-			return;
-		}
-		final String name = this.getClass().getName();
-		if (memento.getString(name + MEMENTO_ORIENTATION) != null) {
-			if (memento.getString(name + MEMENTO_ORIENTATION) != null) {
-				fHorizontalLayout = Boolean.parseBoolean(memento.getString(name
-						+ MEMENTO_ORIENTATION));
-			}
-		} else {
-			fHorizontalLayout = true;
-		}
-
-	}
-
-	boolean fHorizontalLayout;
-	private FeedViewerLabelProvider labelProvider;
 
 	@Override
 	public void saveState(IMemento memento) {
@@ -400,5 +382,24 @@ public class RSSView extends ViewPart implements IFeedView,
 		final String name = this.getClass().getName();
 		memento.putString(name + MEMENTO_ORIENTATION, Boolean
 				.toString(fHorizontalLayout));
+	}
+
+	public void setFeedCollection(FeedCollection registry) {
+		this.registry = registry;
+		treeView.setInput(registry);
+		labelProvider.setCollection(registry);
+	}
+	/**
+	 * Passing the focus request to the viewer's control.
+	 */
+	public void setFocus() {
+		treeView.getControl().setFocus();
+	}
+
+	private void updateFromPreferences() {
+		IPreferenceStore store = AggregatorUIPlugin.getDefault()
+				.getPreferenceStore();
+		pPreviewIsRead = store
+				.getBoolean(PreferenceConstants.P_PREVIEW_IS_READ);
 	}
 }

@@ -72,10 +72,10 @@ public class AggregatorPlugin extends Plugin {
 	}
 
 	private ServiceTracker serviceTracker;
+
 	/**
 	 * Name of the default feed collection.
 	 */
-	public static final String DEFAULT_COLLECTION_ID = "no.resheim.aggregator.core.defaultFeedCollection"; //$NON-NLS-1$
 
 	/**
 	 * The constructor
