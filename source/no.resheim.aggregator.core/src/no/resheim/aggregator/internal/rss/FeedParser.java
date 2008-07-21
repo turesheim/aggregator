@@ -9,14 +9,12 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.internal;
+package no.resheim.aggregator.internal.rss;
 
 import java.util.Stack;
 
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.internal.rss.IElementHandler;
-import no.resheim.aggregator.internal.rss.RSSFeedHandler;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

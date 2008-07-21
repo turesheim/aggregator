@@ -24,7 +24,7 @@ import javax.xml.parsers.SAXParserFactory;
 import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
 import no.resheim.aggregator.data.Feed.Archiving;
-import no.resheim.aggregator.internal.FeedParser;
+import no.resheim.aggregator.internal.rss.FeedParser;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
