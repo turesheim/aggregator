@@ -11,6 +11,7 @@ import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
 import no.resheim.aggregator.data.internal.DerbySQLStorage;
 import no.resheim.aggregator.data.internal.IAggregatorStorage;
+import no.resheim.aggregator.data.internal.MemoryStorage;
 
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -224,6 +225,8 @@ public class AggregatorPlugin extends Plugin {
 							.getAttribute("public")); //$NON-NLS-1$
 					boolean def = Boolean.parseBoolean(element
 							.getAttribute("default")); //$NON-NLS-1$
+					boolean persistent = Boolean.parseBoolean(element
+							.getAttribute("persistent")); //$NON-NLS-1$
 
 					final FeedCollection collection = new FeedCollection(id,
 							pub, def);
@@ -231,8 +234,15 @@ public class AggregatorPlugin extends Plugin {
 					synchronized (registryMap) {
 						registryMap.put(id, collection);
 					}
-					IAggregatorStorage storage = new DerbySQLStorage(
-							collection, getStorageLocation(collection));
+					IAggregatorStorage storage = null;
+					if (persistent) {
+						storage = new DerbySQLStorage(collection,
+								getStorageLocation(collection));
+					} else {
+						storage = new MemoryStorage(collection,
+								getStorageLocation(collection));
+					}
+
 					IStatus status = storage.startup(monitor);
 					if (status.isOK()) {
 						collection.initialize(storage);
