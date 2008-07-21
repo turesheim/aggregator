@@ -17,7 +17,6 @@ import java.util.UUID;
 
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.core.resources.ISaveParticipant;
@@ -28,6 +27,11 @@ import org.eclipse.core.runtime.IStatus;
  * This interface is internal and is not intended to be implemented by clients.
  * Standard implementations of the various storage methods are already supplied
  * so there should be no real need to add another.
+ * <p>
+ * A few methods are not typical for a simple storage type. This is because it's
+ * desirable to optimise on the database level instead of having to instantiate
+ * aggregator items.
+ * </p>
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -59,7 +63,6 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            The feed to delete articles from
 	 * @param date
 	 *            The limit date
-	 * @deprecated Do this in {@link FeedCollection} instead
 	 */
 	public abstract void deleteOutdated(Feed feed, long date);
 
@@ -148,7 +151,6 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            The feed to remove articles from
 	 * @param keep
 	 *            The number of articles to keep
-	 * @deprecated Do this in {@link FeedCollection} instead
 	 */
 	public abstract void keepMaximum(Feed feed, int keep);
 
@@ -171,7 +173,6 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * 
 	 * @param item
 	 *            the item to rename
-	 * @deprecated Do this in {@link FeedCollection} instead
 	 */
 	public abstract void rename(AggregatorItem item);
 
