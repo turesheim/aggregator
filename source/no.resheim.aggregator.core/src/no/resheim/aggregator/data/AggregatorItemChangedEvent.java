@@ -18,70 +18,50 @@ package no.resheim.aggregator.data;
  * @since 1.0
  */
 public class AggregatorItemChangedEvent {
+
+	public enum FeedChangeEventType {
+		/** The item has been created */
+		CREATED,
+		/** Something bad happened */
+		FAILED,
+		/** The item has been moved */
+		MOVED,
+		/** The article has been read */
+		READ,
+		/** The item has been removed */
+		REMOVED,
+		/** The feed has been restored from the database */
+		RESTORED,
+		/** The item has been moved as a result of another item being moved */
+		SHIFTED,
+		/** The item has been updated */
+		UPDATED,
+		/** The item is being updated */
+		UPDATING
+	}
+
 	/**
 	 * Used in conjunction with the MOVED event type indicating that not only
 	 * was the item moved, but it also got a new parent.
 	 */
 	public static final int NEW_PARENT = 0x1;
 
-	public enum FeedChangeEventType {
-		/** The feed has been restored from the database */
-		RESTORED,
-		/** The item has been created */
-		CREATED,
-		/** The item has been removed */
-		REMOVED,
-		/** The item has been updated */
-		UPDATED,
-		/** The article has been read */
-		READ,
-		/** The item is being updated */
-		UPDATING,
-		/** The item has been moved */
-		MOVED,
-		/** The item has been moved as a result of another item being moved */
-		SHIFTED,
-		/** Something bad happened */
-		FAILED
-	}
+	private int details;
 
 	private IAggregatorItem item;
 
-	private IAggregatorItem oldParent;
-
 	private int oldOrder;
 
-	public int getOldOrder() {
-		return oldOrder;
-	}
-
-	public IAggregatorItem getOldParent() {
-		return oldParent;
-	}
-
-	private FeedChangeEventType type;
-
-	private int details;
+	private IAggregatorItem oldParent;
 
 	private long time;
 
-	public AggregatorItemChangedEvent(IAggregatorItem feed,
-			FeedChangeEventType type, long time) {
-		this.item = feed;
-		this.type = type;
-		this.time = time;
-	}
+	private FeedChangeEventType type;
 
 	public AggregatorItemChangedEvent(IAggregatorItem feed,
 			FeedChangeEventType type) {
 		this.item = feed;
 		this.type = type;
-	}
-
-	public AggregatorItemChangedEvent(IAggregatorItem feed,
-			FeedChangeEventType type, long time, int details) {
-		this(feed, type, time);
-		this.details = details;
 	}
 
 	public AggregatorItemChangedEvent(IAggregatorItem feed,
@@ -93,8 +73,33 @@ public class AggregatorItemChangedEvent {
 		this.time = time;
 	}
 
+	public AggregatorItemChangedEvent(IAggregatorItem feed,
+			FeedChangeEventType type, long time) {
+		this.item = feed;
+		this.type = type;
+		this.time = time;
+	}
+
+	public AggregatorItemChangedEvent(IAggregatorItem feed,
+			FeedChangeEventType type, long time, int details) {
+		this(feed, type, time);
+		this.details = details;
+	}
+
+	public int getDetails() {
+		return details;
+	}
+
 	public IAggregatorItem getItem() {
 		return item;
+	}
+
+	public int getOldOrder() {
+		return oldOrder;
+	}
+
+	public IAggregatorItem getOldParent() {
+		return oldParent;
 	}
 
 	public FeedChangeEventType getType() {
@@ -123,9 +128,5 @@ public class AggregatorItemChangedEvent {
 			break;
 		}
 		return sb.toString();
-	}
-
-	public int getDetails() {
-		return details;
 	}
 }
