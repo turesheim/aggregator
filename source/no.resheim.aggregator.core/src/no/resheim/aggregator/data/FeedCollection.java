@@ -24,7 +24,7 @@ import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.internal.AggregatorItem;
 import no.resheim.aggregator.data.internal.IAggregatorStorage;
-import no.resheim.aggregator.data.internal.RegistryUpdateJob;
+import no.resheim.aggregator.data.internal.CollectionUpdateJob;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -59,7 +59,7 @@ public class FeedCollection extends AggregatorItem {
 
 	private boolean fDefault;
 
-	final RegistryUpdateJob fRegistryUpdateJob = new RegistryUpdateJob(this);
+	final CollectionUpdateJob fRegistryUpdateJob = new CollectionUpdateJob(this);
 
 	/**
 	 * The identifier of the registry as specified when the registry was

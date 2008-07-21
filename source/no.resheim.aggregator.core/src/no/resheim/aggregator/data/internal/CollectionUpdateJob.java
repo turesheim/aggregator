@@ -32,7 +32,7 @@ import org.eclipse.core.runtime.jobs.Job;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class RegistryUpdateJob extends Job {
+public class CollectionUpdateJob extends Job {
 
 	/** The feed registry that we're updating */
 	private FeedCollection registry;
@@ -45,7 +45,7 @@ public class RegistryUpdateJob extends Job {
 
 	}
 
-	public RegistryUpdateJob(FeedCollection registry) {
+	public CollectionUpdateJob(FeedCollection registry) {
 		super(Messages.RegistryUpdateJob_Label);
 		this.registry = registry;
 	}
