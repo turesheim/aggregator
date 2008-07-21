@@ -38,7 +38,6 @@ public class FeedWorkingCopy extends Feed {
 
 	public Feed getFeed() {
 		if (feed != null) {
-			feed.setParent(getParent());
 			feed.title = title;
 			feed.url = url;
 			feed.archiving = archiving;

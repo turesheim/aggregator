@@ -17,8 +17,10 @@ import java.util.UUID;
 
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorItem;
 
+import org.eclipse.core.resources.ISaveParticipant;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
@@ -30,7 +32,7 @@ import org.eclipse.core.runtime.IStatus;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public interface IAggregatorStorage {
+public interface IAggregatorStorage extends ISaveParticipant {
 
 	/**
 	 * Adds the given aggregator item to the storage.
@@ -38,7 +40,7 @@ public interface IAggregatorStorage {
 	 * @param item
 	 *            The item to add
 	 */
-	public abstract void add(IAggregatorItem item);
+	public abstract void add(AggregatorItem item);
 
 	/**
 	 * Deletes the specified item from the storage.
@@ -46,7 +48,7 @@ public interface IAggregatorStorage {
 	 * @param item
 	 *            The item to delete
 	 */
-	public abstract void delete(IAggregatorItem item);
+	public abstract void delete(AggregatorItem item);
 
 	/**
 	 * Deletes all articles from the specified feed which publication date (or
@@ -57,6 +59,7 @@ public interface IAggregatorStorage {
 	 *            The feed to delete articles from
 	 * @param date
 	 *            The limit date
+	 * @deprecated Do this in {@link FeedCollection} instead
 	 */
 	public abstract void deleteOutdated(Feed feed, long date);
 
@@ -67,7 +70,7 @@ public interface IAggregatorStorage {
 	 *            the parent item
 	 * @return the number of children
 	 */
-	public abstract int getChildCount(IAggregatorItem parent);
+	public abstract int getChildCount(AggregatorItem parent);
 
 	/**
 	 * Retrieves all the child articles of the given parent node. If the node is
@@ -79,7 +82,7 @@ public interface IAggregatorStorage {
 	 *            The parent item
 	 * @return An array of aggregator articles
 	 */
-	public abstract IAggregatorItem[] getChildren(IAggregatorItem item);
+	public abstract IAggregatorItem[] getChildren(AggregatorItem item);
 
 	/**
 	 * Returns the description string of the aggregator item if such a
@@ -115,7 +118,7 @@ public interface IAggregatorStorage {
 	 * @param index
 	 * @return
 	 */
-	public abstract IAggregatorItem getItem(IAggregatorItem parent, int index);
+	public abstract IAggregatorItem getItem(AggregatorItem parent, int index);
 
 	/**
 	 * Returns the number of unread articles the given feed has.
@@ -145,6 +148,7 @@ public interface IAggregatorStorage {
 	 *            The feed to remove articles from
 	 * @param keep
 	 *            The number of articles to keep
+	 * @deprecated Do this in {@link FeedCollection} instead
 	 */
 	public abstract void keepMaximum(Feed feed, int keep);
 
@@ -159,7 +163,7 @@ public interface IAggregatorStorage {
 	 * @param order
 	 *            the new order of the item
 	 */
-	public abstract void move(IAggregatorItem item, IAggregatorItem parent,
+	public abstract void move(AggregatorItem item, AggregatorItem parent,
 			int order);
 
 	/**
@@ -167,8 +171,9 @@ public interface IAggregatorStorage {
 	 * 
 	 * @param item
 	 *            the item to rename
+	 * @deprecated Do this in {@link FeedCollection} instead
 	 */
-	public abstract void rename(IAggregatorItem item);
+	public abstract void rename(AggregatorItem item);
 
 	/**
 	 * Shuts down the storage.
@@ -199,6 +204,6 @@ public interface IAggregatorStorage {
 	 * @param item
 	 *            The item to update
 	 */
-	public abstract void updateReadFlag(IAggregatorItem item);
+	public abstract void updateReadFlag(AggregatorItem item);
 
 }

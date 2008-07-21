@@ -216,6 +216,7 @@ public class FeedCollection extends AggregatorItem {
 	 * @param item
 	 *            the parent item
 	 * @return the child items
+	 * @deprecated We should be able to get by without this one.
 	 */
 	public IAggregatorItem[] getChildren(IAggregatorItem item) {
 		try {
@@ -275,7 +276,8 @@ public class FeedCollection extends AggregatorItem {
 	public IAggregatorItem getItemAt(IAggregatorItem parent, int index) {
 		try {
 			lock.readLock().lock();
-			IAggregatorItem item = database.getItem(parent, index);
+			IAggregatorItem item = database.getItem((AggregatorItem) parent,
+					index);
 			return item;
 		} finally {
 			lock.readLock().unlock();
@@ -415,15 +417,18 @@ public class FeedCollection extends AggregatorItem {
 				// The item is moved into a new parent
 				details |= AggregatorItemChangedEvent.NEW_PARENT;
 				shiftUp((AggregatorItem) item);
-				database.move(item, newParent, newOrder);
+				database.move((AggregatorItem) item,
+						(AggregatorItem) newParent, newOrder);
 			} else if (newOrder > oldOrder) {
 				// The item is moved down (new order is higher)
 				shiftUp(item, oldOrder, newOrder);
-				database.move(item, newParent, newOrder);
+				database.move((AggregatorItem) item,
+						(AggregatorItem) newParent, newOrder);
 			} else {
 				// The item is moved up
 				shiftDown(item, oldOrder, newOrder);
-				database.move(item, newParent, newOrder);
+				database.move((AggregatorItem) item,
+						(AggregatorItem) newParent, newOrder);
 			}
 			// Tell our listeners that the deed is done
 			notifyListerners(new AggregatorItemChangedEvent(item,
@@ -505,7 +510,7 @@ public class FeedCollection extends AggregatorItem {
 								AggregatorPlugin.PLUGIN_ID,
 								Messages.FeedCollection_NoDelete_Locked);
 				}
-				database.delete(aggregatorItem);
+				database.delete((AggregatorItem) aggregatorItem);
 			}
 			shiftUp((AggregatorItem) item);
 			notifyListerners(new AggregatorItemChangedEvent(item,
@@ -537,7 +542,7 @@ public class FeedCollection extends AggregatorItem {
 	public void rename(IAggregatorItem item) {
 		try {
 			lock.writeLock().lock();
-			database.rename(item);
+			database.rename((AggregatorItem) item);
 		} finally {
 			lock.writeLock().unlock();
 		}
@@ -564,7 +569,7 @@ public class FeedCollection extends AggregatorItem {
 		long start = System.currentTimeMillis();
 		try {
 			lock.writeLock().lock();
-			database.updateReadFlag(item);
+			database.updateReadFlag((AggregatorItem) item);
 		} finally {
 			lock.writeLock().unlock();
 		}
@@ -605,7 +610,8 @@ public class FeedCollection extends AggregatorItem {
 			long start = System.currentTimeMillis();
 			AggregatorItem sibling = (AggregatorItem) getItemAt(parent, i);
 			int oldOrder = sibling.getOrdering();
-			database.move(sibling, parent, sibling.getOrdering() + 1);
+			database.move((AggregatorItem) sibling, (AggregatorItem) parent,
+					sibling.getOrdering() + 1);
 			notifyListerners(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
 					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
@@ -621,7 +627,8 @@ public class FeedCollection extends AggregatorItem {
 			long start = System.currentTimeMillis();
 			AggregatorItem sibling = (AggregatorItem) getItemAt(parent, i);
 			int oldOrder = sibling.getOrdering();
-			database.move(sibling, parent, sibling.getOrdering() - 1);
+			database.move((AggregatorItem) sibling, (AggregatorItem) parent,
+					sibling.getOrdering() - 1);
 			events.add(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
 					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
@@ -648,7 +655,8 @@ public class FeedCollection extends AggregatorItem {
 			long start = System.currentTimeMillis();
 			AggregatorItem sibling = (AggregatorItem) getItemAt(parent, i);
 			int oldOrder = sibling.getOrdering();
-			database.move(sibling, parent, sibling.getOrdering() - 1);
+			database.move((AggregatorItem) sibling, (AggregatorItem) parent,
+					sibling.getOrdering() - 1);
 			events.add(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
 					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
