@@ -31,6 +31,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 /**
+ * Aggregator storage that uses the Derby embedded database to store it's data.
+ * The only instantiated items are those created on request in order to keep the
+ * memory use low.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0

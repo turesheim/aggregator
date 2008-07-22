@@ -23,14 +23,11 @@ import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.internal.AggregatorItem;
-import no.resheim.aggregator.data.internal.IAggregatorStorage;
 import no.resheim.aggregator.data.internal.CollectionUpdateJob;
+import no.resheim.aggregator.data.internal.IAggregatorStorage;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
@@ -227,6 +224,9 @@ public class FeedCollection extends AggregatorItem {
 		}
 	}
 
+	/**
+	 * @deprecated by calling this method we're creating a lot of instances
+	 */
 	private List<IAggregatorItem> getDescendants(IAggregatorItem item) {
 		ArrayList<IAggregatorItem> descendants = new ArrayList<IAggregatorItem>();
 		for (IAggregatorItem aggregatorItem : getChildren(item)) {
@@ -377,20 +377,6 @@ public class FeedCollection extends AggregatorItem {
 		fRegistryUpdateJob.schedule();
 	}
 
-	public boolean isLocked(Feed feed) {
-		final IExtensionRegistry ereg = Platform.getExtensionRegistry();
-		IConfigurationElement[] elements = ereg
-				.getConfigurationElementsFor(AggregatorPlugin.REGISTRY_EXTENSION_ID);
-		for (IConfigurationElement element : elements) {
-			if (element.getName().equals("feed") && element.getAttribute("url").equals(feed.getURL())) { //$NON-NLS-1$ //$NON-NLS-2$
-				if (element.getAttribute("locked") != null) { //$NON-NLS-1$
-					return Boolean.parseBoolean(element.getAttribute("locked")); //$NON-NLS-1$
-				}
-			}
-		}
-		return false;
-	}
-
 	public boolean isPublic() {
 		return fPublic;
 	}
@@ -505,10 +491,6 @@ public class FeedCollection extends AggregatorItem {
 			for (IAggregatorItem aggregatorItem : deletables) {
 				if (aggregatorItem instanceof Feed) {
 					sites.remove(((Feed) aggregatorItem).getUUID());
-					if (isLocked((Feed) item))
-						return new Status(IStatus.CANCEL,
-								AggregatorPlugin.PLUGIN_ID,
-								Messages.FeedCollection_NoDelete_Locked);
 				}
 				database.delete((AggregatorItem) aggregatorItem);
 			}

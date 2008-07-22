@@ -190,13 +190,6 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="locked" type="boolean">
-            <annotation>
-               <documentation>
-                  specifies the locked property of the feed. If a feed is locked the user will not be able to change or remove it.
-               </documentation>
-            </annotation>
-         </attribute>
          <attribute name="create" type="boolean">
             <annotation>
                <documentation>
