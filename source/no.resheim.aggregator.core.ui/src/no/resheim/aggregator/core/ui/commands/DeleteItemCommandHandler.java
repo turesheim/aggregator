@@ -35,13 +35,14 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedCollection registry = ((IFeedView) part).getFeedCollection();
-			if (registry == null) {
+			FeedCollection collection = ((IFeedView) part).getFeedCollection();
+			if (collection == null) {
 				return null;
 			}
 			IAggregatorItem item = getSelection(event);
 			if (item != null) {
-				IStatus status = registry.delete(item);
+				IStatus status = collection.delete(item);
+				// Show a message if something went wrong.
 				if (!status.isOK()) {
 					StatusManager.getManager().handle(status,
 							StatusManager.SHOW);
