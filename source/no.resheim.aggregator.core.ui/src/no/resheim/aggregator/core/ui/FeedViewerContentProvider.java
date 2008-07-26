@@ -96,11 +96,7 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 							fViewer.refresh();
 							break;
 						case REMOVED:
-							// Maybe the number of "read" has changed
-							fViewer.update(event.getItem().getParent(),
-									STATE_PROPERTIES);
-							// Remove the item itself
-							fViewer.remove(event.getItem());
+							fViewer.refresh(event.getItem().getParent(), true);
 							break;
 						case CREATED:
 							// fViewer.add(event.getItem().getParent(), event

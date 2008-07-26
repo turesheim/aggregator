@@ -121,6 +121,7 @@ public class FeedCollection extends AggregatorItem {
 				} else {
 					item.setOrdering(getChildCount(item.getParent()));
 				}
+				System.out.println("Adding item at " + item.getOrdering());
 				if (item instanceof Feed) {
 					Feed feed = (Feed) item;
 					sites.put(feed.getUUID(), feed);
@@ -486,15 +487,16 @@ public class FeedCollection extends AggregatorItem {
 		try {
 			lock.writeLock().lock();
 			long start = System.currentTimeMillis();
-			List<IAggregatorItem> deletables = getDescendants(item);
-			deletables.add(item);
-			for (IAggregatorItem aggregatorItem : deletables) {
-				if (aggregatorItem instanceof Feed) {
-					sites.remove(((Feed) aggregatorItem).getUUID());
-				}
-				database.delete((AggregatorItem) aggregatorItem);
-			}
+			// List<IAggregatorItem> deletables = getDescendants(item);
+			// deletables.add(item);
+			// for (IAggregatorItem aggregatorItem : deletables) {
+			// if (aggregatorItem instanceof Feed) {
+			// sites.remove(((Feed) aggregatorItem).getUUID());
+			// }
+			// database.delete((AggregatorItem) aggregatorItem);
+			// }
 			shiftUp((AggregatorItem) item);
+			database.delete((AggregatorItem) item);
 			notifyListerners(new AggregatorItemChangedEvent(item,
 					FeedChangeEventType.REMOVED, System.currentTimeMillis()
 							- start));
