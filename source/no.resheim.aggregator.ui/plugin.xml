@@ -135,7 +135,6 @@
             archivingItems="0"
             archivingMethod="KEEP_NEWEST"
             create="false"
-            locked="false"
             title="Linux Journal"
             updateInterval="1"
             updatePeriod="HOURS"
@@ -146,7 +145,6 @@
             archivingItems="0"
             archivingMethod="KEEP_NEWEST"
             create="false"
-            locked="false"
             title="AVR Freaks Forums"
             updateInterval="10"
             updatePeriod="MINUTES"
@@ -157,7 +155,6 @@
             archivingItems="0"
             archivingMethod="KEEP_NEWEST"
             create="true"
-            locked="false"
             title="Resheim Software News"
             updateInterval="1"
             updatePeriod="DAYS"
@@ -168,7 +165,6 @@
             archivingItems="0"
             archivingMethod="KEEP_NEWEST"
             create="false"
-            locked="false"
             title="Planet Eclipse Blogs"
             updateInterval="1"
             updatePeriod="HOURS"
@@ -179,7 +175,6 @@
             archivingItems="0"
             archivingMethod="KEEP_NEWEST"
             create="false"
-            locked="false"
             title="SlashDot"
             updateInterval="1"
             updatePeriod="HOURS"
@@ -190,7 +185,6 @@
             archivingItems="0"
             archivingMethod="KEEP_NEWEST"
             create="false"
-            locked="false"
             title="ECF Developer Mailing List"
             updateInterval="5"
             updatePeriod="MINUTES"
@@ -201,11 +195,20 @@
             archivingItems="0"
             archivingMethod="KEEP_NEWEST"
             create="false"
-            locked="false"
             title="Photran Developer Mailing List"
             updateInterval="5"
             updatePeriod="MINUTES"
             url="http://dev.eclipse.org/mhonarc/lists/photran-dev/maillist.rss">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="BBC News World Edition"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml">
       </feed>
    </extension>
 
