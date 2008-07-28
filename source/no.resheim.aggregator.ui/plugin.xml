@@ -190,6 +190,7 @@
             updatePeriod="MINUTES"
             url="http://dev.eclipse.org/mhonarc/lists/ecf-dev/maillist.rss">
       </feed>
+      <!-- GENERAL COMPUTER SCIENCE -->
       <feed
             archivingDays="30"
             archivingItems="0"
@@ -200,6 +201,7 @@
             updatePeriod="MINUTES"
             url="http://dev.eclipse.org/mhonarc/lists/photran-dev/maillist.rss">
       </feed>
+      <!-- NEWS -->
       <feed
             archivingDays="30"
             archivingItems="0"
@@ -209,6 +211,48 @@
             updateInterval="1"
             updatePeriod="HOURS"
             url="http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml">
+      </feed>
+      <!-- ECLIPSE -->
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="true"
+            title="EclipseZone News"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://www.eclipsezone.com/forumRSS/18112.xml">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="true"
+            title="EclipseZone Tips"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://www.eclipsezone.com/forumRSS/18111.xml">
+      </feed>
+      <!-- ENTERTAINMENT -->
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="true"
+            title="Dilbert Blog"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://dilbertblog.typepad.com/the_dilbert_blog/atom.xml">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="iTunes 25 Just Added Albums"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://phobos.apple.com/WebObjects/MZStore.woa/wpa/MRSS/justadded/limit=25/rss.xml">
       </feed>
    </extension>
 
