@@ -23,9 +23,9 @@ CREATE TABLE feeds (
 		last_update BIGINT NOT NULL,
 		description LONG VARCHAR,
 		link VARCHAR(256),
-		webmaster VARCHAR(64),
-		editor VARCHAR(64),
-		copyright VARCHAR(64),
+		webmaster VARCHAR(256),
+		editor VARCHAR(256),
+		copyright VARCHAR(256),
 		feed_type VARCHAR(32),
 		hidden INT NOT NULL,
 		username VARCHAR(64),
@@ -64,11 +64,6 @@ CREATE INDEX articles_guid ON articles (guid,uuid);
 CREATE INDEX folders_tree ON folders (parent_uuid,ordering,uuid);
 CREATE INDEX feeds_tree ON feeds (parent_uuid,ordering,uuid);
 CREATE INDEX articles_tree ON articles (parent_uuid,ordering,uuid);
-
-/* Unique index */
-CREATE INDEX folders_id ON folders (uuid);
-CREATE INDEX feeds_id ON feeds (uuid);
-CREATE INDEX articles_id ON articles (uuid);
 
 /* Finding read articles */
 CREATE INDEX articles_old ON articles (feed_uuid,is_read);
