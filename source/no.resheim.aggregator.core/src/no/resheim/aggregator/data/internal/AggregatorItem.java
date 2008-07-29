@@ -41,6 +41,16 @@ public abstract class AggregatorItem implements IAggregatorItem {
 
 	protected UUID uuid;
 
+	private boolean hidden;
+
+	public boolean isHidden() {
+		return hidden;
+	}
+
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
+	}
+
 	/**
 	 * @param parent
 	 */

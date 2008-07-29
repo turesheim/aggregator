@@ -28,7 +28,7 @@ public class RSS10FeedHandler extends AbstractElementHandler {
 
 	public RSS10FeedHandler(FeedCollection registry, Feed feed) {
 		super();
-		this.registry = registry;
+		this.collection = registry;
 		this.feed = feed;
 	}
 
@@ -57,7 +57,7 @@ public class RSS10FeedHandler extends AbstractElementHandler {
 			setCapture(true);
 		}
 		if (qName.equals(ITEM)) {
-			return new RSS10ItemHandler(registry, feed);
+			return new RSS10ItemHandler(collection, feed);
 		}
 		return this;
 	}

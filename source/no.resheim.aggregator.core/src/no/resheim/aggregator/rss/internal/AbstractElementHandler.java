@@ -42,7 +42,8 @@ public abstract class AbstractElementHandler implements IElementHandler {
 			"yyyy-MM-dd'T'hh:mm:ss'Z'"); //$NON-NLS-1$
 
 	// Dublin Core Elements
-	// http://homepage.univie.ac.at/horst.prillinger/blog/archives/2005/01/000922.html
+	//http://homepage.univie.ac.at/horst.prillinger/blog/archives/2005/01/000922.
+	// html
 	// http://purl.org/dc/elements/1.1/
 	static final String DC_DATE = "dc:date"; //$NON-NLS-1$
 	private static final String DC_CREATOR = "dc:creator"; //$NON-NLS-1$
@@ -60,7 +61,7 @@ public abstract class AbstractElementHandler implements IElementHandler {
 	protected Article item;
 
 	/** The feed registry we're working for */
-	protected FeedCollection registry;
+	protected FeedCollection collection;
 
 	public AbstractElementHandler() {
 		buffer = new StringBuffer();

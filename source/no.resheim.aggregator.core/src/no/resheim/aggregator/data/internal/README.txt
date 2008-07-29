@@ -1,4 +1,7 @@
 
+
+
+
 http://www.onjava.com/pub/a/onjava/2007/01/31/tuning-derby.html?page=2
   SELECT * FROM tbl ORDER BY owner
 

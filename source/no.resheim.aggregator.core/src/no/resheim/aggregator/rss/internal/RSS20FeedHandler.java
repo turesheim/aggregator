@@ -33,7 +33,7 @@ public class RSS20FeedHandler extends AbstractElementHandler {
 
 	public RSS20FeedHandler(FeedCollection registry, Feed feed) {
 		super();
-		this.registry = registry;
+		this.collection = registry;
 		this.feed = feed;
 	}
 
@@ -75,7 +75,7 @@ public class RSS20FeedHandler extends AbstractElementHandler {
 			setCapture(true);
 		}
 		if (qName.equals(ITEM)) {
-			return new RSS20ItemHandler(registry, feed);
+			return new RSS20ItemHandler(collection, feed);
 		}
 		return this;
 	}

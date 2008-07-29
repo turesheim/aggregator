@@ -1,13 +1,15 @@
 CREATE TABLE folders (
-		uuid CHAR(36) NOT NULL,
+		uuid CHAR(36) NOT NULL PRIMARY KEY,
 		parent_uuid CHAR(36),
 		ordering INTEGER NOT NULL,
+		hidden INT NOT NULL,
         title VARCHAR(256) NOT NULL,
-		marks VARCHAR(64) NOT NULL		
+		marks VARCHAR(64) NOT NULL,
+		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);
 
 CREATE TABLE feeds (
-        uuid CHAR(36) NOT NULL,
+        uuid CHAR(36) NOT NULL PRIMARY KEY,
 		parent_uuid CHAR(36) NOT NULL,
 		ordering INTEGER NOT NULL,
 		title VARCHAR(256) NOT NULL,
@@ -28,11 +30,12 @@ CREATE TABLE feeds (
 		hidden INT NOT NULL,
 		username VARCHAR(64),
 		password VARCHAR(64),
-		threaded INT
+		threaded INT,
+		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);
 
 CREATE TABLE articles (
-        uuid CHAR(36) NOT NULL,
+        uuid CHAR(36) NOT NULL PRIMARY KEY,
 		parent_uuid CHAR(36) NOT NULL,
 		ordering INTEGER NOT NULL,
 		feed_uuid CHAR(36) NOT NULL,
@@ -45,8 +48,10 @@ CREATE TABLE articles (
 		read_date BIGINT NOT NULL,
 		added_date BIGINT NOT NULL,
 		description LONG VARCHAR,
-		creator VARCHAR(128)
+		creator VARCHAR(128),
+		FOREIGN KEY (parent_uuid) references feeds (uuid) ON DELETE CASCADE
 	);
+
 
 /* Selection*/
 CREATE INDEX folders_parent ON folders (parent_uuid,uuid);

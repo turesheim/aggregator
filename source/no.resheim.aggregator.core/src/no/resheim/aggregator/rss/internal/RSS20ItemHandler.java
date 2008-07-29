@@ -40,7 +40,7 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 			"EEE, d MMM yyyy HH:mm:ss Z"); //$NON-NLS-1$
 
 	public RSS20ItemHandler(FeedCollection registry, Feed feed) {
-		this.registry = registry;
+		this.collection = registry;
 		this.item = registry.newArticleInstance(feed);
 		this.item.setFeedUUID(feed.getUUID());
 		this.feed = feed;
@@ -82,8 +82,8 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 			setCapture(false);
 		}
 		if (qName.equals(ITEM)) {
-			if (!registry.hasArticle(item)) {
-				registry.addNew(item);
+			if (!collection.hasArticle(item)) {
+				collection.addNew(item);
 			}
 		}
 	}

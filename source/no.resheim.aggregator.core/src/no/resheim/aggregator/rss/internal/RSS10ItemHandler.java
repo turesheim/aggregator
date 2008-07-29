@@ -27,7 +27,7 @@ import org.xml.sax.SAXException;
 public class RSS10ItemHandler extends AbstractElementHandler {
 
 	public RSS10ItemHandler(FeedCollection registry, Feed feed) {
-		this.registry = registry;
+		this.collection = registry;
 		this.feed = feed;
 		this.item = registry.newArticleInstance(feed);
 		this.item.setFeedUUID(feed.getUUID());
@@ -51,8 +51,8 @@ public class RSS10ItemHandler extends AbstractElementHandler {
 			setCapture(false);
 		}
 		if (qName.equals(ITEM)) {
-			if (!registry.hasArticle(item)) {
-				registry.addNew(item);
+			if (!collection.hasArticle(item)) {
+				collection.addNew(item);
 			}
 		}
 	}

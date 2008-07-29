@@ -40,7 +40,7 @@ public class RSSFeedHandler extends AbstractElementHandler {
 
 	public RSSFeedHandler(FeedCollection registry, Feed feed) {
 		super();
-		this.registry = registry;
+		this.collection = registry;
 		this.feed = feed;
 	}
 
@@ -53,17 +53,17 @@ public class RSSFeedHandler extends AbstractElementHandler {
 		if (qName.equals(ELEMENT_RSS)) {
 			if (atts.getValue(ATTR_VERSION).equals(VERSION_0_92)) {
 				feed.setType(RSS_TYPE + atts.getValue(ATTR_VERSION));
-				return new RSS092FeedHandler(registry, feed);
+				return new RSS092FeedHandler(collection, feed);
 			}
 			if (atts.getValue(ATTR_VERSION).equals(VERSION_2_0)) {
 				feed.setType(RSS_TYPE + atts.getValue(ATTR_VERSION));
-				return new RSS20FeedHandler(registry, feed);
+				return new RSS20FeedHandler(collection, feed);
 			}
 		}
 		// rdf:RDF is basically the same as RSS1
 		if (qName.equals(ELEMENT_RDF)) {
 			feed.setType(RDF_TYPE);
-			return new RSS10FeedHandler(registry, feed);
+			return new RSS10FeedHandler(collection, feed);
 		}
 		throw new SAXNotRecognizedException(MessageFormat.format(
 				Messages.RSSFeedHandler_Unrecognized_Feed_Type, new Object[] {
