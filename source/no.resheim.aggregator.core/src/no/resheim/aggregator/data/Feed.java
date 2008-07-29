@@ -63,8 +63,6 @@ public class Feed extends AggregatorItem {
 
 	private String password;
 	boolean threaded;
-	protected String title = BLANK_STRING;
-
 	private String type;
 	protected int updateInterval = 1;
 	protected UpdatePeriod updatePeriod;
@@ -114,16 +112,6 @@ public class Feed extends AggregatorItem {
 
 	public String getPassword() {
 		return password;
-	}
-
-	/**
-	 * @return the title
-	 */
-	public String getTitle() {
-		if (title != null) {
-			return title;
-		} else
-			return BLANK_STRING;
 	}
 
 	public String getType() {
@@ -235,10 +223,6 @@ public class Feed extends AggregatorItem {
 
 	public void setThreaded(boolean threaded) {
 		this.threaded = threaded;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	public void setType(String type) {

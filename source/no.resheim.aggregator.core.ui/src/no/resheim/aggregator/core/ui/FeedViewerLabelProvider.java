@@ -15,6 +15,7 @@ import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
+import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -93,26 +94,23 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 	}
 
 	public String getText(Object element) {
-		if (element instanceof Feed) {
-			Feed feed = (Feed) element;
-			StringBuffer sb = new StringBuffer();
-			sb.append(feed.getTitle());
-			if (pShowUnreadCount && collection != null) {
-				int unread = collection.getItemCount(feed);
-				if (unread > 0) {
-					sb.append(" ("); //$NON-NLS-1$
-					sb.append(unread);
-					sb.append(")"); //$NON-NLS-1$
+		if (element instanceof IAggregatorItem) {
+			IAggregatorItem item = (IAggregatorItem) element;
+			if (element instanceof Feed || element instanceof Folder) {
+				StringBuffer sb = new StringBuffer();
+				sb.append(item.getTitle());
+				if (pShowUnreadCount && collection != null) {
+					int unread = collection.getItemCount(item);
+					if (unread > 0) {
+						sb.append(" ("); //$NON-NLS-1$
+						sb.append(unread);
+						sb.append(")"); //$NON-NLS-1$
+					}
 				}
+				return sb.toString();
 			}
-			return sb.toString();
+			return item.getTitle();
 		}
-		if (element instanceof Article) {
-			return ((Article) element).getTitle();
-		}
-
-		if (element instanceof Folder)
-			return ((Folder) element).getTitle();
 		// Fallback, should never happen
 		return element.toString();
 	}

@@ -26,7 +26,7 @@ public class FeedWorkingCopy extends Feed {
 	}
 
 	public void copy(Feed feed) {
-		this.title = feed.title;
+		this.title = feed.getTitle();
 		this.url = feed.url;
 		this.archiving = feed.archiving;
 		this.archivingItems = feed.archivingItems;
@@ -38,7 +38,7 @@ public class FeedWorkingCopy extends Feed {
 
 	public Feed getFeed() {
 		if (feed != null) {
-			feed.title = title;
+			feed.setTitle(title);
 			feed.url = url;
 			feed.archiving = archiving;
 			feed.archivingItems = archivingItems;

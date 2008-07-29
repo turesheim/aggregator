@@ -43,6 +43,9 @@ public abstract class AggregatorItem implements IAggregatorItem {
 
 	private boolean hidden;
 
+	/** The folder title */
+	protected String title;
+
 	public boolean isHidden() {
 		return hidden;
 	}
@@ -112,6 +115,14 @@ public abstract class AggregatorItem implements IAggregatorItem {
 	 */
 	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }

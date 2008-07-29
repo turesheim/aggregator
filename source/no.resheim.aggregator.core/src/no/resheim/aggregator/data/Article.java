@@ -43,9 +43,6 @@ public class Article extends AggregatorItem {
 	/** The read date */
 	private long readDate;
 
-	/** Title of the item */
-	private String title = EMPTY_STRING;
-
 	/**
 	 * Access to the constructor is limited as we
 	 */
@@ -114,13 +111,6 @@ public class Article extends AggregatorItem {
 
 	public long getReadDate() {
 		return readDate;
-	}
-
-	/**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
 	}
 
 	public boolean isRead() {
@@ -202,14 +192,6 @@ public class Article extends AggregatorItem {
 
 	public void setReadDate(long readDate) {
 		this.readDate = readDate;
-	}
-
-	/**
-	 * @param title
-	 *            the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	@Override

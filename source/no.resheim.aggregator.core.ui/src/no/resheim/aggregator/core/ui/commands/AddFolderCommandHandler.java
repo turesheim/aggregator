@@ -13,8 +13,8 @@ package no.resheim.aggregator.core.ui.commands;
 
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.IAggregatorItem;
+import no.resheim.aggregator.data.internal.AggregatorItem;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -35,7 +35,7 @@ public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 			IAggregatorItem parent = getSelection(event);
 			if (parent == null)
 				parent = collection;
-			Folder folder = collection.newFolderInstance(parent);
+			AggregatorItem folder = collection.newFolderInstance(parent);
 			folder.setTitle(Messages.AddFolderCommandHandler_NewFolderName);
 			collection.addNew(folder);
 		}

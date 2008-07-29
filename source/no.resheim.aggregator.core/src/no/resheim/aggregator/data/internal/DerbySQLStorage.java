@@ -172,9 +172,9 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * @return a {@link Folder} instance composed from the result set
 	 * @throws SQLException
 	 */
-	private Folder composeFolder(IAggregatorItem parent, ResultSet rs)
+	private AggregatorItem composeFolder(IAggregatorItem parent, ResultSet rs)
 			throws SQLException {
-		Folder item = collection.newFolderInstance(parent);
+		AggregatorItem item = collection.newFolderInstance(parent);
 		item.setUUID(UUID.fromString(rs.getString(1)));
 		item.setParent(parent);
 		item.setOrdering(rs.getInt(3));
@@ -216,7 +216,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			}
 			// Create a folder to represent the collection root. This is
 			// required for maintaining relation integrity.
-			Folder root = collection.newFolderInstance(null);
+			AggregatorItem root = collection.newFolderInstance(null);
 			root.setUUID(collection.getUUID());
 			root.setTitle("ROOT"); //$NON-NLS-1$
 			root.setHidden(true);
@@ -404,7 +404,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		if (item instanceof Article)
 			insert((Article) item);
 		if (item instanceof Folder)
-			insert((Folder) item);
+			insert((AggregatorItem) item);
 		if (item instanceof Feed)
 			insert((Feed) item);
 	}
@@ -489,7 +489,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * @param item
 	 *            The item to insert.
 	 */
-	private void insert(Folder folder) {
+	private void insert(AggregatorItem folder) {
 		try {
 			PreparedStatement ps = connection
 					.prepareStatement("insert into folders values(?,?,?,?,?,?) "); //$NON-NLS-1$
@@ -655,7 +655,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			throws SQLException {
 		Statement s = connection.createStatement();
 		String query = null;
-		Folder folder = null;
+		AggregatorItem folder = null;
 		if (index == -1) {
 			query = "select * from folders where uuid='" //$NON-NLS-1$
 					+ parent.getUUID().toString() + "'"; //$NON-NLS-1$
@@ -748,18 +748,38 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * no.resheim.aggregator.model.IAggregatorStorage#selectItemCount(no.resheim
 	 * .aggregator.model.Feed)
 	 */
-	public int getUnreadCount(Feed feed) {
+	public int getUnreadCount(AggregatorItem parent) {
+		return getUnreadCount(parent.getUUID().toString());
+	}
+
+	/**
+	 * Recurses through feeds and folders determining the number of unread
+	 * articles contained within.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private int getUnreadCount(String id) {
 		int count = 0;
 		try {
 			if (connection.isClosed())
 				return 0;
 			Statement s = connection.createStatement();
-			String query = "select count(title) from articles where parent_uuid='" //$NON-NLS-1$
-					+ feed.getUUID() + "' and is_read=0"; //$NON-NLS-1$
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s
+					.executeQuery("select count(uuid) from articles where parent_uuid='" //$NON-NLS-1$
+							+ id + "' and is_read=0"); //$NON-NLS-1$
 			if (rs.next())
 				count += rs.getInt(1);
-			rs.close();
+			rs = s.executeQuery("select uuid from feeds where parent_uuid='" //$NON-NLS-1$
+					+ id + "'"); //$NON-NLS-1$
+			while (rs.next()) {
+				count += getUnreadCount(rs.getString(1));
+			}
+			rs = s.executeQuery("select uuid from folders where parent_uuid='" //$NON-NLS-1$
+					+ id + "'"); //$NON-NLS-1$
+			while (rs.next()) {
+				count += getUnreadCount(rs.getString(1));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

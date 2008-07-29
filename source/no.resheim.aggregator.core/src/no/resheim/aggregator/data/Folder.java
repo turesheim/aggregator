@@ -22,23 +22,12 @@ import no.resheim.aggregator.data.internal.AggregatorItem;
  */
 public class Folder extends AggregatorItem {
 
-	/** The folder title */
-	private String title;
-
 	/**
 	 * @param registryId
 	 * @param title
 	 */
 	Folder(IAggregatorItem parent) {
 		super(parent);
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	public String toString() {

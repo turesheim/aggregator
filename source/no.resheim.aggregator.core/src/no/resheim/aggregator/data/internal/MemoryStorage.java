@@ -132,7 +132,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		return null;
 	}
 
-	public int getUnreadCount(Feed parent) {
+	public int getUnreadCount(AggregatorItem parent) {
 		int count = 0;
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {

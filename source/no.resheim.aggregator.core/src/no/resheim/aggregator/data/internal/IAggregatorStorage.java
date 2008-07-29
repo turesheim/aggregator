@@ -124,13 +124,13 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	public abstract IAggregatorItem getItem(AggregatorItem parent, int index);
 
 	/**
-	 * Returns the number of unread articles the given feed has.
+	 * Returns the number of unread articles the given parent item has.
 	 * 
 	 * @param parent
-	 *            The parent item
-	 * @return The number of child items
+	 *            the parent item
+	 * @return the number of unread articles
 	 */
-	public abstract int getUnreadCount(Feed parent);
+	public abstract int getUnreadCount(AggregatorItem parent);
 
 	/**
 	 * Tests to see if the feed with the given URL already exists in the

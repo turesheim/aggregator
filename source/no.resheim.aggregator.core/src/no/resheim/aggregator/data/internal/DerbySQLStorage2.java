@@ -174,7 +174,7 @@ public class DerbySQLStorage2 extends MemoryStorage {
 			if (item instanceof Article)
 				insert((Article) item);
 			if (item instanceof Folder)
-				insert((Folder) item);
+				insert((AggregatorItem) item);
 			if (item instanceof Feed)
 				insert((Feed) item);
 			item.setSerialized(true);
@@ -261,7 +261,7 @@ public class DerbySQLStorage2 extends MemoryStorage {
 	 * @param item
 	 *            The item to insert.
 	 */
-	private void insert(Folder category) {
+	private void insert(AggregatorItem category) {
 		try {
 			PreparedStatement ps = connection
 					.prepareStatement("insert into folders values(?,?,?,?,?) "); //$NON-NLS-1$
@@ -335,9 +335,9 @@ public class DerbySQLStorage2 extends MemoryStorage {
 		return item;
 	}
 
-	private Folder composeFolder(IAggregatorItem parent, ResultSet rs)
+	private AggregatorItem composeFolder(IAggregatorItem parent, ResultSet rs)
 			throws SQLException {
-		Folder item = collection.newFolderInstance(parent);
+		AggregatorItem item = collection.newFolderInstance(parent);
 		item.setUUID(UUID.fromString(rs.getString(1)));
 		item.setParent(parent);
 		item.setOrdering(rs.getInt(3));
@@ -386,7 +386,7 @@ public class DerbySQLStorage2 extends MemoryStorage {
 			throws SQLException {
 		Statement s = connection.createStatement();
 		String query = null;
-		Folder folder = null;
+		AggregatorItem folder = null;
 		if (index == -1) {
 			query = "select * from folders where uuid='" //$NON-NLS-1$
 					+ parent.getUUID().toString() + "'"; //$NON-NLS-1$

@@ -78,9 +78,6 @@ public class FeedCollection extends AggregatorItem {
 	 */
 	private HashMap<UUID, Feed> sites;
 
-	/** The title of the feed collection */
-	private String title;
-
 	public FeedCollection(String id, boolean pub, boolean def) {
 		super(null);
 		this.id = id;
@@ -128,7 +125,7 @@ public class FeedCollection extends AggregatorItem {
 					FeedUpdateJob job = new FeedUpdateJob(this, feed);
 					job.schedule();
 				} else if (item instanceof Folder) {
-					Folder folder = (Folder) item;
+					AggregatorItem folder = (AggregatorItem) item;
 					database.add(folder);
 				} else if (item instanceof Article) {
 					Article feedItem = (Article) item;
@@ -293,10 +290,7 @@ public class FeedCollection extends AggregatorItem {
 	public int getItemCount(IAggregatorItem element) {
 		try {
 			lock.readLock().lock();
-			if (element instanceof Feed) {
-				return database.getUnreadCount(((Feed) element));
-			}
-			return -1;
+			return database.getUnreadCount((AggregatorItem) element);
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -451,8 +445,8 @@ public class FeedCollection extends AggregatorItem {
 		return feed;
 	}
 
-	public Folder newFolderInstance(IAggregatorItem parent) {
-		Folder folder = new Folder(parent);
+	public AggregatorItem newFolderInstance(IAggregatorItem parent) {
+		AggregatorItem folder = new Folder(parent);
 		folder.setUUID(UUID.randomUUID());
 		return folder;
 	}
