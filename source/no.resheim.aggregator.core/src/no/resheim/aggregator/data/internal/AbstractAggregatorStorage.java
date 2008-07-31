@@ -14,7 +14,7 @@ package no.resheim.aggregator.data.internal;
 import java.util.EnumSet;
 
 import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.internal.AggregatorItem.Mark;
+import no.resheim.aggregator.data.internal.AggregatorUIItem.Mark;
 
 import org.eclipse.core.resources.ISaveContext;
 import org.eclipse.core.runtime.CoreException;

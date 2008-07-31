@@ -5,14 +5,14 @@ package no.resheim.aggregator.data;
 
 import java.util.UUID;
 
-import no.resheim.aggregator.data.internal.AggregatorItem;
+import no.resheim.aggregator.data.internal.AggregatorUIItem;
 
 /**
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class Article extends AggregatorItem {
+public class Article extends AggregatorUIItem {
 
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
@@ -43,11 +43,26 @@ public class Article extends AggregatorItem {
 	/** The read date */
 	private long readDate;
 
+	private UUID location;
+
+	public UUID getLocation() {
+		return location;
+	}
+
+	public void setLocation(UUID location) {
+		this.location = location;
+	}
+
 	/**
 	 * Access to the constructor is limited as we
 	 */
-	Article(IAggregatorItem parent) {
+	Article(AggregatorUIItem parent) {
 		super(parent);
+	}
+
+	public Article() {
+		super(null);
+		this.uuid = UUID.randomUUID();
 	}
 
 	/**
@@ -166,7 +181,7 @@ public class Article extends AggregatorItem {
 		this.link = link;
 	}
 
-	public void setParentItem(IAggregatorItem parent) {
+	public void setParentItem(AggregatorUIItem parent) {
 		this.parent = parent;
 	}
 

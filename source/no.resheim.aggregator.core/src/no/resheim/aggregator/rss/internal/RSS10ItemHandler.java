@@ -11,6 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.rss.internal;
 
+import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 
@@ -28,9 +29,10 @@ public class RSS10ItemHandler extends AbstractElementHandler {
 
 	public RSS10ItemHandler(FeedCollection registry, Feed feed) {
 		this.collection = registry;
-		this.feed = feed;
-		this.item = registry.newArticleInstance(feed);
+		this.item = new Article();
+		this.item.setLocation(feed.getLocation());
 		this.item.setFeedUUID(feed.getUUID());
+		this.feed = feed;
 
 	}
 
@@ -51,7 +53,7 @@ public class RSS10ItemHandler extends AbstractElementHandler {
 			setCapture(false);
 		}
 		if (qName.equals(ITEM)) {
-			if (!collection.hasArticle(item)) {
+			if (!collection.hasArticle(item.getGuid())) {
 				collection.addNew(item);
 			}
 		}

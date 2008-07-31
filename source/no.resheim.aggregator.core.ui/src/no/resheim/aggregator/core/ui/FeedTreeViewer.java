@@ -11,26 +11,23 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import java.text.MessageFormat;
-
+import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.IAggregatorItem;
 
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipse.swt.dnd.DropTarget;
-import org.eclipse.swt.dnd.DropTargetAdapter;
-import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -82,11 +79,14 @@ public class FeedTreeViewer extends TreeViewer {
 		source.addDragListener(new DragSourceListener() {
 			public void dragStart(DragSourceEvent event) {
 				TreeItem[] selection = tree.getSelection();
+				event.doit = false;
 				if (selection.length > 0) {
-					event.doit = true;
-					dragSourceItem[0] = selection[0];
-				} else {
-					event.doit = false;
+					IAggregatorItem item = (IAggregatorItem) selection[0]
+							.getData();
+					if (item instanceof Feed || item instanceof Folder) {
+						event.doit = true;
+						dragSourceItem[0] = selection[0];
+					}
 				}
 			};
 
@@ -105,100 +105,109 @@ public class FeedTreeViewer extends TreeViewer {
 		});
 		DropTarget target = new DropTarget(tree, operations);
 		target.setTransfer(types);
-		target.addDropListener(new DropTargetAdapter() {
+		target.addDropListener(new ViewerDropAdapter(this) {
 
 			private FeedCollection collection;
 
-			public void dragOver(DropTargetEvent event) {
-				if (event.item != null) {
-					Rectangle rect = ((TreeItem) event.item).getBounds();
-					Point pt = tree.toControl(event.x, event.y);
-					if (pt.y < rect.y + DND_OFFSET)
-						event.feedback = DND.FEEDBACK_INSERT_BEFORE;
-					if (pt.y > rect.y + rect.height - DND_OFFSET)
-						event.feedback = DND.FEEDBACK_INSERT_AFTER;
-				}
-				event.feedback |= DND.FEEDBACK_SCROLL | DND.FEEDBACK_EXPAND;
-			}
-
-			// Note that this method does not actually move anything. It only
-			// gathers the required data for the feed collection to do the
-			// moving. It is up to the content provider to react on the move
-			// and update the data.
-			public void drop(DropTargetEvent event) {
-				IAggregatorItem source = (IAggregatorItem) ((IStructuredSelection) getSelection())
-						.getFirstElement();
-				Object input = getInput();
-				if (!(input instanceof FeedCollection)) {
-					return;
-				}
-				collection = ((FeedCollection) input);
-
-				// We must drop in something
-				if (event.item == null || event.item.equals(dragSourceItem[0])) {
-					event.detail = DND.DROP_NONE;
-				} else {
-					TreeItem item = (TreeItem) event.item;
-
-					IAggregatorItem newParent = (IAggregatorItem) item
-							.getData();
-					IAggregatorItem oldParent = getParent(dragSourceItem[0]);
-					int newOrder = 0;
-					int oldOrder = getItemIndex(dragSourceItem[0]);
-
-					Rectangle rect = item.getBounds();
-					Point pt = tree.toControl(event.x, event.y);
-					try {
-						if (pt.y < rect.y + DND_OFFSET) {
-							// Before
-							newOrder = getItemIndex(item) - 1;
-							newParent = oldParent;
-						} else if (pt.y > rect.y + rect.height - DND_OFFSET) {
-							// After
-							newOrder = getItemIndex(item);
-							newParent = oldParent;
-						} else {
-							newOrder = collection.getChildCount(newParent);
-						}
-
-						if (newParent.equals(oldParent)) {
-							if (newOrder > oldOrder) {
-								System.out.println(MessageFormat.format(
-										"Moving {0} downwards to {1}",
-										new Object[] {
-												source, newOrder
-										}));
-								collection.move(source, oldParent, oldOrder,
-										newParent, newOrder);
-							} else {
-								System.out.println(MessageFormat.format(
-										"Moving {0} upwards to {1}",
-										new Object[] {
-												source, newOrder + 1
-										}));
-								collection.move(source, oldParent, oldOrder,
-										newParent, newOrder + 1);
-							}
-						} else {
-							System.out.println(MessageFormat.format(
-									"Dropping {0} into {1} at {2}",
-									new Object[] {
-											source, item, newOrder
-									}));
-							collection.move(source, oldParent, oldOrder,
-									newParent, newOrder);
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			/**
+			// @Override
+			// public void dropAccept(DropTargetEvent event) {
+			// if (event.item.getData() instanceof Folder) {
+			// event.detail = DND.DROP_MOVE;
+			// } else {
+			// event.detail = DND.DROP_NONE;
+			// }
+			// }
+			//
+			// public void dragOver(DropTargetEvent event) {
+			// if (event.item != null) {
+			// Rectangle rect = ((TreeItem) event.item).getBounds();
+			// Point pt = tree.toControl(event.x, event.y);
+			// if (pt.y < rect.y + DND_OFFSET)
+			// event.feedback = DND.FEEDBACK_INSERT_BEFORE;
+			// if (pt.y > rect.y + rect.height - DND_OFFSET)
+			// event.feedback = DND.FEEDBACK_INSERT_AFTER;
+			// }
+			// event.feedback |= DND.FEEDBACK_SCROLL | DND.FEEDBACK_EXPAND;
+			// }
+			//
+			// // Note that this method does not actually move anything. It only
+			// // gathers the required data for the feed collection to do the
+			// // moving. It is up to the content provider to react on the move
+			// // and update the data.
+			// public void drop(DropTargetEvent event) {
+			// IAggregatorItem source = (IAggregatorItem)
+			// ((IStructuredSelection) getSelection())
+			// .getFirstElement();
+			// Object input = getInput();
+			// if (!(input instanceof FeedCollection)) {
+			// return;
+			// }
+			// collection = ((FeedCollection) input);
+			//
+			// // We must drop in something
+			// if (event.item == null || event.item.equals(dragSourceItem[0])) {
+			// event.detail = DND.DROP_NONE;
+			// } else {
+			// TreeItem item = (TreeItem) event.item;
+			//
+			// IAggregatorItem newParent = (IAggregatorItem) item
+			// .getData();
+			// IAggregatorItem oldParent = getParent(dragSourceItem[0]);
+			// int newOrder = 0;
+			// int oldOrder = getItemIndex(dragSourceItem[0]);
+			//
+			// Rectangle rect = item.getBounds();
+			// Point pt = tree.toControl(event.x, event.y);
+			// try {
+			// if (pt.y < rect.y + DND_OFFSET) {
+			// // Before
+			// newOrder = getItemIndex(item) - 1;
+			// newParent = oldParent;
+			// } else if (pt.y > rect.y + rect.height - DND_OFFSET) {
+			// // After
+			// newOrder = getItemIndex(item);
+			// newParent = oldParent;
+			// } else {
+			// newOrder = collection.getChildCount(newParent);
+			// }
+			//
+			// if (newParent.equals(oldParent)) {
+			// if (newOrder > oldOrder) {
+			// System.out.println(MessageFormat.format(
+			// "Moving {0} downwards to {1}",
+			// new Object[] {
+			// source, newOrder
+			// }));
+			// collection.move(source, oldParent, oldOrder,
+			// newParent, newOrder);
+			// } else {
+			// System.out.println(MessageFormat.format(
+			// "Moving {0} upwards to {1}",
+			// new Object[] {
+			// source, newOrder + 1
+			// }));
+			// collection.move(source, oldParent, oldOrder,
+			// newParent, newOrder + 1);
+			// }
+			// } else {
+			// System.out.println(MessageFormat.format(
+			// "Dropping {0} into {1} at {2}",
+			// new Object[] {
+			// source, item, newOrder
+			// }));
+			// collection.move(source, oldParent, oldOrder,
+			// newParent, newOrder);
+			// }
+			// } catch (Exception e) {
+			// e.printStackTrace();
+			// }
+			// }
+			// }
+			/*
 			 * Calculates and returns the index of the tree item in its parent.
 			 * 
-			 * @param item
-			 *            the tree item
+			 * @param item the tree item
+			 * 
 			 * @return the index of the item
 			 */
 			private int getItemIndex(TreeItem item) {
@@ -215,6 +224,19 @@ public class FeedTreeViewer extends TreeViewer {
 				} else {
 					return (IAggregatorItem) item.getParentItem().getData();
 				}
+			}
+
+			@Override
+			public boolean performDrop(Object data) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean validateDrop(Object target, int operation,
+					TransferData transferType) {
+
+				return target instanceof Folder;
 			}
 		});
 	}

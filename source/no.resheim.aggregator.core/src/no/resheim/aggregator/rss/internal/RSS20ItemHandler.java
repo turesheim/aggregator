@@ -14,6 +14,7 @@ package no.resheim.aggregator.rss.internal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 
@@ -41,7 +42,8 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 
 	public RSS20ItemHandler(FeedCollection registry, Feed feed) {
 		this.collection = registry;
-		this.item = registry.newArticleInstance(feed);
+		this.item = new Article();
+		this.item.setLocation(feed.getLocation());
 		this.item.setFeedUUID(feed.getUUID());
 		this.feed = feed;
 	}
@@ -82,7 +84,7 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 			setCapture(false);
 		}
 		if (qName.equals(ITEM)) {
-			if (!collection.hasArticle(item)) {
+			if (!collection.hasArticle(item.getGuid())) {
 				collection.addNew(item);
 			}
 		}

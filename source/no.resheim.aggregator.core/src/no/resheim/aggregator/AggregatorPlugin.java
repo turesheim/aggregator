@@ -297,7 +297,7 @@ public class AggregatorPlugin extends Plugin {
 
 	private Feed createNewFeed(FeedCollection parent,
 			IConfigurationElement element) {
-		Feed feed = parent.newFeedInstance(parent);
+		Feed feed = new Feed();
 		feed.setUUID(UUID.randomUUID());
 		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.

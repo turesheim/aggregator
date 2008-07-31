@@ -11,22 +11,22 @@
  *******************************************************************************/
 package no.resheim.aggregator.data;
 
-import no.resheim.aggregator.data.internal.AggregatorItem;
+import no.resheim.aggregator.data.internal.AggregatorUIItem;
 
 /**
  * Aggregator item representing a folder. Folders are used to hold any other
- * type of aggregator items such as feeds, articles and other folders.
+ * type of aggregator items such as articles and other folders.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class Folder extends AggregatorItem {
+public class Folder extends AggregatorUIItem {
 
 	/**
 	 * @param registryId
 	 * @param title
 	 */
-	Folder(IAggregatorItem parent) {
+	Folder(AggregatorUIItem parent) {
 		super(parent);
 	}
 

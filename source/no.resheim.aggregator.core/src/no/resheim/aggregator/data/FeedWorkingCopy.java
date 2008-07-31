@@ -14,13 +14,13 @@ public class FeedWorkingCopy extends Feed {
 	Feed feed;
 
 	public static FeedWorkingCopy newInstance(IAggregatorItem parent) {
-		Feed feed = new Feed(parent);
+		Feed feed = new Feed();
 		feed.setUUID(UUID.randomUUID());
 		return new FeedWorkingCopy(feed);
 	}
 
 	public FeedWorkingCopy(Feed feed) {
-		super(feed.getParent());
+		super();
 		this.feed = feed;
 		copy(feed);
 	}

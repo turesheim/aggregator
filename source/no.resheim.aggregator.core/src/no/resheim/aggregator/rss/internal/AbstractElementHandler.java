@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.data.internal.AggregatorUIItem;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -38,8 +39,9 @@ import org.xml.sax.SAXException;
  * @since 1.0
  */
 public abstract class AbstractElementHandler implements IElementHandler {
+
 	static final SimpleDateFormat dc_date = new SimpleDateFormat(
-			"yyyy-MM-dd'T'hh:mm:ss'Z'"); //$NON-NLS-1$
+			"yyyy-MM-dd'T'hh:mm:ss'Z'"); //$NON-NLS-1$	
 
 	// Dublin Core Elements
 	//http://homepage.univie.ac.at/horst.prillinger/blog/archives/2005/01/000922.
@@ -59,6 +61,8 @@ public abstract class AbstractElementHandler implements IElementHandler {
 
 	/** The current item */
 	protected Article item;
+
+	protected AggregatorUIItem location;
 
 	/** The feed registry we're working for */
 	protected FeedCollection collection;

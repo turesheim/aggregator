@@ -44,7 +44,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param item
 	 *            The item to add
 	 */
-	public abstract void add(AggregatorItem item);
+	public abstract void add(IAggregatorItem item);
 
 	/**
 	 * Deletes the specified item from the storage.
@@ -52,7 +52,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param item
 	 *            The item to delete
 	 */
-	public abstract void delete(AggregatorItem item);
+	public abstract void delete(IAggregatorItem item);
 
 	/**
 	 * Deletes all articles from the specified feed which publication date (or
@@ -73,7 +73,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            the parent item
 	 * @return the number of children
 	 */
-	public abstract int getChildCount(AggregatorItem parent);
+	public abstract int getChildCount(AggregatorUIItem parent);
 
 	/**
 	 * Retrieves all the child articles of the given parent node. If the node is
@@ -85,7 +85,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            The parent item
 	 * @return An array of aggregator articles
 	 */
-	public abstract IAggregatorItem[] getChildren(AggregatorItem item);
+	public abstract IAggregatorItem[] getChildren(AggregatorUIItem item);
 
 	/**
 	 * Returns the description string of the aggregator item if such a
@@ -121,7 +121,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param index
 	 * @return
 	 */
-	public abstract IAggregatorItem getItem(AggregatorItem parent, int index);
+	public abstract IAggregatorItem getItem(AggregatorUIItem parent, int index);
 
 	/**
 	 * Returns the number of unread articles the given parent item has.
@@ -130,7 +130,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            the parent item
 	 * @return the number of unread articles
 	 */
-	public abstract int getUnreadCount(AggregatorItem parent);
+	public abstract int getUnreadCount(AggregatorUIItem parent);
 
 	/**
 	 * Tests to see if the feed with the given URL already exists in the
@@ -165,7 +165,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param order
 	 *            the new order of the item
 	 */
-	public abstract void move(AggregatorItem item, AggregatorItem parent,
+	public abstract void move(AggregatorUIItem item, AggregatorUIItem parent,
 			int order);
 
 	/**
@@ -174,7 +174,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param item
 	 *            the item to rename
 	 */
-	public abstract void rename(AggregatorItem item);
+	public abstract void rename(AggregatorUIItem item);
 
 	/**
 	 * Shuts down the storage.
@@ -205,6 +205,6 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param item
 	 *            The item to update
 	 */
-	public abstract void updateReadFlag(AggregatorItem item);
+	public abstract void updateReadFlag(AggregatorUIItem item);
 
 }

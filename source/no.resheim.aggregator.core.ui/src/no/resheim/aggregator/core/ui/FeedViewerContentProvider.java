@@ -15,6 +15,7 @@ import no.resheim.aggregator.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorEventListener;
 import no.resheim.aggregator.data.IAggregatorItem;
+import no.resheim.aggregator.data.internal.AggregatorUIItem;
 
 import org.eclipse.jface.viewers.IBasicPropertyConstants;
 import org.eclipse.jface.viewers.ILazyTreeContentProvider;
@@ -63,8 +64,8 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 	}
 
 	public Object getParent(Object child) {
-		if (child instanceof IAggregatorItem) {
-			return ((IAggregatorItem) child).getParent();
+		if (child instanceof AggregatorUIItem) {
+			return ((AggregatorUIItem) child).getParent();
 		}
 		return null;
 	}
@@ -84,19 +85,17 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 						switch (event.getType()) {
 						case READ:
 							fViewer.update(event.getItem(), STATE_PROPERTIES);
-							fViewer.update(event.getItem().getParent(),
-									STATE_PROPERTIES);
 							break;
 						case UPDATED:
 							// We _have_ to refresh deeply after adding new
 							// articles or the viewer will become confused.
-							fViewer.refresh(event.getItem().getParent(), true);
+							fViewer.refresh();
 							break;
 						case MOVED:
 							fViewer.refresh();
 							break;
 						case REMOVED:
-							fViewer.refresh(event.getItem().getParent(), true);
+							fViewer.refresh();
 							break;
 						case CREATED:
 							// fViewer.add(event.getItem().getParent(), event

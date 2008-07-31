@@ -8,32 +8,6 @@ CREATE TABLE folders (
 		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);
 
-CREATE TABLE feeds (
-        uuid CHAR(36) NOT NULL PRIMARY KEY,
-		parent_uuid CHAR(36) NOT NULL,
-		ordering INTEGER NOT NULL,
-		title VARCHAR(256) NOT NULL,
-		url VARCHAR(256) NOT NULL,
-		marks VARCHAR(64) NOT NULL,		
-		archiving VARCHAR(32) NOT NULL,			
-		archiving_items INTEGER NOT NULL,
-		archiving_days INTEGER NOT NULL,
-		update_interval INTEGER NOT NULL,
-		update_period VARCHAR(32) NOT NULL,
-		last_update BIGINT NOT NULL,
-		description LONG VARCHAR,
-		link VARCHAR(256),
-		webmaster VARCHAR(256),
-		editor VARCHAR(256),
-		copyright VARCHAR(256),
-		feed_type VARCHAR(32),
-		hidden INT NOT NULL,
-		username VARCHAR(64),
-		password VARCHAR(64),
-		threaded INT,
-		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
-	);
-
 CREATE TABLE articles (
         uuid CHAR(36) NOT NULL PRIMARY KEY,
 		parent_uuid CHAR(36) NOT NULL,
@@ -49,20 +23,40 @@ CREATE TABLE articles (
 		added_date BIGINT NOT NULL,
 		description LONG VARCHAR,
 		creator VARCHAR(128),
-		FOREIGN KEY (parent_uuid) references feeds (uuid) ON DELETE CASCADE
+		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);
 
+CREATE TABLE feeds (
+        uuid CHAR(36) NOT NULL PRIMARY KEY,
+		location CHAR(36) NOT NULL,
+		title VARCHAR(256) NOT NULL,
+		url VARCHAR(256) NOT NULL,
+		archiving VARCHAR(32) NOT NULL,			
+		archiving_items INTEGER NOT NULL,
+		archiving_days INTEGER NOT NULL,
+		update_interval INTEGER NOT NULL,
+		update_period VARCHAR(32) NOT NULL,
+		last_update BIGINT NOT NULL,
+		description LONG VARCHAR,
+		link VARCHAR(256),
+		webmaster VARCHAR(256),
+		editor VARCHAR(256),
+		copyright VARCHAR(256),
+		feed_type VARCHAR(32),
+		hidden INT NOT NULL,
+		username VARCHAR(64),
+		password VARCHAR(64),
+		threaded INT
+	);
 
 /* Selection*/
 CREATE INDEX folders_parent ON folders (parent_uuid,uuid);
-CREATE INDEX feeds_parent ON feeds (parent_uuid,uuid);
 CREATE INDEX feeds_url ON feeds (url,uuid);
 CREATE INDEX articles_parent ON articles (parent_uuid,uuid);
 CREATE INDEX articles_guid ON articles (guid,uuid);
 
 /* Virtual tree browsing */
 CREATE INDEX folders_tree ON folders (parent_uuid,ordering,uuid);
-CREATE INDEX feeds_tree ON feeds (parent_uuid,ordering,uuid);
 CREATE INDEX articles_tree ON articles (parent_uuid,ordering,uuid);
 
 /* Finding read articles */

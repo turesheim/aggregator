@@ -36,24 +36,10 @@ public interface IAggregatorItem {
 	public abstract String getTitle();
 
 	/**
-	 * Returns the parent of the item.
-	 * 
-	 * @return the parent item
-	 */
-	public abstract IAggregatorItem getParent();
-
-	/**
 	 * Returns the unique identifier of the item.
 	 * 
 	 * @return the unique identifier
 	 */
 	public abstract UUID getUUID();
-
-	/**
-	 * Returns the order of the item.
-	 * 
-	 * @return the order
-	 */
-	public int getOrdering();
 
 }

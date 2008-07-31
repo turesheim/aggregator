@@ -18,12 +18,13 @@ import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorItem;
 
 /**
- * This implementation is internal and is not intended to be used by clients.
+ * This type implements the UI presentable information for aggregator items such
+ * as articles and folders
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public abstract class AggregatorItem implements IAggregatorItem {
+public abstract class AggregatorUIItem implements IAggregatorItem {
 
 	public enum Mark {
 		DONE, FIRST_PRIORITY, IMPORTANT, SECOND_PRIORITY, THIRD_PRIORITY, TODO
@@ -33,7 +34,7 @@ public abstract class AggregatorItem implements IAggregatorItem {
 
 	protected int ordering;
 
-	protected IAggregatorItem parent;
+	protected AggregatorUIItem parent;
 
 	protected FeedCollection registry;
 
@@ -57,7 +58,7 @@ public abstract class AggregatorItem implements IAggregatorItem {
 	/**
 	 * @param parent
 	 */
-	public AggregatorItem(IAggregatorItem parent) {
+	public AggregatorUIItem(AggregatorUIItem parent) {
 		this.parent = parent;
 	}
 
@@ -69,7 +70,7 @@ public abstract class AggregatorItem implements IAggregatorItem {
 		return ordering;
 	};
 
-	public IAggregatorItem getParent() {
+	public AggregatorUIItem getParent() {
 		return parent;
 	}
 
@@ -94,7 +95,7 @@ public abstract class AggregatorItem implements IAggregatorItem {
 		this.ordering = ordering;
 	}
 
-	public void setParent(IAggregatorItem parent) {
+	public void setParent(AggregatorUIItem parent) {
 		this.parent = parent;
 	}
 

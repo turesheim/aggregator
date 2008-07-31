@@ -11,17 +11,15 @@
  *******************************************************************************/
 package no.resheim.aggregator.data;
 
-import no.resheim.aggregator.data.internal.AggregatorItem;
+import java.util.UUID;
 
 /**
- * Feeds are created by the user and immediately inserted into the database,
- * thus it's not the parsing of the feed stream that will result in a feed being
- * created as with an feed item.
+ * Feeds are
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class Feed extends AggregatorItem {
+public class Feed implements IAggregatorItem {
 
 	/**
 	 * 
@@ -38,7 +36,7 @@ public class Feed extends AggregatorItem {
 	}
 
 	public enum UpdatePeriod {
-		MINUTES, HOURS, DAYS
+		DAYS, HOURS, MINUTES
 	}
 
 	private static final String BLANK_STRING = ""; //$NON-NLS-1$
@@ -61,22 +59,22 @@ public class Feed extends AggregatorItem {
 
 	private String link;
 
+	protected UUID location;
 	private String password;
 	boolean threaded;
+	protected String title;
 	private String type;
 	protected int updateInterval = 1;
 	protected UpdatePeriod updatePeriod;
-	boolean updating;
-	protected String url = BLANK_STRING;
-	private String username;
-	private String webmaster;
 
-	/**
-	 * @param parent
-	 */
-	Feed(IAggregatorItem parent) {
-		super(parent);
-	}
+	boolean updating;
+
+	protected String url = BLANK_STRING;
+
+	private String username;
+
+	protected UUID uuid;
+	private String webmaster;
 
 	public Archiving getArchiving() {
 		return archiving;
@@ -110,8 +108,16 @@ public class Feed extends AggregatorItem {
 		return link;
 	}
 
+	public UUID getLocation() {
+		return location;
+	}
+
 	public String getPassword() {
 		return password;
+	}
+
+	public String getTitle() {
+		return title;
 	}
 
 	public String getType() {
@@ -157,6 +163,10 @@ public class Feed extends AggregatorItem {
 
 	public String getUsername() {
 		return username;
+	}
+
+	public UUID getUUID() {
+		return uuid;
 	}
 
 	public String getWebmaster() {
@@ -217,12 +227,20 @@ public class Feed extends AggregatorItem {
 		this.link = link;
 	}
 
+	public void setLocation(UUID location) {
+		this.location = location;
+	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
 	public void setThreaded(boolean threaded) {
 		this.threaded = threaded;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public void setType(String type) {
@@ -254,6 +272,10 @@ public class Feed extends AggregatorItem {
 		this.username = username;
 	}
 
+	public void setUUID(UUID uuid) {
+		this.uuid = uuid;
+	}
+
 	public void setWebmaster(String webmaster) {
 		this.webmaster = webmaster;
 	}
@@ -261,9 +283,6 @@ public class Feed extends AggregatorItem {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(title);
-		sb.append(" ["); //$NON-NLS-1$
-		sb.append(getOrdering());
-		sb.append(']');
 		return sb.toString();
 	}
 
@@ -282,5 +301,4 @@ public class Feed extends AggregatorItem {
 		this.updatePeriod = wc.updatePeriod;
 		this.hidden = wc.hidden;
 	}
-
 }
