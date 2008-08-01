@@ -18,6 +18,7 @@ import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.internal.AggregatorUIItem;
+import no.resheim.aggregator.data.internal.InternalArticle;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -59,8 +60,11 @@ public abstract class AbstractElementHandler implements IElementHandler {
 	/** The current feed */
 	protected Feed feed;
 
-	/** The current item */
-	protected Article item;
+	/**
+	 * The current article. We use {@link InternalArticle} instead of
+	 * {@link Article} as we need to be able to set certain values.
+	 */
+	protected InternalArticle item;
 
 	protected AggregatorUIItem location;
 

@@ -140,7 +140,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private Article composeArticle(AggregatorUIItem parent, ResultSet rs)
 			throws SQLException {
-		Article item = collection.newArticleInstance(parent);
+		InternalArticle item = new InternalArticle(parent);
 		item.setUUID(UUID.fromString(rs.getString(1)));
 		item.setParent(parent);
 		item.setOrdering(rs.getInt(3));
@@ -778,36 +778,36 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	public void updateFeed(Feed feed) {
 		try {
-			StringBuffer sb = new StringBuffer();
-			sb.append("update feeds set description="); //$NON-NLS-1$
-			addString(sb, feed.getDescription(), false);
-			sb.append(", link="); //$NON-NLS-1$
-			addString(sb, feed.getLink(), false);
-			sb.append(", title="); //$NON-NLS-1$
-			addString(sb, feed.getTitle(), false);
-			sb.append(", webmaster="); //$NON-NLS-1$
-			addString(sb, feed.getWebmaster(), false);
-			sb.append(", editor="); //$NON-NLS-1$
-			addString(sb, feed.getEditor(), false);
-			sb.append(", copyright="); //$NON-NLS-1$
-			addString(sb, feed.getCopyright(), false);
-			sb.append(", feed_type="); //$NON-NLS-1$
-			addString(sb, feed.getType(), false);
-			sb.append(", last_update="); //$NON-NLS-1$
-			addLong(sb, feed.getLastUpdate(), false);
-			sb.append(", archiving="); //$NON-NLS-1$
-			addString(sb, feed.getArchiving().toString(), false);
-			sb.append(", archiving_items="); //$NON-NLS-1$
-			addInt(sb, feed.getArchivingItems(), false);
-			sb.append(", archiving_days="); //$NON-NLS-1$
-			addInt(sb, feed.getArchivingDays(), false);
-			sb.append(", update_interval="); //$NON-NLS-1$
-			addInt(sb, feed.getUpdateInterval(), false);
-			sb.append(", update_period="); //$NON-NLS-1$
-			addString(sb, feed.getUpdatePeriod().toString(), false);
-			sb.append(" where uuid="); //$NON-NLS-1$
-			addString(sb, feed.getUUID().toString(), false);
-			executeUpdate(sb.toString());
+			// StringBuffer sb = new StringBuffer();
+			//			sb.append("update feeds set description="); //$NON-NLS-1$
+			// addString(sb, feed.getDescription(), false);
+			//			sb.append(", link="); //$NON-NLS-1$
+			// addString(sb, feed.getLink(), false);
+			//			sb.append(", title="); //$NON-NLS-1$
+			// addString(sb, feed.getTitle(), false);
+			//			sb.append(", webmaster="); //$NON-NLS-1$
+			// addString(sb, feed.getWebmaster(), false);
+			//			sb.append(", editor="); //$NON-NLS-1$
+			// addString(sb, feed.getEditor(), false);
+			//			sb.append(", copyright="); //$NON-NLS-1$
+			// addString(sb, feed.getCopyright(), false);
+			//			sb.append(", feed_type="); //$NON-NLS-1$
+			// addString(sb, feed.getType(), false);
+			//			sb.append(", last_update="); //$NON-NLS-1$
+			// addLong(sb, feed.getLastUpdate(), false);
+			//			sb.append(", archiving="); //$NON-NLS-1$
+			// addString(sb, feed.getArchiving().toString(), false);
+			//			sb.append(", archiving_items="); //$NON-NLS-1$
+			// addInt(sb, feed.getArchivingItems(), false);
+			//			sb.append(", archiving_days="); //$NON-NLS-1$
+			// addInt(sb, feed.getArchivingDays(), false);
+			//			sb.append(", update_interval="); //$NON-NLS-1$
+			// addInt(sb, feed.getUpdateInterval(), false);
+			//			sb.append(", update_period="); //$NON-NLS-1$
+			// addString(sb, feed.getUpdatePeriod().toString(), false);
+			//			sb.append(" where uuid="); //$NON-NLS-1$
+			// addString(sb, feed.getUUID().toString(), false);
+			// executeUpdate(sb.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

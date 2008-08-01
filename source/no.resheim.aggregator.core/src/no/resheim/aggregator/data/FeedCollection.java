@@ -25,6 +25,7 @@ import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.internal.AggregatorUIItem;
 import no.resheim.aggregator.data.internal.CollectionUpdateJob;
 import no.resheim.aggregator.data.internal.IAggregatorStorage;
+import no.resheim.aggregator.data.internal.InternalArticle;
 
 import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.IStatus;
@@ -113,17 +114,11 @@ public class FeedCollection extends AggregatorUIItem {
 		try {
 			lock.writeLock().lock();
 			try {
-				// if (item.getParent().equals(this)) {
-				// item.setOrdering(getChildCount(this));
-				// } else {
-				// item.setOrdering(getChildCount(item.getParent()));
-				// }
 				if (item instanceof Folder) {
 					AggregatorUIItem folder = (AggregatorUIItem) item;
 					database.add(folder);
 				} else if (item instanceof Article) {
 					Article feedItem = (Article) item;
-					feedItem.setAddedDate(System.currentTimeMillis());
 					database.add(feedItem);
 				}
 			} catch (Exception e) {
@@ -437,17 +432,6 @@ public class FeedCollection extends AggregatorUIItem {
 		}
 	}
 
-	/**
-	 * 
-	 * @param feed
-	 * @return
-	 */
-	public Article newArticleInstance(AggregatorUIItem parent) {
-		Article article = new Article(parent);
-		article.setUUID(UUID.randomUUID());
-		return article;
-	}
-
 	public Folder newFolderInstance(AggregatorUIItem parent) {
 		Folder folder = new Folder(parent);
 		folder.setUUID(UUID.randomUUID());
@@ -551,7 +535,7 @@ public class FeedCollection extends AggregatorUIItem {
 			lock.writeLock().unlock();
 		}
 		if (item instanceof Article) {
-			((Article) item).setRead(true);
+			((InternalArticle) item).setRead(true);
 			notifyListerners(new AggregatorItemChangedEvent(item,
 					FeedChangeEventType.READ, System.currentTimeMillis()
 							- start));

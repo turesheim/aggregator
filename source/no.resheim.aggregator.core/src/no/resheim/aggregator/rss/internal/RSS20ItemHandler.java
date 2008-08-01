@@ -14,9 +14,9 @@ package no.resheim.aggregator.rss.internal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.data.internal.InternalArticle;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -42,10 +42,11 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 
 	public RSS20ItemHandler(FeedCollection registry, Feed feed) {
 		this.collection = registry;
-		this.item = new Article();
-		this.item.setLocation(feed.getLocation());
-		this.item.setFeedUUID(feed.getUUID());
 		this.feed = feed;
+		item = new InternalArticle();
+		item.setLocation(feed.getLocation());
+		item.setFeedUUID(feed.getUUID());
+		item.setAddedDate(System.currentTimeMillis());
 	}
 
 	public void endElement(String qName) throws SAXException {
