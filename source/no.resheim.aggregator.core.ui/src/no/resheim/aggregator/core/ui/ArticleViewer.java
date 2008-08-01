@@ -33,8 +33,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 /**
- * Type to render articles. A {@link Browser} instance will be used to render
- * the HTML.
+ * A control that is used to show aggregator articles. A {@link Browser}
+ * instance will be used to render the HTML.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
