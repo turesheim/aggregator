@@ -171,13 +171,16 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private AggregatorUIItem composeFolder(AggregatorUIItem parent, ResultSet rs)
 			throws SQLException {
-		AggregatorUIItem item = collection.newFolderInstance(parent);
+		InternalFolder item = new InternalFolder(parent);
 		item.setUUID(UUID.fromString(rs.getString(1)));
 		item.setParent(parent);
 		item.setOrdering(rs.getInt(3));
-		item.setHidden(rs.getInt(4) != 0);
-		item.setTitle(rs.getString(5));
-		item.setMarks(decode(rs.getString(6)));
+		if (rs.getString(4) != null) {
+			item.setFeed(UUID.fromString(rs.getString(4)));
+		}
+		item.setHidden(rs.getInt(5) != 0);
+		item.setTitle(rs.getString(6));
+		item.setMarks(decode(rs.getString(7)));
 		return item;
 	}
 
@@ -213,7 +216,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			}
 			// Create a folder to represent the collection root. This is
 			// required for maintaining relation integrity.
-			AggregatorUIItem root = collection.newFolderInstance(null);
+			Folder root = new InternalFolder(null);
 			root.setUUID(collection.getUUID());
 			root.setTitle("ROOT"); //$NON-NLS-1$
 			root.setHidden(true);
@@ -405,7 +408,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			((AggregatorUIItem) item)
 					.setOrdering(getChildCount(((AggregatorUIItem) item)
 							.getParent()));
-			insert((AggregatorUIItem) item);
+			insert((Folder) item);
 		}
 		if (item instanceof Feed)
 			insert((Feed) item);
@@ -487,10 +490,10 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * @param item
 	 *            The item to insert.
 	 */
-	private void insert(AggregatorUIItem folder) {
+	private void insert(Folder folder) {
 		try {
 			PreparedStatement ps = connection
-					.prepareStatement("insert into folders values(?,?,?,?,?,?) "); //$NON-NLS-1$
+					.prepareStatement("insert into folders values(?,?,?,?,?,?,?) "); //$NON-NLS-1$
 			ps.setEscapeProcessing(true);
 			ps.setString(1, folder.getUUID().toString());
 			// Folders are used to represent the root aggregator item
@@ -501,9 +504,15 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 				ps.setNull(2, Types.CHAR);
 			}
 			ps.setLong(3, folder.getOrdering());
-			ps.setInt(4, folder.isHidden() ? 1 : 0);
-			ps.setString(5, folder.getTitle());
-			ps.setString(6, encode(folder.getMarks()));
+			// Folders are used to represent the root aggregator item
+			if (folder.getFeed() != null) {
+				ps.setString(4, folder.getFeed().toString());
+			} else {
+				ps.setNull(4, Types.CHAR);
+			}
+			ps.setInt(5, folder.isHidden() ? 1 : 0);
+			ps.setString(6, folder.getTitle());
+			ps.setString(7, encode(folder.getMarks()));
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {

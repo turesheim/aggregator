@@ -77,7 +77,7 @@ public class CollectionUpdateJob extends Job {
 	 */
 	private Stack<Feed> getSortedFeeds() {
 		Stack<Feed> feeds = new Stack<Feed>();
-		for (Feed feed : registry.getFeeds()) {
+		for (Feed feed : registry.getFeeds().values()) {
 			feeds.add(feed);
 		}
 		Collections.sort(feeds, new FeedComparator());

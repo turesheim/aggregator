@@ -12,7 +12,6 @@
 package no.resheim.aggregator.data;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +25,7 @@ import no.resheim.aggregator.data.internal.AggregatorUIItem;
 import no.resheim.aggregator.data.internal.CollectionUpdateJob;
 import no.resheim.aggregator.data.internal.IAggregatorStorage;
 import no.resheim.aggregator.data.internal.InternalArticle;
+import no.resheim.aggregator.data.internal.InternalFolder;
 
 import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.IStatus;
@@ -138,7 +138,9 @@ public class FeedCollection extends AggregatorUIItem {
 			// No location has been specified for the feed so we must create a
 			// new folder at the collection root and use this.
 			if (feed.getLocation() == null) {
-				Folder folder = newFolderInstance(this);
+				InternalFolder folder = new InternalFolder(this);
+				folder.setUUID(UUID.randomUUID());
+				folder.setFeed(feed.getUUID());
 				folder.setTitle(feed.getTitle());
 				addNew(folder);
 				feed.setLocation(folder.getUUID());
@@ -268,8 +270,8 @@ public class FeedCollection extends AggregatorUIItem {
 	 * 
 	 * @return The list of feeds
 	 */
-	public Collection<Feed> getFeeds() {
-		return sites.values();
+	public HashMap<UUID, Feed> getFeeds() {
+		return sites;
 	}
 
 	/**
@@ -430,12 +432,6 @@ public class FeedCollection extends AggregatorUIItem {
 		} finally {
 			lock.writeLock().unlock();
 		}
-	}
-
-	public Folder newFolderInstance(AggregatorUIItem parent) {
-		Folder folder = new Folder(parent);
-		folder.setUUID(UUID.randomUUID());
-		return folder;
 	}
 
 	/**
@@ -627,7 +623,7 @@ public class FeedCollection extends AggregatorUIItem {
 	}
 
 	public void updateAllFeeds() {
-		for (Feed feed : getFeeds()) {
+		for (Feed feed : getFeeds().values()) {
 			updateFeed(feed);
 		}
 	}

@@ -11,22 +11,33 @@
  *******************************************************************************/
 package no.resheim.aggregator.data;
 
+import java.util.UUID;
+
 import no.resheim.aggregator.data.internal.AggregatorUIItem;
 
 /**
- * Aggregator item representing a folder. Folders are used to hold any other
- * type of aggregator items such as articles and other folders.
+ * Aggregator item representing a folder. Folders are used to contain other type
+ * of aggregator items such as articles and other folders. A folder may also
+ * <i>point</i> to a {@link Feed}, meaning that the folder is the default
+ * location for the feed articles. In this case the folder can be used to obtain
+ * the feed instance.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
 public class Folder extends AggregatorUIItem {
 
+	protected UUID feed;
+
+	public UUID getFeed() {
+		return feed;
+	}
+
 	/**
 	 * @param registryId
 	 * @param title
 	 */
-	Folder(AggregatorUIItem parent) {
+	public Folder(AggregatorUIItem parent) {
 		super(parent);
 	}
 

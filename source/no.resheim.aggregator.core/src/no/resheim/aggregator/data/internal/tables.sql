@@ -2,6 +2,7 @@ CREATE TABLE folders (
 		uuid CHAR(36) NOT NULL PRIMARY KEY,
 		parent_uuid CHAR(36),
 		ordering INTEGER NOT NULL,
+		feed_uuid CHAR(36),
 		hidden INT NOT NULL,
         title VARCHAR(256) NOT NULL,
 		marks VARCHAR(64) NOT NULL,

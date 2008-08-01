@@ -37,10 +37,6 @@ import org.eclipse.ui.PlatformUI;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-/**
- * @author torkildr
- * 
- */
 public class FeedViewerLabelProvider extends LabelProvider implements
 		ILabelProvider, IColorProvider, IPropertyChangeListener {
 
@@ -78,12 +74,14 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 	 */
 	public Image getImage(Object element) {
 		if (element instanceof Folder) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(
-					ISharedImages.IMG_OBJ_FOLDER);
-		}
-		if (element instanceof Feed) {
-			return AggregatorUIPlugin.getDefault().getImage(
-					AggregatorUIPlugin.IMG_FEED_OBJ);
+			if (((Folder) element).getFeed() == null) {
+				return PlatformUI.getWorkbench().getSharedImages().getImage(
+						ISharedImages.IMG_OBJ_FOLDER);
+			} else {
+				// If the folder is the defa
+				return AggregatorUIPlugin.getDefault().getImage(
+						AggregatorUIPlugin.IMG_FEED_OBJ);
+			}
 		}
 		if (element instanceof Article) {
 			return PlatformUI.getWorkbench().getSharedImages().getImage(
