@@ -84,7 +84,7 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 					if (fViewer != null) {
 						switch (event.getType()) {
 						case READ:
-							fViewer.update(event.getItem(), STATE_PROPERTIES);
+							fViewer.refresh();
 							break;
 						case UPDATED:
 							// We _have_ to refresh deeply after adding new
