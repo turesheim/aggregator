@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -397,21 +398,29 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * no.resheim.aggregator.model.IAggregatorStorage#add(no.resheim.aggregator
 	 * .model.IAggregatorItem)
 	 */
-	public void add(IAggregatorItem item) {
-		if (item instanceof Article) {
-			// Set the order of the item
-			((Article) item).setOrdering(getChildCount(((Article) item)
-					.getLocation()));
-			insert((Article) item);
+	public IStatus add(IAggregatorItem item) {
+		try {
+			if (item instanceof Article) {
+				// Set the order of the item
+				((Article) item).setOrdering(getChildCount(((Article) item)
+						.getLocation()));
+				insert((Article) item);
+			}
+			if (item instanceof Folder) {
+				((AggregatorUIItem) item)
+						.setOrdering(getChildCount(((AggregatorUIItem) item)
+								.getParent()));
+				insert((Folder) item);
+			}
+			if (item instanceof Feed)
+				insert((Feed) item);
+			return Status.OK_STATUS;
+		} catch (SQLException e) {
+			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
+					MessageFormat.format(
+							"Could not store item \"{0}\" in database.", item),
+					e);
 		}
-		if (item instanceof Folder) {
-			((AggregatorUIItem) item)
-					.setOrdering(getChildCount(((AggregatorUIItem) item)
-							.getParent()));
-			insert((Folder) item);
-		}
-		if (item instanceof Feed)
-			insert((Feed) item);
 	}
 
 	/**
@@ -419,31 +428,28 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * 
 	 * @param item
 	 *            The item to insert.
+	 * @throws SQLException
 	 */
-	private void insert(Article item) {
-		try {
-			PreparedStatement ps = connection
-					.prepareStatement("insert into articles values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
-			ps.setEscapeProcessing(true);
-			ps.setString(1, item.getUUID().toString());
-			ps.setString(2, item.getLocation().toString());
-			ps.setLong(3, item.getOrdering());
-			ps.setString(4, item.getFeedUUID().toString());
-			ps.setString(5, item.getGuid());
-			ps.setString(6, item.getTitle());
-			ps.setString(7, item.getLink());
-			ps.setString(8, encode(item.getMarks()));
-			ps.setInt(9, item.isRead() ? 1 : 0);
-			ps.setLong(10, item.getPublicationDate());
-			ps.setLong(11, item.getReadDate());
-			ps.setLong(12, item.getAdded());
-			ps.setString(13, item.getDescription());
-			ps.setString(14, item.getCreator());
-			ps.executeUpdate();
-			ps.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	private void insert(Article item) throws SQLException {
+		PreparedStatement ps = connection
+				.prepareStatement("insert into articles values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+		ps.setEscapeProcessing(true);
+		ps.setString(1, item.getUUID().toString());
+		ps.setString(2, item.getLocation().toString());
+		ps.setLong(3, item.getOrdering());
+		ps.setString(4, item.getFeedUUID().toString());
+		ps.setString(5, item.getGuid());
+		ps.setString(6, item.getTitle());
+		ps.setString(7, item.getLink());
+		ps.setString(8, encode(item.getMarks()));
+		ps.setInt(9, item.isRead() ? 1 : 0);
+		ps.setLong(10, item.getPublicationDate());
+		ps.setLong(11, item.getReadDate());
+		ps.setLong(12, item.getAdded());
+		ps.setString(13, item.getDescription());
+		ps.setString(14, item.getCreator());
+		ps.executeUpdate();
+		ps.close();
 	}
 
 	/**
@@ -451,37 +457,34 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * 
 	 * @param feed
 	 *            The feed to insert
+	 * @throws SQLException
 	 */
-	private void insert(Feed feed) {
-		try {
-			PreparedStatement ps = connection
-					.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
-			ps.setEscapeProcessing(true);
-			ps.setString(1, feed.getUUID().toString());
-			ps.setString(2, feed.getTitle());
-			ps.setString(3, feed.getLocation().toString());
-			ps.setString(4, feed.getURL());
-			ps.setString(5, feed.getArchiving().toString());
-			ps.setInt(6, feed.getArchivingItems());
-			ps.setInt(7, feed.getArchivingDays()); // archiving_days
-			ps.setInt(8, feed.getUpdateInterval()); // update_interval
-			ps.setString(9, feed.getUpdatePeriod().toString()); // update_period
-			ps.setLong(10, feed.getLastUpdate()); // last_update
-			ps.setString(11, feed.getDescription()); // description
-			ps.setString(12, feed.getLink()); // link
-			ps.setString(13, feed.getWebmaster()); // webmaster
-			ps.setString(14, feed.getEditor()); // editor
-			ps.setString(15, feed.getCopyright()); // copyright
-			ps.setString(16, feed.getType()); // feed_type
-			ps.setInt(17, feed.isHidden() ? 1 : 0);
-			ps.setString(18, feed.getUsername());
-			ps.setString(19, feed.getPassword());
-			ps.setInt(20, feed.isThreaded() ? 1 : 0);
-			ps.executeUpdate();
-			ps.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	private void insert(Feed feed) throws SQLException {
+		PreparedStatement ps = connection
+				.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+		ps.setEscapeProcessing(true);
+		ps.setString(1, feed.getUUID().toString());
+		ps.setString(2, feed.getTitle());
+		ps.setString(3, feed.getLocation().toString());
+		ps.setString(4, feed.getURL());
+		ps.setString(5, feed.getArchiving().toString());
+		ps.setInt(6, feed.getArchivingItems());
+		ps.setInt(7, feed.getArchivingDays()); // archiving_days
+		ps.setInt(8, feed.getUpdateInterval()); // update_interval
+		ps.setString(9, feed.getUpdatePeriod().toString()); // update_period
+		ps.setLong(10, feed.getLastUpdate()); // last_update
+		ps.setString(11, feed.getDescription()); // description
+		ps.setString(12, feed.getLink()); // link
+		ps.setString(13, feed.getWebmaster()); // webmaster
+		ps.setString(14, feed.getEditor()); // editor
+		ps.setString(15, feed.getCopyright()); // copyright
+		ps.setString(16, feed.getType()); // feed_type
+		ps.setInt(17, feed.isHidden() ? 1 : 0);
+		ps.setString(18, feed.getUsername());
+		ps.setString(19, feed.getPassword());
+		ps.setInt(20, feed.isThreaded() ? 1 : 0);
+		ps.executeUpdate();
+		ps.close();
 	}
 
 	/**
@@ -489,35 +492,32 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * 
 	 * @param item
 	 *            The item to insert.
+	 * @throws SQLException
 	 */
-	private void insert(Folder folder) {
-		try {
-			PreparedStatement ps = connection
-					.prepareStatement("insert into folders values(?,?,?,?,?,?,?) "); //$NON-NLS-1$
-			ps.setEscapeProcessing(true);
-			ps.setString(1, folder.getUUID().toString());
-			// Folders are used to represent the root aggregator item
-			if (folder.getParent() != null) {
-				ps.setString(2, ((AggregatorUIItem) folder.getParent())
-						.getUUID().toString());
-			} else {
-				ps.setNull(2, Types.CHAR);
-			}
-			ps.setLong(3, folder.getOrdering());
-			// Folders are used to represent the root aggregator item
-			if (folder.getFeed() != null) {
-				ps.setString(4, folder.getFeed().toString());
-			} else {
-				ps.setNull(4, Types.CHAR);
-			}
-			ps.setInt(5, folder.isHidden() ? 1 : 0);
-			ps.setString(6, folder.getTitle());
-			ps.setString(7, encode(folder.getMarks()));
-			ps.executeUpdate();
-			ps.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+	private void insert(Folder folder) throws SQLException {
+		PreparedStatement ps = connection
+				.prepareStatement("insert into folders values(?,?,?,?,?,?,?) "); //$NON-NLS-1$
+		ps.setEscapeProcessing(true);
+		ps.setString(1, folder.getUUID().toString());
+		// Folders are used to represent the root aggregator item
+		if (folder.getParent() != null) {
+			ps.setString(2, ((AggregatorUIItem) folder.getParent()).getUUID()
+					.toString());
+		} else {
+			ps.setNull(2, Types.CHAR);
 		}
+		ps.setLong(3, folder.getOrdering());
+		// Folders are used to represent the root aggregator item
+		if (folder.getFeed() != null) {
+			ps.setString(4, folder.getFeed().toString());
+		} else {
+			ps.setNull(4, Types.CHAR);
+		}
+		ps.setInt(5, folder.isHidden() ? 1 : 0);
+		ps.setString(6, folder.getTitle());
+		ps.setString(7, encode(folder.getMarks()));
+		ps.executeUpdate();
+		ps.close();
 	}
 
 	/*

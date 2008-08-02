@@ -69,7 +69,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		items.put(collection.getUUID(), new ItemHolder(collection));
 	}
 
-	public void add(IAggregatorItem item) {
+	public IStatus add(IAggregatorItem item) {
 		if (item instanceof Feed) {
 			feeds.put(item.getUUID(), (Feed) item);
 		} else {
@@ -78,8 +78,8 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 			ItemHolder parentHolder = items.get(((AggregatorUIItem) item)
 					.getParent().getUUID());
 			parentHolder.children.add((AggregatorUIItem) item);
-
 		}
+		return Status.OK_STATUS;
 	}
 
 	public void delete(IAggregatorItem item) {

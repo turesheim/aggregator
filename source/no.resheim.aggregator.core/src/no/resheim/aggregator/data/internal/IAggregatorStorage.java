@@ -44,7 +44,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param item
 	 *            The item to add
 	 */
-	public abstract void add(IAggregatorItem item);
+	public abstract IStatus add(IAggregatorItem item);
 
 	/**
 	 * Deletes the specified item from the storage.
