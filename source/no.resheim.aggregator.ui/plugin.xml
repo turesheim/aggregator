@@ -242,7 +242,7 @@
             title="Dilbert Blog"
             updateInterval="1"
             updatePeriod="HOURS"
-            url="http://dilbertblog.typepad.com/the_dilbert_blog/atom.xml">
+            url="http://dilbert.com/blog">
       </feed>
       <feed
             archivingDays="30"

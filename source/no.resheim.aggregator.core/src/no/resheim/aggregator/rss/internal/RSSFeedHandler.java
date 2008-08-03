@@ -30,10 +30,12 @@ import org.xml.sax.SAXNotRecognizedException;
 public class RSSFeedHandler extends AbstractElementHandler {
 	private static final String RDF_TYPE = "RSS 1.0/RDF"; //$NON-NLS-1$
 	private static final String RSS_TYPE = "RSS"; //$NON-NLS-1$
+	private static final String ATOM_TYPE = "Atom"; //$NON-NLS-1$
 	// http:// cyber.law.harvard.edu/rss/rss.html
 	private static final String VERSION_2_0 = "2.0"; //$NON-NLS-1$
 	private static final String VERSION_0_92 = "0.92"; //$NON-NLS-1$
 	private static final String ELEMENT_RSS = "rss"; //$NON-NLS-1$
+	private static final String ELEMENT_ATOM = "feed"; //$NON-NLS-1$
 	// http://web.resource.org/rss/1.0/spec
 	private static final String ELEMENT_RDF = "rdf:RDF"; //$NON-NLS-1$
 	private static final String ATTR_VERSION = "version"; //$NON-NLS-1$
@@ -64,6 +66,10 @@ public class RSSFeedHandler extends AbstractElementHandler {
 		if (qName.equals(ELEMENT_RDF)) {
 			feed.setType(RDF_TYPE);
 			return new RSS10FeedHandler(collection, feed);
+		}
+		if (qName.equals(ELEMENT_ATOM)) {
+			feed.setType(ATOM_TYPE);
+			return new AtomFeedHandler(collection, feed);
 		}
 		throw new SAXNotRecognizedException(MessageFormat.format(
 				Messages.RSSFeedHandler_Unrecognized_Feed_Type, new Object[] {
