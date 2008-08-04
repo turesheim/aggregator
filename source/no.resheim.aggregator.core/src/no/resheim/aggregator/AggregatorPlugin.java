@@ -159,9 +159,9 @@ public class AggregatorPlugin extends Plugin {
 	 * @return the feed collection
 	 */
 	public FeedCollection getFeedCollection(String id) {
-		if (id == null)
-			return defaultCollection;
 		synchronized (registryMap) {
+			if (id == null)
+				return defaultCollection;
 			return registryMap.get(id);
 		}
 	}
@@ -229,7 +229,6 @@ public class AggregatorPlugin extends Plugin {
 				if (element.getName().equals("collection")) { //$NON-NLS-1$
 					String id = element.getAttribute("id"); //$NON-NLS-1$
 					String name = element.getAttribute("name"); //$NON-NLS-1$
-					System.out.println(name);
 					boolean pub = Boolean.parseBoolean(element
 							.getAttribute("public")); //$NON-NLS-1$
 					boolean def = Boolean.parseBoolean(element
