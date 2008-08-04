@@ -14,7 +14,6 @@ package no.resheim.aggregator.ui.test;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.commands.AbstractAggregatorCommandHandler;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent;
-import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
@@ -61,7 +60,7 @@ public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
 					collection.notifyListerners(new AggregatorItemChangedEvent(
 							feed, FeedChangeEventType.UPDATING));
 					for (int a = 0; a < count; a++) {
-						Article article = new InternalArticle();
+						InternalArticle article = new InternalArticle();
 						article.setFeedUUID(feed.getUUID());
 						article.setTitle("Article #" + a); //$NON-NLS-1$
 						article.setDescription(EMPTY_STRING);
@@ -79,7 +78,7 @@ public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
 	}
 
 	private Feed createNewFeed(FeedCollection parent, String title) {
-		Feed feed = parent.newFeedInstance(parent);
+		Feed feed = new Feed();
 		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.
 		feed.setTitle(title);
