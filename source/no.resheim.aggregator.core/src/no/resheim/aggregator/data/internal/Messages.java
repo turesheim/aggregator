@@ -7,6 +7,7 @@ public class Messages extends NLS {
 	public static String DerbySQLStorage_Creating_Storage;
 	public static String DerbySQLStorage_Creating_Tables;
 	public static String DerbySQLStorage_Initializing_Database;
+	public static String DerbySQLStorage_StoreError;
 	public static String RegistryUpdateJob_Label;
 	static {
 		// initialize resource bundle

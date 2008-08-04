@@ -419,7 +419,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		} catch (SQLException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
 					MessageFormat.format(
-							"Could not store item \"{0}\" in database.", item),
+							Messages.DerbySQLStorage_StoreError, item),
 					e);
 		}
 	}
