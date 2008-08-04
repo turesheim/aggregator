@@ -20,6 +20,7 @@ import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
+import no.resheim.aggregator.data.internal.InternalArticle;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -60,7 +61,7 @@ public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
 					collection.notifyListerners(new AggregatorItemChangedEvent(
 							feed, FeedChangeEventType.UPDATING));
 					for (int a = 0; a < count; a++) {
-						Article article = collection.newArticleInstance(feed);
+						Article article = new InternalArticle();
 						article.setFeedUUID(feed.getUUID());
 						article.setTitle("Article #" + a); //$NON-NLS-1$
 						article.setDescription(EMPTY_STRING);
