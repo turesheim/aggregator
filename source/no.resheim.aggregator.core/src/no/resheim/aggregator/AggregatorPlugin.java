@@ -190,6 +190,12 @@ public class AggregatorPlugin extends Plugin {
 				registry.getId().toString());
 	}
 
+	/**
+	 * Returns a collection of all declared feed collections. If the
+	 * initialisation procedure has not completed the caller will have to wait.
+	 * 
+	 * @return
+	 */
 	public Collection<FeedCollection> getCollections() {
 		synchronized (registryMap) {
 			return registryMap.values();
@@ -201,11 +207,13 @@ public class AggregatorPlugin extends Plugin {
 		Job job = new Job(Messages.AggregatorPlugin_Initializing) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				IStatus status = addCollections(ereg, monitor);
-				if (status.isOK()) {
-					addFeeds(ereg);
+				synchronized (registryMap) {
+					IStatus status = addCollections(ereg, monitor);
+					if (status.isOK()) {
+						addFeeds(ereg);
+					}
+					return status;
 				}
-				return status;
 			}
 		};
 		job.schedule();
@@ -221,6 +229,7 @@ public class AggregatorPlugin extends Plugin {
 				if (element.getName().equals("collection")) { //$NON-NLS-1$
 					String id = element.getAttribute("id"); //$NON-NLS-1$
 					String name = element.getAttribute("name"); //$NON-NLS-1$
+					System.out.println(name);
 					boolean pub = Boolean.parseBoolean(element
 							.getAttribute("public")); //$NON-NLS-1$
 					boolean def = Boolean.parseBoolean(element
@@ -231,9 +240,7 @@ public class AggregatorPlugin extends Plugin {
 					final FeedCollection collection = new FeedCollection(id,
 							pub, def);
 					collection.setTitle(name);
-					synchronized (registryMap) {
-						registryMap.put(id, collection);
-					}
+					registryMap.put(id, collection);
 					IAggregatorStorage storage = null;
 					if (persistent) {
 						storage = new DerbySQLStorage(collection,
