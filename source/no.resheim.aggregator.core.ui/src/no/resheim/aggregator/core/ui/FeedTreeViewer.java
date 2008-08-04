@@ -13,10 +13,10 @@ package no.resheim.aggregator.core.ui;
 
 import java.text.MessageFormat;
 
+import no.resheim.aggregator.data.AggregatorUIItem;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.IAggregatorItem;
-import no.resheim.aggregator.data.internal.AggregatorUIItem;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;

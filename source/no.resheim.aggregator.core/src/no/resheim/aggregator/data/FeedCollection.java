@@ -21,7 +21,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
 import no.resheim.aggregator.data.Feed.Archiving;
-import no.resheim.aggregator.data.internal.AggregatorUIItem;
 import no.resheim.aggregator.data.internal.CollectionUpdateJob;
 import no.resheim.aggregator.data.internal.IAggregatorStorage;
 import no.resheim.aggregator.data.internal.InternalArticle;

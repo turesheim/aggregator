@@ -12,10 +12,10 @@
 package no.resheim.aggregator.core.ui;
 
 import no.resheim.aggregator.data.AggregatorItemChangedEvent;
+import no.resheim.aggregator.data.AggregatorUIItem;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorEventListener;
 import no.resheim.aggregator.data.IAggregatorItem;
-import no.resheim.aggregator.data.internal.AggregatorUIItem;
 
 import org.eclipse.jface.viewers.IBasicPropertyConstants;
 import org.eclipse.jface.viewers.ILazyTreeContentProvider;

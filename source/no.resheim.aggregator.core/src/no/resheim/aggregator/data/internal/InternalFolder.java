@@ -2,6 +2,7 @@ package no.resheim.aggregator.data.internal;
 
 import java.util.UUID;
 
+import no.resheim.aggregator.data.AggregatorUIItem;
 import no.resheim.aggregator.data.Folder;
 
 public class InternalFolder extends Folder {

@@ -9,13 +9,11 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.data.internal;
+package no.resheim.aggregator.data;
 
 import java.util.EnumSet;
 import java.util.UUID;
 
-import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.IAggregatorItem;
 
 /**
  * This type implements the UI presentable information for aggregator items such

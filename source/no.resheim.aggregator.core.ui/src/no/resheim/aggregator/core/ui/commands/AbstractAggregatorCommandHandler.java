@@ -11,8 +11,8 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.commands;
 
+import no.resheim.aggregator.data.AggregatorUIItem;
 import no.resheim.aggregator.data.IAggregatorItem;
-import no.resheim.aggregator.data.internal.AggregatorUIItem;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;

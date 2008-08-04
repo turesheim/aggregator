@@ -14,10 +14,10 @@ package no.resheim.aggregator.rss.internal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import no.resheim.aggregator.data.AggregatorUIItem;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.internal.AggregatorUIItem;
 import no.resheim.aggregator.data.internal.InternalArticle;
 
 import org.xml.sax.Attributes;

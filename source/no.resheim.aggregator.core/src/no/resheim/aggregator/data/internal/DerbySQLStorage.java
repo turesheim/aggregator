@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import no.resheim.aggregator.AggregatorPlugin;
+import no.resheim.aggregator.data.AggregatorUIItem;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;

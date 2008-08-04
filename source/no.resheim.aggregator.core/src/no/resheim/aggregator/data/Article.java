@@ -5,7 +5,6 @@ package no.resheim.aggregator.data;
 
 import java.util.UUID;
 
-import no.resheim.aggregator.data.internal.AggregatorUIItem;
 
 /**
  * 
