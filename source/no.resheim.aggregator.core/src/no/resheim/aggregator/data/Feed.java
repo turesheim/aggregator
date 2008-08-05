@@ -22,6 +22,13 @@ import java.util.UUID;
 public class Feed implements IAggregatorItem {
 
 	/**
+	 * A unique identifier will be created for the feed as it is instantiated.
+	 */
+	public Feed() {
+		uuid = UUID.randomUUID();
+	}
+
+	/**
 	 * 
 	 */
 	public enum Archiving {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="no.resheim.aggregator.core.ui" version="2">
+    <resource path="src/no/resheim/aggregator/core/ui/FeedTreeViewer.java" type="no.resheim.aggregator.core.ui.FeedTreeViewer">
+        <filter id="571473929">
+            <message_arguments>
+                <message_argument value="TreeViewer"/>
+                <message_argument value="FeedTreeViewer"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>

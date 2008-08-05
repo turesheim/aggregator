@@ -5,7 +5,6 @@ package no.resheim.aggregator.data;
 
 import java.util.UUID;
 
-
 /**
  * 
  * @author Torkild Ulvøy Resheim
@@ -44,8 +43,8 @@ public class Article extends AggregatorUIItem {
 	/** The read date */
 	protected long readDate;
 
-	public Article(AggregatorUIItem parent) {
-		super(parent);
+	public Article(AggregatorUIItem parent, UUID uuid) {
+		super(parent, uuid);
 	}
 
 	/**

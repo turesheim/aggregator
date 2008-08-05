@@ -14,7 +14,6 @@ package no.resheim.aggregator.data;
 import java.util.EnumSet;
 import java.util.UUID;
 
-
 /**
  * This type implements the UI presentable information for aggregator items such
  * as articles and folders
@@ -56,8 +55,9 @@ public abstract class AggregatorUIItem implements IAggregatorItem {
 	/**
 	 * @param parent
 	 */
-	public AggregatorUIItem(AggregatorUIItem parent) {
+	public AggregatorUIItem(AggregatorUIItem parent, UUID uuid) {
 		this.parent = parent;
+		this.uuid = uuid;
 	}
 
 	public EnumSet<Mark> getMarks() {
@@ -105,15 +105,6 @@ public abstract class AggregatorUIItem implements IAggregatorItem {
 	 */
 	public void setSerialized(boolean serialized) {
 		this.serialized = serialized;
-	}
-
-	/**
-	 * Sets the identifier of this feed item.
-	 * 
-	 * @param uuid
-	 */
-	public void setUUID(UUID uuid) {
-		this.uuid = uuid;
 	}
 
 	public String getTitle() {

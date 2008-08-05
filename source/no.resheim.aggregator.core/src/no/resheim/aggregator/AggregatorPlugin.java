@@ -3,7 +3,6 @@ package no.resheim.aggregator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.UUID;
 
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
@@ -304,7 +303,6 @@ public class AggregatorPlugin extends Plugin {
 	private Feed createNewFeed(FeedCollection parent,
 			IConfigurationElement element) {
 		Feed feed = new Feed();
-		feed.setUUID(UUID.randomUUID());
 		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.
 		feed.setTitle(element.getAttribute("title")); //$NON-NLS-1$

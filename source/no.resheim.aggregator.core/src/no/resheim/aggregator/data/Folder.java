@@ -13,7 +13,6 @@ package no.resheim.aggregator.data;
 
 import java.util.UUID;
 
-
 /**
  * Aggregator item representing a folder. Folders are used to contain other type
  * of aggregator items such as articles and other folders. A folder may also
@@ -36,8 +35,8 @@ public class Folder extends AggregatorUIItem {
 	 * @param registryId
 	 * @param title
 	 */
-	public Folder(AggregatorUIItem parent) {
-		super(parent);
+	public Folder(AggregatorUIItem parent, UUID uuid) {
+		super(parent, uuid);
 	}
 
 	public String toString() {

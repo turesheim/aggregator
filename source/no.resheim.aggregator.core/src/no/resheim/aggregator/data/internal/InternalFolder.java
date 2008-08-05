@@ -7,8 +7,8 @@ import no.resheim.aggregator.data.Folder;
 
 public class InternalFolder extends Folder {
 
-	public InternalFolder(AggregatorUIItem parent) {
-		super(parent);
+	public InternalFolder(AggregatorUIItem parent, UUID uuid) {
+		super(parent, uuid);
 	}
 
 	public void setFeed(UUID feed) {

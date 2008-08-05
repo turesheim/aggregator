@@ -14,6 +14,7 @@ package no.resheim.aggregator.rss.internal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
@@ -83,7 +84,7 @@ public class AtomItemHandler extends AbstractElementHandler {
 	public AtomItemHandler(FeedCollection registry, Feed feed) {
 		this.collection = registry;
 		this.feed = feed;
-		item = new InternalArticle();
+		item = new InternalArticle(null, UUID.randomUUID());
 		item.setLocation(feed.getLocation());
 		item.setFeedUUID(feed.getUUID());
 		item.setAddedDate(System.currentTimeMillis());

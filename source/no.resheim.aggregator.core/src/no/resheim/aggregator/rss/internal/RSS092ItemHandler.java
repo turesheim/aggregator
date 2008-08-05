@@ -11,6 +11,8 @@
  *******************************************************************************/
 package no.resheim.aggregator.rss.internal;
 
+import java.util.UUID;
+
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.internal.InternalArticle;
@@ -29,7 +31,7 @@ public class RSS092ItemHandler extends AbstractElementHandler {
 	public RSS092ItemHandler(FeedCollection registry, Feed feed) {
 		this.collection = registry;
 		this.feed = feed;
-		item = new InternalArticle();
+		item = new InternalArticle(null, UUID.randomUUID());
 		item.setLocation(feed.getLocation());
 		item.setFeedUUID(feed.getUUID());
 		item.setAddedDate(System.currentTimeMillis());

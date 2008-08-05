@@ -79,7 +79,7 @@ public class FeedCollection extends AggregatorUIItem {
 	private HashMap<UUID, Feed> fFeeds;
 
 	public FeedCollection(String id, boolean pub, boolean def) {
-		super(null);
+		super(null, DEFAULT_ID);
 		this.id = id;
 		this.fPublic = pub;
 		this.fDefault = def;
@@ -133,8 +133,8 @@ public class FeedCollection extends AggregatorUIItem {
 			// No location has been specified for the feed so we must create a
 			// new folder at the collection root and use this.
 			if (feed.getLocation() == null) {
-				InternalFolder folder = new InternalFolder(this);
-				folder.setUUID(UUID.randomUUID());
+				InternalFolder folder = new InternalFolder(this, UUID
+						.randomUUID());
 				folder.setFeed(feed.getUUID());
 				folder.setTitle(feed.getTitle());
 				addNew(folder);

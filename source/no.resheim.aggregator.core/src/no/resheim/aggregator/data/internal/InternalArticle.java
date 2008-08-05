@@ -22,17 +22,11 @@ import no.resheim.aggregator.data.Article;
  * @since 1.0
  */
 public class InternalArticle extends Article {
-
-	public InternalArticle() {
-		super(null);
-		uuid = UUID.randomUUID();
-	}
-
 	/**
 	 * Access to the constructor is limited as we
 	 */
-	InternalArticle(AggregatorUIItem parent) {
-		super(parent);
+	public InternalArticle(AggregatorUIItem parent, UUID uuid) {
+		super(parent, uuid);
 	}
 
 	/**

@@ -142,9 +142,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private Article composeArticle(AggregatorUIItem parent, ResultSet rs)
 			throws SQLException {
-		InternalArticle item = new InternalArticle(parent);
-		item.setUUID(UUID.fromString(rs.getString(1)));
-		item.setParent(parent);
+		InternalArticle item = new InternalArticle(parent, UUID.fromString(rs
+				.getString(1)));
 		item.setOrdering(rs.getInt(3));
 		item.setFeedUUID(UUID.fromString(rs.getString(4)));
 		item.setGuid(rs.getString(5));
@@ -173,8 +172,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private AggregatorUIItem composeFolder(AggregatorUIItem parent, ResultSet rs)
 			throws SQLException {
-		InternalFolder item = new InternalFolder(parent);
-		item.setUUID(UUID.fromString(rs.getString(1)));
+		InternalFolder item = new InternalFolder(parent, UUID.fromString(rs
+				.getString(1)));
 		item.setParent(parent);
 		item.setOrdering(rs.getInt(3));
 		if (rs.getString(4) != null) {
@@ -218,8 +217,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			}
 			// Create a folder to represent the collection root. This is
 			// required for maintaining relation integrity.
-			Folder root = new InternalFolder(null);
-			root.setUUID(collection.getUUID());
+			Folder root = new InternalFolder(null, collection.getUUID());
 			root.setTitle("ROOT"); //$NON-NLS-1$
 			root.setHidden(true);
 			insert(root);
@@ -418,9 +416,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			return Status.OK_STATUS;
 		} catch (SQLException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
-					MessageFormat.format(
-							Messages.DerbySQLStorage_StoreError, item),
-					e);
+					MessageFormat.format(Messages.DerbySQLStorage_StoreError,
+							item), e);
 		}
 	}
 
