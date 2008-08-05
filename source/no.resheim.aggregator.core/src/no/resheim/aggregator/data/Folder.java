@@ -27,16 +27,22 @@ public class Folder extends AggregatorUIItem {
 
 	protected UUID feed;
 
-	public UUID getFeed() {
-		return feed;
-	}
-
 	/**
 	 * @param registryId
 	 * @param title
 	 */
 	public Folder(AggregatorUIItem parent, UUID uuid) {
 		super(parent, uuid);
+	}
+
+	/**
+	 * Returns the associated feed identifier or <b>null</b>. If a value is
+	 * returned this folder is the default folder for the articles of the feed.
+	 * 
+	 * @return the feed identifier
+	 */
+	public UUID getFeed() {
+		return feed;
 	}
 
 	public String toString() {

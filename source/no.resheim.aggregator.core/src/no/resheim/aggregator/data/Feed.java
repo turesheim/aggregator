@@ -234,6 +234,13 @@ public class Feed implements IAggregatorItem {
 		this.link = link;
 	}
 
+	/**
+	 * Sets the identifier of the folder where articles found in this feed will
+	 * be placed when downloaded.
+	 * 
+	 * @param location
+	 *            UUID of the folder
+	 */
 	public void setLocation(UUID location) {
 		this.location = location;
 	}

@@ -81,10 +81,6 @@ public abstract class AggregatorUIItem implements IAggregatorItem {
 		return uuid;
 	}
 
-	public boolean isSerialized() {
-		return serialized;
-	}
-
 	public void setMarks(EnumSet<Mark> mark) {
 		this.marks = mark;
 	}
@@ -93,18 +89,14 @@ public abstract class AggregatorUIItem implements IAggregatorItem {
 		this.ordering = ordering;
 	}
 
+	/**
+	 * Used to set the new parent item of the aggregator item.
+	 * 
+	 * @param parent
+	 *            the new parent item
+	 */
 	public void setParent(AggregatorUIItem parent) {
 		this.parent = parent;
-	}
-
-	/**
-	 * Marks the item as serialised. This is done whenever serialised or
-	 * deserialised such as when read from a database.
-	 * 
-	 * @param serialized
-	 */
-	public void setSerialized(boolean serialized) {
-		this.serialized = serialized;
 	}
 
 	public String getTitle() {
