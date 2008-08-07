@@ -27,7 +27,9 @@ public class InternalArticle extends Article {
 	 */
 	public InternalArticle(AggregatorUIItem parent, UUID uuid, UUID feedId) {
 		super(parent, uuid);
-		setLocation(parent.getUUID());
+		if (parent != null) {
+			setLocation(parent.getUUID());
+		}
 		feed_uuid = feedId;
 	}
 

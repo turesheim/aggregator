@@ -67,30 +67,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		super(registry, path);
 	}
 
-	private void addInt(StringBuffer sb, long value, boolean comma) {
-		if (comma)
-			sb.append(',');
-		sb.append(value);
-	}
-
-	private void addLong(StringBuffer sb, long value, boolean comma) {
-		if (comma)
-			sb.append(',');
-		sb.append(value);
-	}
-
-	private void addString(StringBuffer sb, String value, boolean comma) {
-		if (comma)
-			sb.append(',');
-		if (value == null) {
-			sb.append("''"); //$NON-NLS-1$
-		} else {
-			sb.append('\'');
-			sb.append(value.replaceAll("'", "''")); //$NON-NLS-1$ //$NON-NLS-2$
-			sb.append('\'');
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -783,40 +759,9 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * aggregator.model.Feed)
 	 */
 	public void updateFeed(Feed feed) {
-		try {
-			// StringBuffer sb = new StringBuffer();
-			//			sb.append("update feeds set description="); //$NON-NLS-1$
-			// addString(sb, feed.getDescription(), false);
-			//			sb.append(", link="); //$NON-NLS-1$
-			// addString(sb, feed.getLink(), false);
-			//			sb.append(", title="); //$NON-NLS-1$
-			// addString(sb, feed.getTitle(), false);
-			//			sb.append(", webmaster="); //$NON-NLS-1$
-			// addString(sb, feed.getWebmaster(), false);
-			//			sb.append(", editor="); //$NON-NLS-1$
-			// addString(sb, feed.getEditor(), false);
-			//			sb.append(", copyright="); //$NON-NLS-1$
-			// addString(sb, feed.getCopyright(), false);
-			//			sb.append(", feed_type="); //$NON-NLS-1$
-			// addString(sb, feed.getType(), false);
-			//			sb.append(", last_update="); //$NON-NLS-1$
-			// addLong(sb, feed.getLastUpdate(), false);
-			//			sb.append(", archiving="); //$NON-NLS-1$
-			// addString(sb, feed.getArchiving().toString(), false);
-			//			sb.append(", archiving_items="); //$NON-NLS-1$
-			// addInt(sb, feed.getArchivingItems(), false);
-			//			sb.append(", archiving_days="); //$NON-NLS-1$
-			// addInt(sb, feed.getArchivingDays(), false);
-			//			sb.append(", update_interval="); //$NON-NLS-1$
-			// addInt(sb, feed.getUpdateInterval(), false);
-			//			sb.append(", update_period="); //$NON-NLS-1$
-			// addString(sb, feed.getUpdatePeriod().toString(), false);
-			//			sb.append(" where uuid="); //$NON-NLS-1$
-			// addString(sb, feed.getUUID().toString(), false);
-			// executeUpdate(sb.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// XXX: Use SQL "update" instead of "delete" & "insert"
+		delete(feed);
+		add(feed);
 	}
 
 	/*
