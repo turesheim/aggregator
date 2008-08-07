@@ -25,8 +25,10 @@ public class InternalArticle extends Article {
 	/**
 	 * Access to the constructor is limited as we
 	 */
-	public InternalArticle(AggregatorUIItem parent, UUID uuid) {
+	public InternalArticle(AggregatorUIItem parent, UUID uuid, UUID feedId) {
 		super(parent, uuid);
+		setLocation(parent.getUUID());
+		feed_uuid = feedId;
 	}
 
 	/**

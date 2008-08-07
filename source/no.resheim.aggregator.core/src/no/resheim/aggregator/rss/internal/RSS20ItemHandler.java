@@ -44,9 +44,8 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 	public RSS20ItemHandler(FeedCollection registry, Feed feed) {
 		this.collection = registry;
 		this.feed = feed;
-		item = new InternalArticle(null, UUID.randomUUID());
+		item = new InternalArticle(null, UUID.randomUUID(), feed.getUUID());
 		item.setLocation(feed.getLocation());
-		item.setFeedUUID(feed.getUUID());
 		item.setAddedDate(System.currentTimeMillis());
 	}
 

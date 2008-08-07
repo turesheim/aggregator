@@ -37,12 +37,12 @@ public abstract class AggregatorUIItem implements IAggregatorItem {
 
 	protected boolean serialized;
 
-	protected UUID uuid;
+	protected UUID uuid = null;
 
-	private boolean hidden;
+	private boolean hidden = false;
 
 	/** The folder title */
-	protected String title;
+	protected String title = ""; //$NON-NLS-1$
 
 	public boolean isHidden() {
 		return hidden;

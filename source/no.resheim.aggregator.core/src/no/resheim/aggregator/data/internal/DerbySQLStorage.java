@@ -143,9 +143,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	private Article composeArticle(AggregatorUIItem parent, ResultSet rs)
 			throws SQLException {
 		InternalArticle item = new InternalArticle(parent, UUID.fromString(rs
-				.getString(1)));
+				.getString(1)), UUID.fromString(rs.getString(4)));
 		item.setOrdering(rs.getInt(3));
-		item.setFeedUUID(UUID.fromString(rs.getString(4)));
 		item.setGuid(rs.getString(5));
 		item.setTitle(rs.getString(6));
 		item.setLink(rs.getString(7));
