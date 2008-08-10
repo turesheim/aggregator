@@ -36,7 +36,11 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 	protected static final String[] STATE_PROPERTIES = new String[] {
 			IBasicPropertyConstants.P_TEXT, IBasicPropertyConstants.P_IMAGE
 	};
+
+	/** The tree viewer we're providing content for */
 	private TreeViewer fViewer;
+
+	/** The input */
 	private FeedCollection fCollection;
 
 	/**
@@ -80,11 +84,20 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 	public void aggregatorItemChanged(final AggregatorItemChangedEvent event) {
 		synchronized (fViewer) {
 			Display.getDefault().asyncExec(new Runnable() {
+
+				private void updateStructure(AggregatorUIItem item) {
+					AggregatorUIItem parent = item.getParent();
+					fViewer.update(item, STATE_PROPERTIES);
+					if (!(parent instanceof FeedCollection)) {
+						updateStructure(parent);
+					}
+				}
+
 				public void run() {
 					if (fViewer != null) {
 						switch (event.getType()) {
 						case READ:
-							fViewer.refresh();
+							updateStructure((AggregatorUIItem) event.getItem());
 							break;
 						case UPDATED:
 							// We _have_ to refresh deeply after adding new
