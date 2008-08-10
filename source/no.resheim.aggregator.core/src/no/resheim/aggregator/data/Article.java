@@ -3,6 +3,9 @@
  ****************************************************************************/
 package no.resheim.aggregator.data;
 
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -42,6 +45,9 @@ public class Article extends AggregatorUIItem {
 
 	/** The read date */
 	protected long readDate;
+
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
+			"EEE, dd MMMM yyyy kk:mm:ss"); //$NON-NLS-1$
 
 	public Article(AggregatorUIItem parent, UUID uuid) {
 		super(parent, uuid);
@@ -136,6 +142,38 @@ public class Article extends AggregatorUIItem {
 		sb.append(" ["); //$NON-NLS-1$
 		sb.append(getOrdering());
 		sb.append(']');
+		return sb.toString();
+	}
+
+	public String getDetails() {
+		StringBuilder sb = new StringBuilder();
+		if (creator != null && publicationDate > 0) {
+			sb.append(MessageFormat.format(
+					"Published by {0} on {1}. Downloaded on {2}.",
+					new Object[] {
+							creator,
+							dateFormat.format(new Date(publicationDate)),
+							dateFormat.format(new Date(addedDate))
+					}));
+		} else if (creator != null) {
+			sb.append(MessageFormat.format(
+					"Published on {0}. Downloaded on {1}.", new Object[] {
+							dateFormat.format(new Date(publicationDate)),
+							dateFormat.format(new Date(addedDate))
+					}));
+		} else if (publicationDate > 0) {
+			sb.append(MessageFormat.format(
+					"Published on {0}. Downloaded on {1}.", new Object[] {
+							dateFormat.format(new Date(publicationDate)),
+							dateFormat.format(new Date(addedDate))
+					}));
+
+		} else {
+			sb.append(MessageFormat.format("Downloaded on {0}.", new Object[] {
+				dateFormat.format(new Date(addedDate))
+			}));
+
+		}
 		return sb.toString();
 	}
 }

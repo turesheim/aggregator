@@ -57,7 +57,8 @@ public class FeedItemTitle extends Composite {
 	 *            the widget factory for the tabbed property sheet
 	 */
 	public FeedItemTitle(Composite parent, FeedViewWidgetFactory factory) {
-		super(parent, SWT.NO_FOCUS);
+		// super(parent, SWT.NO_FOCUS);
+		super(parent, SWT.NONE);
 		this.factory = factory;
 
 		this.addPaintListener(new PaintListener() {

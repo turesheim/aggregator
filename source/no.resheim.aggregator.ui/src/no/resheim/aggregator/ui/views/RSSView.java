@@ -30,6 +30,7 @@ import no.resheim.aggregator.data.Folder;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
@@ -69,6 +70,15 @@ public class RSSView extends ViewPart implements IFeedView,
 	 */
 	class ViewSelectionListener implements ISelectionChangedListener {
 
+		private void setStatusText(String text) {
+			IStatusLineManager mgr = getViewSite().getActionBars()
+					.getStatusLineManager();
+			if (mgr != null) {
+				mgr.setMessage(text);
+			}
+
+		}
+
 		public void selectionChanged(SelectionChangedEvent event) {
 			// Reset in case it's not an Item that is selected.
 			fLastSelectionItem = null;
@@ -77,6 +87,7 @@ public class RSSView extends ViewPart implements IFeedView,
 						.getSelection();
 				if (selection.getFirstElement() instanceof Article) {
 					Article item = (Article) selection.getFirstElement();
+					setStatusText(item.getDetails());
 					preview.show(item);
 					if (pPreviewIsRead && !item.isRead()) {
 						fLastSelectionItem = item;
@@ -89,6 +100,7 @@ public class RSSView extends ViewPart implements IFeedView,
 			}
 		}
 	}
+
 	private static final String BLANK = ""; //$NON-NLS-1$
 	public static final String DEFAULT_COLLECTION_ID = "no.resheim.aggregator.ui.defaultFeedCollection"; //$NON-NLS-1$
 	private static final String MEMENTO_ORIENTATION = ".ORIENTATION"; //$NON-NLS-1$
@@ -389,6 +401,7 @@ public class RSSView extends ViewPart implements IFeedView,
 		treeView.setInput(registry);
 		labelProvider.setCollection(registry);
 	}
+
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
