@@ -24,6 +24,14 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+/**
+ * Command handler for adding folder items to a feed collection. The folder will
+ * be added as a child of the currently selected item.
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
+ */
+@SuppressWarnings("restriction")
 public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 		implements IHandler {
 
