@@ -242,7 +242,7 @@
             title="Dilbert Blog"
             updateInterval="1"
             updatePeriod="HOURS"
-            url="http://dilbert.com/blog">
+            url="http://feedproxy.google.com/typepad/ihdT?format=xml">
       </feed>
       <feed
             archivingDays="30"
