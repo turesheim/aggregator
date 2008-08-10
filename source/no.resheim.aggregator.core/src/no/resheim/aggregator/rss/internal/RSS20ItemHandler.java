@@ -11,7 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.rss.internal;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
@@ -76,12 +75,7 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 		}
 		// RFC822 date specification
 		if (qName.equals(PUBDATE)) {
-			try {
-				item.setPublicationDate(date.parse(getBuffer().toString())
-						.getTime());
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+			item.setPublicationDate(parse(getBuffer().toString()).getTime());
 			setCapture(false);
 		}
 		if (qName.equals(ITEM)) {

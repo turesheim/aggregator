@@ -13,6 +13,8 @@ package no.resheim.aggregator.rss.internal;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 import no.resheim.aggregator.data.AggregatorUIItem;
 import no.resheim.aggregator.data.Article;
@@ -50,6 +52,41 @@ public abstract class AbstractElementHandler implements IElementHandler {
 	// http://purl.org/dc/elements/1.1/
 	static final String DC_DATE = "dc:date"; //$NON-NLS-1$
 	private static final String DC_CREATOR = "dc:creator"; //$NON-NLS-1$
+
+	static String[] date_formats = {
+			"yyyy-MM-dd'T'kk:mm:ssZ", // ISO //$NON-NLS-1$
+			"yyyy-MM-dd'T'kk:mm:ss'Z'", // ISO //$NON-NLS-1$
+			"yyyy-MM-dd'T'kk:mm:ssz", // ISO //$NON-NLS-1$
+			"yyyy-MM-dd'T'kk:mm:ss", // ISO //$NON-NLS-1$
+			"EEE, d MMM yy kk:mm:ss z", // RFC822 //$NON-NLS-1$
+			"EEE, d MMM yyyy kk:mm:ss z", // RFC2882 //$NON-NLS-1$
+			"EEE MMM  d kk:mm:ss zzz yyyy", // ASC //$NON-NLS-1$
+			"EEE, dd MMMM yyyy kk:mm:ss", // Mon, 26 January 2004 //$NON-NLS-1$
+			// 16:31:00 ET
+			"yyyy-MM-dd kk:mm:ss.0", "-yy-MM", "-yyMM", "yy-MM-dd", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			"yyyy-MM-dd", "yyyy-MM", "yyyy-D", "-yyMM", "yyyyMMdd", "yyMMdd", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+			"yyyy", "yyD" //$NON-NLS-1$ //$NON-NLS-2$
+
+	};
+
+	public static Date parse(String d) {
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat();
+		formatter.setTimeZone(TimeZone.getTimeZone("GMT")); //$NON-NLS-1$
+		d = d.replaceAll("([-+]\\d\\d:\\d\\d)", "GMT$1"); // Correct W3C times //$NON-NLS-1$ //$NON-NLS-2$
+		d = d.replaceAll(" ([ACEMP])T$", " $1ST"); // Correct Disney times //$NON-NLS-1$ //$NON-NLS-2$
+		for (int i = 0; i < date_formats.length; i++) {
+			try {
+				formatter.applyPattern(date_formats[i]);
+				date = formatter.parse(d);
+				break;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return date;
+	}
 
 	/** Temporary text storage */
 	private StringBuffer buffer;
