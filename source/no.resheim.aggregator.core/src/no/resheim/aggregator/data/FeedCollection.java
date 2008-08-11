@@ -219,7 +219,6 @@ public class FeedCollection extends AggregatorUIItem {
 	 * @param item
 	 *            the parent item
 	 * @return the child items
-	 * @deprecated We should be able to get by without this one.
 	 */
 	public IAggregatorItem[] getChildren(IAggregatorItem item) {
 		try {
@@ -230,9 +229,6 @@ public class FeedCollection extends AggregatorUIItem {
 		}
 	}
 
-	/**
-	 * @deprecated by calling this method we're creating a lot of instances
-	 */
 	private List<IAggregatorItem> getDescendants(IAggregatorItem item) {
 		ArrayList<IAggregatorItem> descendants = new ArrayList<IAggregatorItem>();
 		for (IAggregatorItem aggregatorItem : getChildren(item)) {
@@ -624,16 +620,20 @@ public class FeedCollection extends AggregatorUIItem {
 		return events;
 	}
 
-	public void updateAllFeeds() {
-		for (Feed feed : getFeeds().values()) {
-			updateFeed(feed);
-		}
-	}
-
-	public void updateFeed(Feed feed) {
-		if (!feed.isUpdating()) {
-			FeedUpdateJob job = new FeedUpdateJob(this, feed);
-			job.schedule();
+	public void update(IAggregatorItem item) {
+		List<IAggregatorItem> items = getDescendants(item);
+		items.add(item);
+		for (IAggregatorItem aggregatorItem : items) {
+			if (aggregatorItem instanceof Folder) {
+				UUID feedId = ((Folder) aggregatorItem).getFeed();
+				if (feedId != null) {
+					Feed feed = getFeeds().get(feedId);
+					if (!feed.isUpdating()) {
+						FeedUpdateJob job = new FeedUpdateJob(this, feed);
+						job.schedule();
+					}
+				}
+			}
 		}
 	}
 
