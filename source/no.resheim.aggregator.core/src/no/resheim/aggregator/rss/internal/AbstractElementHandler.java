@@ -81,7 +81,6 @@ public abstract class AbstractElementHandler implements IElementHandler {
 				date = formatter.parse(d);
 				break;
 			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 
