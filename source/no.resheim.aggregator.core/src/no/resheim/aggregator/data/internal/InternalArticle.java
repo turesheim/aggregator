@@ -23,7 +23,12 @@ import no.resheim.aggregator.data.Article;
  */
 public class InternalArticle extends Article {
 	/**
-	 * Access to the constructor is limited as we
+	 * @param the
+	 *            parent item (folder)
+	 * @param the
+	 *            unique identifier of the item
+	 * @param the
+	 *            identifier of the feed
 	 */
 	public InternalArticle(AggregatorUIItem parent, UUID uuid, UUID feedId) {
 		super(parent, uuid);
@@ -44,6 +49,12 @@ public class InternalArticle extends Article {
 		this.addedDate = added;
 	}
 
+	/**
+	 * Sets the creator name of the article.
+	 * 
+	 * @param creator
+	 *            the creator name
+	 */
 	public void setCreator(String creator) {
 		this.creator = creator;
 	}
@@ -82,6 +93,13 @@ public class InternalArticle extends Article {
 		this.link = link;
 	}
 
+	/**
+	 * Sets the location of the feed. This should only be done when an instance
+	 * of the parent item is not available.
+	 * 
+	 * @param location
+	 *            the identifier of the parent item
+	 */
 	public void setLocation(UUID location) {
 		this.location = location;
 	}
