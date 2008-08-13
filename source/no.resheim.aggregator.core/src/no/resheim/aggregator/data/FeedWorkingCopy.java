@@ -10,7 +10,7 @@ import java.util.UUID;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class FeedWorkingCopy extends Feed {
+public final class FeedWorkingCopy extends Feed {
 	Feed feed;
 
 	public static FeedWorkingCopy newInstance(IAggregatorItem parent) {

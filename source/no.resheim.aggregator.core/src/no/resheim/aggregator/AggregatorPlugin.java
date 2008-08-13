@@ -6,10 +6,10 @@ import java.util.HashMap;
 
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.data.IAggregatorStorage;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
 import no.resheim.aggregator.data.internal.DerbySQLStorage;
-import no.resheim.aggregator.data.internal.IAggregatorStorage;
 import no.resheim.aggregator.data.internal.MemoryStorage;
 
 import org.eclipse.core.net.proxy.IProxyService;

@@ -14,6 +14,7 @@ package no.resheim.aggregator.data.internal;
 import java.util.EnumSet;
 
 import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.data.IAggregatorStorage;
 import no.resheim.aggregator.data.AggregatorUIItem.Mark;
 
 import org.eclipse.core.resources.ISaveContext;
@@ -21,6 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
 /**
+ * Implementation of {@link IAggregatorStorage} with some common features.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0

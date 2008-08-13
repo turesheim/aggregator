@@ -10,15 +10,10 @@
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
 
-package no.resheim.aggregator.data.internal;
+package no.resheim.aggregator.data;
 
 import java.util.HashMap;
 import java.util.UUID;
-
-import no.resheim.aggregator.data.AggregatorUIItem;
-import no.resheim.aggregator.data.Article;
-import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.core.resources.ISaveParticipant;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,6 +31,7 @@ import org.eclipse.core.runtime.IStatus;
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
+ * @noimplement This interface is not intended to be implemented by clients.
  */
 public interface IAggregatorStorage extends ISaveParticipant {
 

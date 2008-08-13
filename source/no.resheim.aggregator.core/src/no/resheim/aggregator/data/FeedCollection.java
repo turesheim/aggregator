@@ -22,7 +22,6 @@ import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.internal.CollectionUpdateJob;
-import no.resheim.aggregator.data.internal.IAggregatorStorage;
 import no.resheim.aggregator.data.internal.InternalArticle;
 import no.resheim.aggregator.data.internal.InternalFolder;
 
@@ -463,7 +462,7 @@ public class FeedCollection extends AggregatorUIItem {
 			fDatabase.delete((AggregatorUIItem) item);
 			if (item instanceof Folder) {
 				UUID feedId = ((Folder) item).getFeed();
-				// Make sure we also delete the associated feed
+				// Make sure we also delete the associated feed instance
 				if (feedId != null) {
 					fDatabase.delete(fFeeds.remove(feedId));
 				}
