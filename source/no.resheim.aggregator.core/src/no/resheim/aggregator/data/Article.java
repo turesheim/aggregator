@@ -149,7 +149,7 @@ public class Article extends AggregatorUIItem {
 		StringBuilder sb = new StringBuilder();
 		if (creator != null && publicationDate > 0) {
 			sb.append(MessageFormat.format(
-					"Published by {0} on {1}. Downloaded on {2}.",
+					Messages.Article_PublishedByAndDownloaded,
 					new Object[] {
 							creator,
 							dateFormat.format(new Date(publicationDate)),
@@ -157,19 +157,19 @@ public class Article extends AggregatorUIItem {
 					}));
 		} else if (creator != null) {
 			sb.append(MessageFormat.format(
-					"Published on {0}. Downloaded on {1}.", new Object[] {
+					Messages.Article_PublishedAndDownloaded, new Object[] {
 							dateFormat.format(new Date(publicationDate)),
 							dateFormat.format(new Date(addedDate))
 					}));
 		} else if (publicationDate > 0) {
 			sb.append(MessageFormat.format(
-					"Published on {0}. Downloaded on {1}.", new Object[] {
+					Messages.Article_PublishedAndDownloaded, new Object[] {
 							dateFormat.format(new Date(publicationDate)),
 							dateFormat.format(new Date(addedDate))
 					}));
 
 		} else {
-			sb.append(MessageFormat.format("Downloaded on {0}.", new Object[] {
+			sb.append(MessageFormat.format(Messages.Article_Downloaded, new Object[] {
 				dateFormat.format(new Date(addedDate))
 			}));
 
