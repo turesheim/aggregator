@@ -20,6 +20,7 @@ import java.util.UUID;
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
+ * @noextend This class is not intended to be subclassed by clients.
  */
 public abstract class AggregatorUIItem implements IAggregatorItem {
 
