@@ -31,6 +31,8 @@ import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 
 /**
  * 
@@ -164,6 +166,7 @@ public class FeedCollection extends AggregatorUIItem {
 			int articles = site.getArchivingItems();
 			switch (archiving) {
 			case KEEP_ALL:
+				// Do nothing as we want to keep all items
 				break;
 			case KEEP_NEWEST:
 				long lim = System.currentTimeMillis() - ((long) days * DAY);
@@ -465,6 +468,11 @@ public class FeedCollection extends AggregatorUIItem {
 				// Make sure we also delete the associated feed instance
 				if (feedId != null) {
 					fDatabase.delete(fFeeds.remove(feedId));
+					ISecurePreferences root = SecurePreferencesFactory
+							.getDefault().node(
+									AggregatorPlugin.SECURE_STORAGE_ROOT);
+					ISecurePreferences feedNode = root.node(feedId.toString());
+					feedNode.removeNode();
 				}
 			}
 			notifyListerners(new AggregatorItemChangedEvent(item,

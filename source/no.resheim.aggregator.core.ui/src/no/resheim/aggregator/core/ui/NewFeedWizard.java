@@ -11,12 +11,16 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.core.ui.internal.NewFeedWizardGeneralPage;
 import no.resheim.aggregator.core.ui.internal.NewFeedWizardOptionsPage;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.FeedWorkingCopy;
 
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 
@@ -67,6 +71,22 @@ public class NewFeedWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
+		if (!workingCopy.isAnonymousAccess()) {
+			ISecurePreferences root = SecurePreferencesFactory.getDefault()
+					.node(AggregatorPlugin.SECURE_STORAGE_ROOT);
+			ISecurePreferences feedNode = root.node(workingCopy.getUUID()
+					.toString());
+			try {
+				feedNode.put(AggregatorPlugin.SECURE_STORAGE_USERNAME,
+						workingCopy.getUsername(), true);
+				feedNode.put(AggregatorPlugin.SECURE_STORAGE_PASSWORD,
+						workingCopy.getPassword(), true);
+			} catch (StorageException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		collection.addNew(workingCopy.getFeed());
 		return true;
 	}
 

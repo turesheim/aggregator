@@ -118,6 +118,12 @@ public class AggregatorPlugin extends Plugin {
 
 	private boolean fDebugging;
 
+	public static final String SECURE_STORAGE_PASSWORD = "password"; //$NON-NLS-1$
+
+	public static final String SECURE_STORAGE_USERNAME = "username"; //$NON-NLS-1$
+
+	public static final String SECURE_STORAGE_ROOT = PLUGIN_ID;
+
 	@Override
 	public boolean isDebugging() {
 		return fDebugging;

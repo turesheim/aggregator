@@ -27,6 +27,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -38,6 +39,10 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 	private Label urlLabel;
 	private Label titleLabel;
 	private NewFeedWizard wizard;
+	private Label userLabel;
+	private Text userText;
+	private Label passwordLabel;
+	private Text passwordText;
 
 	/**
 	 * Create the wizard
@@ -106,6 +111,53 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 			}
 		});
 		urlText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+		final Button loginButton = new Button(container, SWT.CHECK);
+		loginButton.setText(Messages.NewFeedWizardGeneralPage_Anonymous);
+		GridData gd2 = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		gd2.horizontalSpan = 2;
+		loginButton.setLayoutData(gd2);
+		loginButton.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				boolean state = !(loginButton.getSelection());
+				workingCopy.setAnonymousAccess(loginButton.getSelection());
+				updateCredentialsFields(state);
+			}
+
+		});
+
+		userLabel = new Label(container, SWT.NONE);
+		userLabel.setText(Messages.NewFeedWizardGeneralPage_Login);
+		userText = new Text(container, SWT.BORDER);
+		userText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		userText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				workingCopy.setUsername(userText.getText());
+				validate();
+			}
+		});
+		passwordLabel = new Label(container, SWT.NONE);
+		passwordLabel.setText(Messages.NewFeedWizardGeneralPage_Password);
+		passwordText = new Text(container, SWT.BORDER | SWT.PASSWORD);
+		passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false));
+		passwordText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				workingCopy.setPassword(passwordText.getText());
+				validate();
+			}
+		});
+		loginButton.setSelection(true);
+		updateCredentialsFields(false);
+	}
+
+	private void updateCredentialsFields(boolean state) {
+		userLabel.setEnabled(state);
+		userText.setEnabled(state);
+		passwordLabel.setEnabled(state);
+		passwordText.setEnabled(state);
 	}
 
 	private void validate() {

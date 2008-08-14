@@ -22,6 +22,7 @@ public final class FeedWorkingCopy extends Feed {
 	public FeedWorkingCopy(Feed feed) {
 		super();
 		this.feed = feed;
+		this.uuid = feed.uuid;
 		copy(feed);
 	}
 
@@ -46,6 +47,9 @@ public final class FeedWorkingCopy extends Feed {
 			feed.updateInterval = updateInterval;
 			feed.updatePeriod = updatePeriod;
 			feed.hidden = hidden;
+			feed.anonymousAccess = anonymousAccess;
+			feed.password = password;
+			feed.username = username;
 		}
 		return feed;
 	}

@@ -8,7 +8,8 @@ Bundle-Vendor: Resheim Software
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  no.resheim.aggregator.core,
- org.eclipse.ui.forms
+ org.eclipse.ui.forms,
+ org.eclipse.equinox.security;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Export-Package: no.resheim.aggregator.core.ui,
  no.resheim.aggregator.core.ui.commands,

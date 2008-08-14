@@ -45,9 +45,7 @@ CREATE TABLE feeds (
 		copyright VARCHAR(256),
 		feed_type VARCHAR(32),
 		hidden INT NOT NULL,
-		username VARCHAR(64),
-		password VARCHAR(64),
-		threaded INT
+		anonymous_access INT NOT NULL
 	);
 
 /* Selection*/

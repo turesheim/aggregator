@@ -52,9 +52,9 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	public abstract void delete(IAggregatorItem item);
 
 	/**
-	 * Deletes all articles from the specified feed which publication date (or
-	 * added date if the publication date is not available) is older than the
-	 * given date.
+	 * Deletes all read articles from the specified feed which publication date
+	 * (or added date if the publication date is not available) is older than
+	 * the given date.
 	 * 
 	 * @param feed
 	 *            The feed to delete articles from

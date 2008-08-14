@@ -102,9 +102,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		feed.setCopyright(rs.getString(15));
 		feed.setType(rs.getString(16));
 		feed.setHidden(rs.getInt(17) != 0);
-		feed.setUsername(rs.getString(18));
-		feed.setPassword(rs.getString(19));
-		feed.setThreaded(rs.getInt(20) != 0);
+		feed.setAnonymousAccess(rs.getInt(18) != 0);
 		return feed;
 	}
 
@@ -434,7 +432,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private void insert(Feed feed) throws SQLException {
 		PreparedStatement ps = connection
-				.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+				.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
 		ps.setString(1, feed.getUUID().toString());
 		ps.setString(2, feed.getTitle());
@@ -453,9 +451,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		ps.setString(15, feed.getCopyright()); // copyright
 		ps.setString(16, feed.getType()); // feed_type
 		ps.setInt(17, feed.isHidden() ? 1 : 0);
-		ps.setString(18, feed.getUsername());
-		ps.setString(19, feed.getPassword());
-		ps.setInt(20, feed.isThreaded() ? 1 : 0);
+		ps.setInt(18, feed.isAnonymousAccess() ? 1 : 0);
 		ps.executeUpdate();
 		ps.close();
 	}

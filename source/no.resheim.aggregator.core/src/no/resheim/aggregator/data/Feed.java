@@ -62,13 +62,23 @@ public class Feed implements IAggregatorItem {
 
 	boolean hidden;
 
+	boolean anonymousAccess = true;
+
+	public boolean isAnonymousAccess() {
+		return anonymousAccess;
+	}
+
+	public void setAnonymousAccess(boolean anonymousAccess) {
+		this.anonymousAccess = anonymousAccess;
+	}
+
 	protected long lastUpdate;
 
 	private String link;
 
 	protected UUID location;
-	private String password;
-	boolean threaded;
+	protected String password;
+	protected boolean threaded;
 	protected String title;
 	private String type;
 	protected int updateInterval = 1;
@@ -78,7 +88,7 @@ public class Feed implements IAggregatorItem {
 
 	protected String url = BLANK_STRING;
 
-	private String username;
+	protected String username;
 
 	protected UUID uuid;
 	private String webmaster;

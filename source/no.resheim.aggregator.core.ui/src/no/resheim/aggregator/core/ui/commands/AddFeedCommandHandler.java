@@ -73,7 +73,7 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 					.getActiveShell(event), wizard);
 			dialog.create();
 			if (dialog.open() == Window.OK) {
-				registry.addNew(wizard.getFeed());
+				// registry.addNew(wizard.getFeed());
 			}
 		}
 		return null;

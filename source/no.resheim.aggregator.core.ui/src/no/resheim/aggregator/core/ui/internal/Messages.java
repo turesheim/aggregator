@@ -15,6 +15,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "no.resheim.aggregator.core.ui.internal.messages"; //$NON-NLS-1$
+	public static String NewFeedWizardGeneralPage_Anonymous;
 	public static String NewFeedWizardGeneralPage_Description;
 	public static String NewFeedWizardGeneralPage_Error_Bad_URL;
 	public static String NewFeedWizardGeneralPage_Error_Existing_Feed;
@@ -24,6 +25,8 @@ public class Messages extends NLS {
 	public static String NewFeedWizardGeneralPage_Label_Select;
 	public static String NewFeedWizardGeneralPage_Label_Title;
 	public static String NewFeedWizardGeneralPage_Label_URL;
+	public static String NewFeedWizardGeneralPage_Login;
+	public static String NewFeedWizardGeneralPage_Password;
 	public static String NewFeedWizardGeneralPage_Title;
 	public static String NewFeedWizardOptionsPage_Description;
 	public static String NewFeedWizardOptionsPage_Label_Archiving_Group;

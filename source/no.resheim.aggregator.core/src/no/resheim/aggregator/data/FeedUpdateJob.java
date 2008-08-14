@@ -30,6 +30,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.equinox.security.storage.EncodingUtils;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.xml.sax.SAXException;
 
 /**
@@ -39,6 +43,7 @@ import org.xml.sax.SAXException;
  */
 public class FeedUpdateJob extends Job {
 
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 	private Feed feed;
 	private FeedCollection registry;
 
@@ -88,35 +93,35 @@ public class FeedUpdateJob extends Job {
 	 */
 	private IStatus download(Feed site, boolean debug) {
 		try {
-			// http://wiki.eclipse.org/ProxySupport
 			URL feed = new URL(site.getURL());
 			if (feed == null) {
 				return Status.CANCEL_STATUS;
 			}
 
 			// IProxyService proxy = Aggregator.getDefault().getProxyService();
-			URLConnection yc = null;
-			// Obtain the available proxy data
-			// IProxyData[] proxyData =
-			// proxy.getProxyDataForHost(feed.getHost());
-			// for (IProxyData proxyData2 : proxyData) {
-			// if (proxyData2.getType().equals(
-			// feed.getProtocol().toUpperCase())) {
-			// Proxy p = new Proxy(Type.HTTP, new InetSocketAddress(
-			// proxyData2.getHost(), proxyData2.getPort()));
-			// yc = feed.openConnection(p);
-			// BASE64Encoder encode = new BASE64Encoder();
-			// String encoded = new String(encode.encode(new String(
-			// proxyData2.getUserId() + ":"
-			// + proxyData2.getPassword()).getBytes()));
-			// yc.setRequestProperty("Proxy-Authorization", "Basic "
-			// + encoded);
-			// yc.connect();
-			// break;
-			// }
-			// }
-			if (yc == null)
-				yc = feed.openConnection();
+			URLConnection yc = feed.openConnection();
+			yc.setAllowUserInteraction(true);
+			if (!site.isAnonymousAccess()) {
+				ISecurePreferences root = SecurePreferencesFactory.getDefault()
+						.node(AggregatorPlugin.SECURE_STORAGE_ROOT);
+				ISecurePreferences feedNode = root.node(site.getUUID()
+						.toString());
+				try {
+					String credentials = feedNode.get(
+							AggregatorPlugin.SECURE_STORAGE_USERNAME,
+							EMPTY_STRING)
+							+ ":" //$NON-NLS-1$
+							+ feedNode.get(
+									AggregatorPlugin.SECURE_STORAGE_PASSWORD,
+									EMPTY_STRING);
+					String encoding = EncodingUtils.encodeBase64(credentials
+							.getBytes());
+					yc.setRequestProperty("Authorization", "Basic" + encoding); //$NON-NLS-1$ //$NON-NLS-2$
+				} catch (StorageException e) {
+
+				}
+
+			}
 			FeedParser handler = new FeedParser(registry, site);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser parser = factory.newSAXParser();
@@ -135,5 +140,4 @@ public class FeedUpdateJob extends Job {
 					Messages.FeedUpdateJob_Error_Title, e);
 		}
 	}
-
 }
