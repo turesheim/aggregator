@@ -254,6 +254,16 @@
             updatePeriod="HOURS"
             url="http://phobos.apple.com/WebObjects/MZStore.woa/wpa/MRSS/justadded/limit=25/rss.xml">
       </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NONE"
+            create="false"
+            title="GMail RSS Feed"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="https://gmail.google.com/gmail/feed/atom">
+      </feed>
    </extension>
 
 </plugin>
