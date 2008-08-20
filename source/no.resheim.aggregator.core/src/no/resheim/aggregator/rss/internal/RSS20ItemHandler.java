@@ -30,6 +30,8 @@ import org.xml.sax.SAXException;
  */
 public class RSS20ItemHandler extends AbstractElementHandler {
 
+	private static final String AUTHOR = "author"; //$NON-NLS-1$
+
 	public static final String PUBDATE = "pubDate"; //$NON-NLS-1$
 
 	public static final String GUID = "guid"; //$NON-NLS-1$
@@ -73,12 +75,25 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 			item.setGuid(getBuffer().toString());
 			setCapture(false);
 		}
+		if (qName.equals(AUTHOR)) {
+			item.setCreator(getBuffer().toString());
+			setCapture(false);
+		}
 		// RFC822 date specification
 		if (qName.equals(PUBDATE)) {
 			item.setPublicationDate(parse(getBuffer().toString()).getTime());
 			setCapture(false);
 		}
 		if (qName.equals(ITEM)) {
+			// We don't have a GUID so we need to fake it if possible. If not
+			// we'll bail out as this feed is useless
+			if (item.getGuid() == null) {
+				if (item.getLink() == null) {
+					throw new SAXException(
+							"Feed item is missing both \"guid\" and \"link\" elements."); //$NON-NLS-1$
+				}
+				item.setGuid(item.getLink());
+			}
 			if (!collection.hasArticle(item.getGuid())) {
 				collection.addNew(item);
 			}
@@ -88,7 +103,7 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 	public IElementHandler startElement(String qName, Attributes atts)
 			throws SAXException {
 		super.startElement(qName, atts);
-		if (qName.equals(TITLE) || qName.equals(LINK)
+		if (qName.equals(TITLE) || qName.equals(LINK) || qName.equals(AUTHOR)
 				|| qName.equals(DESCRIPTION) || qName.equals(PUBDATE)
 				|| qName.equals(GUID) || qName.equals(CONTENT_ENCODED)) {
 			setCapture(true);
