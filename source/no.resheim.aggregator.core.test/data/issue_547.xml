@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- generator="FeedCreator 1.6" -->
+<rss version="2.0">
+    <channel>
+        <title>AVRTools</title>
+        <description>WebSVN RSS feed - </description>
+        <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?</link>
+        <lastBuildDate>Wed, 20 Aug 2008 08:16:32 +0000</lastBuildDate>
+        <generator>FeedCreator 1.6</generator>
+        <item>
+            <title>corrected comment</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44668&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44668 - okbrattli&lt;/strong&gt; (1 file(s) modified)&lt;/div&gt;&lt;div&gt;corrected comment&lt;/div&gt;</description>
+            <author>okbrattli</author>
+            <pubDate>Tue, 19 Aug 2008 14:19:01 +0000</pubDate>
+        </item>
+        <item>
+            <title>refactored to clean up trace mode state machine</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44667&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44667 - okbrattli&lt;/strong&gt; (7 file(s) modified)&lt;/div&gt;&lt;div&gt;refactored to clean up trace mode state machine&lt;/div&gt;</description>
+            <author>okbrattli</author>
+            <pubDate>Tue, 19 Aug 2008 14:16:15 +0000</pubDate>
+        </item>
+        <item>
+            <title>Fixed bug 7107: Only print warnings, don't exit when erasing ...</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44623&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44623 - tolsen&lt;/strong&gt; (2 file(s) modified)&lt;/div&gt;&lt;div&gt;Fixed bug 7107: Only print warnings, don't exit when erasing or&lt;br /&gt;
+programming flash sectors fail.&lt;br /&gt;
+* Avr32Program::program(): Use auto_ptr and new class for deleting a&lt;br /&gt;
+  vector of pointers, removing try/catch block, thus flattening the&lt;br /&gt;
+  method.&lt;/div&gt;</description>
+            <author>tolsen</author>
+            <pubDate>Tue, 19 Aug 2008 05:34:11 +0000</pubDate>
+        </item>
+        <item>
+            <title>Fixed bug 7107: When LOCKE flag is set during programming ...</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44622&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44622 - tolsen&lt;/strong&gt; (8 file(s) modified)&lt;/div&gt;&lt;div&gt;Fixed bug 7107: When LOCKE flag is set during programming or erasing, print&lt;br /&gt;
+warning and resume/retry.&lt;br /&gt;
+* INTERFACE BREAK: Added flag to Flash::programChip() to ignore&lt;br /&gt;
+  LockErrors (implemented in InternalFlash only), used on retry.&lt;br /&gt;
+* InternalFlash::decodeFlashStatus(): new method for easier debugging.&lt;br /&gt;
+* Added LockError exception class for this purpose.&lt;/div&gt;</description>
+            <author>tolsen</author>
+            <pubDate>Tue, 19 Aug 2008 05:26:46 +0000</pubDate>
+        </item>
+        <item>
+            <title>Added missing mask/offset defines for FSR fields.</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44621&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44621 - tolsen&lt;/strong&gt; (1 file(s) modified)&lt;/div&gt;&lt;div&gt;Added missing mask/offset defines for FSR fields.&lt;/div&gt;</description>
+            <author>tolsen</author>
+            <pubDate>Tue, 19 Aug 2008 05:18:50 +0000</pubDate>
+        </item>
+        <item>
+            <title>Fixed bug #8346: If eraseEntireChip() catches an exception, rethrow it
+for ...</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44613&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44613 - tolsen&lt;/strong&gt; (1 file(s) modified)&lt;/div&gt;&lt;div&gt;Fixed bug #8346: If eraseEntireChip() catches an exception, rethrow it&lt;br /&gt;
+for proper handling.&lt;/div&gt;</description>
+            <author>tolsen</author>
+            <pubDate>Mon, 18 Aug 2008 13:35:33 +0000</pubDate>
+        </item>
+        <item>
+            <title>Added 8kb files with 0x55 and 0xaa patterns.</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44609&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44609 - tolsen&lt;/strong&gt; (2 file(s) modified)&lt;/div&gt;&lt;div&gt;Added 8kb files with 0x55 and 0xaa patterns.&lt;/div&gt;</description>
+            <author>tolsen</author>
+            <pubDate>Mon, 18 Aug 2008 12:28:52 +0000</pubDate>
+        </item>
+        <item>
+            <title>Added #include &amp;lt;map&amp;gt; needed to build after PAB's latest cleanup.</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44587&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44587 - tolsen&lt;/strong&gt; (1 file(s) modified)&lt;/div&gt;&lt;div&gt;Added #include &amp;lt;map&amp;gt; needed to build after PAB's latest cleanup.&lt;/div&gt;</description>
+            <author>tolsen</author>
+            <pubDate>Mon, 18 Aug 2008 08:38:00 +0000</pubDate>
+        </item>
+        <item>
+            <title>Changed error messages when LOCKE or PROGE bits in FSR ...</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44586&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44586 - tolsen&lt;/strong&gt; (1 file(s) modified)&lt;/div&gt;&lt;div&gt;Changed error messages when LOCKE or PROGE bits in FSR are set.&lt;/div&gt;</description>
+            <author>tolsen</author>
+            <pubDate>Mon, 18 Aug 2008 08:28:57 +0000</pubDate>
+        </item>
+        <item>
+            <title>Cleaned up in header files includes to make it compile ...</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44575&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44575 - pablaasmo&lt;/strong&gt; (13 file(s) modified)&lt;/div&gt;&lt;div&gt;Cleaned up in header files includes to make it compile with gcc 4.3.x&lt;br /&gt;
+&lt;br /&gt;
+Added support for the target-to-host syscalls which was added to newlib.&lt;/div&gt;</description>
+            <author>pablaasmo</author>
+            <pubDate>Fri, 15 Aug 2008 14:04:04 +0000</pubDate>
+        </item>
+        <item>
+            <title>Cleaned up in header files includes to make it compile ...</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44553&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44553 - pablaasmo&lt;/strong&gt; (2 file(s) modified)&lt;/div&gt;&lt;div&gt;Cleaned up in header files includes to make it compile with gcc 4.3.x&lt;/div&gt;</description>
+            <author>pablaasmo</author>
+            <pubDate>Fri, 15 Aug 2008 08:59:49 +0000</pubDate>
+        </item>
+        <item>
+            <title>Cleaned up in header files includes to make it compile ...</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44547&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44547 - pablaasmo&lt;/strong&gt; (15 file(s) modified)&lt;/div&gt;&lt;div&gt;Cleaned up in header files includes to make it compile with gcc 4.3.x&lt;/div&gt;</description>
+            <author>pablaasmo</author>
+            <pubDate>Fri, 15 Aug 2008 08:45:55 +0000</pubDate>
+        </item>
+        <item>
+            <title>Added #include &amp;lt;vector&amp;gt;</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44545&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44545 - pablaasmo&lt;/strong&gt; (1 file(s) modified)&lt;/div&gt;&lt;div&gt;Added #include &amp;lt;vector&amp;gt;&lt;/div&gt;</description>
+            <author>pablaasmo</author>
+            <pubDate>Fri, 15 Aug 2008 08:44:03 +0000</pubDate>
+        </item>
+        <item>
+            <title>Added #include &amp;lt;string&amp;gt;</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44543&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44543 - pablaasmo&lt;/strong&gt; (1 file(s) modified)&lt;/div&gt;&lt;div&gt;Added #include &amp;lt;string&amp;gt;&lt;/div&gt;</description>
+            <author>pablaasmo</author>
+            <pubDate>Fri, 15 Aug 2008 08:41:01 +0000</pubDate>
+        </item>
+        <item>
+            <title>Cleaned up in header files includes to make it compile ...</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44536&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44536 - pablaasmo&lt;/strong&gt; (7 file(s) modified)&lt;/div&gt;&lt;div&gt;Cleaned up in header files includes to make it compile with gcc 4.3.x&lt;/div&gt;</description>
+            <author>pablaasmo</author>
+            <pubDate>Fri, 15 Aug 2008 08:12:24 +0000</pubDate>
+        </item>
+        <item>
+            <title>Corrected error message</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44533&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44533 - pablaasmo&lt;/strong&gt; (1 file(s) modified)&lt;/div&gt;&lt;div&gt;Corrected error message&lt;/div&gt;</description>
+            <author>pablaasmo</author>
+            <pubDate>Fri, 15 Aug 2008 07:43:18 +0000</pubDate>
+        </item>
+        <item>
+            <title>Cleaned up in header files includes to make it compile ...</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44527&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44527 - pablaasmo&lt;/strong&gt; (7 file(s) modified)&lt;/div&gt;&lt;div&gt;Cleaned up in header files includes to make it compile with gcc 4.3.x&lt;br /&gt;
+&lt;br /&gt;
+cxxtest: Removed folder since we now check environment for it.&lt;br /&gt;
+configure.ac: added check for 'cxxtest' in environment. &lt;br /&gt;
+tests/unittests/Makefile.in: added checks for BUILD_UNITTEST&lt;/div&gt;</description>
+            <author>pablaasmo</author>
+            <pubDate>Fri, 15 Aug 2008 07:09:39 +0000</pubDate>
+        </item>
+        <item>
+            <title>Cleaned up in header files includes to make it compile ...</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44525&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44525 - pablaasmo&lt;/strong&gt; (16 file(s) modified)&lt;/div&gt;&lt;div&gt;Cleaned up in header files includes to make it compile with gcc 4.3.x&lt;/div&gt;</description>
+            <author>pablaasmo</author>
+            <pubDate>Fri, 15 Aug 2008 06:25:13 +0000</pubDate>
+        </item>
+        <item>
+            <title>Cleaned up in header files includes to make it compile ...</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44520&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44520 - pablaasmo&lt;/strong&gt; (16 file(s) modified)&lt;/div&gt;&lt;div&gt;Cleaned up in header files includes to make it compile with gcc 4.3.x&lt;/div&gt;</description>
+            <author>pablaasmo</author>
+            <pubDate>Fri, 15 Aug 2008 05:29:57 +0000</pubDate>
+        </item>
+        <item>
+            <title>Fixed bug 8242: handle invalid numbers given as fuse values.</title>
+            <link>http://revisor.norway.atmel.com/websvn/tools/wsvn/AVRTools/T0243-GNU_Toolchain/?rev=44499&amp;sc=0</link>
+            <description>&lt;div&gt;&lt;strong&gt;Rev 44499 - tolsen&lt;/strong&gt; (1 file(s) modified)&lt;/div&gt;&lt;div&gt;Fixed bug 8242: handle invalid numbers given as fuse values.&lt;/div&gt;</description>
+            <author>tolsen</author>
+            <pubDate>Thu, 14 Aug 2008 11:37:43 +0000</pubDate>
+        </item>
+    </channel>
+</rss>
