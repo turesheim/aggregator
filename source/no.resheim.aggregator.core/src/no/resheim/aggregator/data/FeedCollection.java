@@ -25,6 +25,7 @@ import no.resheim.aggregator.data.internal.CollectionUpdateJob;
 import no.resheim.aggregator.data.internal.InternalArticle;
 import no.resheim.aggregator.data.internal.InternalFolder;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.SafeRunner;
@@ -118,6 +119,7 @@ public class FeedCollection extends AggregatorUIItem {
 				fDatabase.add(folder);
 			} else if (item instanceof Article) {
 				Article feedItem = (Article) item;
+				validate(feedItem);
 				fDatabase.add(feedItem);
 			}
 		} finally {
@@ -127,7 +129,15 @@ public class FeedCollection extends AggregatorUIItem {
 				FeedChangeEventType.CREATED, System.currentTimeMillis() - start));
 	}
 
+	private void validate(Article article) {
+		Assert
+				.isNotNull(article.getGuid(),
+						"Cannot add article without a guid"); //$NON-NLS-1$
+	}
+
 	public void addNew(Feed feed) {
+		Assert.isNotNull(feed.getUUID(),
+				"Cannot add feed with unspecified UUID"); //$NON-NLS-1$
 		long start = System.currentTimeMillis();
 		try {
 			lock.writeLock().lock();
