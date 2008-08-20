@@ -29,8 +29,8 @@ public class Article extends AggregatorUIItem {
 	/** The UUID of the feed this article belongs to */
 	protected UUID feed_uuid;
 
-	/** The globally unique identifier */
-	protected String guid = EMPTY_STRING;
+	/** The globally unique identifier (should never be null) */
+	protected String guid = null;
 
 	/** Link of the item */
 	protected String link = EMPTY_STRING;
@@ -149,8 +149,7 @@ public class Article extends AggregatorUIItem {
 		StringBuilder sb = new StringBuilder();
 		if (creator != null && publicationDate > 0) {
 			sb.append(MessageFormat.format(
-					Messages.Article_PublishedByAndDownloaded,
-					new Object[] {
+					Messages.Article_PublishedByAndDownloaded, new Object[] {
 							creator,
 							dateFormat.format(new Date(publicationDate)),
 							dateFormat.format(new Date(addedDate))
@@ -169,9 +168,10 @@ public class Article extends AggregatorUIItem {
 					}));
 
 		} else {
-			sb.append(MessageFormat.format(Messages.Article_Downloaded, new Object[] {
-				dateFormat.format(new Date(addedDate))
-			}));
+			sb.append(MessageFormat.format(Messages.Article_Downloaded,
+					new Object[] {
+						dateFormat.format(new Date(addedDate))
+					}));
 
 		}
 		return sb.toString();
