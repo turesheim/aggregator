@@ -16,6 +16,7 @@ import java.util.Stack;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 
+import org.eclipse.core.runtime.Assert;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -29,9 +30,12 @@ import org.xml.sax.helpers.DefaultHandler;
 public class FeedParser extends DefaultHandler {
 	private Stack<IElementHandler> handlers;
 
-	public FeedParser(FeedCollection registry, Feed feed) {
+	public FeedParser(FeedCollection collection, Feed feed) {
+		Assert.isNotNull(collection,
+				"Cannot parse feed with a \"null\" collection"); //$NON-NLS-1$
+		Assert.isNotNull(feed, "Cannot parse feed that is \"null\""); //$NON-NLS-1$
 		handlers = new Stack<IElementHandler>();
-		handlers.push(new RSSFeedHandler(registry, feed));
+		handlers.push(new RSSFeedHandler(collection, feed));
 	}
 
 	public void characters(char[] ch, int start, int length)
