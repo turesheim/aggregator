@@ -14,7 +14,7 @@ import no.resheim.aggregator.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorEventListener;
-import no.resheim.aggregator.data.ParentingAggregatorItem;
+import no.resheim.aggregator.data.AggregatorItemParent;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
 import no.resheim.aggregator.rss.internal.FeedParser;
 
@@ -63,7 +63,7 @@ public class FeedParserTest extends TestCase {
 				if (event.getType().equals(FeedChangeEventType.UPDATED)) {
 					// The folder should now contain 20 items
 					try {
-						ParentingAggregatorItem folder = (ParentingAggregatorItem) getCollection()
+						AggregatorItemParent folder = (AggregatorItemParent) getCollection()
 								.getChildAt(0);
 						int count = folder.getChildCount();
 						if (count != 20) {

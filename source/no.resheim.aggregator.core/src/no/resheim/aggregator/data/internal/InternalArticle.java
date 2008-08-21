@@ -14,7 +14,7 @@ package no.resheim.aggregator.data.internal;
 import java.util.UUID;
 
 import no.resheim.aggregator.data.Article;
-import no.resheim.aggregator.data.ParentingAggregatorItem;
+import no.resheim.aggregator.data.AggregatorItemParent;
 
 /**
  * 
@@ -30,7 +30,7 @@ public class InternalArticle extends Article {
 	 * @param the
 	 *            identifier of the feed
 	 */
-	public InternalArticle(ParentingAggregatorItem parent, UUID uuid,
+	public InternalArticle(AggregatorItemParent parent, UUID uuid,
 			UUID feedId) {
 		super(parent, uuid);
 		if (parent != null) {

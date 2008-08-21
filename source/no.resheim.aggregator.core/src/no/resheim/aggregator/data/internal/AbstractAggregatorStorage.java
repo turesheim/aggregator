@@ -18,7 +18,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorStorage;
-import no.resheim.aggregator.data.AggregatorUIItem.Mark;
+import no.resheim.aggregator.data.AggregatorItem.Mark;
 
 import org.eclipse.core.resources.ISaveContext;
 import org.eclipse.core.runtime.CoreException;

@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
-import no.resheim.aggregator.data.AggregatorUIItem;
+import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorItem;
-import no.resheim.aggregator.data.ParentingAggregatorItem;
+import no.resheim.aggregator.data.AggregatorItemParent;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
@@ -46,17 +46,17 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 	 * maintain the relations between the items.
 	 */
 	protected class ItemHolder {
-		ArrayList<AggregatorUIItem> children;
+		ArrayList<AggregatorItem> children;
 
-		AggregatorUIItem item;
+		AggregatorItem item;
 
 		/**
 		 * @param item
 		 */
-		public ItemHolder(AggregatorUIItem item) {
+		public ItemHolder(AggregatorItem item) {
 			super();
 			this.item = item;
-			children = new ArrayList<AggregatorUIItem>();
+			children = new ArrayList<AggregatorItem>();
 		}
 	}
 
@@ -75,11 +75,11 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		if (item instanceof Feed) {
 			feeds.put(item.getUUID(), (Feed) item);
 		} else {
-			ItemHolder holder = new ItemHolder((AggregatorUIItem) item);
+			ItemHolder holder = new ItemHolder((AggregatorItem) item);
 			items.put(item.getUUID(), holder);
-			ItemHolder parentHolder = items.get(((AggregatorUIItem) item)
+			ItemHolder parentHolder = items.get(((AggregatorItem) item)
 					.getParent().getUUID());
-			parentHolder.children.add((AggregatorUIItem) item);
+			parentHolder.children.add((AggregatorItem) item);
 		}
 		return Status.OK_STATUS;
 	}
@@ -88,7 +88,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		if (item instanceof Feed) {
 			feeds.remove(item.getUUID());
 		} else {
-			ItemHolder parentHolder = items.get(((AggregatorUIItem) item)
+			ItemHolder parentHolder = items.get(((AggregatorItem) item)
 					.getParent().getUUID());
 			Assert.isTrue(parentHolder.children.remove(item));
 			Assert.isNotNull(items.remove(item.getUUID()));
@@ -99,7 +99,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		// TODO Auto-generated method stub
 	}
 
-	public int getChildCount(ParentingAggregatorItem parent) {
+	public int getChildCount(AggregatorItemParent parent) {
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
 			return holder.children.size();
@@ -107,13 +107,13 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 			return 0;
 	}
 
-	public AggregatorUIItem[] getChildren(ParentingAggregatorItem parent) {
+	public AggregatorItem[] getChildren(AggregatorItemParent parent) {
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
-			return holder.children.toArray(new AggregatorUIItem[holder.children
+			return holder.children.toArray(new AggregatorItem[holder.children
 					.size()]);
 		}
-		return new AggregatorUIItem[0];
+		return new AggregatorItem[0];
 	}
 
 	public String getDescription(Article item) {
@@ -128,10 +128,10 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		return feeds;
 	}
 
-	public AggregatorUIItem getItem(ParentingAggregatorItem parent, int index) {
+	public AggregatorItem getItem(AggregatorItemParent parent, int index) {
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
-			for (AggregatorUIItem child : holder.children) {
+			for (AggregatorItem child : holder.children) {
 				if (child.getOrdering() == index)
 					return child;
 			}
@@ -139,7 +139,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		return null;
 	}
 
-	public int getUnreadCount(ParentingAggregatorItem parent) {
+	public int getUnreadCount(AggregatorItemParent parent) {
 		int count = 0;
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
@@ -176,7 +176,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 
 	}
 
-	public void move(AggregatorUIItem item, ParentingAggregatorItem parent,
+	public void move(AggregatorItem item, AggregatorItemParent parent,
 			int order) {
 		ItemHolder oldHolder = items.get(item.getParent().getUUID());
 		ItemHolder newHolder = items.get(parent.getUUID());
@@ -186,7 +186,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		newHolder.children.add(item);
 	}
 
-	public void rename(AggregatorUIItem item) {
+	public void rename(AggregatorItem item) {
 		// TODO Auto-generated method stub
 
 	}
@@ -209,7 +209,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 
 	}
 
-	public void updateReadFlag(AggregatorUIItem item) {
+	public void updateReadFlag(AggregatorItem item) {
 		// TODO Auto-generated method stub
 
 	}

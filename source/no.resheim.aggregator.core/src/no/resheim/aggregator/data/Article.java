@@ -13,7 +13,7 @@ import java.util.UUID;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class Article extends AggregatorUIItem {
+public class Article extends AggregatorItem {
 
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
@@ -49,7 +49,7 @@ public class Article extends AggregatorUIItem {
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"EEE, dd MMMM yyyy kk:mm:ss"); //$NON-NLS-1$
 
-	public Article(ParentingAggregatorItem parent, UUID uuid) {
+	public Article(AggregatorItemParent parent, UUID uuid) {
 		super(parent, uuid);
 	}
 

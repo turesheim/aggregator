@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import no.resheim.aggregator.data.AggregatorUIItem;
+import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
@@ -102,7 +102,7 @@ public abstract class AbstractElementHandler implements IElementHandler {
 	 */
 	protected InternalArticle item;
 
-	protected AggregatorUIItem location;
+	protected AggregatorItem location;
 
 	/** The feed registry we're working for */
 	protected FeedCollection collection;

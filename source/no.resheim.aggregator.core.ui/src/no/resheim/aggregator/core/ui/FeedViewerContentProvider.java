@@ -12,10 +12,10 @@
 package no.resheim.aggregator.core.ui;
 
 import no.resheim.aggregator.data.AggregatorItemChangedEvent;
-import no.resheim.aggregator.data.AggregatorUIItem;
+import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorEventListener;
-import no.resheim.aggregator.data.ParentingAggregatorItem;
+import no.resheim.aggregator.data.AggregatorItemParent;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IBasicPropertyConstants;
@@ -69,8 +69,8 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 	}
 
 	public Object getParent(Object child) {
-		if (child instanceof AggregatorUIItem) {
-			return ((AggregatorUIItem) child).getParent();
+		if (child instanceof AggregatorItem) {
+			return ((AggregatorItem) child).getParent();
 		}
 		return null;
 	}
@@ -86,8 +86,8 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 		synchronized (fViewer) {
 			Display.getDefault().asyncExec(new Runnable() {
 
-				private void updateStructure(AggregatorUIItem item) {
-					AggregatorUIItem parent = item.getParent();
+				private void updateStructure(AggregatorItem item) {
+					AggregatorItem parent = item.getParent();
 					fViewer.update(item, STATE_PROPERTIES);
 					if (!(parent instanceof FeedCollection)) {
 						updateStructure(parent);
@@ -98,7 +98,7 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 					if (fViewer != null) {
 						switch (event.getType()) {
 						case READ:
-							updateStructure((AggregatorUIItem) event.getItem());
+							updateStructure((AggregatorItem) event.getItem());
 							break;
 						case UPDATED:
 							// We _have_ to refresh deeply after adding new
@@ -143,9 +143,9 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 
 	public void updateChildCount(final Object element,
 			final int currentChildCount) {
-		if (element instanceof ParentingAggregatorItem) {
+		if (element instanceof AggregatorItemParent) {
 			int length = 0;
-			ParentingAggregatorItem node = (ParentingAggregatorItem) element;
+			AggregatorItemParent node = (AggregatorItemParent) element;
 			try {
 				length = node.getChildCount();
 				if (length != currentChildCount) {
@@ -158,10 +158,10 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 	}
 
 	public void updateElement(final Object parent, final int index) {
-		if (parent instanceof ParentingAggregatorItem) {
+		if (parent instanceof AggregatorItemParent) {
 			Object element;
 			try {
-				element = ((ParentingAggregatorItem) parent).getChildAt(index);
+				element = ((AggregatorItemParent) parent).getChildAt(index);
 				fViewer.replace(parent, index, element);
 				updateChildCount(element, -1);
 			} catch (CoreException e) {

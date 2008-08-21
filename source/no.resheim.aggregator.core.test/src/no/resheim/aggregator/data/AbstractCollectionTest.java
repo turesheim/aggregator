@@ -22,8 +22,8 @@ public abstract class AbstractCollectionTest extends TestCase {
 	 */
 	protected abstract FeedCollection getCollection();
 
-	protected void compareAggregatorUIItems(AggregatorUIItem item_a,
-			AggregatorUIItem item_b) {
+	protected void compareAggregatorUIItems(AggregatorItem item_a,
+			AggregatorItem item_b) {
 		if (!item_a.getUUID().equals(item_a.getUUID())) {
 			failNotEquals("Unique identifier differs", item_b.getUUID(), item_a //$NON-NLS-1$
 					.getUUID());
@@ -161,11 +161,11 @@ public abstract class AbstractCollectionTest extends TestCase {
 		// the location for the feed.
 		collection.addNew(feed);
 		// Get the first folder
-		ParentingAggregatorItem folder = (ParentingAggregatorItem) collection
+		AggregatorItemParent folder = (AggregatorItemParent) collection
 				.getChildAt(0);
 		// Create the article
 		InternalArticle article_a = new InternalArticle(
-				(ParentingAggregatorItem) folder, UUID.randomUUID(), feed
+				(AggregatorItemParent) folder, UUID.randomUUID(), feed
 						.getUUID());
 		// Add it to the collection
 		collection.addNew(article_a);

@@ -39,7 +39,7 @@ import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class FeedCollection extends ParentingAggregatorItem {
+public class FeedCollection extends AggregatorItemParent {
 
 	private static final UUID DEFAULT_ID = UUID
 			.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"); //$NON-NLS-1$
@@ -103,12 +103,12 @@ public class FeedCollection extends ParentingAggregatorItem {
 	 * @param feed
 	 *            the aggregator item to add
 	 */
-	public void addNew(AggregatorUIItem item) {
+	public void addNew(AggregatorItem item) {
 		long start = System.currentTimeMillis();
 		try {
 			fDatabase.writeLock().lock();
 			if (item instanceof Folder) {
-				AggregatorUIItem folder = (AggregatorUIItem) item;
+				AggregatorItem folder = (AggregatorItem) item;
 				fDatabase.add(folder);
 			} else if (item instanceof Article) {
 				Article feedItem = (Article) item;
@@ -205,8 +205,8 @@ public class FeedCollection extends ParentingAggregatorItem {
 	private List<IAggregatorItem> getDescendants(IAggregatorItem item)
 			throws CoreException {
 		ArrayList<IAggregatorItem> descendants = new ArrayList<IAggregatorItem>();
-		if (item instanceof ParentingAggregatorItem) {
-			IAggregatorItem[] children = ((ParentingAggregatorItem) item)
+		if (item instanceof AggregatorItemParent) {
+			IAggregatorItem[] children = ((AggregatorItemParent) item)
 					.getChildren();
 			for (IAggregatorItem aggregatorItem : children) {
 				descendants.add(aggregatorItem);
@@ -258,7 +258,7 @@ public class FeedCollection extends ParentingAggregatorItem {
 	public int getItemCount(IAggregatorItem element) {
 		try {
 			fDatabase.readLock().lock();
-			return fDatabase.getUnreadCount((ParentingAggregatorItem) element);
+			return fDatabase.getUnreadCount((AggregatorItemParent) element);
 		} finally {
 			fDatabase.readLock().unlock();
 		}
@@ -268,7 +268,7 @@ public class FeedCollection extends ParentingAggregatorItem {
 		return 0;
 	}
 
-	public ParentingAggregatorItem getParent() {
+	public AggregatorItemParent getParent() {
 		return null;
 	}
 
@@ -360,8 +360,8 @@ public class FeedCollection extends ParentingAggregatorItem {
 	 *            the new order of the item
 	 * @throws CoreException
 	 */
-	public void move(AggregatorUIItem item, AggregatorUIItem oldParent,
-			int oldOrder, AggregatorUIItem newParent, int newOrder)
+	public void move(AggregatorItem item, AggregatorItem oldParent,
+			int oldOrder, AggregatorItem newParent, int newOrder)
 			throws CoreException {
 		try {
 			fDatabase.writeLock().lock();
@@ -370,19 +370,19 @@ public class FeedCollection extends ParentingAggregatorItem {
 			if (!oldParent.equals(newParent)) {
 				// The item is moved into a new parent
 				details |= AggregatorItemChangedEvent.NEW_PARENT;
-				shiftUp((AggregatorUIItem) item);
-				fDatabase.move((AggregatorUIItem) item,
-						(ParentingAggregatorItem) newParent, newOrder);
+				shiftUp((AggregatorItem) item);
+				fDatabase.move((AggregatorItem) item,
+						(AggregatorItemParent) newParent, newOrder);
 			} else if (newOrder > oldOrder) {
 				// The item is moved down (new order is higher)
 				shiftUp(item, oldOrder, newOrder);
-				fDatabase.move((AggregatorUIItem) item,
-						(ParentingAggregatorItem) newParent, newOrder);
+				fDatabase.move((AggregatorItem) item,
+						(AggregatorItemParent) newParent, newOrder);
 			} else {
 				// The item is moved up
 				shiftDown(item, oldOrder, newOrder);
-				fDatabase.move((AggregatorUIItem) item,
-						(ParentingAggregatorItem) newParent, newOrder);
+				fDatabase.move((AggregatorItem) item,
+						(AggregatorItemParent) newParent, newOrder);
 			}
 			// Tell our listeners that the deed is done
 			notifyListerners(new AggregatorItemChangedEvent(item,
@@ -429,8 +429,8 @@ public class FeedCollection extends ParentingAggregatorItem {
 		try {
 			fDatabase.writeLock().lock();
 			long start = System.currentTimeMillis();
-			shiftUp((AggregatorUIItem) item);
-			fDatabase.delete((AggregatorUIItem) item);
+			shiftUp((AggregatorItem) item);
+			fDatabase.delete((AggregatorItem) item);
 			if (item instanceof Folder) {
 				UUID feedId = ((Folder) item).getFeed();
 				// Make sure we also delete the associated feed instance
@@ -472,7 +472,7 @@ public class FeedCollection extends ParentingAggregatorItem {
 	public void rename(IAggregatorItem item) {
 		try {
 			fDatabase.writeLock().lock();
-			fDatabase.rename((AggregatorUIItem) item);
+			fDatabase.rename((AggregatorItem) item);
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
@@ -500,7 +500,7 @@ public class FeedCollection extends ParentingAggregatorItem {
 		long start = System.currentTimeMillis();
 		try {
 			fDatabase.writeLock().lock();
-			fDatabase.updateReadFlag((AggregatorUIItem) item);
+			fDatabase.updateReadFlag((AggregatorItem) item);
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
@@ -509,8 +509,8 @@ public class FeedCollection extends ParentingAggregatorItem {
 			notifyListerners(new AggregatorItemChangedEvent(item,
 					FeedChangeEventType.READ, System.currentTimeMillis()
 							- start));
-		} else if (item instanceof ParentingAggregatorItem) {
-			IAggregatorItem[] children = ((ParentingAggregatorItem) item)
+		} else if (item instanceof AggregatorItemParent) {
+			IAggregatorItem[] children = ((AggregatorItemParent) item)
 					.getChildren();
 			for (IAggregatorItem child : children) {
 				if (child instanceof Article)
@@ -537,16 +537,16 @@ public class FeedCollection extends ParentingAggregatorItem {
 	 *            the new position of the moved item
 	 * @throws CoreException
 	 */
-	private void shiftDown(AggregatorUIItem item, int from, int to)
+	private void shiftDown(AggregatorItem item, int from, int to)
 			throws CoreException {
-		ParentingAggregatorItem parent = item.getParent();
+		AggregatorItemParent parent = item.getParent();
 		for (int i = from - 1; i >= to; i--) {
 			long start = System.currentTimeMillis();
 			IAggregatorItem sibling = parent.getChildAt(i);
 			int oldOrder = sibling.getOrdering();
 			fDatabase
-					.move((AggregatorUIItem) sibling,
-							(ParentingAggregatorItem) parent, sibling
+					.move((AggregatorItem) sibling,
+							(AggregatorItemParent) parent, sibling
 									.getOrdering() + 1);
 			notifyListerners(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
@@ -555,9 +555,9 @@ public class FeedCollection extends ParentingAggregatorItem {
 		}
 	}
 
-	private List<AggregatorItemChangedEvent> shiftUp(AggregatorUIItem item)
+	private List<AggregatorItemChangedEvent> shiftUp(AggregatorItem item)
 			throws CoreException {
-		ParentingAggregatorItem parent = item.getParent();
+		AggregatorItemParent parent = item.getParent();
 		int count = parent.getChildCount();
 		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
 		for (int i = item.getOrdering() + 1; i < count; i++) {
@@ -565,8 +565,8 @@ public class FeedCollection extends ParentingAggregatorItem {
 			IAggregatorItem sibling = parent.getChildAt(i);
 			int oldOrder = sibling.getOrdering();
 			fDatabase
-					.move((AggregatorUIItem) sibling,
-							(ParentingAggregatorItem) parent, sibling
+					.move((AggregatorItem) sibling,
+							(AggregatorItemParent) parent, sibling
 									.getOrdering() - 1);
 			events.add(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
@@ -587,17 +587,17 @@ public class FeedCollection extends ParentingAggregatorItem {
 	 *            the new position of the moved item
 	 * @throws CoreException
 	 */
-	private List<AggregatorItemChangedEvent> shiftUp(AggregatorUIItem item,
+	private List<AggregatorItemChangedEvent> shiftUp(AggregatorItem item,
 			final int from, final int to) throws CoreException {
-		ParentingAggregatorItem parent = item.getParent();
+		AggregatorItemParent parent = item.getParent();
 		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
 		for (int i = from + 1; i <= to; i++) {
 			long start = System.currentTimeMillis();
 			IAggregatorItem sibling = parent.getChildAt(i);
 			int oldOrder = sibling.getOrdering();
 			fDatabase
-					.move((AggregatorUIItem) sibling,
-							(ParentingAggregatorItem) parent, sibling
+					.move((AggregatorItem) sibling,
+							(AggregatorItemParent) parent, sibling
 									.getOrdering() - 1);
 			events.add(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,

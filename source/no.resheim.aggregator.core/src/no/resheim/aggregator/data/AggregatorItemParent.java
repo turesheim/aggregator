@@ -9,15 +9,15 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-public abstract class ParentingAggregatorItem extends AggregatorUIItem {
+public abstract class AggregatorItemParent extends AggregatorItem {
 
-	public ParentingAggregatorItem(ParentingAggregatorItem parent, UUID uuid) {
+	public AggregatorItemParent(AggregatorItemParent parent, UUID uuid) {
 		super(parent, uuid);
 	}
 
 	private FeedCollection getCollection() throws CoreException {
-		AggregatorUIItem p = this;
-		AggregatorUIItem o = p;
+		AggregatorItem p = this;
+		AggregatorItem o = p;
 		while (!(p instanceof FeedCollection)) {
 			p = p.getParent();
 			if (p == null) {
@@ -46,10 +46,6 @@ public abstract class ParentingAggregatorItem extends AggregatorUIItem {
 
 	/**
 	 * Returns the number of items contained within the given parent item.
-	 * <p>
-	 * <i>This method must only be used by a parenting item that has not been
-	 * initialised and needs to obtain it's children from the database.</i>
-	 * </p>
 	 * 
 	 * @param parent
 	 *            the parent item
@@ -68,10 +64,6 @@ public abstract class ParentingAggregatorItem extends AggregatorUIItem {
 
 	/**
 	 * Returns the child items of the given parent item.
-	 * <p>
-	 * <i>This method must only be used by a parenting item that has not been
-	 * initialised and needs to obtain it's children from the database.</i>
-	 * </p>
 	 * 
 	 * @param item
 	 *            the parent item

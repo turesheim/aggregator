@@ -71,7 +71,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            the parent item
 	 * @return the number of children
 	 */
-	public abstract int getChildCount(ParentingAggregatorItem parent);
+	public abstract int getChildCount(AggregatorItemParent parent);
 
 	/**
 	 * Retrieves all the child articles of the given parent node. If the node is
@@ -83,7 +83,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            The parent item
 	 * @return An array of aggregator articles
 	 */
-	public abstract IAggregatorItem[] getChildren(ParentingAggregatorItem item);
+	public abstract IAggregatorItem[] getChildren(AggregatorItemParent item);
 
 	/**
 	 * Returns the description string of the aggregator item if such a
@@ -119,7 +119,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param index
 	 * @return
 	 */
-	public abstract IAggregatorItem getItem(ParentingAggregatorItem parent,
+	public abstract IAggregatorItem getItem(AggregatorItemParent parent,
 			int index);
 
 	/**
@@ -129,7 +129,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            the parent item
 	 * @return the number of unread articles
 	 */
-	public abstract int getUnreadCount(ParentingAggregatorItem parent);
+	public abstract int getUnreadCount(AggregatorItemParent parent);
 
 	/**
 	 * Tests to see if the feed with the given URL already exists in the
@@ -164,8 +164,8 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param order
 	 *            the new order of the item
 	 */
-	public abstract void move(AggregatorUIItem item,
-			ParentingAggregatorItem parent, int order);
+	public abstract void move(AggregatorItem item,
+			AggregatorItemParent parent, int order);
 
 	/**
 	 * Renames the given item.
@@ -173,7 +173,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param item
 	 *            the item to rename
 	 */
-	public abstract void rename(AggregatorUIItem item);
+	public abstract void rename(AggregatorItem item);
 
 	/**
 	 * Shuts down the storage.
@@ -204,7 +204,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param item
 	 *            The item to update
 	 */
-	public abstract void updateReadFlag(AggregatorUIItem item);
+	public abstract void updateReadFlag(AggregatorItem item);
 
 	public abstract Lock writeLock();
 

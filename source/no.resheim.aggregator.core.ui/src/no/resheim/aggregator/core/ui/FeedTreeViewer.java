@@ -13,11 +13,11 @@ package no.resheim.aggregator.core.ui;
 
 import java.text.MessageFormat;
 
-import no.resheim.aggregator.data.AggregatorUIItem;
+import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.IAggregatorItem;
-import no.resheim.aggregator.data.ParentingAggregatorItem;
+import no.resheim.aggregator.data.AggregatorItemParent;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -130,18 +130,18 @@ public class FeedTreeViewer extends TreeViewer {
 				}
 			}
 
-			private ParentingAggregatorItem getParent(TreeItem item) {
+			private AggregatorItemParent getParent(TreeItem item) {
 				if (item.getParentItem() == null) {
 					return collection;
 				} else {
-					return (ParentingAggregatorItem) item.getParentItem()
+					return (AggregatorItemParent) item.getParentItem()
 							.getData();
 				}
 			}
 
 			@Override
 			public boolean performDrop(Object data) {
-				AggregatorUIItem source = (AggregatorUIItem) ((IStructuredSelection) getSelection())
+				AggregatorItem source = (AggregatorItem) ((IStructuredSelection) getSelection())
 						.getFirstElement();
 
 				Object input = getInput();
@@ -149,8 +149,8 @@ public class FeedTreeViewer extends TreeViewer {
 					return false;
 				}
 				collection = ((FeedCollection) input);
-				ParentingAggregatorItem newParent = (ParentingAggregatorItem) getCurrentTarget();
-				ParentingAggregatorItem oldParent = getParent(dragSourceItem[0]);
+				AggregatorItemParent newParent = (AggregatorItemParent) getCurrentTarget();
+				AggregatorItemParent oldParent = getParent(dragSourceItem[0]);
 				int newOrder = 0;
 				int oldOrder = getItemIndex(dragSourceItem[0]);
 

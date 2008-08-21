@@ -22,7 +22,7 @@ import java.util.UUID;
  * @since 1.0
  * @noextend This class is not intended to be subclassed by clients.
  */
-public abstract class AggregatorUIItem implements IAggregatorItem {
+public abstract class AggregatorItem implements IAggregatorItem {
 
 	public enum Mark {
 		DONE, FIRST_PRIORITY, IMPORTANT, SECOND_PRIORITY, THIRD_PRIORITY, TODO
@@ -32,7 +32,7 @@ public abstract class AggregatorUIItem implements IAggregatorItem {
 
 	protected int ordering;
 
-	protected ParentingAggregatorItem parent;
+	protected AggregatorItemParent parent;
 
 	protected boolean serialized;
 
@@ -54,7 +54,7 @@ public abstract class AggregatorUIItem implements IAggregatorItem {
 	/**
 	 * @param parent
 	 */
-	public AggregatorUIItem(ParentingAggregatorItem parent, UUID uuid) {
+	public AggregatorItem(AggregatorItemParent parent, UUID uuid) {
 		this.parent = parent;
 		this.uuid = uuid;
 	}
@@ -67,7 +67,7 @@ public abstract class AggregatorUIItem implements IAggregatorItem {
 		return ordering;
 	};
 
-	public ParentingAggregatorItem getParent() {
+	public AggregatorItemParent getParent() {
 		return parent;
 	}
 
@@ -94,7 +94,7 @@ public abstract class AggregatorUIItem implements IAggregatorItem {
 	 * @param parent
 	 *            the new parent item
 	 */
-	public void setParent(ParentingAggregatorItem parent) {
+	public void setParent(AggregatorItemParent parent) {
 		this.parent = parent;
 	}
 
