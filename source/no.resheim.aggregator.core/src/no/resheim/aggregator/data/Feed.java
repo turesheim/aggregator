@@ -325,4 +325,9 @@ public class Feed implements IAggregatorItem {
 		this.updatePeriod = wc.updatePeriod;
 		this.hidden = wc.hidden;
 	}
+
+	public int getOrdering() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

@@ -27,6 +27,7 @@ import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -128,7 +129,11 @@ public class RSSView extends ViewPart implements IFeedView,
 	private Runnable markAsRead = new Runnable() {
 		public void run() {
 			if (fLastSelectionItem != null) {
-				registry.setRead(fLastSelectionItem);
+				try {
+					registry.setRead(fLastSelectionItem);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	};

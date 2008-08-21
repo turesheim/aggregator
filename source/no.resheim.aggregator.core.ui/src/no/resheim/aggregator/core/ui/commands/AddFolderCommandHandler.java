@@ -16,6 +16,7 @@ import java.util.UUID;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.data.AggregatorUIItem;
 import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.data.ParentingAggregatorItem;
 import no.resheim.aggregator.data.internal.InternalFolder;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -45,10 +46,12 @@ public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 			AggregatorUIItem parent = getSelection(event);
 			if (parent == null)
 				parent = collection;
-			InternalFolder folder = new InternalFolder(parent, UUID
-					.randomUUID());
-			folder.setTitle(Messages.AddFolderCommandHandler_NewFolderName);
-			collection.addNew(folder);
+			if (parent instanceof ParentingAggregatorItem) {
+				InternalFolder folder = new InternalFolder(
+						(ParentingAggregatorItem) parent, UUID.randomUUID());
+				folder.setTitle(Messages.AddFolderCommandHandler_NewFolderName);
+				collection.addNew(folder);
+			}
 		}
 		return null;
 	}

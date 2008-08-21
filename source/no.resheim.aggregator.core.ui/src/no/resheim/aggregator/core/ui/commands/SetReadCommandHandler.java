@@ -18,6 +18,7 @@ import no.resheim.aggregator.data.IAggregatorItem;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -41,7 +42,11 @@ public class SetReadCommandHandler extends AbstractAggregatorCommandHandler
 			}
 			IAggregatorItem item = getSelection(event);
 			if (item != null) {
-				registry.setRead(item);
+				try {
+					registry.setRead(item);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return null;

@@ -23,7 +23,7 @@ import java.util.UUID;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class Folder extends AggregatorUIItem {
+public class Folder extends ParentingAggregatorItem {
 
 	protected UUID feed;
 
@@ -31,7 +31,7 @@ public class Folder extends AggregatorUIItem {
 	 * @param registryId
 	 * @param title
 	 */
-	public Folder(AggregatorUIItem parent, UUID uuid) {
+	public Folder(ParentingAggregatorItem parent, UUID uuid) {
 		super(parent, uuid);
 	}
 

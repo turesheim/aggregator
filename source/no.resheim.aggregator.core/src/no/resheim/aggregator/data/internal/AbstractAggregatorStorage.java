@@ -12,6 +12,9 @@
 package no.resheim.aggregator.data.internal;
 
 import java.util.EnumSet;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorStorage;
@@ -28,6 +31,20 @@ import org.eclipse.core.runtime.IPath;
  * @since 1.0
  */
 public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
+
+	public Lock readLock() {
+		return lock.readLock();
+	}
+
+	public Lock writeLock() {
+		return lock.writeLock();
+	}
+
+	/**
+	 * Handles concurrency for the database, making sure that no readers get
+	 * access while writing and only one writer gets access at the time.
+	 */
+	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
 	/** The feed collection that data is being handled for */
 	protected FeedCollection collection;

@@ -24,6 +24,7 @@ import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.IAggregatorItem;
+import no.resheim.aggregator.data.ParentingAggregatorItem;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
 
@@ -114,8 +115,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * @return
 	 * @throws SQLException
 	 */
-	private Article composeArticle(AggregatorUIItem parent, ResultSet rs)
-			throws SQLException {
+	private InternalArticle composeArticle(ParentingAggregatorItem parent,
+			ResultSet rs) throws SQLException {
 		InternalArticle item = new InternalArticle(parent, UUID.fromString(rs
 				.getString(1)), UUID.fromString(rs.getString(4)));
 		item.setOrdering(rs.getInt(3));
@@ -143,8 +144,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * @return a {@link Folder} instance composed from the result set
 	 * @throws SQLException
 	 */
-	private AggregatorUIItem composeFolder(AggregatorUIItem parent, ResultSet rs)
-			throws SQLException {
+	private AggregatorUIItem composeFolder(ParentingAggregatorItem parent,
+			ResultSet rs) throws SQLException {
 		InternalFolder item = new InternalFolder(parent, UUID.fromString(rs
 				.getString(1)));
 		item.setParent(parent);
@@ -273,7 +274,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * @see no.resheim.aggregator.model.AggregatorStorage#getChildren(no.resheim
 	 * .aggregator.model.AggregatorItem)
 	 */
-	public AggregatorUIItem[] getChildren(AggregatorUIItem item) {
+	public AggregatorUIItem[] getChildren(ParentingAggregatorItem item) {
 		Assert.isNotNull(item);
 		ArrayList<AggregatorUIItem> items = new ArrayList<AggregatorUIItem>();
 		try {
@@ -292,7 +293,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * no.resheim.aggregator.IAggregatorStorage#getChildCount(no.resheim.aggregator
 	 * .data.IAggregatorItem)
 	 */
-	public synchronized int getChildCount(AggregatorUIItem parent) {
+	public synchronized int getChildCount(ParentingAggregatorItem parent) {
 		UUID parentID = parent.getUUID();
 		return getChildCount(parentID);
 	}
@@ -525,7 +526,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * no.resheim.aggregator.model.IAggregatorStorage#move(no.resheim.aggregator
 	 * .model.IAggregatorItem, no.resheim.aggregator.model.IAggregatorItem)
 	 */
-	public void move(AggregatorUIItem item, AggregatorUIItem parent, int order) {
+	public void move(AggregatorUIItem item, ParentingAggregatorItem parent,
+			int order) {
 		try {
 			item.setParent(parent);
 			item.setOrdering(order);
@@ -607,7 +609,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 *            the list of aggregator articles to append to
 	 * @throws SQLException
 	 */
-	private void selectFolders(AggregatorUIItem parent,
+	private void selectFolders(ParentingAggregatorItem parent,
 			ArrayList<AggregatorUIItem> feeds) throws SQLException {
 		Statement s = connection.createStatement();
 		String query = null;
@@ -620,8 +622,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		rs.close();
 	}
 
-	private AggregatorUIItem selectFolder(AggregatorUIItem parent, int index)
-			throws SQLException {
+	private AggregatorUIItem selectFolder(ParentingAggregatorItem parent,
+			int index) throws SQLException {
 		Statement s = connection.createStatement();
 		String query = null;
 		AggregatorUIItem folder = null;
@@ -673,7 +675,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * no.resheim.aggregator.model.IAggregatorStorage#selectItemCount(no.resheim
 	 * .aggregator.model.Feed)
 	 */
-	public int getUnreadCount(AggregatorUIItem parent) {
+	public int getUnreadCount(ParentingAggregatorItem parent) {
 		return getUnreadCount(parent.getUUID().toString());
 	}
 
@@ -714,7 +716,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 *            The list of aggregator articles to append to
 	 * @throws SQLException
 	 */
-	private void selectItems(AggregatorUIItem parent,
+	private void selectItems(ParentingAggregatorItem parent,
 			ArrayList<AggregatorUIItem> feeds) {
 		try {
 			Statement s = connection.createStatement();
@@ -722,8 +724,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 					+ parent.getUUID() + "' order by ordering"; //$NON-NLS-1$
 			ResultSet rs = s.executeQuery(query);
 			while (rs.next()) {
-				Article i = composeArticle(parent, rs);
-				i.setParentItem(parent);
+				InternalArticle i = composeArticle(parent, rs);
+				i.setParent(parent);
 				feeds.add(i);
 			}
 			rs.close();
@@ -732,8 +734,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		}
 	}
 
-	private AggregatorUIItem selectArticle(AggregatorUIItem parent, int index)
-			throws SQLException {
+	private AggregatorUIItem selectArticle(ParentingAggregatorItem parent,
+			int index) throws SQLException {
 		Statement s = connection.createStatement();
 		Article article = null;
 		ResultSet rs = s
@@ -804,7 +806,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		return hasFeed;
 	}
 
-	public AggregatorUIItem getItem(AggregatorUIItem parent, int index) {
+	public AggregatorUIItem getItem(ParentingAggregatorItem parent, int index) {
 		AggregatorUIItem item = null;
 		try {
 			if (item == null) {

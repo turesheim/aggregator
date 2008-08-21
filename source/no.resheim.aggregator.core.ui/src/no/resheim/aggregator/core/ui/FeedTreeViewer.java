@@ -17,6 +17,7 @@ import no.resheim.aggregator.data.AggregatorUIItem;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.IAggregatorItem;
+import no.resheim.aggregator.data.ParentingAggregatorItem;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -129,11 +130,12 @@ public class FeedTreeViewer extends TreeViewer {
 				}
 			}
 
-			private AggregatorUIItem getParent(TreeItem item) {
+			private ParentingAggregatorItem getParent(TreeItem item) {
 				if (item.getParentItem() == null) {
 					return collection;
 				} else {
-					return (AggregatorUIItem) item.getParentItem().getData();
+					return (ParentingAggregatorItem) item.getParentItem()
+							.getData();
 				}
 			}
 
@@ -147,8 +149,8 @@ public class FeedTreeViewer extends TreeViewer {
 					return false;
 				}
 				collection = ((FeedCollection) input);
-				AggregatorUIItem newParent = (AggregatorUIItem) getCurrentTarget();
-				AggregatorUIItem oldParent = getParent(dragSourceItem[0]);
+				ParentingAggregatorItem newParent = (ParentingAggregatorItem) getCurrentTarget();
+				ParentingAggregatorItem oldParent = getParent(dragSourceItem[0]);
 				int newOrder = 0;
 				int oldOrder = getItemIndex(dragSourceItem[0]);
 
@@ -164,7 +166,7 @@ public class FeedTreeViewer extends TreeViewer {
 						newOrder = getItemIndex(fItem);
 						newParent = oldParent;
 					} else {
-						newOrder = collection.getChildCount(newParent);
+						newOrder = newParent.getChildCount();
 					}
 
 					if (newParent.equals(oldParent)) {

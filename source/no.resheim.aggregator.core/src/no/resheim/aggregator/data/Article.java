@@ -49,7 +49,7 @@ public class Article extends AggregatorUIItem {
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"EEE, dd MMMM yyyy kk:mm:ss"); //$NON-NLS-1$
 
-	public Article(AggregatorUIItem parent, UUID uuid) {
+	public Article(ParentingAggregatorItem parent, UUID uuid) {
 		super(parent, uuid);
 	}
 
@@ -130,10 +130,6 @@ public class Article extends AggregatorUIItem {
 
 	public boolean isRead() {
 		return read;
-	}
-
-	public void setParentItem(AggregatorUIItem parent) {
-		this.parent = parent;
 	}
 
 	@Override

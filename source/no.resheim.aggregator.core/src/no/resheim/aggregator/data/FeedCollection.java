@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
@@ -26,6 +24,7 @@ import no.resheim.aggregator.data.internal.InternalArticle;
 import no.resheim.aggregator.data.internal.InternalFolder;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.SafeRunner;
@@ -40,7 +39,7 @@ import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class FeedCollection extends AggregatorUIItem {
+public class FeedCollection extends ParentingAggregatorItem {
 
 	private static final UUID DEFAULT_ID = UUID
 			.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"); //$NON-NLS-1$
@@ -65,12 +64,6 @@ public class FeedCollection extends AggregatorUIItem {
 	 * declared.
 	 */
 	private String id;
-
-	/**
-	 * Handles concurrency for the database, making sure that no readers get
-	 * access while writing and only one writer gets access at the time.
-	 */
-	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
 	/**
 	 * List of <i>live</i> feeds that we must keep track of even if none of the
@@ -113,7 +106,7 @@ public class FeedCollection extends AggregatorUIItem {
 	public void addNew(AggregatorUIItem item) {
 		long start = System.currentTimeMillis();
 		try {
-			lock.writeLock().lock();
+			fDatabase.writeLock().lock();
 			if (item instanceof Folder) {
 				AggregatorUIItem folder = (AggregatorUIItem) item;
 				fDatabase.add(folder);
@@ -123,7 +116,7 @@ public class FeedCollection extends AggregatorUIItem {
 				fDatabase.add(feedItem);
 			}
 		} finally {
-			lock.writeLock().unlock();
+			fDatabase.writeLock().unlock();
 		}
 		notifyListerners(new AggregatorItemChangedEvent(item,
 				FeedChangeEventType.CREATED, System.currentTimeMillis() - start));
@@ -140,7 +133,7 @@ public class FeedCollection extends AggregatorUIItem {
 				"Cannot add feed with unspecified UUID"); //$NON-NLS-1$
 		long start = System.currentTimeMillis();
 		try {
-			lock.writeLock().lock();
+			fDatabase.writeLock().lock();
 			// No location has been specified for the feed so we must create a
 			// new folder at the collection root and use this.
 			if (feed.getLocation() == null) {
@@ -156,7 +149,7 @@ public class FeedCollection extends AggregatorUIItem {
 			FeedUpdateJob job = new FeedUpdateJob(this, feed);
 			job.schedule();
 		} finally {
-			lock.writeLock().unlock();
+			fDatabase.writeLock().unlock();
 		}
 		notifyListerners(new AggregatorItemChangedEvent(feed,
 				FeedChangeEventType.CREATED, System.currentTimeMillis() - start));
@@ -170,7 +163,7 @@ public class FeedCollection extends AggregatorUIItem {
 	 */
 	void cleanUp(Feed site) {
 		try {
-			lock.writeLock().lock();
+			fDatabase.writeLock().lock();
 			Archiving archiving = site.getArchiving();
 			int days = site.getArchivingDays();
 			int articles = site.getArchivingItems();
@@ -189,7 +182,7 @@ public class FeedCollection extends AggregatorUIItem {
 				break;
 			}
 		} finally {
-			lock.writeLock().unlock();
+			fDatabase.writeLock().unlock();
 		}
 	}
 
@@ -202,64 +195,33 @@ public class FeedCollection extends AggregatorUIItem {
 	 */
 	void feedUpdated(Feed feed) {
 		try {
-			lock.writeLock().lock();
+			fDatabase.writeLock().lock();
 			fDatabase.updateFeed(feed);
 		} finally {
-			lock.writeLock().unlock();
+			fDatabase.writeLock().unlock();
 		}
 	}
 
-	/**
-	 * Returns the number of items contained within the given parent item.
-	 * 
-	 * @param parent
-	 *            the parent item
-	 * @return the number of child items
-	 */
-	public int getChildCount(IAggregatorItem parent) {
-		try {
-			lock.readLock().lock();
-			return fDatabase.getChildCount((AggregatorUIItem) parent);
-		} finally {
-			lock.readLock().unlock();
-		}
-	}
-
-	/**
-	 * Returns the child items of the given parent item.
-	 * 
-	 * @param item
-	 *            the parent item
-	 * @return the child items
-	 */
-	public IAggregatorItem[] getChildren(IAggregatorItem item) {
-		try {
-			lock.readLock().lock();
-			return fDatabase.getChildren((AggregatorUIItem) item);
-		} finally {
-			lock.readLock().unlock();
-		}
-	}
-
-	private List<IAggregatorItem> getDescendants(IAggregatorItem item) {
+	private List<IAggregatorItem> getDescendants(IAggregatorItem item)
+			throws CoreException {
 		ArrayList<IAggregatorItem> descendants = new ArrayList<IAggregatorItem>();
-		for (IAggregatorItem aggregatorItem : getChildren(item)) {
-			descendants.add(aggregatorItem);
-			descendants.addAll(getDescendants(aggregatorItem));
+		if (item instanceof ParentingAggregatorItem) {
+			IAggregatorItem[] children = ((ParentingAggregatorItem) item)
+					.getChildren();
+			for (IAggregatorItem aggregatorItem : children) {
+				descendants.add(aggregatorItem);
+				descendants.addAll(getDescendants(aggregatorItem));
+			}
 		}
 		return descendants;
 	}
 
-	public FeedCollection getCollection() {
-		return this;
-	}
-
 	public String getDescription(Article item) {
 		try {
-			lock.readLock().lock();
+			fDatabase.readLock().lock();
 			return fDatabase.getDescription(item);
 		} finally {
-			lock.readLock().unlock();
+			fDatabase.readLock().unlock();
 		}
 	}
 
@@ -287,17 +249,6 @@ public class FeedCollection extends AggregatorUIItem {
 		return id;
 	}
 
-	public IAggregatorItem getItemAt(IAggregatorItem parent, int index) {
-		try {
-			lock.readLock().lock();
-			IAggregatorItem item = fDatabase.getItem((AggregatorUIItem) parent,
-					index);
-			return item;
-		} finally {
-			lock.readLock().unlock();
-		}
-	}
-
 	/**
 	 * Returns the number of <b>unread</b> articles.
 	 * 
@@ -306,10 +257,10 @@ public class FeedCollection extends AggregatorUIItem {
 	 */
 	public int getItemCount(IAggregatorItem element) {
 		try {
-			lock.readLock().lock();
-			return fDatabase.getUnreadCount((AggregatorUIItem) element);
+			fDatabase.readLock().lock();
+			return fDatabase.getUnreadCount((ParentingAggregatorItem) element);
 		} finally {
-			lock.readLock().unlock();
+			fDatabase.readLock().unlock();
 		}
 	}
 
@@ -317,7 +268,7 @@ public class FeedCollection extends AggregatorUIItem {
 		return 0;
 	}
 
-	public AggregatorUIItem getParent() {
+	public ParentingAggregatorItem getParent() {
 		return null;
 	}
 
@@ -348,10 +299,10 @@ public class FeedCollection extends AggregatorUIItem {
 	 */
 	public boolean hasArticle(String guid) {
 		try {
-			lock.readLock().lock();
+			fDatabase.readLock().lock();
 			return fDatabase.hasArticle(guid);
 		} finally {
-			lock.readLock().unlock();
+			fDatabase.readLock().unlock();
 		}
 	}
 
@@ -362,10 +313,10 @@ public class FeedCollection extends AggregatorUIItem {
 	 */
 	public boolean hasFeed(String url) {
 		try {
-			lock.readLock().lock();
+			fDatabase.readLock().lock();
 			return fDatabase.hasFeed(url);
 		} finally {
-			lock.readLock().unlock();
+			fDatabase.readLock().unlock();
 		}
 	}
 
@@ -388,6 +339,10 @@ public class FeedCollection extends AggregatorUIItem {
 		fRegistryUpdateJob.schedule();
 	}
 
+	IAggregatorStorage getStorage() {
+		return fDatabase;
+	}
+
 	public boolean isPublic() {
 		return fPublic;
 	}
@@ -403,11 +358,13 @@ public class FeedCollection extends AggregatorUIItem {
 	 *            the new parent of the moved item
 	 * @param newOrder
 	 *            the new order of the item
+	 * @throws CoreException
 	 */
 	public void move(AggregatorUIItem item, AggregatorUIItem oldParent,
-			int oldOrder, AggregatorUIItem newParent, int newOrder) {
+			int oldOrder, AggregatorUIItem newParent, int newOrder)
+			throws CoreException {
 		try {
-			lock.writeLock().lock();
+			fDatabase.writeLock().lock();
 			long start = System.currentTimeMillis();
 			int details = 0;
 			if (!oldParent.equals(newParent)) {
@@ -415,17 +372,17 @@ public class FeedCollection extends AggregatorUIItem {
 				details |= AggregatorItemChangedEvent.NEW_PARENT;
 				shiftUp((AggregatorUIItem) item);
 				fDatabase.move((AggregatorUIItem) item,
-						(AggregatorUIItem) newParent, newOrder);
+						(ParentingAggregatorItem) newParent, newOrder);
 			} else if (newOrder > oldOrder) {
 				// The item is moved down (new order is higher)
 				shiftUp(item, oldOrder, newOrder);
 				fDatabase.move((AggregatorUIItem) item,
-						(AggregatorUIItem) newParent, newOrder);
+						(ParentingAggregatorItem) newParent, newOrder);
 			} else {
 				// The item is moved up
 				shiftDown(item, oldOrder, newOrder);
 				fDatabase.move((AggregatorUIItem) item,
-						(AggregatorUIItem) newParent, newOrder);
+						(ParentingAggregatorItem) newParent, newOrder);
 			}
 			// Tell our listeners that the deed is done
 			notifyListerners(new AggregatorItemChangedEvent(item,
@@ -433,7 +390,7 @@ public class FeedCollection extends AggregatorUIItem {
 					AggregatorItemChangedEvent.NEW_PARENT, oldParent, oldOrder,
 					System.currentTimeMillis() - start));
 		} finally {
-			lock.writeLock().unlock();
+			fDatabase.writeLock().unlock();
 		}
 	}
 
@@ -466,10 +423,11 @@ public class FeedCollection extends AggregatorUIItem {
 	 * 
 	 * @param item
 	 *            the element to remove
+	 * @throws CoreException
 	 */
-	public IStatus delete(IAggregatorItem item) {
+	public IStatus delete(IAggregatorItem item) throws CoreException {
 		try {
-			lock.writeLock().lock();
+			fDatabase.writeLock().lock();
 			long start = System.currentTimeMillis();
 			shiftUp((AggregatorUIItem) item);
 			fDatabase.delete((AggregatorUIItem) item);
@@ -490,7 +448,7 @@ public class FeedCollection extends AggregatorUIItem {
 							- start));
 			return Status.OK_STATUS;
 		} finally {
-			lock.writeLock().unlock();
+			fDatabase.writeLock().unlock();
 		}
 	}
 
@@ -513,10 +471,10 @@ public class FeedCollection extends AggregatorUIItem {
 	 */
 	public void rename(IAggregatorItem item) {
 		try {
-			lock.writeLock().lock();
+			fDatabase.writeLock().lock();
 			fDatabase.rename((AggregatorUIItem) item);
 		} finally {
-			lock.writeLock().unlock();
+			fDatabase.writeLock().unlock();
 		}
 	}
 
@@ -536,22 +494,24 @@ public class FeedCollection extends AggregatorUIItem {
 	 * 
 	 * @param item
 	 *            the item to mark as read
+	 * @throws CoreException
 	 */
-	public void setRead(IAggregatorItem item) {
+	public void setRead(IAggregatorItem item) throws CoreException {
 		long start = System.currentTimeMillis();
 		try {
-			lock.writeLock().lock();
+			fDatabase.writeLock().lock();
 			fDatabase.updateReadFlag((AggregatorUIItem) item);
 		} finally {
-			lock.writeLock().unlock();
+			fDatabase.writeLock().unlock();
 		}
 		if (item instanceof Article) {
 			((InternalArticle) item).setRead(true);
 			notifyListerners(new AggregatorItemChangedEvent(item,
 					FeedChangeEventType.READ, System.currentTimeMillis()
 							- start));
-		} else {
-			IAggregatorItem[] children = getChildren(item);
+		} else if (item instanceof ParentingAggregatorItem) {
+			IAggregatorItem[] children = ((ParentingAggregatorItem) item)
+					.getChildren();
 			for (IAggregatorItem child : children) {
 				if (child instanceof Article)
 					notifyListerners(new AggregatorItemChangedEvent(child,
@@ -575,15 +535,19 @@ public class FeedCollection extends AggregatorUIItem {
 	 *            the initial position of the moved item
 	 * @param to
 	 *            the new position of the moved item
+	 * @throws CoreException
 	 */
-	private void shiftDown(AggregatorUIItem item, int from, int to) {
-		IAggregatorItem parent = item.getParent();
+	private void shiftDown(AggregatorUIItem item, int from, int to)
+			throws CoreException {
+		ParentingAggregatorItem parent = item.getParent();
 		for (int i = from - 1; i >= to; i--) {
 			long start = System.currentTimeMillis();
-			AggregatorUIItem sibling = (AggregatorUIItem) getItemAt(parent, i);
+			IAggregatorItem sibling = parent.getChildAt(i);
 			int oldOrder = sibling.getOrdering();
-			fDatabase.move((AggregatorUIItem) sibling,
-					(AggregatorUIItem) parent, sibling.getOrdering() + 1);
+			fDatabase
+					.move((AggregatorUIItem) sibling,
+							(ParentingAggregatorItem) parent, sibling
+									.getOrdering() + 1);
 			notifyListerners(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
 					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
@@ -591,16 +555,19 @@ public class FeedCollection extends AggregatorUIItem {
 		}
 	}
 
-	private List<AggregatorItemChangedEvent> shiftUp(AggregatorUIItem item) {
-		IAggregatorItem parent = item.getParent();
-		int count = getChildCount(parent);
+	private List<AggregatorItemChangedEvent> shiftUp(AggregatorUIItem item)
+			throws CoreException {
+		ParentingAggregatorItem parent = item.getParent();
+		int count = parent.getChildCount();
 		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
 		for (int i = item.getOrdering() + 1; i < count; i++) {
 			long start = System.currentTimeMillis();
-			AggregatorUIItem sibling = (AggregatorUIItem) getItemAt(parent, i);
+			IAggregatorItem sibling = parent.getChildAt(i);
 			int oldOrder = sibling.getOrdering();
-			fDatabase.move((AggregatorUIItem) sibling,
-					(AggregatorUIItem) parent, sibling.getOrdering() - 1);
+			fDatabase
+					.move((AggregatorUIItem) sibling,
+							(ParentingAggregatorItem) parent, sibling
+									.getOrdering() - 1);
 			events.add(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
 					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
@@ -618,17 +585,20 @@ public class FeedCollection extends AggregatorUIItem {
 	 *            the initial position of the moved item
 	 * @param to
 	 *            the new position of the moved item
+	 * @throws CoreException
 	 */
 	private List<AggregatorItemChangedEvent> shiftUp(AggregatorUIItem item,
-			final int from, final int to) {
-		IAggregatorItem parent = item.getParent();
+			final int from, final int to) throws CoreException {
+		ParentingAggregatorItem parent = item.getParent();
 		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
 		for (int i = from + 1; i <= to; i++) {
 			long start = System.currentTimeMillis();
-			AggregatorUIItem sibling = (AggregatorUIItem) getItemAt(parent, i);
+			IAggregatorItem sibling = parent.getChildAt(i);
 			int oldOrder = sibling.getOrdering();
-			fDatabase.move((AggregatorUIItem) sibling,
-					(AggregatorUIItem) parent, sibling.getOrdering() - 1);
+			fDatabase
+					.move((AggregatorUIItem) sibling,
+							(ParentingAggregatorItem) parent, sibling
+									.getOrdering() - 1);
 			events.add(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
 					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
@@ -637,7 +607,7 @@ public class FeedCollection extends AggregatorUIItem {
 		return events;
 	}
 
-	public void update(IAggregatorItem item) {
+	public void update(IAggregatorItem item) throws CoreException {
 		List<IAggregatorItem> items = getDescendants(item);
 		items.add(item);
 		for (IAggregatorItem aggregatorItem : items) {
@@ -656,14 +626,14 @@ public class FeedCollection extends AggregatorUIItem {
 
 	public void updateFeedData(IAggregatorItem item) {
 		try {
-			lock.writeLock().lock();
+			fDatabase.writeLock().lock();
 			if (item instanceof Feed) {
 				// Ensure that the local list has a copy of the same instance.
 				fFeeds.put(((Feed) item).getUUID(), (Feed) item);
 				fDatabase.updateFeed((Feed) item);
 			}
 		} finally {
-			lock.writeLock().unlock();
+			fDatabase.writeLock().unlock();
 		}
 	}
 }

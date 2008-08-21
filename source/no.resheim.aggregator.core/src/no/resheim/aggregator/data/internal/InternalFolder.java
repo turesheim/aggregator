@@ -2,12 +2,12 @@ package no.resheim.aggregator.data.internal;
 
 import java.util.UUID;
 
-import no.resheim.aggregator.data.AggregatorUIItem;
 import no.resheim.aggregator.data.Folder;
+import no.resheim.aggregator.data.ParentingAggregatorItem;
 
 public class InternalFolder extends Folder {
 
-	public InternalFolder(AggregatorUIItem parent, UUID uuid) {
+	public InternalFolder(ParentingAggregatorItem parent, UUID uuid) {
 		super(parent, uuid);
 	}
 

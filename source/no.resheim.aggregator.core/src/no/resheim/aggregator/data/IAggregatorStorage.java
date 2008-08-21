@@ -14,6 +14,7 @@ package no.resheim.aggregator.data;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.locks.Lock;
 
 import org.eclipse.core.resources.ISaveParticipant;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -70,7 +71,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            the parent item
 	 * @return the number of children
 	 */
-	public abstract int getChildCount(AggregatorUIItem parent);
+	public abstract int getChildCount(ParentingAggregatorItem parent);
 
 	/**
 	 * Retrieves all the child articles of the given parent node. If the node is
@@ -82,7 +83,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            The parent item
 	 * @return An array of aggregator articles
 	 */
-	public abstract IAggregatorItem[] getChildren(AggregatorUIItem item);
+	public abstract IAggregatorItem[] getChildren(ParentingAggregatorItem item);
 
 	/**
 	 * Returns the description string of the aggregator item if such a
@@ -118,7 +119,8 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param index
 	 * @return
 	 */
-	public abstract IAggregatorItem getItem(AggregatorUIItem parent, int index);
+	public abstract IAggregatorItem getItem(ParentingAggregatorItem parent,
+			int index);
 
 	/**
 	 * Returns the number of unread articles the given parent item has.
@@ -127,7 +129,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            the parent item
 	 * @return the number of unread articles
 	 */
-	public abstract int getUnreadCount(AggregatorUIItem parent);
+	public abstract int getUnreadCount(ParentingAggregatorItem parent);
 
 	/**
 	 * Tests to see if the feed with the given URL already exists in the
@@ -162,8 +164,8 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param order
 	 *            the new order of the item
 	 */
-	public abstract void move(AggregatorUIItem item, AggregatorUIItem parent,
-			int order);
+	public abstract void move(AggregatorUIItem item,
+			ParentingAggregatorItem parent, int order);
 
 	/**
 	 * Renames the given item.
@@ -203,5 +205,9 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            The item to update
 	 */
 	public abstract void updateReadFlag(AggregatorUIItem item);
+
+	public abstract Lock writeLock();
+
+	public abstract Lock readLock();
 
 }

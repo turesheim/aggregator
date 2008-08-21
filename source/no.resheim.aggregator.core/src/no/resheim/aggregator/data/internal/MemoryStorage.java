@@ -20,6 +20,7 @@ import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorItem;
+import no.resheim.aggregator.data.ParentingAggregatorItem;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
@@ -98,7 +99,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		// TODO Auto-generated method stub
 	}
 
-	public int getChildCount(AggregatorUIItem parent) {
+	public int getChildCount(ParentingAggregatorItem parent) {
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
 			return holder.children.size();
@@ -106,7 +107,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 			return 0;
 	}
 
-	public AggregatorUIItem[] getChildren(AggregatorUIItem parent) {
+	public AggregatorUIItem[] getChildren(ParentingAggregatorItem parent) {
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
 			return holder.children.toArray(new AggregatorUIItem[holder.children
@@ -127,7 +128,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		return feeds;
 	}
 
-	public AggregatorUIItem getItem(AggregatorUIItem parent, int index) {
+	public AggregatorUIItem getItem(ParentingAggregatorItem parent, int index) {
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
 			for (AggregatorUIItem child : holder.children) {
@@ -138,7 +139,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		return null;
 	}
 
-	public int getUnreadCount(AggregatorUIItem parent) {
+	public int getUnreadCount(ParentingAggregatorItem parent) {
 		int count = 0;
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
@@ -175,7 +176,8 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 
 	}
 
-	public void move(AggregatorUIItem item, AggregatorUIItem parent, int order) {
+	public void move(AggregatorUIItem item, ParentingAggregatorItem parent,
+			int order) {
 		ItemHolder oldHolder = items.get(item.getParent().getUUID());
 		ItemHolder newHolder = items.get(parent.getUUID());
 		oldHolder.children.remove(item);

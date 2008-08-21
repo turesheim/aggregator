@@ -18,10 +18,9 @@ import no.resheim.aggregator.data.IAggregatorItem;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
-import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.ui.statushandlers.StatusManager;
 
 /**
  * Deletes the selected IAggregatorItem.
@@ -41,11 +40,10 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
 			}
 			IAggregatorItem item = getSelection(event);
 			if (item != null) {
-				IStatus status = collection.delete(item);
-				// Show a message if something went wrong.
-				if (!status.isOK()) {
-					StatusManager.getManager().handle(status,
-							StatusManager.SHOW);
+				try {
+					collection.delete(item);
+				} catch (CoreException e) {
+					e.printStackTrace();
 				}
 			}
 		}

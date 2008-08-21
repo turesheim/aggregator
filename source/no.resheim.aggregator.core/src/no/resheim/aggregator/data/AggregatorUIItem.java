@@ -32,9 +32,7 @@ public abstract class AggregatorUIItem implements IAggregatorItem {
 
 	protected int ordering;
 
-	protected AggregatorUIItem parent;
-
-	protected FeedCollection registry;
+	protected ParentingAggregatorItem parent;
 
 	protected boolean serialized;
 
@@ -56,7 +54,7 @@ public abstract class AggregatorUIItem implements IAggregatorItem {
 	/**
 	 * @param parent
 	 */
-	public AggregatorUIItem(AggregatorUIItem parent, UUID uuid) {
+	public AggregatorUIItem(ParentingAggregatorItem parent, UUID uuid) {
 		this.parent = parent;
 		this.uuid = uuid;
 	}
@@ -69,7 +67,7 @@ public abstract class AggregatorUIItem implements IAggregatorItem {
 		return ordering;
 	};
 
-	public AggregatorUIItem getParent() {
+	public ParentingAggregatorItem getParent() {
 		return parent;
 	}
 
@@ -96,7 +94,7 @@ public abstract class AggregatorUIItem implements IAggregatorItem {
 	 * @param parent
 	 *            the new parent item
 	 */
-	public void setParent(AggregatorUIItem parent) {
+	public void setParent(ParentingAggregatorItem parent) {
 		this.parent = parent;
 	}
 

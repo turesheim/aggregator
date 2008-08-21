@@ -43,4 +43,6 @@ public interface IAggregatorItem {
 	 */
 	public abstract UUID getUUID();
 
+	public abstract int getOrdering();
+
 }

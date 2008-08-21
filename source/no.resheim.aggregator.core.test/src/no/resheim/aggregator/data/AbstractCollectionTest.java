@@ -7,6 +7,7 @@ import no.resheim.aggregator.TestUtils;
 import no.resheim.aggregator.data.internal.InternalArticle;
 import no.resheim.aggregator.data.internal.InternalFolder;
 
+import org.eclipse.core.runtime.CoreException;
 import org.junit.Test;
 
 public abstract class AbstractCollectionTest extends TestCase {
@@ -62,14 +63,14 @@ public abstract class AbstractCollectionTest extends TestCase {
 	}
 
 	@Test
-	public final void testAddFolder() {
+	public final void testAddFolder() throws CoreException {
 		// Create the folder instance
 		InternalFolder folder_a = new InternalFolder(getCollection(), UUID
 				.randomUUID());
 		// Add it to the collection
 		getCollection().addNew(folder_a);
 		// See that it's available in from the storage
-		IAggregatorItem item = getCollection().getItemAt(getCollection(), 0);
+		IAggregatorItem item = getCollection().getChildAt(0);
 		if (item == null) {
 			fail("Folder item could not be retrieved"); //$NON-NLS-1$
 		}
@@ -86,29 +87,31 @@ public abstract class AbstractCollectionTest extends TestCase {
 	 * Assumes that the folder item created in the previous method still exists
 	 * and attempts to delete it. Fails if the item did not exist and if it
 	 * still exists after deleting it.
+	 * 
+	 * @throws CoreException
 	 */
-	public final void testDeleteFolder() {
+	public final void testDeleteFolder() throws CoreException {
 		FeedCollection collection = getCollection();
 		// Assume the folder was added in the method above
-		IAggregatorItem item = collection.getItemAt(collection, 0);
+		IAggregatorItem item = collection.getChildAt(0);
 		if (item == null) {
 			fail("Folder item could not be retrieved"); //$NON-NLS-1$
 		}
 		collection.delete(item);
-		item = collection.getItemAt(collection, 0);
+		item = collection.getChildAt(0);
 		if (item != null) {
 			fail("Folder item was not deleted"); //$NON-NLS-1$
 		}
 
 	}
 
-	public final void testAddFeed() {
+	public final void testAddFeed() throws CoreException {
 		// Create the feed
 		feed = TestUtils.createNewFeed("New feed"); //$NON-NLS-1$
 		// This should also add a new folder automatically as we did not specify
 		// the location for the feed.
 		getCollection().addNew(feed);
-		IAggregatorItem item = getCollection().getItemAt(getCollection(), 0);
+		IAggregatorItem item = getCollection().getChildAt(0);
 		if (item == null) {
 			fail("Feed item could not be retrieved"); //$NON-NLS-1$
 		}
@@ -123,15 +126,17 @@ public abstract class AbstractCollectionTest extends TestCase {
 
 	/**
 	 * Tests the creation of a folder associated with a feed.
+	 * 
+	 * @throws CoreException
 	 */
-	public final void testAddFeedFolder() {
+	public final void testAddFeedFolder() throws CoreException {
 		// Create the folder instance
 		InternalFolder folder_a = new InternalFolder(getCollection(), UUID
 				.randomUUID());
 		// Add it to the collection
 		getCollection().addNew(folder_a);
 		// See that it's available in from the storage
-		IAggregatorItem item = getCollection().getItemAt(getCollection(), 0);
+		IAggregatorItem item = getCollection().getChildAt(0);
 		if (item == null) {
 			fail("Folder item could not be retrieved"); //$NON-NLS-1$
 		}
@@ -148,7 +153,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 		fail("Not implemented yet");
 	}
 
-	public final void testAddArticle() {
+	public final void testAddArticle() throws CoreException {
 		FeedCollection collection = getCollection();
 		// Create the feed
 		Feed feed = TestUtils.createNewFeed("Feed title"); //$NON-NLS-1$
@@ -156,14 +161,16 @@ public abstract class AbstractCollectionTest extends TestCase {
 		// the location for the feed.
 		collection.addNew(feed);
 		// Get the first folder
-		IAggregatorItem folder = collection.getItemAt(collection, 0);
+		ParentingAggregatorItem folder = (ParentingAggregatorItem) collection
+				.getChildAt(0);
 		// Create the article
 		InternalArticle article_a = new InternalArticle(
-				(AggregatorUIItem) folder, UUID.randomUUID(), feed.getUUID());
+				(ParentingAggregatorItem) folder, UUID.randomUUID(), feed
+						.getUUID());
 		// Add it to the collection
 		collection.addNew(article_a);
 		// See that it's there (at position 0 in the folder)
-		IAggregatorItem item = collection.getItemAt(folder, 0);
+		IAggregatorItem item = folder.getChildAt(0);
 		if (item == null) {
 			fail("Article item could not be retrieved"); //$NON-NLS-1$
 		}
@@ -175,5 +182,4 @@ public abstract class AbstractCollectionTest extends TestCase {
 		// Compare the basics
 		compareAggregatorUIItems(article_a, folder_b);
 	}
-
 }
