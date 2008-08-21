@@ -13,7 +13,7 @@ import java.util.UUID;
 public final class FeedWorkingCopy extends Feed {
 	Feed feed;
 
-	public static FeedWorkingCopy newInstance(IAggregatorItem parent) {
+	public static FeedWorkingCopy newInstance(AggregatorItem parent) {
 		Feed feed = new Feed();
 		feed.setUUID(UUID.randomUUID());
 		return new FeedWorkingCopy(feed);

@@ -70,7 +70,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 		// Add it to the collection
 		getCollection().addNew(folder_a);
 		// See that it's available in from the storage
-		IAggregatorItem item = getCollection().getChildAt(0);
+		AggregatorItem item = getCollection().getChildAt(0);
 		if (item == null) {
 			fail("Folder item could not be retrieved"); //$NON-NLS-1$
 		}
@@ -93,7 +93,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 	public final void testDeleteFolder() throws CoreException {
 		FeedCollection collection = getCollection();
 		// Assume the folder was added in the method above
-		IAggregatorItem item = collection.getChildAt(0);
+		AggregatorItem item = collection.getChildAt(0);
 		if (item == null) {
 			fail("Folder item could not be retrieved"); //$NON-NLS-1$
 		}
@@ -111,7 +111,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 		// This should also add a new folder automatically as we did not specify
 		// the location for the feed.
 		getCollection().addNew(feed);
-		IAggregatorItem item = getCollection().getChildAt(0);
+		AggregatorItem item = getCollection().getChildAt(0);
 		if (item == null) {
 			fail("Feed item could not be retrieved"); //$NON-NLS-1$
 		}
@@ -119,9 +119,6 @@ public abstract class AbstractCollectionTest extends TestCase {
 		if (!(item instanceof Folder)) {
 			fail("Returned item is not feed"); //$NON-NLS-1$
 		}
-		// Compare the two
-		Feed storageFeed = (Feed) item;
-
 	}
 
 	/**
@@ -136,7 +133,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 		// Add it to the collection
 		getCollection().addNew(folder_a);
 		// See that it's available in from the storage
-		IAggregatorItem item = getCollection().getChildAt(0);
+		AggregatorItem item = getCollection().getChildAt(0);
 		if (item == null) {
 			fail("Folder item could not be retrieved"); //$NON-NLS-1$
 		}
@@ -170,7 +167,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 		// Add it to the collection
 		collection.addNew(article_a);
 		// See that it's there (at position 0 in the folder)
-		IAggregatorItem item = folder.getChildAt(0);
+		AggregatorItem item = folder.getChildAt(0);
 		if (item == null) {
 			fail("Article item could not be retrieved"); //$NON-NLS-1$
 		}

@@ -19,7 +19,7 @@ import java.util.UUID;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class Feed implements IAggregatorItem {
+public class Feed {
 
 	/**
 	 * A unique identifier will be created for the feed as it is instantiated.
@@ -324,10 +324,5 @@ public class Feed implements IAggregatorItem {
 		this.updateInterval = wc.updateInterval;
 		this.updatePeriod = wc.updatePeriod;
 		this.hidden = wc.hidden;
-	}
-
-	public int getOrdering() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

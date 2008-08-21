@@ -13,7 +13,7 @@ package no.resheim.aggregator.core.ui.commands;
 
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.IAggregatorItem;
+import no.resheim.aggregator.data.AggregatorItem;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -23,7 +23,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 /**
- * Deletes the selected IAggregatorItem.
+ * Deletes the selected AggregatorItem.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -38,7 +38,7 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
 			if (collection == null) {
 				return null;
 			}
-			IAggregatorItem item = getSelection(event);
+			AggregatorItem item = getSelection(event);
 			if (item != null) {
 				try {
 					collection.delete(item);

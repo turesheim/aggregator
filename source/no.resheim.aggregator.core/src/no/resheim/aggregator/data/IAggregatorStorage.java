@@ -42,7 +42,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param item
 	 *            The item to add
 	 */
-	public abstract IStatus add(IAggregatorItem item);
+	public abstract IStatus add(AggregatorItem item);
 
 	/**
 	 * Deletes the specified item from the storage.
@@ -50,7 +50,11 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param item
 	 *            The item to delete
 	 */
-	public abstract void delete(IAggregatorItem item);
+	public abstract void delete(AggregatorItem item);
+
+	public abstract void delete(Feed feed);
+
+	public abstract void add(Feed feed);
 
 	/**
 	 * Deletes all read articles from the specified feed which publication date
@@ -83,7 +87,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            The parent item
 	 * @return An array of aggregator articles
 	 */
-	public abstract IAggregatorItem[] getChildren(AggregatorItemParent item);
+	public abstract AggregatorItem[] getChildren(AggregatorItemParent item);
 
 	/**
 	 * Returns the description string of the aggregator item if such a
@@ -119,7 +123,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param index
 	 * @return
 	 */
-	public abstract IAggregatorItem getItem(AggregatorItemParent parent,
+	public abstract AggregatorItem getItem(AggregatorItemParent parent,
 			int index);
 
 	/**
@@ -164,8 +168,8 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param order
 	 *            the new order of the item
 	 */
-	public abstract void move(AggregatorItem item,
-			AggregatorItemParent parent, int order);
+	public abstract void move(AggregatorItem item, AggregatorItemParent parent,
+			int order);
 
 	/**
 	 * Renames the given item.

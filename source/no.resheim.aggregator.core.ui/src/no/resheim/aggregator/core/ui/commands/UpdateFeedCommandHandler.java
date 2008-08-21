@@ -14,7 +14,7 @@ package no.resheim.aggregator.core.ui.commands;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.IAggregatorItem;
+import no.resheim.aggregator.data.AggregatorItem;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -33,7 +33,7 @@ public class UpdateFeedCommandHandler extends AbstractAggregatorCommandHandler
 			if (registry == null) {
 				return null;
 			}
-			IAggregatorItem item = getSelection(event);
+			AggregatorItem item = getSelection(event);
 			if (item != null && item instanceof Folder) {
 				try {
 					registry.update(item);

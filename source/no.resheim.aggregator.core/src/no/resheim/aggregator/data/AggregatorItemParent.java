@@ -34,7 +34,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		return (FeedCollection) p;
 	}
 
-	public IAggregatorItem getChildAt(int index) throws CoreException {
+	public AggregatorItem getChildAt(int index) throws CoreException {
 		IAggregatorStorage storage = getCollection().getStorage();
 		try {
 			storage.readLock().lock();
@@ -70,7 +70,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 * @return the child items
 	 * @throws CoreException
 	 */
-	public IAggregatorItem[] getChildren() throws CoreException {
+	public AggregatorItem[] getChildren() throws CoreException {
 		IAggregatorStorage storage = getCollection().getStorage();
 		try {
 			storage.readLock().lock();

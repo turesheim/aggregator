@@ -15,7 +15,7 @@ import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.IAggregatorItem;
+import no.resheim.aggregator.data.AggregatorItem;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -92,8 +92,8 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 	}
 
 	public String getText(Object element) {
-		if (element instanceof IAggregatorItem) {
-			IAggregatorItem item = (IAggregatorItem) element;
+		if (element instanceof AggregatorItem) {
+			AggregatorItem item = (AggregatorItem) element;
 			if (element instanceof Feed || element instanceof Folder) {
 				StringBuffer sb = new StringBuffer();
 				sb.append(item.getTitle());

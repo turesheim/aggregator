@@ -19,7 +19,6 @@ import no.resheim.aggregator.core.ui.internal.FeedItemTitle;
 import no.resheim.aggregator.core.ui.internal.FeedViewWidgetFactory;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.IAggregatorItem;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
@@ -93,7 +92,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		setLayout(layout);
 	}
 
-	public void show(IAggregatorItem item) {
+	public void show(Object item) {
 		if (item instanceof Article) {
 			showDescription((Article) item);
 		} else if (item instanceof Feed) {

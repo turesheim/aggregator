@@ -17,7 +17,7 @@ import no.resheim.aggregator.core.ui.NewFeedWizard;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.FeedWorkingCopy;
-import no.resheim.aggregator.data.IAggregatorItem;
+import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
 
@@ -51,8 +51,8 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 				return null;
 			}
 			NewFeedWizard wizard = new NewFeedWizard(registry);
-			IAggregatorItem parent = registry;
-			IAggregatorItem item = getSelection(event);
+			AggregatorItem parent = registry;
+			AggregatorItem item = getSelection(event);
 			String selectionRoot = event.getParameter("selectionRoot"); //$NON-NLS-1$
 			if (selectionRoot != null && selectionRoot.equals("true")) { //$NON-NLS-1$
 				if (item != null)
@@ -79,7 +79,7 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 		return null;
 	}
 
-	private FeedWorkingCopy getNewFeedWorkingCopy(IAggregatorItem parent) {
+	private FeedWorkingCopy getNewFeedWorkingCopy(AggregatorItem parent) {
 		FeedWorkingCopy wc = FeedWorkingCopy.newInstance(parent);
 		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.

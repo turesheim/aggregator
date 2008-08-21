@@ -18,7 +18,7 @@ import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.FeedWorkingCopy;
 import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.IAggregatorItem;
+import no.resheim.aggregator.data.AggregatorItem;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -37,7 +37,7 @@ public class FeedPropertiesCommandHandler extends
 			if (registry == null) {
 				return null;
 			}
-			IAggregatorItem o = getSelection(event);
+			AggregatorItem o = getSelection(event);
 			if (o instanceof Folder) {
 				Feed feed = registry.getFeeds().get(((Folder) o).getFeed());
 				if (feed != null) {

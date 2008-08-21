@@ -12,7 +12,7 @@
 package no.resheim.aggregator.core.ui.commands;
 
 import no.resheim.aggregator.data.AggregatorItem;
-import no.resheim.aggregator.data.IAggregatorItem;
+import no.resheim.aggregator.data.AggregatorItem;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -30,7 +30,7 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof IStructuredSelection) {
 			Object o = ((IStructuredSelection) selection).getFirstElement();
-			if (o != null && o instanceof IAggregatorItem) {
+			if (o != null && o instanceof AggregatorItem) {
 				return ((AggregatorItem) o);
 			}
 		}

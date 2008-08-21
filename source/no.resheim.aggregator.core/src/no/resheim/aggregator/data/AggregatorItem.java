@@ -22,7 +22,7 @@ import java.util.UUID;
  * @since 1.0
  * @noextend This class is not intended to be subclassed by clients.
  */
-public abstract class AggregatorItem implements IAggregatorItem {
+public abstract class AggregatorItem {
 
 	public enum Mark {
 		DONE, FIRST_PRIORITY, IMPORTANT, SECOND_PRIORITY, THIRD_PRIORITY, TODO

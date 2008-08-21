@@ -16,11 +16,10 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import no.resheim.aggregator.data.AggregatorItem;
+import no.resheim.aggregator.data.AggregatorItemParent;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.IAggregatorItem;
-import no.resheim.aggregator.data.AggregatorItemParent;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
@@ -71,28 +70,28 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		items.put(collection.getUUID(), new ItemHolder(collection));
 	}
 
-	public IStatus add(IAggregatorItem item) {
-		if (item instanceof Feed) {
-			feeds.put(item.getUUID(), (Feed) item);
-		} else {
-			ItemHolder holder = new ItemHolder((AggregatorItem) item);
-			items.put(item.getUUID(), holder);
-			ItemHolder parentHolder = items.get(((AggregatorItem) item)
-					.getParent().getUUID());
-			parentHolder.children.add((AggregatorItem) item);
-		}
+	public IStatus add(AggregatorItem item) {
+		ItemHolder holder = new ItemHolder((AggregatorItem) item);
+		items.put(item.getUUID(), holder);
+		ItemHolder parentHolder = items.get(((AggregatorItem) item).getParent()
+				.getUUID());
+		parentHolder.children.add((AggregatorItem) item);
 		return Status.OK_STATUS;
 	}
 
-	public void delete(IAggregatorItem item) {
-		if (item instanceof Feed) {
-			feeds.remove(item.getUUID());
-		} else {
-			ItemHolder parentHolder = items.get(((AggregatorItem) item)
-					.getParent().getUUID());
-			Assert.isTrue(parentHolder.children.remove(item));
-			Assert.isNotNull(items.remove(item.getUUID()));
-		}
+	public void add(Feed feed) {
+		feeds.put(feed.getUUID(), feed);
+	}
+
+	public void delete(AggregatorItem item) {
+		ItemHolder parentHolder = items.get(((AggregatorItem) item).getParent()
+				.getUUID());
+		Assert.isTrue(parentHolder.children.remove(item));
+		Assert.isNotNull(items.remove(item.getUUID()));
+	}
+
+	public void delete(Feed feed) {
+		feeds.remove(feed.getUUID());
 	}
 
 	public void deleteOutdated(Feed feed, long date) {
@@ -143,7 +142,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		int count = 0;
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
-			for (IAggregatorItem item : holder.children) {
+			for (AggregatorItem item : holder.children) {
 				if (item instanceof Article && !((Article) item).isRead()) {
 					count++;
 				}
@@ -176,8 +175,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 
 	}
 
-	public void move(AggregatorItem item, AggregatorItemParent parent,
-			int order) {
+	public void move(AggregatorItem item, AggregatorItemParent parent, int order) {
 		ItemHolder oldHolder = items.get(item.getParent().getUUID());
 		ItemHolder newHolder = items.get(parent.getUUID());
 		oldHolder.children.remove(item);

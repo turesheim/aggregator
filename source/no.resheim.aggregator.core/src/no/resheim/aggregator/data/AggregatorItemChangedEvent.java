@@ -48,39 +48,38 @@ public class AggregatorItemChangedEvent {
 
 	private int details;
 
-	private IAggregatorItem item;
+	private Object item;
 
 	private int oldOrder;
 
-	private IAggregatorItem oldParent;
+	private Object oldParent;
 
 	private long time;
 
 	private FeedChangeEventType type;
 
-	public AggregatorItemChangedEvent(IAggregatorItem feed,
-			FeedChangeEventType type) {
+	public AggregatorItemChangedEvent(Feed feed, FeedChangeEventType type) {
 		this.item = feed;
 		this.type = type;
 	}
 
-	public AggregatorItemChangedEvent(IAggregatorItem feed,
-			FeedChangeEventType type, int details, IAggregatorItem oldParent,
-			int oldOrder, long time) {
+	public AggregatorItemChangedEvent(AggregatorItem feed,
+			FeedChangeEventType type, int details,
+			AggregatorItemParent oldParent, int oldOrder, long time) {
 		this(feed, type, details);
 		this.oldParent = oldParent;
 		this.oldOrder = oldOrder;
 		this.time = time;
 	}
 
-	public AggregatorItemChangedEvent(IAggregatorItem feed,
+	public AggregatorItemChangedEvent(AggregatorItem feed,
 			FeedChangeEventType type, long time) {
 		this.item = feed;
 		this.type = type;
 		this.time = time;
 	}
 
-	public AggregatorItemChangedEvent(IAggregatorItem feed,
+	public AggregatorItemChangedEvent(AggregatorItem feed,
 			FeedChangeEventType type, long time, int details) {
 		this(feed, type, time);
 		this.details = details;
@@ -90,7 +89,7 @@ public class AggregatorItemChangedEvent {
 		return details;
 	}
 
-	public IAggregatorItem getItem() {
+	public Object getItem() {
 		return item;
 	}
 
@@ -98,7 +97,7 @@ public class AggregatorItemChangedEvent {
 		return oldOrder;
 	}
 
-	public IAggregatorItem getOldParent() {
+	public Object getOldParent() {
 		return oldParent;
 	}
 

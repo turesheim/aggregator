@@ -16,7 +16,7 @@ import java.text.MessageFormat;
 import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.IAggregatorItem;
+import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.AggregatorItemParent;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -89,7 +89,7 @@ public class FeedTreeViewer extends TreeViewer {
 			};
 
 			public void dragSetData(DragSourceEvent event) {
-				IAggregatorItem item = (IAggregatorItem) dragSourceItem[0]
+				AggregatorItem item = (AggregatorItem) dragSourceItem[0]
 						.getData();
 				event.data = item.getUUID().toString();
 			}
