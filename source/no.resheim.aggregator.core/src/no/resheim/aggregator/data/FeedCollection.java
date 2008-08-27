@@ -26,13 +26,9 @@ import no.resheim.aggregator.data.internal.InternalFolder;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ISafeRunnable;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.SafeRunner;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
-import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 
 /**
  * 
@@ -424,40 +420,6 @@ public class FeedCollection extends AggregatorItemParent {
 	}
 
 	/**
-	 * Removes the specified item from the collection and underlying database.
-	 * 
-	 * @param item
-	 *            the element to remove
-	 * @throws CoreException
-	 */
-	public IStatus delete(AggregatorItem item) throws CoreException {
-		try {
-			fDatabase.writeLock().lock();
-			long start = System.currentTimeMillis();
-			shiftUp((AggregatorItem) item);
-			fDatabase.delete((AggregatorItem) item);
-			if (item instanceof Folder) {
-				UUID feedId = ((Folder) item).getFeed();
-				// Make sure we also delete the associated feed instance
-				if (feedId != null) {
-					fDatabase.delete(fFeeds.remove(feedId));
-					ISecurePreferences root = SecurePreferencesFactory
-							.getDefault().node(
-									AggregatorPlugin.SECURE_STORAGE_ROOT);
-					ISecurePreferences feedNode = root.node(feedId.toString());
-					feedNode.removeNode();
-				}
-			}
-			notifyListerners(new AggregatorItemChangedEvent(item,
-					FeedChangeEventType.REMOVED, System.currentTimeMillis()
-							- start));
-			return Status.OK_STATUS;
-		} finally {
-			fDatabase.writeLock().unlock();
-		}
-	}
-
-	/**
 	 * Removes the event listener from the list. The specified listener will no
 	 * longer be notified of aggregator events.
 	 * 
@@ -558,7 +520,7 @@ public class FeedCollection extends AggregatorItemParent {
 		}
 	}
 
-	private List<AggregatorItemChangedEvent> shiftUp(AggregatorItem item)
+	List<AggregatorItemChangedEvent> shiftUp(AggregatorItem item)
 			throws CoreException {
 		AggregatorItemParent parent = item.getParent();
 		int count = parent.getChildCount();

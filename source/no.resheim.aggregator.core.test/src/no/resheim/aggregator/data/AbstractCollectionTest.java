@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import junit.framework.TestCase;
 import no.resheim.aggregator.TestUtils;
+import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
 import no.resheim.aggregator.data.internal.InternalArticle;
 import no.resheim.aggregator.data.internal.InternalFolder;
 
@@ -22,7 +23,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 	 */
 	protected abstract FeedCollection getCollection();
 
-	protected void compareAggregatorUIItems(AggregatorItem item_a,
+	protected void compareAggregatorItems(AggregatorItem item_a,
 			AggregatorItem item_b) {
 		if (!item_a.getUUID().equals(item_a.getUUID())) {
 			failNotEquals("Unique identifier differs", item_b.getUUID(), item_a //$NON-NLS-1$
@@ -80,7 +81,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 		}
 		// Compare the two
 		Folder folder_b = (Folder) item;
-		compareAggregatorUIItems(folder_a, folder_b);
+		compareAggregatorItems(folder_a, folder_b);
 	}
 
 	/**
@@ -97,7 +98,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 		if (item == null) {
 			fail("Folder item could not be retrieved"); //$NON-NLS-1$
 		}
-		collection.delete(item);
+		item.parent.delete(item);
 		item = collection.getChildAt(0);
 		if (item != null) {
 			fail("Folder item was not deleted"); //$NON-NLS-1$
@@ -156,14 +157,12 @@ public abstract class AbstractCollectionTest extends TestCase {
 		Feed feed = TestUtils.createNewFeed("Feed title"); //$NON-NLS-1$
 		// This should also add a new folder automatically as we did not specify
 		// the location for the feed.
-		collection.addNew(feed);
-		// Get the first folder
-		AggregatorItemParent folder = (AggregatorItemParent) collection
-				.getChildAt(0);
+		Folder folder = collection.addNew(feed);
 		// Create the article
 		InternalArticle article_a = new InternalArticle(
 				(AggregatorItemParent) folder, UUID.randomUUID(), feed
 						.getUUID());
+		article_a.setGuid("myGUID"); //$NON-NLS-1$
 		// Add it to the collection
 		collection.addNew(article_a);
 		// See that it's there (at position 0 in the folder)
@@ -177,6 +176,33 @@ public abstract class AbstractCollectionTest extends TestCase {
 		}
 		Article folder_b = (Article) item;
 		// Compare the basics
-		compareAggregatorUIItems(article_a, folder_b);
+		compareAggregatorItems(article_a, folder_b);
+	}
+
+	/**
+	 * Note that this test takes significantly longer time when we have change
+	 * listeners as these most likely will update the UI.
+	 */
+	public final void testAdd1000Articles() {
+		FeedCollection collection = getCollection();
+		Feed feed = TestUtils.createNewFeed("** Test feed **"); //$NON-NLS-1$
+		Folder folder = collection.addNew(feed);
+		collection.notifyListerners(new AggregatorItemChangedEvent(feed,
+				FeedChangeEventType.UPDATING));
+		for (int a = 0; a < 1000; a++) {
+			InternalArticle article = new InternalArticle(folder, UUID
+					.randomUUID(), feed.getUUID());
+			article.setTitle("Article #" + a); //$NON-NLS-1$
+			article.setGuid(article.getUUID().toString());
+			article.setDescription(""); //$NON-NLS-1$
+			article.setLink(""); //$NON-NLS-1$
+			collection.addNew(article);
+		}
+		collection.notifyListerners(new AggregatorItemChangedEvent(feed,
+				FeedChangeEventType.UPDATED));
+	}
+
+	public final void testGet1000Articles() {
+
 	}
 }

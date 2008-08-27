@@ -12,8 +12,8 @@
 package no.resheim.aggregator.core.ui.commands;
 
 import no.resheim.aggregator.core.ui.IFeedView;
-import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.AggregatorItem;
+import no.resheim.aggregator.data.FeedCollection;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -41,7 +41,7 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
 			AggregatorItem item = getSelection(event);
 			if (item != null) {
 				try {
-					collection.delete(item);
+					item.getParent().delete(item);
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}

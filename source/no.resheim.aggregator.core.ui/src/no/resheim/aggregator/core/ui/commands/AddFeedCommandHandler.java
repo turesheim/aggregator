@@ -15,9 +15,9 @@ import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.NewFeedWizard;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
+import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.FeedWorkingCopy;
-import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
 
@@ -28,7 +28,6 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 /**
@@ -44,37 +43,34 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 		implements IHandler {
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IWorkbenchPart part = HandlerUtil.getActivePart(event);
-		if (part instanceof IFeedView) {
-			FeedCollection registry = ((IFeedView) part).getFeedCollection();
-			if (registry == null) {
-				return null;
-			}
-			NewFeedWizard wizard = new NewFeedWizard(registry);
-			AggregatorItem parent = registry;
-			AggregatorItem item = getSelection(event);
-			String selectionRoot = event.getParameter("selectionRoot"); //$NON-NLS-1$
-			if (selectionRoot != null && selectionRoot.equals("true")) { //$NON-NLS-1$
-				if (item != null)
-					parent = registry;
-			}
-			FeedWorkingCopy wc = getNewFeedWorkingCopy(parent);
-			wizard.setFeed(wc);
-			IDialogSettings workbenchSettings = AggregatorUIPlugin.getDefault()
-					.getDialogSettings();
-			IDialogSettings wizardSettings = workbenchSettings
-					.getSection("NewWizardAction");//$NON-NLS-1$
-			if (wizardSettings == null) {
-				wizardSettings = workbenchSettings
-						.addNewSection("NewWizardAction");//$NON-NLS-1$
-			}
-			wizard.setDialogSettings(wizardSettings);
-			WizardDialog dialog = new WizardDialog(HandlerUtil
-					.getActiveShell(event), wizard);
-			dialog.create();
-			if (dialog.open() == Window.OK) {
-				// registry.addNew(wizard.getFeed());
-			}
+
+		FeedCollection collection = getCollection(event);
+		if (collection == null) {
+			return null;
+		}
+		NewFeedWizard wizard = new NewFeedWizard(collection);
+		AggregatorItem parent = collection;
+		AggregatorItem item = getSelection(event);
+		String selectionRoot = event.getParameter("selectionRoot"); //$NON-NLS-1$
+		if (selectionRoot != null && selectionRoot.equals("true")) { //$NON-NLS-1$
+			if (item != null)
+				parent = collection;
+		}
+		FeedWorkingCopy wc = getNewFeedWorkingCopy(parent);
+		wizard.setFeed(wc);
+		IDialogSettings workbenchSettings = AggregatorUIPlugin.getDefault()
+				.getDialogSettings();
+		IDialogSettings wizardSettings = workbenchSettings
+				.getSection("NewWizardAction");//$NON-NLS-1$
+		if (wizardSettings == null) {
+			wizardSettings = workbenchSettings.addNewSection("NewWizardAction");//$NON-NLS-1$
+		}
+		wizard.setDialogSettings(wizardSettings);
+		WizardDialog dialog = new WizardDialog(HandlerUtil
+				.getActiveShell(event), wizard);
+		dialog.create();
+		if (dialog.open() == Window.OK) {
+			// registry.addNew(wizard.getFeed());
 		}
 		return null;
 	}
