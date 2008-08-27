@@ -25,6 +25,32 @@
       </perspectiveExtension>
    </extension>
    <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.eclipse.ui.category.views"
+            defaultHandler="no.resheim.aggregator.ui.views.NextUnreadItemCommandHandler"
+            id="no.resheim.aggregator.ui.nextUnread"
+            name="Next Unread">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.contexts">
+      <context
+            id="no.resheim.aggregator.ui.context"
+            name="Aggregator View"
+            parentId="org.eclipse.ui.contexts.window">
+      </context>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="no.resheim.aggregator.ui.nextUnread"
+            contextId="no.resheim.aggregator.ui.context"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="Ctrl+.">
+      </key>
+   </extension>
+   <extension
          point="org.eclipse.ui.menus">
       <menuContribution
             locationURI="toolbar:no.resheim.aggregator.ui.RSSView?after=additions">
@@ -42,6 +68,13 @@
                   id="no.resheim.aggregator.ui.dynamic">
             </dynamic>
          </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="popup:no.resheim.aggregator.ui.RSSView?after=navigation">
+         <command
+               commandId="no.resheim.aggregator.ui.nextUnread"
+               label="Next Unread">
+         </command>
       </menuContribution>
       <menuContribution
             locationURI="popup:no.resheim.aggregator.ui.RSSView?after=modify">
@@ -71,6 +104,52 @@
                <count
                      value="1">
                </count>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="popup:no.resheim.aggregator.ui.RSSView?after=selection">
+         <command
+               commandId="no.resheim.aggregator.core.ui.update"
+               label="Update">
+            <visibleWhen>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <adapt
+                           type="no.resheim.aggregator.data.Folder">
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.setRead"
+               label="Mark As Read">
+            <visibleWhen>
+               <count
+                     value="1">
+               </count>
+            </visibleWhen>
+         </command>
+         <separator
+               name="properties"
+               visible="true">
+         </separator>
+         <command
+               commandId="no.resheim.aggregator.core.ui.properties"
+               label="Properties">
+            <visibleWhen>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <adapt
+                           type="no.resheim.aggregator.data.Folder">
+                     </adapt>
+                  </iterate>
+               </with>
             </visibleWhen>
          </command>
       </menuContribution>

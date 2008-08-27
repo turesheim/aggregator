@@ -57,10 +57,18 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 
 /**
+ * 
+ * The view context menu has three groups:
+ * <ul>
+ * <li>navigation</li>
+ * <li>modify</li>
+ * <li>selection</li>
+ * </ul>
  * 
  */
 public class RSSView extends ViewPart implements IFeedView,
@@ -70,15 +78,6 @@ public class RSSView extends ViewPart implements IFeedView,
 	 * Listens to selection events in the
 	 */
 	class ViewSelectionListener implements ISelectionChangedListener {
-
-		private void setStatusText(String text) {
-			IStatusLineManager mgr = getViewSite().getActionBars()
-					.getStatusLineManager();
-			if (mgr != null) {
-				mgr.setMessage(text);
-			}
-
-		}
 
 		public void selectionChanged(SelectionChangedEvent event) {
 			// Reset in case it's not an Item that is selected.
@@ -100,11 +99,28 @@ public class RSSView extends ViewPart implements IFeedView,
 				}
 			}
 		}
+
+		private void setStatusText(String text) {
+			IStatusLineManager mgr = getViewSite().getActionBars()
+					.getStatusLineManager();
+			if (mgr != null) {
+				mgr.setMessage(text);
+			}
+
+		}
 	}
 
 	private static final String BLANK = ""; //$NON-NLS-1$
 	public static final String DEFAULT_COLLECTION_ID = "no.resheim.aggregator.ui.defaultFeedCollection"; //$NON-NLS-1$
 	private static final String MEMENTO_ORIENTATION = ".ORIENTATION"; //$NON-NLS-1$
+
+	private final static Separator modify_separator = new Separator("modify"); //$NON-NLS-1$
+
+	private final static Separator navigation_separator = new Separator(
+			"navigation"); //$NON-NLS-1$
+
+	private final static Separator selection_separator = new Separator(
+			"selection"); //$NON-NLS-1$
 
 	/** The web browser we're using */
 	private IWebBrowser browser;
@@ -150,6 +166,7 @@ public class RSSView extends ViewPart implements IFeedView,
 	/** Tree viewer to show all the feeds and articles */
 	private FeedTreeViewer treeView;
 
+	/** Action to change the layout of the view */
 	private Action verticalLayoutAction;
 
 	/**
@@ -177,6 +194,9 @@ public class RSSView extends ViewPart implements IFeedView,
 		fillLocalToolBar(bars.getToolBarManager());
 	}
 
+	/**
+	 * Contributes to the local view menu.
+	 */
 	private void contributeToMenu() {
 		MenuManager mgr = new MenuManager(Messages.RSSView_LayoutMenuTitle,
 				"layout"); //$NON-NLS-1$
@@ -244,6 +264,14 @@ public class RSSView extends ViewPart implements IFeedView,
 			}
 
 		});
+
+		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				((IContextService) PlatformUI.getWorkbench().getService(
+						IContextService.class))
+						.activateContext("no.resheim.aggregator.ui.context"); //$NON-NLS-1$
+			}
+		});
 		// Register for collection events
 		AggregatorPlugin.getDefault().addFeedCollectionListener(this);
 	}
@@ -255,9 +283,10 @@ public class RSSView extends ViewPart implements IFeedView,
 	 *            The menu manager
 	 */
 	private void fillContextMenu(IMenuManager manager) {
+		manager.add(navigation_separator);
 		drillDownAdapter.addNavigationActions(manager);
-		manager.add(new Separator("modify")); //$NON-NLS-1$
-		manager.add(new Separator("selection")); //$NON-NLS-1$
+		manager.add(modify_separator);
+		manager.add(selection_separator);
 	}
 
 	/**
@@ -267,7 +296,6 @@ public class RSSView extends ViewPart implements IFeedView,
 	 *            The menu manager
 	 */
 	private void fillLocalToolBar(IToolBarManager manager) {
-		manager.add(new Separator());
 		drillDownAdapter.addNavigationActions(manager);
 	}
 
