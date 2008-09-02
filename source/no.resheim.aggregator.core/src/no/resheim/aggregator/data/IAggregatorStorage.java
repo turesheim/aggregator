@@ -168,8 +168,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param order
 	 *            the new order of the item
 	 */
-	public abstract void move(AggregatorItem item, AggregatorItemParent parent,
-			int order);
+	public abstract void move(AggregatorItem item);
 
 	/**
 	 * Renames the given item.

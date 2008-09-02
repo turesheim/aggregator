@@ -147,7 +147,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			ResultSet rs) throws SQLException {
 		InternalFolder item = new InternalFolder(parent, UUID.fromString(rs
 				.getString(1)));
-		item.setParent(parent);
 		item.setOrdering(rs.getInt(3));
 		if (rs.getString(4) != null) {
 			item.setFeed(UUID.fromString(rs.getString(4)));
@@ -532,10 +531,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * no.resheim.aggregator.model.IAggregatorStorage#move(no.resheim.aggregator
 	 * .model.AggregatorItem, no.resheim.aggregator.model.AggregatorItem)
 	 */
-	public void move(AggregatorItem item, AggregatorItemParent parent, int order) {
+	public void move(AggregatorItem item) {
 		try {
-			item.setParent(parent);
-			item.setOrdering(order);
 			String table = null;
 			if (item instanceof Article) {
 				table = "articles"; //$NON-NLS-1$
@@ -545,8 +542,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			}
 			Statement s = connection.createStatement();
 			s.executeUpdate("update " + table + " set parent_uuid='" //$NON-NLS-1$ //$NON-NLS-2$
-					+ parent.getUUID().toString() + "', ordering=" //$NON-NLS-1$
-					+ order + " where uuid='" //$NON-NLS-1$
+					+ item.getParent().getUUID().toString() + "', ordering=" //$NON-NLS-1$
+					+ item.getOrdering() + " where uuid='" //$NON-NLS-1$
 					+ item.getUUID().toString() + "'"); //$NON-NLS-1$
 			s.close();
 		} catch (Exception e) {
@@ -730,7 +727,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			ResultSet rs = s.executeQuery(query);
 			while (rs.next()) {
 				InternalArticle i = composeArticle(parent, rs);
-				i.setParent(parent);
 				feeds.add(i);
 			}
 			rs.close();
@@ -746,7 +742,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		ResultSet rs = s
 				.executeQuery("select * from articles where parent_uuid='" //$NON-NLS-1$
 						+ ((AggregatorItem) parent).getUUID().toString()
-						+ "' and ordering=" + index); //$NON-NLS-1$);
+						+ "' and ordering=" + index); //$NON-NLS-1$
 		while (rs.next()) {
 			article = composeArticle(parent, rs);
 		}
@@ -800,9 +796,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		boolean hasFeed = false;
 		try {
 			Statement s = connection.createStatement();
-			String query = "select uuid from feeds where url='" //$NON-NLS-1$
-					+ url + "'"; //$NON-NLS-1$
-			ResultSet rs = s.executeQuery(query);
+			ResultSet rs = s.executeQuery("select uuid from feeds where url='" //$NON-NLS-1$
+					+ url + "'"); //$NON-NLS-1$
 			hasFeed = rs.next();
 			rs.close();
 		} catch (SQLException e) {
@@ -812,6 +807,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	}
 
 	public AggregatorItem getItem(AggregatorItemParent parent, int index) {
+		Assert.isNotNull(parent);
 		AggregatorItem item = null;
 		try {
 			if (item == null) {
@@ -823,7 +819,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		// Cache the retrieved item
 		return item;
 	}
 }
