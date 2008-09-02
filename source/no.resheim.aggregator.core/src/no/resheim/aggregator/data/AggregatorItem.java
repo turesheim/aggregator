@@ -88,16 +88,6 @@ public abstract class AggregatorItem {
 		this.ordering = ordering;
 	}
 
-	/**
-	 * Used to set the new parent item of the aggregator item.
-	 * 
-	 * @param parent
-	 *            the new parent item
-	 */
-	public void setParent(AggregatorItemParent parent) {
-		this.parent = parent;
-	}
-
 	public String getTitle() {
 		return title;
 	}
