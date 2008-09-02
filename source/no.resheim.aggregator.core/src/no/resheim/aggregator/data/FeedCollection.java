@@ -371,24 +371,30 @@ public class FeedCollection extends AggregatorItemParent {
 			if (!oldParent.equals(newParent)) {
 				// The item is moved into a new parent
 				details |= AggregatorItemChangedEvent.NEW_PARENT;
+				// Shift affected siblings
 				shiftUp((AggregatorItem) item);
-				fDatabase.move((AggregatorItem) item,
-						(AggregatorItemParent) newParent, newOrder);
+				// Switch parent item
+				item.getParent().internalRemove(item);
+				item.parent = newParent;
+				item.getParent().internalAdd(item);
+				// Change the order
+				item.setOrdering(newOrder);
+				// Update the database
+				fDatabase.move((AggregatorItem) item);
 			} else if (newOrder > oldOrder) {
 				// The item is moved down (new order is higher)
 				shiftUp(item, oldOrder, newOrder);
-				fDatabase.move((AggregatorItem) item,
-						(AggregatorItemParent) newParent, newOrder);
+				item.setOrdering(newOrder);
+				fDatabase.move((AggregatorItem) item);
 			} else {
 				// The item is moved up
 				shiftDown(item, oldOrder, newOrder);
-				fDatabase.move((AggregatorItem) item,
-						(AggregatorItemParent) newParent, newOrder);
+				item.setOrdering(newOrder);
+				fDatabase.move((AggregatorItem) item);
 			}
 			// Tell our listeners that the deed is done
 			notifyListerners(new AggregatorItemChangedEvent(item,
-					FeedChangeEventType.MOVED,
-					AggregatorItemChangedEvent.NEW_PARENT, oldParent, oldOrder,
+					FeedChangeEventType.MOVED, details, oldParent, oldOrder,
 					System.currentTimeMillis() - start));
 		} finally {
 			fDatabase.writeLock().unlock();
@@ -511,8 +517,8 @@ public class FeedCollection extends AggregatorItemParent {
 			long start = System.currentTimeMillis();
 			AggregatorItem sibling = parent.getChildAt(i);
 			int oldOrder = sibling.getOrdering();
-			fDatabase.move((AggregatorItem) sibling,
-					(AggregatorItemParent) parent, sibling.getOrdering() + 1);
+			sibling.setOrdering(sibling.getOrdering() + 1);
+			fDatabase.move((AggregatorItem) sibling);
 			notifyListerners(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
 					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
@@ -529,8 +535,8 @@ public class FeedCollection extends AggregatorItemParent {
 			long start = System.currentTimeMillis();
 			AggregatorItem sibling = parent.getChildAt(i);
 			int oldOrder = sibling.getOrdering();
-			fDatabase.move((AggregatorItem) sibling,
-					(AggregatorItemParent) parent, sibling.getOrdering() - 1);
+			sibling.setOrdering(sibling.getOrdering() - 1);
+			fDatabase.move((AggregatorItem) sibling);
 			events.add(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
 					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
@@ -558,8 +564,8 @@ public class FeedCollection extends AggregatorItemParent {
 			long start = System.currentTimeMillis();
 			AggregatorItem sibling = parent.getChildAt(i);
 			int oldOrder = sibling.getOrdering();
-			fDatabase.move((AggregatorItem) sibling,
-					(AggregatorItemParent) parent, sibling.getOrdering() - 1);
+			sibling.setOrdering(sibling.getOrdering() - 1);
+			fDatabase.move((AggregatorItem) sibling);
 			events.add(new AggregatorItemChangedEvent(sibling,
 					FeedChangeEventType.SHIFTED,
 					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
