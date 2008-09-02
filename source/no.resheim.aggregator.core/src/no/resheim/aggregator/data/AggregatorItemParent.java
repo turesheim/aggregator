@@ -46,6 +46,18 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		return (FeedCollection) p;
 	}
 
+	void internalRemove(AggregatorItem item) {
+		synchronized (children) {
+			children.remove(item);
+		}
+	}
+
+	void internalAdd(AggregatorItem item) {
+		synchronized (children) {
+			children.add(item);
+		}
+	}
+
 	public AggregatorItem getChildAt(int index) throws CoreException {
 		// Check the cache first
 		synchronized (children) {
