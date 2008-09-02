@@ -14,10 +14,9 @@ package no.resheim.aggregator.core.ui;
 import java.text.MessageFormat;
 
 import no.resheim.aggregator.data.AggregatorItem;
+import no.resheim.aggregator.data.AggregatorItemParent;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.AggregatorItem;
-import no.resheim.aggregator.data.AggregatorItemParent;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -172,7 +171,7 @@ public class FeedTreeViewer extends TreeViewer {
 					if (newParent.equals(oldParent)) {
 						if (newOrder > oldOrder) {
 							System.out.println(MessageFormat.format(
-									"Moving {0} downwards to {1}",
+									"Moving {0} downwards to {1}", //$NON-NLS-1$
 									new Object[] {
 											source, newOrder
 									}));
@@ -180,7 +179,7 @@ public class FeedTreeViewer extends TreeViewer {
 									newParent, newOrder);
 						} else {
 							System.out.println(MessageFormat.format(
-									"Moving {0} upwards to {1}", new Object[] {
+									"Moving {0} upwards to {1}", new Object[] { //$NON-NLS-1$
 											source, newOrder + 1
 									}));
 							collection.move(source, oldParent, oldOrder,
@@ -188,7 +187,7 @@ public class FeedTreeViewer extends TreeViewer {
 						}
 					} else {
 						System.out.println(MessageFormat.format(
-								"Dropping {0} into {1} at {2}", new Object[] {
+								"Dropping {0} into {1} at {2}", new Object[] { //$NON-NLS-1$
 										source, fItem, newOrder
 								}));
 						collection.move(source, oldParent, oldOrder, newParent,
