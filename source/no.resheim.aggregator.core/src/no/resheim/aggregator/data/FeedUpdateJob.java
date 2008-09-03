@@ -63,7 +63,9 @@ public class FeedUpdateJob extends Job {
 		if (feed.getURL().startsWith("test://")) { //$NON-NLS-1$
 			return Status.OK_STATUS;
 		}
-		feed.setUpdating(true);
+		synchronized (feed) {
+			feed.setUpdating(true);
+		}
 		boolean debug = AggregatorPlugin.getDefault().isDebugging();
 		registry.notifyListerners(new AggregatorItemChangedEvent(feed,
 				FeedChangeEventType.UPDATING));
@@ -76,11 +78,13 @@ public class FeedUpdateJob extends Job {
 		if (ds.isOK()) {
 			registry.cleanUp(feed);
 			feed.setLastUpdate(System.currentTimeMillis());
-			feed.setUpdating(false);
 			// Store changes to the feed
 			registry.feedUpdated(feed);
 			registry.notifyListerners(new AggregatorItemChangedEvent(feed,
 					FeedChangeEventType.UPDATED));
+		}
+		synchronized (feed) {
+			feed.setUpdating(false);
 		}
 		return ds;
 

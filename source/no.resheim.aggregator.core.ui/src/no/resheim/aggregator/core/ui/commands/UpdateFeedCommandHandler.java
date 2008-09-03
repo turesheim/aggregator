@@ -12,17 +12,24 @@
 package no.resheim.aggregator.core.ui.commands;
 
 import no.resheim.aggregator.core.ui.IFeedView;
+import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.AggregatorItem;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.ui.statushandlers.StatusManager;
 
+/**
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
+ */
 public class UpdateFeedCommandHandler extends AbstractAggregatorCommandHandler
 		implements IHandler {
 
@@ -36,7 +43,11 @@ public class UpdateFeedCommandHandler extends AbstractAggregatorCommandHandler
 			AggregatorItem item = getSelection(event);
 			if (item != null && item instanceof Folder) {
 				try {
-					registry.update(item);
+					IStatus s = registry.update(item);
+					if (!s.isOK()) {
+						StatusManager.getManager().handle(s,
+								StatusManager.BLOCK);
+					}
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}

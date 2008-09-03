@@ -11,6 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.data;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,9 @@ import no.resheim.aggregator.data.internal.InternalFolder;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ISafeRunnable;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.SafeRunner;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 
@@ -574,7 +577,7 @@ public class FeedCollection extends AggregatorItemParent {
 		return events;
 	}
 
-	public void update(AggregatorItem item) throws CoreException {
+	public IStatus update(AggregatorItem item) throws CoreException {
 		List<AggregatorItem> items = getDescendants(item);
 		items.add(item);
 		for (AggregatorItem aggregatorItem : items) {
@@ -585,10 +588,17 @@ public class FeedCollection extends AggregatorItemParent {
 					if (!feed.isUpdating()) {
 						FeedUpdateJob job = new FeedUpdateJob(this, feed);
 						job.schedule();
+					} else {
+						return new Status(IStatus.ERROR,
+								AggregatorPlugin.PLUGIN_ID,
+								MessageFormat.format(
+										"{0} is already being updated.", feed
+												.getTitle()));
 					}
 				}
 			}
 		}
+		return Status.OK_STATUS;
 	}
 
 	public void updateFeedData(Feed item) {
