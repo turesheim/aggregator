@@ -153,52 +153,6 @@
             </visibleWhen>
          </command>
       </menuContribution>
-      <menuContribution
-            locationURI="popup:no.resheim.aggregator.ui.RSSView?after=selection">
-         <command
-               commandId="no.resheim.aggregator.core.ui.update"
-               label="Update">
-            <visibleWhen>
-               <with
-                     variable="selection">
-                  <iterate
-                        ifEmpty="false">
-                     <adapt
-                           type="no.resheim.aggregator.data.Folder">
-                     </adapt>
-                  </iterate>
-               </with>
-            </visibleWhen>
-         </command>
-         <command
-               commandId="no.resheim.aggregator.core.ui.setRead"
-               label="Mark As Read">
-            <visibleWhen>
-               <count
-                     value="1">
-               </count>
-            </visibleWhen>
-         </command>
-         <separator
-               name="properties"
-               visible="true">
-         </separator>
-         <command
-               commandId="no.resheim.aggregator.core.ui.properties"
-               label="Properties">
-            <visibleWhen>
-               <with
-                     variable="selection">
-                  <iterate
-                        ifEmpty="false">
-                     <adapt
-                           type="no.resheim.aggregator.data.Folder">
-                     </adapt>
-                  </iterate>
-               </with>
-            </visibleWhen>
-         </command>
-      </menuContribution>
    </extension>
    <extension
          point="no.resheim.aggregator.core.feeds">
