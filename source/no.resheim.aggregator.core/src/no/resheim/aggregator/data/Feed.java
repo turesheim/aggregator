@@ -77,7 +77,6 @@ public class Feed {
 	private String link;
 
 	protected UUID location;
-	protected String password;
 	protected boolean threaded;
 	protected String title;
 	private String type;
@@ -87,8 +86,6 @@ public class Feed {
 	boolean updating;
 
 	protected String url = BLANK_STRING;
-
-	protected String username;
 
 	protected UUID uuid;
 	private String webmaster;
@@ -127,10 +124,6 @@ public class Feed {
 
 	public UUID getLocation() {
 		return location;
-	}
-
-	public String getPassword() {
-		return password;
 	}
 
 	public String getTitle() {
@@ -176,10 +169,6 @@ public class Feed {
 	 */
 	public String getURL() {
 		return url;
-	}
-
-	public String getUsername() {
-		return username;
 	}
 
 	public UUID getUUID() {
@@ -255,10 +244,6 @@ public class Feed {
 		this.location = location;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public void setThreaded(boolean threaded) {
 		this.threaded = threaded;
 	}
@@ -292,10 +277,6 @@ public class Feed {
 		this.url = link;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
 	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
 	}
@@ -324,5 +305,6 @@ public class Feed {
 		this.updateInterval = wc.updateInterval;
 		this.updatePeriod = wc.updatePeriod;
 		this.hidden = wc.hidden;
+		this.anonymousAccess = wc.anonymousAccess;
 	}
 }

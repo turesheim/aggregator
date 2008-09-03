@@ -11,13 +11,17 @@ import java.util.UUID;
  * @since 1.0
  */
 public final class FeedWorkingCopy extends Feed {
-	Feed feed;
-
 	public static FeedWorkingCopy newInstance(AggregatorItem parent) {
 		Feed feed = new Feed();
 		feed.setUUID(UUID.randomUUID());
 		return new FeedWorkingCopy(feed);
 	}
+
+	Feed feed;
+
+	protected String password;
+
+	protected String username;
 
 	public FeedWorkingCopy(Feed feed) {
 		super();
@@ -35,6 +39,7 @@ public final class FeedWorkingCopy extends Feed {
 		this.updateInterval = feed.updateInterval;
 		this.updatePeriod = feed.updatePeriod;
 		this.hidden = feed.hidden;
+		feed.anonymousAccess = anonymousAccess;
 	}
 
 	public Feed getFeed() {
@@ -48,10 +53,24 @@ public final class FeedWorkingCopy extends Feed {
 			feed.updatePeriod = updatePeriod;
 			feed.hidden = hidden;
 			feed.anonymousAccess = anonymousAccess;
-			feed.password = password;
-			feed.username = username;
 		}
 		return feed;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }
