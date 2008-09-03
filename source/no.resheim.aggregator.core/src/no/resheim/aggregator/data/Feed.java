@@ -62,7 +62,7 @@ public class Feed {
 
 	boolean hidden;
 
-	boolean anonymousAccess = true;
+	protected boolean anonymousAccess = true;
 
 	public boolean isAnonymousAccess() {
 		return anonymousAccess;

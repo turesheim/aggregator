@@ -39,7 +39,7 @@ public final class FeedWorkingCopy extends Feed {
 		this.updateInterval = feed.updateInterval;
 		this.updatePeriod = feed.updatePeriod;
 		this.hidden = feed.hidden;
-		feed.anonymousAccess = anonymousAccess;
+		this.anonymousAccess = feed.anonymousAccess;
 	}
 
 	public Feed getFeed() {

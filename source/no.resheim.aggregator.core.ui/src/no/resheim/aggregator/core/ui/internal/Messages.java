@@ -72,7 +72,11 @@ public class Messages extends NLS {
 	public static String FeedPropertiesComposite_25;
 	public static String FeedPropertiesComposite_26;
 	public static String FeedPropertiesComposite_27;
+	public static String FeedPropertiesComposite_29;
 	public static String FeedPropertiesComposite_3;
+	public static String FeedPropertiesComposite_30;
+	public static String FeedPropertiesComposite_31;
+	public static String FeedPropertiesComposite_32;
 	public static String FeedPropertiesComposite_4;
 	public static String FeedPropertiesComposite_5;
 	public static String FeedPropertiesComposite_6;

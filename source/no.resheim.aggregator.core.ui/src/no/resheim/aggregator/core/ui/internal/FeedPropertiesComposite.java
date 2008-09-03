@@ -11,11 +11,19 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal;
 
+import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.FeedWorkingCopy;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
 
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -29,6 +37,8 @@ import org.eclipse.swt.widgets.Text;
 
 public class FeedPropertiesComposite extends Composite {
 
+	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+
 	private FeedWorkingCopy feed = null;
 
 	private Label titleLabel = null;
@@ -40,6 +50,8 @@ public class FeedPropertiesComposite extends Composite {
 	private Text urlText = null;
 
 	private Group archiveGroup = null;
+
+	private Group loginGroup = null;
 
 	private Button radioKeepAll = null;
 
@@ -64,6 +76,13 @@ public class FeedPropertiesComposite extends Composite {
 	private Spinner intervalField = null;
 
 	private Combo periodCombo = null;
+
+	private Label userLabel;
+	private Text userText;
+	private Label passwordLabel;
+	private Text passwordText;
+
+	private Button loginButton;
 
 	public FeedPropertiesComposite(Composite parent, FeedWorkingCopy feed) {
 		super(parent, SWT.NONE);
@@ -111,6 +130,7 @@ public class FeedPropertiesComposite extends Composite {
 			}
 		});
 		this.setLayout(gridLayout);
+		createLoginGroup();
 		createArchiveGroup();
 		createUpdateGroup();
 		setSize(new Point(457, 230));
@@ -122,7 +142,68 @@ public class FeedPropertiesComposite extends Composite {
 		itemCount.setSelection(feed.getArchivingItems());
 		updateRefreshWidgets();
 		updateArchivingWidgets();
+		updateLoginWidgets();
 
+	}
+
+	private void createLoginGroup() {
+		GridLayout groupLayout = new GridLayout();
+		groupLayout.numColumns = 2;
+		GridData groupLayoutData = new GridData();
+		groupLayoutData.horizontalSpan = 3;
+		groupLayoutData.grabExcessHorizontalSpace = true;
+		groupLayoutData.horizontalAlignment = GridData.FILL;
+
+		loginGroup = new Group(this, SWT.NONE);
+		loginGroup.setText(Messages.FeedPropertiesComposite_29);
+		loginGroup.setLayout(groupLayout);
+		loginGroup.setLayoutData(groupLayoutData);
+
+		loginButton = new Button(loginGroup, SWT.CHECK);
+		loginButton.setText(Messages.FeedPropertiesComposite_30);
+		GridData gd2 = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		gd2.horizontalSpan = 2;
+		loginButton.setLayoutData(gd2);
+		loginButton.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				boolean state = !(loginButton.getSelection());
+				feed.setAnonymousAccess(loginButton.getSelection());
+				updateCredentialsFields(state);
+			}
+
+		});
+
+		userLabel = new Label(loginGroup, SWT.NONE);
+		userLabel.setText(Messages.FeedPropertiesComposite_31);
+		userText = new Text(loginGroup, SWT.BORDER);
+		userText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		userText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				feed.setUsername(userText.getText());
+			}
+		});
+		passwordLabel = new Label(loginGroup, SWT.NONE);
+		passwordLabel.setText(Messages.FeedPropertiesComposite_32);
+		passwordText = new Text(loginGroup, SWT.BORDER | SWT.PASSWORD);
+		passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false));
+		passwordText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				feed.setPassword(passwordText.getText());
+			}
+		});
+		loginButton.setSelection(true);
+		updateCredentialsFields(false);
+
+	}
+
+	private void updateCredentialsFields(boolean state) {
+		userLabel.setEnabled(state);
+		userText.setEnabled(state);
+		passwordLabel.setEnabled(state);
+		passwordText.setEnabled(state);
 	}
 
 	/**
@@ -245,6 +326,27 @@ public class FeedPropertiesComposite extends Composite {
 			days.setEnabled(false);
 			break;
 		}
+	}
+
+	private void updateLoginWidgets() {
+		loginButton.setSelection(feed.isAnonymousAccess());
+		updateCredentialsFields(!feed.isAnonymousAccess());
+		if (!feed.isAnonymousAccess()) {
+			ISecurePreferences root = SecurePreferencesFactory.getDefault()
+					.node(AggregatorPlugin.SECURE_STORAGE_ROOT);
+			ISecurePreferences feedNode = root.node(feed.getUUID().toString());
+			try {
+				String login = feedNode.get(
+						AggregatorPlugin.SECURE_STORAGE_USERNAME, EMPTY_STRING);
+				String password = feedNode.get(
+						AggregatorPlugin.SECURE_STORAGE_PASSWORD, EMPTY_STRING);
+				userText.setText(login);
+				passwordText.setText(password);
+			} catch (StorageException e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	private void updateRefreshWidgets() {

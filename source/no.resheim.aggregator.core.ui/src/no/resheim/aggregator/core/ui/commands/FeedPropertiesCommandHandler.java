@@ -11,6 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.commands;
 
+import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.FeedPropertiesDialog;
 import no.resheim.aggregator.core.ui.IFeedView;
@@ -23,6 +24,9 @@ import no.resheim.aggregator.data.Folder;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -53,6 +57,14 @@ public class FeedPropertiesCommandHandler extends
 									Messages.FeedPropertiesCommand_CANCEL
 							}, 0, wc);
 					if (dialog.open() == Window.OK) {
+						// Remove the node
+						if (!feed.isAnonymousAccess() && wc.isAnonymousAccess()) {
+							removeCredentials(feed);
+
+						}
+						if (!wc.isAnonymousAccess()) {
+							setCredentials(wc);
+						}
 						feed.updateFromWorkingCopy(wc);
 						registry.updateFeedData(feed);
 					}
@@ -60,5 +72,31 @@ public class FeedPropertiesCommandHandler extends
 			}
 		}
 		return null;
+	}
+
+	private void setCredentials(FeedWorkingCopy wc) {
+		ISecurePreferences root = SecurePreferencesFactory.getDefault().node(
+				AggregatorPlugin.SECURE_STORAGE_ROOT);
+		ISecurePreferences feedNode = root.node(wc.getUUID().toString());
+		try {
+			feedNode.put(AggregatorPlugin.SECURE_STORAGE_USERNAME, wc
+					.getUsername(), true);
+			feedNode.put(AggregatorPlugin.SECURE_STORAGE_PASSWORD, wc
+					.getPassword(), true);
+		} catch (StorageException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void removeCredentials(Feed wc) {
+		try {
+			ISecurePreferences root = SecurePreferencesFactory.getDefault()
+					.node(AggregatorPlugin.SECURE_STORAGE_ROOT);
+			ISecurePreferences feedNode = root.node(wc.getUUID().toString());
+			feedNode.removeNode();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
