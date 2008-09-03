@@ -11,7 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal;
 
-import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedWorkingCopy;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
 
@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class FeedPropertiesComposite extends Composite {
 
-	private Feed feed = null;
+	private FeedWorkingCopy feed = null;
 
 	private Label titleLabel = null;
 
@@ -65,7 +65,7 @@ public class FeedPropertiesComposite extends Composite {
 
 	private Combo periodCombo = null;
 
-	public FeedPropertiesComposite(Composite parent, Feed feed) {
+	public FeedPropertiesComposite(Composite parent, FeedWorkingCopy feed) {
 		super(parent, SWT.NONE);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
@@ -120,8 +120,9 @@ public class FeedPropertiesComposite extends Composite {
 		intervalField.setSelection(feed.getUpdateInterval());
 		days.setSelection(feed.getArchivingDays());
 		itemCount.setSelection(feed.getArchivingItems());
-		// XXX: The order better not change
-		periodCombo.select(feed.getUpdatePeriod().ordinal());
+		updateRefreshWidgets();
+		updateArchivingWidgets();
+
 	}
 
 	/**
@@ -219,7 +220,6 @@ public class FeedPropertiesComposite extends Composite {
 						feed.setArchiving(Archiving.KEEP_NONE);
 					}
 				});
-		updateArchivingWidgets();
 	}
 
 	private void updateArchivingWidgets() {
@@ -252,14 +252,17 @@ public class FeedPropertiesComposite extends Composite {
 		case MINUTES:
 			periodCombo.setEnabled(true);
 			intervalField.setEnabled(true);
+			periodCombo.select(0);
 			break;
 		case HOURS:
 			periodCombo.setEnabled(true);
 			intervalField.setEnabled(true);
+			periodCombo.select(1);
 			break;
 		case DAYS:
 			periodCombo.setEnabled(true);
 			intervalField.setEnabled(true);
+			periodCombo.select(2);
 			break;
 		}
 	}
@@ -301,7 +304,6 @@ public class FeedPropertiesComposite extends Composite {
 					}
 				});
 		createPeriodCombo();
-		updateRefreshWidgets();
 	}
 
 	/**
@@ -311,7 +313,7 @@ public class FeedPropertiesComposite extends Composite {
 	private void createPeriodCombo() {
 		GridData gridData8 = new GridData();
 		gridData8.widthHint = 100;
-		periodCombo = new Combo(updateGroup, SWT.NONE);
+		periodCombo = new Combo(updateGroup, SWT.READ_ONLY);
 		periodCombo.setToolTipText(Messages.FeedPropertiesComposite_24);
 		periodCombo.setLayoutData(gridData8);
 		periodCombo
@@ -339,14 +341,6 @@ public class FeedPropertiesComposite extends Composite {
 		periodCombo.add(Messages.FeedPropertiesComposite_26);
 		periodCombo.add(Messages.FeedPropertiesComposite_27);
 
-	}
-
-	public Feed getFeed() {
-		return feed;
-	}
-
-	public void setFeed(Feed feed) {
-		this.feed = feed;
 	}
 
 } // @jve:decl-index=0:visual-constraint="10,10"
