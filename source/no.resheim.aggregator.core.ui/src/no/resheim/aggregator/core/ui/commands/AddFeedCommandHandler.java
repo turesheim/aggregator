@@ -26,7 +26,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -69,9 +68,7 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 		WizardDialog dialog = new WizardDialog(HandlerUtil
 				.getActiveShell(event), wizard);
 		dialog.create();
-		if (dialog.open() == Window.OK) {
-			// registry.addNew(wizard.getFeed());
-		}
+		dialog.open();
 		return null;
 	}
 
