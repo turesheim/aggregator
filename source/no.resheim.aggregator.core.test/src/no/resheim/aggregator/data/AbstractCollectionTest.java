@@ -15,6 +15,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 
 	private Feed feed;
 	private Folder feedFolder;
+	private Folder folder_1000;
 
 	/**
 	 * Used to obtain a correctly configured feed collection.
@@ -98,12 +99,11 @@ public abstract class AbstractCollectionTest extends TestCase {
 		if (item == null) {
 			fail("Folder item could not be retrieved"); //$NON-NLS-1$
 		}
-		item.parent.delete(item);
+		item.getParent().delete(item);
 		item = collection.getChildAt(0);
 		if (item != null) {
 			fail("Folder item was not deleted"); //$NON-NLS-1$
 		}
-
 	}
 
 	public final void testAddFeed() throws CoreException {
@@ -113,42 +113,17 @@ public abstract class AbstractCollectionTest extends TestCase {
 		// the location for the feed.
 		getCollection().addNew(feed);
 		AggregatorItem item = getCollection().getChildAt(0);
+		// Remove the folder.
+		getCollection().delete(item);
+
+		// Compare
 		if (item == null) {
-			fail("Feed item could not be retrieved"); //$NON-NLS-1$
+			fail("Feed folder could not be retrieved"); //$NON-NLS-1$
 		}
 		// And that the storage item is a folder
 		if (!(item instanceof Folder)) {
-			fail("Returned item is not feed"); //$NON-NLS-1$
+			fail("Returned item is not feed folder"); //$NON-NLS-1$
 		}
-	}
-
-	/**
-	 * Tests the creation of a folder associated with a feed.
-	 * 
-	 * @throws CoreException
-	 */
-	public final void testAddFeedFolder() throws CoreException {
-		// Create the folder instance
-		InternalFolder folder_a = new InternalFolder(getCollection(), UUID
-				.randomUUID());
-		// Add it to the collection
-		getCollection().addNew(folder_a);
-		// See that it's available in from the storage
-		AggregatorItem item = getCollection().getChildAt(0);
-		if (item == null) {
-			fail("Folder item could not be retrieved"); //$NON-NLS-1$
-		}
-		// And that the storage item is a folder
-		if (!(item instanceof Folder)) {
-			fail("Returned item is not folder"); //$NON-NLS-1$
-		}
-	}
-
-	/**
-	 * Tests the deletion of the folder item created in the previous method.
-	 */
-	public final void testDeleteFeedFolder() {
-		fail("Not implemented yet");
 	}
 
 	public final void testAddArticle() throws CoreException {
@@ -182,10 +157,12 @@ public abstract class AbstractCollectionTest extends TestCase {
 	/**
 	 * Note that this test takes significantly longer time when we have change
 	 * listeners as these most likely will update the UI.
+	 * 
+	 * @throws CoreException
 	 */
-	public final void testAdd1000Articles() {
+	public final void testAdd1000Articles() throws CoreException {
 		FeedCollection collection = getCollection();
-		Feed feed = TestUtils.createNewFeed("** Test feed **"); //$NON-NLS-1$
+		Feed feed = TestUtils.createNewFeed("1000 articles"); //$NON-NLS-1$
 		Folder folder = collection.addNew(feed);
 		collection.notifyListerners(new AggregatorItemChangedEvent(feed,
 				FeedChangeEventType.UPDATING));
@@ -202,7 +179,18 @@ public abstract class AbstractCollectionTest extends TestCase {
 				FeedChangeEventType.UPDATED));
 	}
 
-	public final void testGet1000Articles() {
+	public final void testGetThe1000Articles() throws CoreException {
+		AggregatorItem folder = getCollection().getChildAt(0);
+		System.out.println(folder);
+		for (int a = 0; a < 1000; a++) {
+			AggregatorItem item = ((Folder) folder).getChildAt(a);
+			System.out.println(item);
+			if (item == null)
+				fail("Retrieved item is null"); //$NON-NLS-1$
+		}
+	}
 
+	public final void testGetThe1000ArticlesAgain() throws CoreException {
+		testGetThe1000Articles();
 	}
 }

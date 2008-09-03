@@ -1,7 +1,11 @@
-package no.resheim.aggregator.data;
+package no.resheim.aggregator;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import no.resheim.aggregator.data.FolderTest;
+import no.resheim.aggregator.data.PersistentCollectionTest;
+import no.resheim.aggregator.data.VolatileCollectionTest;
+import no.resheim.aggregator.data.rss.internal.FeedParserTest;
 
 public class AllTests {
 
@@ -11,6 +15,7 @@ public class AllTests {
 		suite.addTestSuite(FolderTest.class);
 		suite.addTestSuite(PersistentCollectionTest.class);
 		suite.addTestSuite(VolatileCollectionTest.class);
+		suite.addTestSuite(FeedParserTest.class);
 		// $JUnit-END$
 		return suite;
 	}
