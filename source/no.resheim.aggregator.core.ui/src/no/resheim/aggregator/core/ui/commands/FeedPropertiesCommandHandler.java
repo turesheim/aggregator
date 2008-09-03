@@ -14,11 +14,11 @@ package no.resheim.aggregator.core.ui.commands;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.FeedPropertiesDialog;
 import no.resheim.aggregator.core.ui.IFeedView;
+import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.FeedWorkingCopy;
 import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.AggregatorItem;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -39,7 +39,7 @@ public class FeedPropertiesCommandHandler extends
 			}
 			AggregatorItem o = getSelection(event);
 			if (o instanceof Folder) {
-				Feed feed = registry.getFeeds().get(((Folder) o).getFeed());
+				Feed feed = registry.getFeeds().get(((Folder) o).getFeedUUID());
 				if (feed != null) {
 					FeedWorkingCopy wc = new FeedWorkingCopy(feed);
 					FeedPropertiesDialog dialog = new FeedPropertiesDialog(
