@@ -175,13 +175,14 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 
 	}
 
-	public void move(AggregatorItem item, AggregatorItemParent parent, int order) {
-		ItemHolder oldHolder = items.get(item.getParent().getUUID());
-		ItemHolder newHolder = items.get(parent.getUUID());
-		oldHolder.children.remove(item);
-		item.setOrdering(order);
-		item.setParent(parent);
-		newHolder.children.add(item);
+	public void move(AggregatorItem item) {
+		// XXX:Totally broken
+		// ItemHolder oldHolder = items.get(item.getParent().getUUID());
+		// ItemHolder newHolder = items.get(parent.getUUID());
+		// oldHolder.children.remove(item);
+		// item.setOrdering(order);
+		// item.setParent(parent);
+		// newHolder.children.add(item);
 	}
 
 	public void rename(AggregatorItem item) {

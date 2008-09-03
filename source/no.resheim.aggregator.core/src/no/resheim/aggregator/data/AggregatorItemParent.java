@@ -99,7 +99,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 			getCollection().shiftUp((AggregatorItem) item);
 			storage.delete((AggregatorItem) item);
 			if (item instanceof Folder) {
-				UUID feedId = ((Folder) item).getFeed();
+				UUID feedId = ((Folder) item).getFeedUUID();
 				// Make sure we also delete the associated feed instance
 				if (feedId != null) {
 					storage.delete(getCollection().getFeeds().remove(feedId));

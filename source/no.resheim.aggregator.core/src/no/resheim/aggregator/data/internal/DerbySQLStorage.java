@@ -483,8 +483,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		}
 		ps.setLong(3, folder.getOrdering());
 		// Folders are used to represent the root aggregator item
-		if (folder.getFeed() != null) {
-			ps.setString(4, folder.getFeed().toString());
+		if (folder.getFeedUUID() != null) {
+			ps.setString(4, folder.getFeedUUID().toString());
 		} else {
 			ps.setNull(4, Types.CHAR);
 		}

@@ -74,7 +74,7 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 	 */
 	public Image getImage(Object element) {
 		if (element instanceof Folder) {
-			if (((Folder) element).getFeed() == null) {
+			if (((Folder) element).getFeedUUID() == null) {
 				return PlatformUI.getWorkbench().getSharedImages().getImage(
 						ISharedImages.IMG_OBJ_FOLDER);
 			} else {

@@ -12,7 +12,7 @@
 package no.resheim.aggregator.core.ui;
 
 import no.resheim.aggregator.core.ui.internal.FeedPropertiesComposite;
-import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.FeedWorkingCopy;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.graphics.Image;
@@ -28,11 +28,11 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class FeedPropertiesDialog extends MessageDialog {
 
-	private Feed feed;
+	private FeedWorkingCopy feed;
 
 	public FeedPropertiesDialog(Shell parentShell, String dialogTitle,
 			Image dialogTitleImage, String dialogMessage, int dialogImageType,
-			String[] dialogButtonLabels, int defaultIndex, Feed feed) {
+			String[] dialogButtonLabels, int defaultIndex, FeedWorkingCopy feed) {
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage,
 				dialogImageType, dialogButtonLabels, defaultIndex);
 		this.feed = feed;

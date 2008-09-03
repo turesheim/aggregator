@@ -579,7 +579,7 @@ public class FeedCollection extends AggregatorItemParent {
 		items.add(item);
 		for (AggregatorItem aggregatorItem : items) {
 			if (aggregatorItem instanceof Folder) {
-				UUID feedId = ((Folder) aggregatorItem).getFeed();
+				UUID feedId = ((Folder) aggregatorItem).getFeedUUID();
 				if (feedId != null) {
 					Feed feed = getFeeds().get(feedId);
 					if (!feed.isUpdating()) {

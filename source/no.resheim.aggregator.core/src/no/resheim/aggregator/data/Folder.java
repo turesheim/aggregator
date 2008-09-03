@@ -41,7 +41,7 @@ public class Folder extends AggregatorItemParent {
 	 * 
 	 * @return the feed identifier
 	 */
-	public UUID getFeed() {
+	public UUID getFeedUUID() {
 		return feed;
 	}
 
