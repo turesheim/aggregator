@@ -56,6 +56,7 @@ public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
 			final int count = Integer.parseInt(event
 					.getParameter(COUNT_PARAMETER_ID));
 			Job job = new Job("Adding test data") { //$NON-NLS-1$
+				@SuppressWarnings("restriction")
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					Feed feed = createNewFeed(collection, "** Test feed **"); //$NON-NLS-1$
@@ -67,7 +68,7 @@ public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
 								UUID.randomUUID(), feed.getUUID());
 						article.setTitle("Article #" + a); //$NON-NLS-1$
 						article.setGuid(article.getUUID().toString());
-						article.setDescription(EMPTY_STRING);
+						article.setDescription(Messages.CreateArticlesHandler_NewArticle_Description);
 						article.setLink(EMPTY_STRING);
 						collection.addNew(article);
 					}
