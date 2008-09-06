@@ -11,13 +11,21 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import no.resheim.aggregator.data.Article;
+import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.data.Folder;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.viewers.DecorationOverlayIcon;
+import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -46,7 +54,15 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	/** Identifier for feed item image descriptor */
 	public static final String IMG_FEED_OBJ = "feed_obj"; //$NON-NLS-1$
 
+	public static final String IMG_FOLDER_OBJ = "folder_obj"; //$NON-NLS-1$
+
+	public static final String IMG_ARTICLE_OBJ = "article_obj"; //$NON-NLS-1$
+
 	public static final String IMG_NEW_FEED_WIZBAN = "new_feed_banner"; //$NON-NLS-1$
+
+	public static final String IMG_DEC_WARNING = "warning_dec"; //$NON-NLS-1$
+
+	public static final String IMG_DEC_ERRROR = "error_dec"; //$NON-NLS-1$
 
 	private static AggregatorUIPlugin plugin;
 
@@ -92,6 +108,16 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 				"icons/obj16/feed_obj.gif")); //$NON-NLS-1$
 		reg.put(IMG_NEW_FEED_WIZBAN, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/wizban/new_feed_wizard.png")); //$NON-NLS-1$
+		reg.put(IMG_DEC_WARNING, imageDescriptorFromPlugin(PLUGIN_ID,
+				"icons/ovr16/warning_co.gif")); //$NON-NLS-1$
+		reg.put(IMG_DEC_ERRROR, imageDescriptorFromPlugin(PLUGIN_ID,
+				"icons/ovr16/error_co.gif")); //$NON-NLS-1$
+		// Copy some stuff from the shared
+		reg.put(IMG_ARTICLE_OBJ, PlatformUI.getWorkbench().getSharedImages()
+				.getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
+		reg.put(IMG_FOLDER_OBJ, PlatformUI.getWorkbench().getSharedImages()
+				.getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER));
+
 	}
 
 	/**
@@ -104,6 +130,52 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+
+	/**
+	 * Return an image for the aggregator item and decorate if the status is not
+	 * null
+	 * 
+	 * @param item
+	 * @param status
+	 * @return an image representing the item
+	 */
+	Image getImage(Object item, IStatus status) {
+		String baseId = null;
+
+		if (item instanceof Feed)
+			baseId = IMG_FEED_OBJ;
+		if (item instanceof Folder)
+			baseId = IMG_FOLDER_OBJ;
+		if (item instanceof Article)
+			baseId = IMG_ARTICLE_OBJ;
+		if (baseId == null)
+			return null;
+
+		String id = baseId;
+
+		ImageDescriptor si = null;
+		if (status != null) {
+			switch (status.getSeverity()) {
+			case IStatus.ERROR:
+				si = getImageRegistry().getDescriptor(IMG_DEC_ERRROR);
+				break;
+			case IStatus.WARNING:
+				si = getImageRegistry().getDescriptor(IMG_DEC_WARNING);
+				break;
+			}
+			if (si != null) {
+				id = id + "_" + Integer.toString(status.getSeverity()); //$NON-NLS-1$
+			}
+		}
+		if (getImageRegistry().get(id) != null) {
+			return getImageRegistry().get(id);
+		}
+		Image baseImage = getImageRegistry().get(baseId);
+		DecorationOverlayIcon icon = new DecorationOverlayIcon(baseImage, si,
+				IDecoration.BOTTOM_LEFT);
+		getImageRegistry().put(id, icon);
+		return getImage(id);
 	}
 
 	/**

@@ -38,6 +38,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -237,6 +238,10 @@ public class RSSView extends ViewPart implements IFeedView,
 		treeView
 				.setLabelProvider(labelProvider = new FeedViewerLabelProvider());
 		treeView.addSelectionChangedListener(new ViewSelectionListener());
+
+		// Enable tooltips for the tree items
+		ColumnViewerToolTipSupport.enableFor(treeView);
+
 		getSite().setSelectionProvider(treeView);
 
 		preview = new ArticleViewer(sashForm, SWT.NONE);

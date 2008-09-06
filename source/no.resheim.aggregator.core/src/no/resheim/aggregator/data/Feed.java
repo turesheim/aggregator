@@ -13,6 +13,9 @@ package no.resheim.aggregator.data;
 
 import java.util.UUID;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 /**
  * Feeds are
  * 
@@ -59,6 +62,17 @@ public class Feed {
 	private String description;
 
 	private String editor;
+
+	/** Default is OK */
+	private IStatus lastStatus = Status.OK_STATUS;
+
+	public IStatus getLastStatus() {
+		return lastStatus;
+	}
+
+	public void setLastStatus(IStatus lastStatus) {
+		this.lastStatus = lastStatus;
+	}
 
 	boolean hidden;
 

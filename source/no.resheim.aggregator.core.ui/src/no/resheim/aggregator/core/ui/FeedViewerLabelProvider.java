@@ -11,18 +11,19 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.AggregatorItem;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -37,7 +38,7 @@ import org.eclipse.ui.PlatformUI;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class FeedViewerLabelProvider extends LabelProvider implements
+public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		ILabelProvider, IColorProvider, IPropertyChangeListener {
 
 	/** Preference: show unread items in header */
@@ -47,6 +48,21 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 
 	public FeedCollection getCollection() {
 		return collection;
+	}
+
+	@Override
+	public String getToolTipText(Object element) {
+		Feed f = getFeed(element);
+		if (f != null) {
+			IStatus s = f.getLastStatus();
+			if (!s.isOK()) {
+				if (s.getException() != null) {
+					return s.getException().getLocalizedMessage();
+				} else
+					return s.getMessage();
+			}
+		}
+		return null;
 	}
 
 	public void setCollection(FeedCollection collection) {
@@ -67,6 +83,14 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 		store.addPropertyChangeListener(this);
 	}
 
+	private Feed getFeed(Object element) {
+		if (((Folder) element).getFeedUUID() != null) {
+			return collection.getFeeds().get(((Folder) element).getFeedUUID());
+		}
+		return null;
+
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -75,17 +99,17 @@ public class FeedViewerLabelProvider extends LabelProvider implements
 	public Image getImage(Object element) {
 		if (element instanceof Folder) {
 			if (((Folder) element).getFeedUUID() == null) {
-				return PlatformUI.getWorkbench().getSharedImages().getImage(
-						ISharedImages.IMG_OBJ_FOLDER);
+				return AggregatorUIPlugin.getDefault().getImage(element, null);
 			} else {
-				// If the folder is the defa
-				return AggregatorUIPlugin.getDefault().getImage(
-						AggregatorUIPlugin.IMG_FEED_OBJ);
+				Feed feed = collection.getFeeds().get(
+						((Folder) element).getFeedUUID());
+				return AggregatorUIPlugin.getDefault().getImage(feed,
+						feed.getLastStatus());
+
 			}
 		}
 		if (element instanceof Article) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(
-					ISharedImages.IMG_OBJ_FILE);
+			return AggregatorUIPlugin.getDefault().getImage(element, null);
 		}
 		return PlatformUI.getWorkbench().getSharedImages().getImage(
 				ISharedImages.IMG_OBJ_ELEMENT);

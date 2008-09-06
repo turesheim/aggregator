@@ -75,14 +75,15 @@ public class FeedUpdateJob extends Job {
 			// TODO: Implement cleanup.
 		}
 		IStatus ds = download(feed, debug);
+		feed.setLastStatus(ds);
 		if (ds.isOK()) {
 			registry.cleanUp(feed);
 			feed.setLastUpdate(System.currentTimeMillis());
 			// Store changes to the feed
 			registry.feedUpdated(feed);
-			registry.notifyListerners(new AggregatorItemChangedEvent(feed,
-					FeedChangeEventType.UPDATED));
 		}
+		registry.notifyListerners(new AggregatorItemChangedEvent(feed,
+				FeedChangeEventType.UPDATED));
 		synchronized (feed) {
 			feed.setUpdating(false);
 		}

@@ -55,8 +55,9 @@ public class CollectionUpdateJob extends Job {
 		Stack<Feed> feeds = getSortedFeeds();
 		while (!feeds.empty()) {
 			Feed f = feeds.pop();
-			// Update if we're not already doing so.
-			if (!f.isUpdating()) {
+			// Update if we're not already doing so unless the last update was
+			// bad.
+			if (!f.isUpdating() && f.getLastStatus().isOK()) {
 				long last = f.getLastUpdate();
 				long interval = f.getUpdateTime();
 				// Schedule the job to run
