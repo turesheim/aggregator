@@ -135,11 +135,11 @@ public class AtomItemHandler extends AbstractElementHandler {
 			setCapture(false);
 		}
 		if (qName.equals(SUMMARY)) {
-			item.setDescription(getBuffer().toString());
+			item.internalSetText(getBuffer().toString());
 			setCapture(false);
 		}
 		if (qName.equals(CONTENT)) {
-			item.setDescription(getBuffer().toString());
+			item.internalSetText(getBuffer().toString());
 			setCapture(false);
 		}
 		if (qName.equals(ID)) {

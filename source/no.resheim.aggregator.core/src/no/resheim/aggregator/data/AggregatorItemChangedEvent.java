@@ -65,7 +65,7 @@ public class AggregatorItemChangedEvent {
 
 	public AggregatorItemChangedEvent(AggregatorItem feed,
 			FeedChangeEventType type, int details,
-			AggregatorItemParent oldParent, int oldOrder, long time) {
+			AggregatorItem oldParent, int oldOrder, long time) {
 		this(feed, type, details);
 		this.oldParent = oldParent;
 		this.oldOrder = oldOrder;

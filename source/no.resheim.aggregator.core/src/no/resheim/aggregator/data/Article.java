@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import org.eclipse.core.runtime.CoreException;
+
 /**
  * 
  * @author Torkild Ulvøy Resheim
@@ -24,7 +26,7 @@ public class Article extends AggregatorItem {
 	protected String creator;
 
 	/** The description or content */
-	protected String description = null;
+	protected String text = null;
 
 	/** The UUID of the feed this article belongs to */
 	protected UUID feed_uuid;
@@ -67,15 +69,12 @@ public class Article extends AggregatorItem {
 		return creator;
 	}
 
-	/**
-	 * Clients must obtain the description from the feed registry. The
-	 * description kept in this member variable is only temporarily held while
-	 * the feed is being updated.
-	 * 
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
+	public String getText() {
+		try {
+			return getCollection().getDescription(this);
+		} catch (CoreException e) {
+			return null;
+		}
 	}
 
 	/**

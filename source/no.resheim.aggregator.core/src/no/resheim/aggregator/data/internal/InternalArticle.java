@@ -13,8 +13,8 @@ package no.resheim.aggregator.data.internal;
 
 import java.util.UUID;
 
-import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.AggregatorItemParent;
+import no.resheim.aggregator.data.Article;
 
 /**
  * 
@@ -30,8 +30,7 @@ public class InternalArticle extends Article {
 	 * @param the
 	 *            identifier of the feed
 	 */
-	public InternalArticle(AggregatorItemParent parent, UUID uuid,
-			UUID feedId) {
+	public InternalArticle(AggregatorItemParent parent, UUID uuid, UUID feedId) {
 		super(parent, uuid);
 		if (parent != null) {
 			setLocation(parent.getUUID());
@@ -61,11 +60,25 @@ public class InternalArticle extends Article {
 	}
 
 	/**
-	 * @param description
-	 *            the description to set
+	 * Sets the text of the article. This method should only be used by feed
+	 * parsers et cetera that are required to set the text.
+	 * 
+	 * @param text
+	 *            the article text
 	 */
-	public void setDescription(String description) {
-		this.description = description;
+	public void internalSetText(String text) {
+		this.text = text;
+	}
+
+	/**
+	 * Returns the text of the article. This method should only be used by feed
+	 * parsers et cetera that are required to obtain the text of the article
+	 * without looking it up in the storage.
+	 * 
+	 * @return the internal text representation
+	 */
+	public String internalGetText() {
+		return text;
 	}
 
 	/**

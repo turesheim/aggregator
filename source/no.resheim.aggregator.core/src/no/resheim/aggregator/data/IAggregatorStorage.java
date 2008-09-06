@@ -75,7 +75,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            the parent item
 	 * @return the number of children
 	 */
-	public abstract int getChildCount(AggregatorItemParent parent);
+	public abstract int getChildCount(AggregatorItem parent);
 
 	/**
 	 * Retrieves all the child articles of the given parent node. If the node is
@@ -133,7 +133,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *            the parent item
 	 * @return the number of unread articles
 	 */
-	public abstract int getUnreadCount(AggregatorItemParent parent);
+	public abstract int getUnreadCount(AggregatorItem parent);
 
 	/**
 	 * Tests to see if the feed with the given URL already exists in the

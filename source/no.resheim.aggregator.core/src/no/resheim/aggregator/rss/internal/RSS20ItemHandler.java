@@ -62,13 +62,13 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 		}
 		if (qName.equals(DESCRIPTION)) {
 			// Make sure we don't overwrite description added by content:encoded
-			if (item.getDescription() == null) {
-				item.setDescription(getBuffer().toString());
+			if (item.internalGetText() == null) {
+				item.internalSetText(getBuffer().toString());
 			}
 			setCapture(false);
 		}
 		if (qName.equals(CONTENT_ENCODED)) {
-			item.setDescription(getBuffer().toString());
+			item.internalSetText(getBuffer().toString());
 			setCapture(false);
 		}
 		if (qName.equals(GUID)) {

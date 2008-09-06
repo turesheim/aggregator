@@ -50,7 +50,7 @@ public class RSS10ItemHandler extends AbstractElementHandler {
 			setCapture(false);
 		}
 		if (qName.equals(DESCRIPTION)) {
-			item.setDescription(getBuffer().toString());
+			item.internalSetText(getBuffer().toString());
 			setCapture(false);
 		}
 		if (qName.equals(ITEM)) {

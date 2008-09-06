@@ -1,6 +1,5 @@
 package no.resheim.aggregator.data;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -25,25 +24,6 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	public AggregatorItemParent(AggregatorItemParent parent, UUID uuid) {
 		super(parent, uuid);
 		children = new ArrayList<AggregatorItem>();
-	}
-
-	private FeedCollection getCollection() throws CoreException {
-		AggregatorItem p = this;
-		AggregatorItem o = p;
-		while (!(p instanceof FeedCollection)) {
-			p = p.getParent();
-			if (p == null) {
-				throw new CoreException(
-						new Status(
-								IStatus.ERROR,
-								AggregatorPlugin.PLUGIN_ID,
-								MessageFormat
-										.format(
-												"Aggregator item {0} does not have a parent", new Object[] { o}))); //$NON-NLS-1$
-			}
-			o = p;
-		}
-		return (FeedCollection) p;
 	}
 
 	void internalRemove(AggregatorItem item) {

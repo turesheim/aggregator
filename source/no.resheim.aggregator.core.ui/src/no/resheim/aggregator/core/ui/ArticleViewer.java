@@ -115,7 +115,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		description.append(FONT_FIX_3);
 		description.append(pPresentationFontSize);
 		description.append(FONT_FIX_4);
-		description.append(item.getDescription());
+		description.append(item.getText());
 		description.append(FONT_FIX_5);
 		title.setTitle(item.getTitle(), null);
 		browser.setText(description.toString());

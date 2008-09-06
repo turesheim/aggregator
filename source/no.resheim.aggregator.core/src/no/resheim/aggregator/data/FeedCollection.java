@@ -262,7 +262,7 @@ public class FeedCollection extends AggregatorItemParent {
 	public int getItemCount(AggregatorItem element) {
 		try {
 			fDatabase.readLock().lock();
-			return fDatabase.getUnreadCount((AggregatorItemParent) element);
+			return fDatabase.getUnreadCount((AggregatorItem) element);
 		} finally {
 			fDatabase.readLock().unlock();
 		}
@@ -364,7 +364,7 @@ public class FeedCollection extends AggregatorItemParent {
 	 *            the new order of the item
 	 * @throws CoreException
 	 */
-	public void move(AggregatorItem item, AggregatorItemParent oldParent,
+	public void move(AggregatorItem item, AggregatorItem oldParent,
 			int oldOrder, AggregatorItemParent newParent, int newOrder)
 			throws CoreException {
 		try {

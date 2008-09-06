@@ -49,7 +49,7 @@ public class RSS092ItemHandler extends AbstractElementHandler {
 			setCapture(false);
 		}
 		if (qName.equals(DESCRIPTION)) {
-			item.setDescription(getBuffer().toString());
+			item.internalSetText(getBuffer().toString());
 			setCapture(false);
 		}
 		if (qName.equals(ITEM)) {

@@ -68,7 +68,7 @@ public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
 								UUID.randomUUID(), feed.getUUID());
 						article.setTitle("Article #" + a); //$NON-NLS-1$
 						article.setGuid(article.getUUID().toString());
-						article.setDescription(Messages.CreateArticlesHandler_NewArticle_Description);
+						article.internalSetText(Messages.CreateArticlesHandler_NewArticle_Description);
 						article.setLink(EMPTY_STRING);
 						collection.addNew(article);
 					}

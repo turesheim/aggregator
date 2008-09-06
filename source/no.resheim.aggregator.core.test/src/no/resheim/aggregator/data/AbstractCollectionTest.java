@@ -171,7 +171,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 					.randomUUID(), feed.getUUID());
 			article.setTitle("Article #" + a); //$NON-NLS-1$
 			article.setGuid(article.getUUID().toString());
-			article.setDescription(""); //$NON-NLS-1$
+			article.internalSetText(""); //$NON-NLS-1$
 			article.setLink(""); //$NON-NLS-1$
 			collection.addNew(article);
 		}

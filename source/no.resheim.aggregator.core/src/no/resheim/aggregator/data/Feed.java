@@ -121,6 +121,9 @@ public class Feed {
 	}
 
 	public String getDescription() {
+		if (description == null) {
+
+		}
 		return description;
 	}
 

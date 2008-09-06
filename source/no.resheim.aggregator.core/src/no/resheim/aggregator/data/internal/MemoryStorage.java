@@ -98,7 +98,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		// TODO Auto-generated method stub
 	}
 
-	public int getChildCount(AggregatorItemParent parent) {
+	public int getChildCount(AggregatorItem parent) {
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
 			return holder.children.size();
@@ -118,7 +118,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 	public String getDescription(Article item) {
 		ItemHolder holder = items.get(item.getUUID());
 		if (holder != null) {
-			return ((Article) holder.item).getDescription();
+			return ((InternalArticle) holder.item).internalGetText();
 		}
 		return EMPTY_STRING;
 	}
@@ -138,7 +138,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		return null;
 	}
 
-	public int getUnreadCount(AggregatorItemParent parent) {
+	public int getUnreadCount(AggregatorItem parent) {
 		int count = 0;
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {

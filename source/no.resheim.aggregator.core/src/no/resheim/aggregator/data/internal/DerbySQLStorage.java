@@ -127,7 +127,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		item.setPublicationDate(rs.getLong(10));
 		item.setReadDate(rs.getLong(11));
 		item.setAddedDate(rs.getLong(12));
-		item.setDescription(rs.getString(13));
 		item.setCreator(rs.getString(14));
 		return item;
 	}
@@ -292,7 +291,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * no.resheim.aggregator.IAggregatorStorage#getChildCount(no.resheim.aggregator
 	 * .data.AggregatorItem)
 	 */
-	public synchronized int getChildCount(AggregatorItemParent parent) {
+	public synchronized int getChildCount(AggregatorItem parent) {
 		UUID parentID = parent.getUUID();
 		return getChildCount(parentID);
 	}
@@ -376,7 +375,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 				// Set the order of the item
 				((Article) item).setOrdering(getChildCount(((Article) item)
 						.getLocation()));
-				insert((Article) item);
+				insert((InternalArticle) item);
 			}
 			if (item instanceof Folder) {
 				((AggregatorItem) item)
@@ -407,7 +406,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 *            The item to insert.
 	 * @throws SQLException
 	 */
-	private void insert(Article item) throws SQLException {
+	private void insert(InternalArticle item) throws SQLException {
 		PreparedStatement ps = connection
 				.prepareStatement("insert into articles values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
@@ -423,7 +422,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		ps.setLong(10, item.getPublicationDate());
 		ps.setLong(11, item.getReadDate());
 		ps.setLong(12, item.getAdded());
-		ps.setString(13, item.getDescription());
+		ps.setString(13, item.internalGetText());
 		ps.setString(14, item.getCreator());
 		ps.executeUpdate();
 		ps.close();
@@ -677,7 +676,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * no.resheim.aggregator.model.IAggregatorStorage#selectItemCount(no.resheim
 	 * .aggregator.model.Feed)
 	 */
-	public int getUnreadCount(AggregatorItemParent parent) {
+	public int getUnreadCount(AggregatorItem parent) {
 		return getUnreadCount(parent.getUUID().toString());
 	}
 
