@@ -15,7 +15,8 @@
 
    <includes
          id="no.resheim.aggregator.core.source"
-         version="0.0.0"/>
+         version="0.0.0"
+         name="Aggregator Source Code"/>
 
    <plugin
          id="no.resheim.aggregator.sdk"
