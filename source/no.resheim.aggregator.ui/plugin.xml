@@ -133,6 +133,11 @@
                </count>
             </visibleWhen>
          </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.copyLinkCommand"
+               label="Copy Link Location"
+               style="push">
+         </command>
          <separator
                name="properties"
                visible="true">

@@ -77,6 +77,11 @@
                values="no.resheim.aggregator.core.ui.commands.CollectionSelectionParameterValues">
          </commandParameter>
       </command>
+      <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.CopyLinkLocationCommandHandler"
+            id="no.resheim.aggregator.core.ui.copyLinkCommand"
+            name="Copy Link Location">
+      </command>
       <commandParameterType
             converter="no.resheim.aggregator.core.ui.commands.CollectionParameterValueConverter"
             id="no.resheim.aggregator.core.ui.collectionCommandParameterType"
