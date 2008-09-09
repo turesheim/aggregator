@@ -2,4 +2,14 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="feeds" name="Aggregator Feeds" schema="schema/feeds.exsd"/>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+   <propertyTester
+         class="no.resheim.aggregator.PropertyTester"
+         id="no.resheim.aggregator.propertyTester"
+         namespace="no.resheim.aggregator"
+         properties="multipleCollections"
+         type="java.lang.Object">
+   </propertyTester>
+   </extension>
 </plugin>

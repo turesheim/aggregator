@@ -63,6 +63,13 @@
             locationURI="menu:no.resheim.aggregator.ui.RSSView?after=additions">
          <menu
                label="Collections">
+            <visibleWhen
+                  checkEnabled="false">
+               <test
+                     forcePluginActivation="true"
+                     property="no.resheim.aggregator.multipleCollections">
+               </test>
+            </visibleWhen>
             <dynamic
                   class="no.resheim.aggregator.core.ui.commands.FeedCollectionMenu"
                   id="no.resheim.aggregator.ui.dynamic">
@@ -302,6 +309,15 @@
             updatePeriod="HOURS"
             url="https://gmail.google.com/gmail/feed/atom">
       </feed>
+   </extension>
+   <extension
+         point="no.resheim.aggregator.core.feeds">
+      <collection
+            id="no.resheim.aggregator.ui.collection1"
+            name="name"
+            persistent="true"
+            public="true">
+      </collection>
    </extension>
 
 </plugin>

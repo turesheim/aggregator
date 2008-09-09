@@ -50,6 +50,11 @@ public class FeedCollectionMenu extends
 		ArrayList<IContributionItem> actions = new ArrayList<IContributionItem>();
 		Collection<FeedCollection> collections = AggregatorPlugin.getDefault()
 				.getCollections();
+		// No need to show the menu if we just have one item. It's always
+		// selected per default.
+		if (collections.size() <= 1) {
+			return new IContributionItem[0];
+		}
 		IServiceLocator locator = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow();
 		// TODO: Fix this deprecation issue when no longer supporting 3.3
