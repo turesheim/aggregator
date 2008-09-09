@@ -52,10 +52,13 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 
 	@Override
 	public String getToolTipText(Object element) {
+		// Fix for bug 561
+		if (element != null)
+			return null;
 		Feed f = getFeed(element);
 		if (f != null) {
 			IStatus s = f.getLastStatus();
-			if (!s.isOK()) {
+			if (s != null && !s.isOK()) {
 				if (s.getException() != null) {
 					return s.getException().getLocalizedMessage();
 				} else
@@ -84,7 +87,8 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 	}
 
 	private Feed getFeed(Object element) {
-		if (((Folder) element).getFeedUUID() != null) {
+		if (element instanceof Folder
+				&& ((Folder) element).getFeedUUID() != null) {
 			return collection.getFeeds().get(((Folder) element).getFeedUUID());
 		}
 		return null;
