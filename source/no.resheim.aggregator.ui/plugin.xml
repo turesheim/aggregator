@@ -310,14 +310,5 @@
             url="https://gmail.google.com/gmail/feed/atom">
       </feed>
    </extension>
-   <extension
-         point="no.resheim.aggregator.core.feeds">
-      <collection
-            id="no.resheim.aggregator.ui.collection1"
-            name="name"
-            persistent="true"
-            public="true">
-      </collection>
-   </extension>
 
 </plugin>
