@@ -77,6 +77,9 @@ import org.osgi.framework.Bundle;
 public class RSSView extends ViewPart implements IFeedView,
 		IFeedCollectionEventListener {
 
+	private static final String CONTEXT_ID = "no.resheim.aggregator.ui.context"; //$NON-NLS-1$
+	private static final String CORE_PLUGIN_ID = "no.resheim.aggregator.core"; //$NON-NLS-1$
+
 	/**
 	 * Listens to selection events in the
 	 */
@@ -179,7 +182,6 @@ public class RSSView extends ViewPart implements IFeedView,
 	}
 
 	public void collectionInitialized(FeedCollection collection) {
-		System.out.println(collection);
 		if (collection.getId().equals(DEFAULT_COLLECTION_ID)) {
 			setDefaultCollection();
 		}
@@ -193,7 +195,6 @@ public class RSSView extends ViewPart implements IFeedView,
 						DEFAULT_COLLECTION_ID);
 				treeView.setInput(fCollection);
 				labelProvider.setCollection(fCollection);
-				System.out.println(fCollection.getId());
 			}
 		});
 	}
@@ -281,12 +282,11 @@ public class RSSView extends ViewPart implements IFeedView,
 		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				((IContextService) PlatformUI.getWorkbench().getService(
-						IContextService.class))
-						.activateContext("no.resheim.aggregator.ui.context"); //$NON-NLS-1$
+						IContextService.class)).activateContext(CONTEXT_ID);
 			}
 		});
 		// Register for collection events
-		if (Platform.getBundle("no.resheim.aggregator.core").getState() == Bundle.ACTIVE) {
+		if (Platform.getBundle(CORE_PLUGIN_ID).getState() == Bundle.ACTIVE) {
 			setDefaultCollection();
 		} else {
 			AggregatorPlugin.getDefault().addFeedCollectionListener(this);
