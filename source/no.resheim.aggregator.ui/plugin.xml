@@ -49,6 +49,12 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="Ctrl+.">
       </key>
+      <key
+            commandId="no.resheim.aggregator.core.ui.delete"
+            contextId="no.resheim.aggregator.ui.context"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="DEL">
+      </key>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
