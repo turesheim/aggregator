@@ -11,7 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.Folder;
@@ -26,7 +25,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IStartup;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -34,7 +32,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class AggregatorUIPlugin extends AbstractUIPlugin implements IStartup {
+public class AggregatorUIPlugin extends AbstractUIPlugin {
 	/** Identifier for the select feed collection command */
 	public static final String CMD_SELECT_COLLECTION = "no.resheim.aggregator.core.ui.selectCollection"; //$NON-NLS-1$
 
@@ -72,6 +70,7 @@ public class AggregatorUIPlugin extends AbstractUIPlugin implements IStartup {
 	 * The constructor
 	 */
 	public AggregatorUIPlugin() {
+		super();
 		plugin = this;
 	}
 
@@ -197,9 +196,6 @@ public class AggregatorUIPlugin extends AbstractUIPlugin implements IStartup {
 	 * @return the shared instance
 	 */
 	public static AggregatorUIPlugin getDefault() {
-		if (plugin == null) {
-			plugin = new AggregatorUIPlugin();
-		}
 		return plugin;
 	}
 
@@ -233,10 +229,4 @@ public class AggregatorUIPlugin extends AbstractUIPlugin implements IStartup {
 		});
 
 	}
-
-	public void earlyStartup() {
-		// Just make it load
-		AggregatorPlugin.getDefault();
-	}
-
 }

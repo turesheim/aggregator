@@ -106,11 +106,5 @@
             icon="icons/etool16/newfolder_wiz.gif">
       </image>
    </extension>
-   <extension
-         point="org.eclipse.ui.startup">
-      <startup
-            class="no.resheim.aggregator.core.ui.AggregatorUIPlugin">
-      </startup>
-   </extension>
 
 </plugin>
