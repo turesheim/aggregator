@@ -55,8 +55,18 @@
       <menuContribution
             locationURI="toolbar:no.resheim.aggregator.ui.RSSView?after=additions">
          <command
+               commandId="no.resheim.aggregator.core.ui.collapseAll"
+               label="Collapse All"
+               style="push">
+         </command>
+         <separator
+               name="no.resheim.aggregator.ui.separator1"
+               visible="true">
+         </separator>
+         <command
                commandId="no.resheim.aggregator.core.ui.addFeed"
-               label="Add Feed">
+               label="Add Feed"
+               style="push">
          </command>
       </menuContribution>
       <menuContribution

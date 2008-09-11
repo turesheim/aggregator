@@ -118,6 +118,8 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 				.getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
 		reg.put(IMG_FOLDER_OBJ, PlatformUI.getWorkbench().getSharedImages()
 				.getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER));
+		reg.put(IMG_FOLDER_OBJ, PlatformUI.getWorkbench().getSharedImages()
+				.getImageDescriptor(ISharedImages.IMG_ELCL_COLLAPSEALL));
 
 	}
 

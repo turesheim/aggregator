@@ -82,6 +82,11 @@
             id="no.resheim.aggregator.core.ui.copyLinkCommand"
             name="Copy Link Location">
       </command>
+      <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.CollapseAllCommandHandler"
+            id="no.resheim.aggregator.core.ui.collapseAll"
+            name="Collapse All">
+      </command>
       <commandParameterType
             converter="no.resheim.aggregator.core.ui.commands.CollectionParameterValueConverter"
             id="no.resheim.aggregator.core.ui.collectionCommandParameterType"
@@ -104,6 +109,10 @@
             commandId="no.resheim.aggregator.core.ui.newFolder"
             disabledIcon="icons/dtool16/newfolder_wiz.gif"
             icon="icons/etool16/newfolder_wiz.gif">
+      </image>
+      <image
+            commandId="no.resheim.aggregator.core.ui.collapseAll"
+            icon="icons/clcl16/collapse_all.gif">
       </image>
    </extension>
 
