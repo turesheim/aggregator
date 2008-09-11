@@ -18,9 +18,11 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
@@ -55,7 +57,7 @@ public class AggregatorPlugin extends Plugin {
 	 * It's contents may be manipulated by different threads so it has been made
 	 * thread safe using synchronized blocks.
 	 */
-	private final HashMap<String, FeedCollection> registryMap = new HashMap<String, FeedCollection>();
+	private final HashMap<String, FeedCollection> collectionMap = new HashMap<String, FeedCollection>();
 
 	private final ArrayList<IAggregatorStorage> storageList = new ArrayList<IAggregatorStorage>();
 
@@ -86,7 +88,9 @@ public class AggregatorPlugin extends Plugin {
 	}
 
 	public void addFeedCollectionListener(IFeedCollectionEventListener listener) {
-		fCollectionListeners.add(listener);
+		synchronized (fCollectionListeners) {
+			fCollectionListeners.add(listener);
+		}
 	}
 
 	/**
@@ -113,6 +117,7 @@ public class AggregatorPlugin extends Plugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		fDebugging = super.isDebugging();
+		System.out.println("Starting aggregator core"); //$NON-NLS-1$
 		initialize();
 	}
 
@@ -164,10 +169,10 @@ public class AggregatorPlugin extends Plugin {
 	 * @return the feed collection
 	 */
 	public FeedCollection getFeedCollection(String id) {
-		synchronized (registryMap) {
+		synchronized (collectionMap) {
 			if (id == null)
 				return defaultCollection;
-			return registryMap.get(id);
+			return collectionMap.get(id);
 		}
 	}
 
@@ -202,8 +207,8 @@ public class AggregatorPlugin extends Plugin {
 	 * @return
 	 */
 	public Collection<FeedCollection> getCollections() {
-		synchronized (registryMap) {
-			return registryMap.values();
+		synchronized (collectionMap) {
+			return collectionMap.values();
 		}
 	}
 
@@ -212,7 +217,7 @@ public class AggregatorPlugin extends Plugin {
 		Job job = new Job(Messages.AggregatorPlugin_Initializing) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				synchronized (registryMap) {
+				synchronized (collectionMap) {
 					IStatus status = addCollections(ereg, monitor);
 					if (status.isOK()) {
 						addFeeds(ereg);
@@ -244,7 +249,7 @@ public class AggregatorPlugin extends Plugin {
 					final FeedCollection collection = new FeedCollection(id,
 							pub, def);
 					collection.setTitle(name);
-					registryMap.put(id, collection);
+					collectionMap.put(id, collection);
 					IAggregatorStorage storage = null;
 					if (persistent) {
 						storage = new DerbySQLStorage(collection,
@@ -261,12 +266,24 @@ public class AggregatorPlugin extends Plugin {
 						if (def) {
 							defaultCollection = collection;
 						}
-						for (IFeedCollectionEventListener listener : fCollectionListeners) {
-							listener.collectionInitialized(collection);
+						synchronized (fCollectionListeners) {
+							for (final IFeedCollectionEventListener listener : fCollectionListeners) {
+								SafeRunner.run(new ISafeRunnable() {
+									public void handleException(
+											Throwable exception) {
+										exception.printStackTrace();
+									}
+
+									public void run() throws Exception {
+										listener
+												.collectionInitialized(collection);
+									}
+
+								});
+							}
 						}
 						ResourcesPlugin.getWorkspace().addSaveParticipant(this,
 								storage);
-
 					} else {
 						return status;
 					}

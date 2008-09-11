@@ -28,6 +28,7 @@ import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -61,6 +62,7 @@ import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.Bundle;
 
 /**
  * 
@@ -147,7 +149,7 @@ public class RSSView extends ViewPart implements IFeedView,
 		public void run() {
 			if (fLastSelectionItem != null) {
 				try {
-					registry.setRead(fLastSelectionItem);
+					fCollection.setRead(fLastSelectionItem);
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
@@ -160,7 +162,7 @@ public class RSSView extends ViewPart implements IFeedView,
 
 	private ArticleViewer preview;
 
-	private FeedCollection registry;
+	private FeedCollection fCollection;
 
 	private SashForm sashForm;
 
@@ -177,17 +179,23 @@ public class RSSView extends ViewPart implements IFeedView,
 	}
 
 	public void collectionInitialized(FeedCollection collection) {
+		System.out.println(collection);
 		if (collection.getId().equals(DEFAULT_COLLECTION_ID)) {
-			Display d = getViewSite().getShell().getDisplay();
-			d.asyncExec(new Runnable() {
-				public void run() {
-					registry = AggregatorPlugin.getDefault().getFeedCollection(
-							DEFAULT_COLLECTION_ID);
-					treeView.setInput(registry);
-					labelProvider.setCollection(registry);
-				}
-			});
+			setDefaultCollection();
 		}
+	}
+
+	private void setDefaultCollection() {
+		Display d = getViewSite().getShell().getDisplay();
+		d.asyncExec(new Runnable() {
+			public void run() {
+				fCollection = AggregatorPlugin.getDefault().getFeedCollection(
+						DEFAULT_COLLECTION_ID);
+				treeView.setInput(fCollection);
+				labelProvider.setCollection(fCollection);
+				System.out.println(fCollection.getId());
+			}
+		});
 	}
 
 	private void contributeToActionBars() {
@@ -278,7 +286,11 @@ public class RSSView extends ViewPart implements IFeedView,
 			}
 		});
 		// Register for collection events
-		AggregatorPlugin.getDefault().addFeedCollectionListener(this);
+		if (Platform.getBundle("no.resheim.aggregator.core").getState() == Bundle.ACTIVE) {
+			setDefaultCollection();
+		} else {
+			AggregatorPlugin.getDefault().addFeedCollectionListener(this);
+		}
 	}
 
 	/**
@@ -305,7 +317,7 @@ public class RSSView extends ViewPart implements IFeedView,
 	}
 
 	public FeedCollection getFeedCollection() {
-		return registry;
+		return fCollection;
 	}
 
 	public Viewer getFeedViewer() {
@@ -373,7 +385,7 @@ public class RSSView extends ViewPart implements IFeedView,
 					// Make the item as read if we were able to open the
 					// browser on it's URL.
 					if (obj instanceof Article) {
-						registry.setRead((Article) obj);
+						fCollection.setRead((Article) obj);
 					}
 				} catch (Exception e) {
 				}
@@ -435,7 +447,7 @@ public class RSSView extends ViewPart implements IFeedView,
 	}
 
 	public void setFeedCollection(FeedCollection registry) {
-		this.registry = registry;
+		this.fCollection = registry;
 		treeView.setInput(registry);
 		labelProvider.setCollection(registry);
 	}
