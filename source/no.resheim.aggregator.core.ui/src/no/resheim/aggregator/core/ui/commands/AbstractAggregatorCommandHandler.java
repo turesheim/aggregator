@@ -11,6 +11,8 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.commands;
 
+import java.util.ArrayList;
+
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.FeedCollection;
@@ -53,5 +55,18 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 			}
 		}
 		return null;
+	}
+
+	protected AggregatorItem[] getSelectedItems(ExecutionEvent event) {
+		ArrayList<AggregatorItem> items = new ArrayList<AggregatorItem>();
+		ISelection selection = HandlerUtil.getCurrentSelection(event);
+		if (selection instanceof IStructuredSelection) {
+			for (Object o : ((IStructuredSelection) selection).toArray()) {
+				if (o != null && o instanceof AggregatorItem) {
+					items.add((AggregatorItem) o);
+				}
+			}
+		}
+		return items.toArray(new AggregatorItem[items.size()]);
 	}
 }

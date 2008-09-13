@@ -23,7 +23,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 /**
- * Deletes the selected AggregatorItem.
+ * Deletes the selected AggregatorItems.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -38,8 +38,7 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
 			if (collection == null) {
 				return null;
 			}
-			AggregatorItem item = getSelection(event);
-			if (item != null) {
+			for (AggregatorItem item : getSelectedItems(event)) {
 				try {
 					item.getParent().delete(item);
 				} catch (CoreException e) {
