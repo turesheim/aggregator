@@ -22,7 +22,7 @@ import org.eclipse.core.runtime.Status;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class Feed {
+public class Feed implements Comparable<Feed> {
 
 	/**
 	 * A unique identifier will be created for the feed as it is instantiated.
@@ -323,5 +323,9 @@ public class Feed {
 		this.updatePeriod = wc.updatePeriod;
 		this.hidden = wc.hidden;
 		this.anonymousAccess = wc.anonymousAccess;
+	}
+
+	public int compareTo(Feed arg) {
+		return this.getTitle().compareTo(arg.getTitle());
 	}
 }
