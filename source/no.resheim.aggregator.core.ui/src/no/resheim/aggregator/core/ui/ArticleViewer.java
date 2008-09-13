@@ -57,9 +57,9 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 
 	@Override
 	public void dispose() {
-		super.dispose();
 		AggregatorUIPlugin.getDefault().getPreferenceStore()
 				.removePropertyChangeListener(this);
+		super.dispose();
 	}
 
 	/**
