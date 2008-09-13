@@ -20,6 +20,7 @@ import no.resheim.aggregator.core.ui.ArticleViewer;
 import no.resheim.aggregator.core.ui.FeedTreeViewer;
 import no.resheim.aggregator.core.ui.FeedViewerContentProvider;
 import no.resheim.aggregator.core.ui.FeedViewerLabelProvider;
+import no.resheim.aggregator.core.ui.IArticleViewerListener;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
 import no.resheim.aggregator.data.Article;
@@ -93,6 +94,7 @@ public class RSSView extends ViewPart implements IFeedView,
 						.getSelection();
 				if (selection.getFirstElement() instanceof Article) {
 					Article item = (Article) selection.getFirstElement();
+					fLastArticleInfo = item.getDetails();
 					setStatusText(item.getDetails());
 					preview.show(item);
 					if (pPreviewIsRead && !item.isRead()) {
@@ -105,14 +107,24 @@ public class RSSView extends ViewPart implements IFeedView,
 				}
 			}
 		}
+	}
 
-		private void setStatusText(String text) {
-			IStatusLineManager mgr = getViewSite().getActionBars()
-					.getStatusLineManager();
-			if (mgr != null) {
-				mgr.setMessage(text);
+	class ArticleViewerListener implements IArticleViewerListener {
+
+		public void statusTextChanged(String text) {
+			if (text.length() == 0 && fLastArticleInfo != null) {
+				setStatusText(fLastArticleInfo);
+			} else {
+				setStatusText(text);
 			}
+		}
+	}
 
+	private void setStatusText(String text) {
+		IStatusLineManager mgr = getViewSite().getActionBars()
+				.getStatusLineManager();
+		if (mgr != null) {
+			mgr.setMessage(text);
 		}
 	}
 
@@ -231,6 +243,8 @@ public class RSSView extends ViewPart implements IFeedView,
 		return false;
 	}
 
+	private String fLastArticleInfo;
+
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize
 	 * it.
@@ -254,6 +268,7 @@ public class RSSView extends ViewPart implements IFeedView,
 		getSite().setSelectionProvider(treeView);
 
 		preview = new ArticleViewer(sashForm, SWT.NONE);
+		preview.addListener(new ArticleViewerListener());
 		sashForm.setWeights(new int[] {
 				1, 1
 		});

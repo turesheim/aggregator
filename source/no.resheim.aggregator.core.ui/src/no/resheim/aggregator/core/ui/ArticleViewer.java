@@ -11,21 +11,21 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import java.text.MessageFormat;
-import java.util.Date;
-
 import no.resheim.aggregator.core.ui.internal.FeedDescriptionFormatter;
 import no.resheim.aggregator.core.ui.internal.FeedItemTitle;
 import no.resheim.aggregator.core.ui.internal.FeedViewWidgetFactory;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.StatusTextEvent;
+import org.eclipse.swt.browser.StatusTextListener;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -47,6 +47,8 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	/** Preference: The size of the font used in the details pane (pixels) */
 	private int pPresentationFontSize;
 
+	private ListenerList listeners;
+
 	// HTML/CSS code for specifying the description font when using the
 	// integrated web browser.
 	private static final String FONT_FIX_5 = "</div>"; //$NON-NLS-1$
@@ -55,10 +57,19 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	private static final String FONT_FIX_2 = " style=\"font-family: '"; //$NON-NLS-1$
 	private static final String FONT_FIX_1 = "<div"; //$NON-NLS-1$
 
+	public void addListener(IArticleViewerListener listener) {
+		listeners.add(listener);
+	}
+
+	public void removeListener(IArticleViewerListener listener) {
+		listeners.remove(listener);
+	}
+
 	@Override
 	public void dispose() {
 		AggregatorUIPlugin.getDefault().getPreferenceStore()
 				.removePropertyChangeListener(this);
+		browser.removeStatusTextListener(fBrowserListener);
 		super.dispose();
 	}
 
@@ -73,7 +84,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		title = new FeedItemTitle(this, factory);
 		title.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING,
 				true, false));
-
+		listeners = new ListenerList();
 		browser = new Browser(this, SWT.NONE);
 		browser.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true,
 				true));
@@ -81,6 +92,19 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		updateFromPreferences();
 		AggregatorUIPlugin.getDefault().getPreferenceStore()
 				.addPropertyChangeListener(this);
+		fBrowserListener = new BrowserStatusTextListener();
+		browser.addStatusTextListener(fBrowserListener);
+	}
+
+	private BrowserStatusTextListener fBrowserListener;
+
+	private class BrowserStatusTextListener implements StatusTextListener {
+		public void changed(StatusTextEvent event) {
+			for (Object listener : listeners.getListeners()) {
+				((IArticleViewerListener) listener)
+						.statusTextChanged(event.text);
+			}
+		}
 	}
 
 	private void setLayout() {
@@ -119,19 +143,6 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		description.append(FONT_FIX_5);
 		title.setTitle(item.getTitle(), null);
 		browser.setText(description.toString());
-		if (item.getPublicationDate() > 0) {
-			setStatusText(MessageFormat.format(
-					Messages.ArticleViewer_Published, new Object[] {
-							new Date(item.getPublicationDate()),
-							item.getCreator()
-					}));
-		} else {
-			setStatusText(MessageFormat.format(
-					Messages.ArticleViewer_UnknownPublicationDate,
-					new Object[] {
-						new Date(item.getAdded())
-					}));
-		}
 	}
 
 	private void showDescription(Feed feed) {
@@ -140,11 +151,6 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		browser.setText(FeedDescriptionFormatter.format(feed,
 				pPresentationFontFamily, pPresentationFontSize));
 		title.setTitle(feed.getTitle(), null);
-		setStatusText(MessageFormat.format(Messages.ArticleViewer_Updated,
-				new Object[] {
-						feed.getTitle(), new Date(feed.getLastUpdate()),
-						new Date(feed.getLastUpdate() + feed.getUpdateTime())
-				}));
 	}
 
 	private void updateFromPreferences() {
@@ -159,14 +165,4 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	public void propertyChange(PropertyChangeEvent event) {
 		updateFromPreferences();
 	}
-
-	private void setStatusText(String text) {
-		// IStatusLineManager mgr = getViewSite().getActionBars()
-		// .getStatusLineManager();
-		// if (mgr != null) {
-		// mgr.setMessage(text);
-		// }
-
-	}
-
 }
