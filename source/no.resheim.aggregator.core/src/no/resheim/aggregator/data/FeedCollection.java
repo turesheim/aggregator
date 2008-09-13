@@ -50,7 +50,7 @@ public class FeedCollection extends AggregatorItemParent {
 	private IAggregatorStorage fDatabase;
 
 	/** The number of milliseconds in a day */
-	private final long DAY = 86400000;
+	private static final long DAY = 86400000;
 
 	private boolean fPublic;
 

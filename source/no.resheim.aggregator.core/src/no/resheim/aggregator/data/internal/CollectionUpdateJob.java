@@ -11,6 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.data.internal;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Stack;
@@ -37,7 +38,10 @@ public class CollectionUpdateJob extends Job {
 	/** The feed registry that we're updating */
 	private FeedCollection registry;
 
-	private class FeedComparator implements Comparator<Feed> {
+	private static class FeedComparator implements Comparator<Feed>,
+			Serializable {
+
+		private static final long serialVersionUID = 5298242739294116541L;
 
 		public int compare(Feed o1, Feed o2) {
 			return 0;

@@ -44,7 +44,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 	 * Simple holder of aggregator items. The main purpose of the type is to
 	 * maintain the relations between the items.
 	 */
-	protected class ItemHolder {
+	protected static class ItemHolder {
 		ArrayList<AggregatorItem> children;
 
 		AggregatorItem item;

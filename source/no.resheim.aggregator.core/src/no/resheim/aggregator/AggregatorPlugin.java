@@ -185,20 +185,8 @@ public class AggregatorPlugin extends Plugin {
 	 * @return A pointer to the Aggregator configuration directory
 	 */
 	private IPath getStorageLocation(FeedCollection registry) {
-		// Location location = Platform.getConfigurationLocation();
-		// if (location != null) {
-		// URL configURL = location.getURL();
-		// if (configURL != null && configURL.getProtocol().startsWith("file"))
-		// //$NON-NLS-1$
-		// {
-		// return new File(configURL.getFile(), PLUGIN_ID);
-		// }
-		// }
-		// If the configuration directory is read-only,
-		// then return an alternate location
-		// rather than null or throwing an Exception.
 		return getStateLocation().makeAbsolute().addTrailingSeparator().append(
-				registry.getId().toString());
+				registry.getId());
 	}
 
 	/**

@@ -43,6 +43,8 @@ import org.eclipse.core.runtime.Status;
  */
 public class DerbySQLStorage extends AbstractAggregatorStorage {
 
+	private static final String SQL_SEPARATOR = ";";
+
 	/** Connection options */
 	private static final String CONNECT_OPTIONS = ";create=true"; //$NON-NLS-1$
 
@@ -172,7 +174,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 					}
 					in = br.readLine();
 				}
-				if (in.endsWith(";")) { //$NON-NLS-1$
+				if (in.endsWith(SQL_SEPARATOR)) {
 					create.append(in.substring(0, in.length() - 1));
 					try {
 						s.executeUpdate(create.toString());
@@ -186,6 +188,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 					create.append('\n');
 				}
 			}
+			br.close();
 			// Create a folder to represent the collection root. This is
 			// required for maintaining relation integrity.
 			Folder root = new InternalFolder(null, collection.getUUID());
@@ -197,6 +200,11 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		} catch (IOException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
 					"Could not create feeds", e); //$NON-NLS-1$
+		} finally {
+			try {
+				br.close();
+			} catch (IOException e) {
+			}
 		}
 	}
 
@@ -316,6 +324,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+
 		}
 		return count;
 	}
