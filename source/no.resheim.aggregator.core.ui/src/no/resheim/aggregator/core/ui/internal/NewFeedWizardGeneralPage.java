@@ -58,6 +58,8 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		setPageComplete(false);
 	}
 
+	ArrayList<Feed> defaults = new ArrayList<Feed>();
+
 	/**
 	 * Create contents of the wizard
 	 * 
@@ -81,7 +83,7 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		combo.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				if (combo.getSelectionIndex() >= 0) {
-					workingCopy.copy(feeds.get(combo.getSelectionIndex()));
+					workingCopy.copy(defaults.get(combo.getSelectionIndex()));
 					urlText.setText(workingCopy.getURL());
 
 				}
@@ -89,7 +91,10 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 			}
 		});
 		for (Feed feed : feeds) {
-			combo.add(feed.getTitle());
+			if (!wizard.getCollection().hasFeed(feed.getURL())) {
+				combo.add(feed.getTitle());
+				defaults.add(feed);
+			}
 
 		}
 		combo.addModifyListener(new ModifyListener() {
@@ -170,11 +175,6 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		}
 		if (workingCopy.getURL().length() == 0) {
 			setMessage(Messages.NewFeedWizardGeneralPage_Error_Missing_URL);
-			setPageComplete(false);
-			return;
-		}
-		if (wizard.getCollection().hasFeed(workingCopy.getURL())) {
-			setErrorMessage(Messages.NewFeedWizardGeneralPage_Error_Existing_Feed);
 			setPageComplete(false);
 			return;
 		}
