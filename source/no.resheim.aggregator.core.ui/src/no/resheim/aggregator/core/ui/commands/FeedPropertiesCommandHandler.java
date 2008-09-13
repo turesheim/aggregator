@@ -43,7 +43,7 @@ public class FeedPropertiesCommandHandler extends
 			}
 			AggregatorItem o = getSelection(event);
 			if (o instanceof Folder) {
-				Feed feed = registry.getFeeds().get(((Folder) o).getFeedUUID());
+				Feed feed = ((Folder) o).getFeed();
 				if (feed != null) {
 					FeedWorkingCopy wc = new FeedWorkingCopy(feed);
 					FeedPropertiesDialog dialog = new FeedPropertiesDialog(

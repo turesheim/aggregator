@@ -373,13 +373,14 @@ public class RSSView extends ViewPart implements IFeedView,
 				Object obj = ((IStructuredSelection) selection)
 						.getFirstElement();
 				String url = BLANK;
-				if (obj instanceof Folder)
-					return;
-				if (obj instanceof Feed)
-					url = ((Feed) obj).getURL();
-				if (obj instanceof Article) {
+				if (obj instanceof Folder) {
+					if (((Folder) obj).getFeed() != null) {
+						url = ((Folder) obj).getFeed().getLink();
+					}
+				} else if (obj instanceof Article) {
 					url = ((Article) obj).getLink();
-				}
+				} else
+					return;
 				try {
 					browser.openURL(new URL(url));
 					// Make the item as read if we were able to open the

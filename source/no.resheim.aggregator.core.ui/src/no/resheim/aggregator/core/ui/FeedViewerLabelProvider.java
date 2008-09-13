@@ -87,9 +87,8 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 	}
 
 	private Feed getFeed(Object element) {
-		if (element instanceof Folder
-				&& ((Folder) element).getFeedUUID() != null) {
-			return collection.getFeeds().get(((Folder) element).getFeedUUID());
+		if (element instanceof Folder) {
+			return ((Folder) element).getFeed();
 		}
 		return null;
 

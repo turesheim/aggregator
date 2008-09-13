@@ -13,6 +13,8 @@ package no.resheim.aggregator.data;
 
 import java.util.UUID;
 
+import org.eclipse.core.runtime.CoreException;
+
 /**
  * Aggregator item representing a folder. Folders are used to contain other type
  * of aggregator items such as articles and other folders. A folder may also
@@ -43,6 +45,19 @@ public class Folder extends AggregatorItemParent {
 	 */
 	public UUID getFeedUUID() {
 		return feed;
+	}
+
+	public Feed getFeed() {
+		if (feed == null) {
+			return null;
+		} else {
+			try {
+				return getCollection().getFeeds().get(feed);
+			} catch (CoreException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
 	}
 
 	public String toString() {
