@@ -2,6 +2,7 @@ package no.resheim.aggregator;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
 import no.resheim.aggregator.data.Feed;
@@ -64,12 +65,12 @@ public class AggregatorPlugin extends Plugin {
 	private final ArrayList<IFeedCollectionEventListener> fCollectionListeners = new ArrayList<IFeedCollectionEventListener>();
 
 	/** Default feeds to add */
-	private ArrayList<Feed> defaultFeeds;
+	private ArrayList<Feed> fDefaultFeeds;
 
 	private FeedCollection defaultCollection;
 
 	public ArrayList<Feed> getDefaultFeeds() {
-		return defaultFeeds;
+		return fDefaultFeeds;
 	}
 
 	private ServiceTracker serviceTracker;
@@ -84,7 +85,7 @@ public class AggregatorPlugin extends Plugin {
 	public AggregatorPlugin() {
 		plugin = this;
 		// DEFAULT_FEEDS = new ArrayList<String[]>();
-		defaultFeeds = new ArrayList<Feed>();
+		fDefaultFeeds = new ArrayList<Feed>();
 	}
 
 	public void addFeedCollectionListener(IFeedCollectionEventListener listener) {
@@ -221,6 +222,7 @@ public class AggregatorPlugin extends Plugin {
 					IStatus status = addCollections(ereg, monitor);
 					if (status.isOK()) {
 						addFeeds(ereg);
+						Collections.sort(fDefaultFeeds);
 					}
 					return status;
 				}
@@ -295,6 +297,13 @@ public class AggregatorPlugin extends Plugin {
 		return Status.OK_STATUS;
 	}
 
+	/**
+	 * Reads all feed declarations from the extension registry and adds these to
+	 * the list of default feeds and optionally adds the feed to the
+	 * collection(s).
+	 * 
+	 * @param ereg
+	 */
 	private void addFeeds(IExtensionRegistry ereg) {
 		IConfigurationElement[] elements = ereg
 				.getConfigurationElementsFor(REGISTRY_EXTENSION_ID);
@@ -314,7 +323,7 @@ public class AggregatorPlugin extends Plugin {
 						if (add && !collection.hasFeed(url)) {
 							collection.addNew(feed);
 						}
-						defaultFeeds.add(feed);
+						fDefaultFeeds.add(feed);
 					}
 				}
 			} catch (Exception e) {
