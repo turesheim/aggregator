@@ -13,6 +13,7 @@ package no.resheim.aggregator.core.ui.internal.preferences;
 
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
+import no.resheim.aggregator.core.ui.PreferenceConstants.LinkOpen;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
 
@@ -33,7 +34,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
 	 */
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = AggregatorUIPlugin.getDefault().getPreferenceStore();
+		IPreferenceStore store = AggregatorUIPlugin.getDefault()
+				.getPreferenceStore();
 		store.setDefault(PreferenceConstants.P_OPEN_LINK,
 				PreferenceConstants.LinkOpen.VIEW.toString());
 		store.setDefault(PreferenceConstants.P_PREVIEW_IS_READ, true);
@@ -48,6 +50,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_BROWSER_LOCATION_BAR, false);
 		store.setDefault(PreferenceConstants.P_BROWSER_NAVIGATION_BAR, false);
 		store.setDefault(PreferenceConstants.P_BROWSER_REUSE_WINDOW, true);
+		store.setDefault(PreferenceConstants.P_OPEN_LINK, LinkOpen.EDITOR
+				.toString());
 	}
 
 }

@@ -60,8 +60,6 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.browser.IWebBrowser;
-import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
@@ -147,9 +145,6 @@ public class RSSView extends ViewPart implements IFeedView,
 
 	private final static Separator selection_separator = new Separator(
 			"selection"); //$NON-NLS-1$
-
-	/** The web browser we're using */
-	private IWebBrowser browser;
 
 	private Action doubleClickAction;
 
@@ -237,25 +232,8 @@ public class RSSView extends ViewPart implements IFeedView,
 
 	@Override
 	public void dispose() {
-		browser.close();
 		treeView.removeSelectionChangedListener(fViewSelectionListener);
 		AggregatorPlugin.getDefault().removeFeedCollectionListener(this);
-	}
-
-	private boolean createBrowser() {
-		try {
-			browser = PlatformUI.getWorkbench().getBrowserSupport()
-					.createBrowser(
-							IWorkbenchBrowserSupport.NAVIGATION_BAR
-									| IWorkbenchBrowserSupport.LOCATION_BAR
-									| IWorkbenchBrowserSupport.AS_EDITOR,
-							AggregatorPlugin.PLUGIN_ID,
-							Messages.RSSView_BrowserTitle, BLANK);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
 	}
 
 	private String fLastArticleInfo;
@@ -295,7 +273,6 @@ public class RSSView extends ViewPart implements IFeedView,
 		hookDoubleClickAction();
 		contributeToActionBars();
 		contributeToMenu();
-		createBrowser();
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()
 				.getPreferenceStore();
 		store.addPropertyChangeListener(new IPropertyChangeListener() {
@@ -414,7 +391,7 @@ public class RSSView extends ViewPart implements IFeedView,
 				} else
 					return;
 				try {
-					browser.openURL(new URL(url));
+					AggregatorUIPlugin.getSharedBrowser().openURL(new URL(url));
 					// Make the item as read if we were able to open the
 					// browser on it's URL.
 					if (obj instanceof Article) {

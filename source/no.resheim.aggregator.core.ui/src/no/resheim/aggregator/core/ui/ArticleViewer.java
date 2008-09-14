@@ -11,6 +11,9 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import no.resheim.aggregator.core.ui.internal.FeedDescriptionFormatter;
 import no.resheim.aggregator.core.ui.internal.FeedItemTitle;
 import no.resheim.aggregator.core.ui.internal.FeedViewWidgetFactory;
@@ -24,12 +27,16 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.LocationEvent;
+import org.eclipse.swt.browser.LocationListener;
 import org.eclipse.swt.browser.StatusTextEvent;
 import org.eclipse.swt.browser.StatusTextListener;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * A control that is used to show aggregator articles. A {@link Browser}
@@ -65,6 +72,8 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		listeners.remove(listener);
 	}
 
+	boolean fInterceptBrowser = false;
+
 	@Override
 	public void dispose() {
 		AggregatorUIPlugin.getDefault().getPreferenceStore()
@@ -94,6 +103,47 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 				.addPropertyChangeListener(this);
 		fBrowserListener = new BrowserStatusTextListener();
 		browser.addStatusTextListener(fBrowserListener);
+		browser.addLocationListener(new LocationListener() {
+
+			public void changed(LocationEvent event) {
+			}
+
+			public void changing(LocationEvent event) {
+				if (fInterceptBrowser) {
+					IPreferenceStore store = AggregatorUIPlugin.getDefault()
+							.getPreferenceStore();
+					String setting = store
+							.getString(PreferenceConstants.P_OPEN_LINK);
+					switch (PreferenceConstants.LinkOpen.valueOf(setting)) {
+					case EDITOR:
+						event.doit = false;
+						try {
+							AggregatorUIPlugin.getSharedBrowser().openURL(
+									new URL(event.location));
+						} catch (PartInitException e1) {
+							e1.printStackTrace();
+						} catch (MalformedURLException e1) {
+							e1.printStackTrace();
+						}
+						break;
+					case EXTERNAL:
+						event.doit = false;
+						try {
+							PlatformUI.getWorkbench().getBrowserSupport()
+									.getExternalBrowser().openURL(
+											new URL(event.location));
+						} catch (PartInitException e) {
+							e.printStackTrace();
+						} catch (MalformedURLException e) {
+							e.printStackTrace();
+						}
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		});
 	}
 
 	private BrowserStatusTextListener fBrowserListener;
@@ -117,11 +167,13 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	}
 
 	public void show(Object item) {
+		fInterceptBrowser = false;
 		if (item instanceof Article) {
 			showDescription((Article) item);
 		} else if (item instanceof Feed) {
 			showDescription((Feed) item);
 		}
+		fInterceptBrowser = true;
 	}
 
 	/**

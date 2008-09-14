@@ -11,6 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.Folder;
@@ -26,6 +27,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWebBrowser;
+import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -91,6 +94,9 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
+		if (fEditorBrowser != null) {
+			fEditorBrowser.close();
+		}
 		super.stop(context);
 	}
 
@@ -133,6 +139,24 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+
+	private static IWebBrowser fEditorBrowser;
+
+	public static IWebBrowser getSharedBrowser() {
+		if (fEditorBrowser == null) {
+			try {
+				fEditorBrowser = PlatformUI.getWorkbench().getBrowserSupport()
+						.createBrowser(
+								IWorkbenchBrowserSupport.NAVIGATION_BAR
+										| IWorkbenchBrowserSupport.LOCATION_BAR
+										| IWorkbenchBrowserSupport.AS_EDITOR,
+								AggregatorPlugin.PLUGIN_ID, "Aggregator", "");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return fEditorBrowser;
 	}
 
 	/**
