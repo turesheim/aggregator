@@ -94,6 +94,13 @@ public class AggregatorPlugin extends Plugin {
 		}
 	}
 
+	public void removeFeedCollectionListener(
+			IFeedCollectionEventListener listener) {
+		synchronized (fCollectionListeners) {
+			fCollectionListeners.remove(listener);
+		}
+	}
+
 	/**
 	 * Returns the proxy service for this bundle.
 	 * 
