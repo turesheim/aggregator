@@ -53,7 +53,7 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 	@Override
 	public String getToolTipText(Object element) {
 		// Fix for bug 561
-		if (element != null)
+		if (element == null)
 			return null;
 		Feed f = getFeed(element);
 		if (f != null) {
