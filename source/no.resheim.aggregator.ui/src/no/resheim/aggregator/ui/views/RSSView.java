@@ -49,6 +49,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.browser.TitleEvent;
+import org.eclipse.swt.browser.TitleListener;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -80,6 +82,12 @@ public class RSSView extends ViewPart implements IFeedView,
 
 	private static final String CONTEXT_ID = "no.resheim.aggregator.ui.context"; //$NON-NLS-1$
 	private static final String CORE_PLUGIN_ID = "no.resheim.aggregator.core"; //$NON-NLS-1$
+
+	class BrowserTitleListener implements TitleListener {
+
+		public void changed(TitleEvent event) {
+		}
+	}
 
 	/**
 	 * Listens to selection events in the
@@ -227,6 +235,13 @@ public class RSSView extends ViewPart implements IFeedView,
 		mgr.add(horizontalLayoutAction);
 	}
 
+	@Override
+	public void dispose() {
+		browser.close();
+		treeView.removeSelectionChangedListener(fViewSelectionListener);
+		AggregatorPlugin.getDefault().removeFeedCollectionListener(this);
+	}
+
 	private boolean createBrowser() {
 		try {
 			browser = PlatformUI.getWorkbench().getBrowserSupport()
@@ -244,6 +259,7 @@ public class RSSView extends ViewPart implements IFeedView,
 	}
 
 	private String fLastArticleInfo;
+	private ViewSelectionListener fViewSelectionListener;
 
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize
@@ -260,7 +276,8 @@ public class RSSView extends ViewPart implements IFeedView,
 		treeView.setContentProvider(new FeedViewerContentProvider());
 		treeView
 				.setLabelProvider(labelProvider = new FeedViewerLabelProvider());
-		treeView.addSelectionChangedListener(new ViewSelectionListener());
+		fViewSelectionListener = new ViewSelectionListener();
+		treeView.addSelectionChangedListener(fViewSelectionListener);
 
 		// Enable tooltips for the tree items
 		ColumnViewerToolTipSupport.enableFor(treeView);
