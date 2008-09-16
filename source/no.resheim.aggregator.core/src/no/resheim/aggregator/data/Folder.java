@@ -33,7 +33,7 @@ public class Folder extends AggregatorItemParent {
 	 * @param registryId
 	 * @param title
 	 */
-	public Folder(AggregatorItemParent parent, UUID uuid) {
+	protected Folder(AggregatorItemParent parent, UUID uuid) {
 		super(parent, uuid);
 	}
 

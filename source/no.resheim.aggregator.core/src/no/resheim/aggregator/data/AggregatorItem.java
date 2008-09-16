@@ -61,7 +61,7 @@ public abstract class AggregatorItem {
 	/**
 	 * @param parent
 	 */
-	public AggregatorItem(AggregatorItemParent parent, UUID uuid) {
+	protected AggregatorItem(AggregatorItemParent parent, UUID uuid) {
 		this.parent = parent;
 		this.uuid = uuid;
 	}

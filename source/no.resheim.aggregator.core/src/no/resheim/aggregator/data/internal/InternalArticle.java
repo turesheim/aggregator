@@ -17,6 +17,8 @@ import no.resheim.aggregator.data.AggregatorItemParent;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 
+import org.eclipse.core.runtime.Assert;
+
 /**
  * 
  * @author Torkild Ulvøy Resheim
@@ -33,12 +35,14 @@ public class InternalArticle extends Article {
 	 */
 	public InternalArticle(AggregatorItemParent parent, UUID uuid, UUID feedId) {
 		super(parent, uuid);
+		Assert.isNotNull(parent);
 		location = parent.getUUID();
 		feed_uuid = feedId;
 	}
 
 	public InternalArticle(Feed feed, UUID uuid) {
 		super(null, uuid);
+		Assert.isNotNull(feed);
 		location = feed.getLocation();
 		feed_uuid = feed.getUUID();
 	}

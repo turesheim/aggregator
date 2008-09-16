@@ -26,7 +26,16 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	/** The number of milliseconds in a day */
 	private static final long DAY = 86400000;
 
-	public AggregatorItemParent(AggregatorItemParent parent, UUID uuid) {
+	/**
+	 * Use a feed collection to create an instance of this type or use the
+	 * "internal" subclass constructor.
+	 * 
+	 * @param parent
+	 *            the parent item
+	 * @param uuid
+	 *            the unique identifier
+	 */
+	protected AggregatorItemParent(AggregatorItemParent parent, UUID uuid) {
 		super(parent, uuid);
 		children = new ArrayList<AggregatorItem>();
 	}

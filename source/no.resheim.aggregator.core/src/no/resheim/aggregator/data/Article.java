@@ -51,7 +51,7 @@ public class Article extends AggregatorItem {
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"EEE, dd MMMM yyyy kk:mm:ss"); //$NON-NLS-1$
 
-	public Article(AggregatorItemParent parent, UUID uuid) {
+	protected Article(AggregatorItemParent parent, UUID uuid) {
 		super(parent, uuid);
 	}
 
