@@ -43,7 +43,7 @@ import org.eclipse.core.runtime.Status;
  */
 public class DerbySQLStorage extends AbstractAggregatorStorage {
 
-	private static final String SQL_SEPARATOR = ";";
+	private static final String SQL_SEPARATOR = ";"; //$NON-NLS-1$
 
 	/** Connection options */
 	private static final String CONNECT_OPTIONS = ";create=true"; //$NON-NLS-1$
