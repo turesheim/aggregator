@@ -19,7 +19,6 @@ import java.util.UUID;
 
 import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
-import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.internal.CollectionUpdateJob;
 import no.resheim.aggregator.data.internal.InternalArticle;
 import no.resheim.aggregator.data.internal.InternalFolder;
@@ -48,9 +47,6 @@ public class FeedCollection extends AggregatorItemParent {
 
 	/** The storage for our data */
 	private IAggregatorStorage fDatabase;
-
-	/** The number of milliseconds in a day */
-	private static final long DAY = 86400000;
 
 	private boolean fPublic;
 
@@ -166,27 +162,15 @@ public class FeedCollection extends AggregatorItemParent {
 	 * @param site
 	 */
 	void cleanUp(Feed site) {
+		// First find the folder
 		try {
-			fDatabase.writeLock().lock();
-			Archiving archiving = site.getArchiving();
-			int days = site.getArchivingDays();
-			int articles = site.getArchivingItems();
-			switch (archiving) {
-			case KEEP_ALL:
-				// Do nothing as we want to keep all items
-				break;
-			case KEEP_NEWEST:
-				long lim = System.currentTimeMillis() - ((long) days * DAY);
-				fDatabase.deleteOutdated(site, lim);
-				break;
-			case KEEP_SOME:
-				fDatabase.keepMaximum(site, articles);
-				break;
-			default:
-				break;
+			for (Folder folder : this.getDescendingFolders()) {
+				if (folder.getUUID().equals(site.getLocation())) {
+					folder.cleanUp(site);
+				}
 			}
-		} finally {
-			fDatabase.writeLock().unlock();
+		} catch (CoreException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -589,11 +573,13 @@ public class FeedCollection extends AggregatorItemParent {
 						FeedUpdateJob job = new FeedUpdateJob(this, feed);
 						job.schedule();
 					} else {
-						return new Status(IStatus.ERROR,
+						return new Status(
+								IStatus.ERROR,
 								AggregatorPlugin.PLUGIN_ID,
-								MessageFormat.format(
-										"{0} is already being updated.", feed
-												.getTitle()));
+								MessageFormat
+										.format(
+												Messages.FeedCollection_UpdateInProgress,
+												feed.getTitle()));
 					}
 				}
 			}
