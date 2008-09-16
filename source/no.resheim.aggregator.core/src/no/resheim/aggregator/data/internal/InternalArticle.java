@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import no.resheim.aggregator.data.AggregatorItemParent;
 import no.resheim.aggregator.data.Article;
+import no.resheim.aggregator.data.Feed;
 
 /**
  * 
@@ -32,10 +33,14 @@ public class InternalArticle extends Article {
 	 */
 	public InternalArticle(AggregatorItemParent parent, UUID uuid, UUID feedId) {
 		super(parent, uuid);
-		if (parent != null) {
-			setLocation(parent.getUUID());
-		}
+		location = parent.getUUID();
 		feed_uuid = feedId;
+	}
+
+	public InternalArticle(Feed feed, UUID uuid) {
+		super(null, uuid);
+		location = feed.getLocation();
+		feed_uuid = feed.getUUID();
 	}
 
 	/**
@@ -108,17 +113,6 @@ public class InternalArticle extends Article {
 	}
 
 	/**
-	 * Sets the location of the feed. This should only be done when an instance
-	 * of the parent item is not available.
-	 * 
-	 * @param location
-	 *            the identifier of the parent item
-	 */
-	public void setLocation(UUID location) {
-		this.location = location;
-	}
-
-	/**
 	 * Publication date.
 	 * 
 	 * @param date
@@ -140,6 +134,18 @@ public class InternalArticle extends Article {
 
 	public void setReadDate(long readDate) {
 		this.readDate = readDate;
+	}
+
+	/**
+	 * The location field is only used when the article is being constructed
+	 * where the article parent item is not available. This would usually be
+	 * when read from a HTTP stream.
+	 * 
+	 * @return the UUID of the parent item
+	 */
+	// TODO: Internalise this member variable
+	public UUID getLocation() {
+		return location;
 	}
 
 }

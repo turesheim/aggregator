@@ -102,18 +102,6 @@ public class Article extends AggregatorItem {
 	}
 
 	/**
-	 * The location field is only used when the article is being constructed
-	 * where the article parent item is not available. This would usually be
-	 * when read from a HTTP stream.
-	 * 
-	 * @return the UUID of the parent item
-	 */
-	// TODO: Internalise this member variable
-	public UUID getLocation() {
-		return location;
-	}
-
-	/**
 	 * Returns the publication date of the feed item. For some feeds, such as
 	 * RSS 1.0 this value is most likely zero.
 	 * 

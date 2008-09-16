@@ -383,8 +383,9 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		try {
 			if (item instanceof Article) {
 				// Set the order of the item
-				((Article) item).setOrdering(getChildCount(((Article) item)
-						.getLocation()));
+				((InternalArticle) item)
+						.setOrdering(getChildCount(((InternalArticle) item)
+								.getLocation()));
 				insert((InternalArticle) item);
 			}
 			if (item instanceof Folder) {

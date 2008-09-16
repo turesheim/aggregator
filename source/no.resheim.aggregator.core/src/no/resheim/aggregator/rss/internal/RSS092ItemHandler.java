@@ -31,8 +31,7 @@ public class RSS092ItemHandler extends AbstractElementHandler {
 	public RSS092ItemHandler(FeedCollection registry, Feed feed) {
 		this.collection = registry;
 		this.feed = feed;
-		item = new InternalArticle(null, UUID.randomUUID(), feed.getUUID());
-		item.setLocation(feed.getLocation());
+		item = new InternalArticle(feed, UUID.randomUUID());
 		item.setAddedDate(System.currentTimeMillis());
 	}
 
