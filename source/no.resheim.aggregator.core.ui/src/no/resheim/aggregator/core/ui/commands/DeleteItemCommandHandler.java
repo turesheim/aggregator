@@ -74,10 +74,8 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		if (part instanceof IFeedView) {
 			setBaseEnabled(true);
-			FeedCollection collection = ((IFeedView) part).getFeedCollection();
 			for (AggregatorItem item : getSelectedItems(selection)) {
-				if (item.getUUID()
-						.equals(collection.getTrashFolder().getUUID())) {
+				if (item.isSystem()) {
 					setBaseEnabled(false);
 					break;
 				}
