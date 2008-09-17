@@ -123,10 +123,8 @@
          <command
                commandId="no.resheim.aggregator.core.ui.delete"
                label="Delete">
-            <visibleWhen>
-               <count
-                     value="1">
-               </count>
+            <visibleWhen
+                  checkEnabled="true">
             </visibleWhen>
          </command>
       </menuContribution>

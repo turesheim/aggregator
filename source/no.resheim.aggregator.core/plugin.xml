@@ -8,7 +8,7 @@
          class="no.resheim.aggregator.AggregatorPropertyTester"
          id="no.resheim.aggregator.propertyTester"
          namespace="no.resheim.aggregator"
-         properties="multipleCollections"
+         properties="multipleCollections,systemFolder"
          type="java.util.Collections$EmptyList">
    </propertyTester>
    </extension>

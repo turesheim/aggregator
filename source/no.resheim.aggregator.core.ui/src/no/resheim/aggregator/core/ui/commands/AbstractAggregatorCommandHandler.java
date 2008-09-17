@@ -58,8 +58,12 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 	}
 
 	protected AggregatorItem[] getSelectedItems(ExecutionEvent event) {
-		ArrayList<AggregatorItem> items = new ArrayList<AggregatorItem>();
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
+		return getSelectedItems(selection);
+	}
+
+	protected AggregatorItem[] getSelectedItems(ISelection selection) {
+		ArrayList<AggregatorItem> items = new ArrayList<AggregatorItem>();
 		if (selection instanceof IStructuredSelection) {
 			for (Object o : ((IStructuredSelection) selection).toArray()) {
 				if (o != null && o instanceof AggregatorItem) {

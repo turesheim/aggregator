@@ -17,11 +17,16 @@ import org.eclipse.core.expressions.PropertyTester;
 public class AggregatorPropertyTester extends PropertyTester {
 
 	private static final String MULTIPLE_COLLECTIONS = "multipleCollections"; //$NON-NLS-1$
+	private static final String SYSTEM_FOLDER = "systemFolder"; //$NON-NLS-1$
 
 	public boolean test(Object receiver, String property, Object[] args,
 			Object expectedValue) {
+		System.out.println(receiver);
 		if (property != null && property.equals(MULTIPLE_COLLECTIONS)) {
 			return (AggregatorPlugin.getDefault().getCollections().size() > 1);
+		}
+		if (property != null && property.equals(SYSTEM_FOLDER)) {
+			System.out.println(receiver);
 		}
 		return false;
 	}
