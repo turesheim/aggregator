@@ -118,10 +118,10 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 					if (article.isRead()) {
 						if (article.getPublicationDate() > 0
 								&& article.getPublicationDate() <= lim) {
-							delete(article);
+							trash(article);
 						} else if (article.getPublicationDate() == 0
 								&& article.addedDate <= lim) {
-							delete(article);
+							trash(article);
 						}
 					}
 				}
@@ -129,7 +129,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 			break;
 		case KEEP_SOME:
 			while (getChildCount() > articles) {
-				delete(getChildAt(0));
+				trash(getChildAt(0));
 			}
 			break;
 		default:
@@ -158,13 +158,27 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	}
 
 	/**
+	 * Moves the item to the trash.
+	 * 
+	 * @param item
+	 * @throws CoreException
+	 */
+	public void trash(AggregatorItem item) throws CoreException {
+		FeedCollection c = getCollection();
+		Folder t = c.getTrashFolder();
+		c
+				.move(item, item.getParent(), item.getOrdering(), t, t
+						.getChildCount());
+	}
+
+	/**
 	 * Removes the specified item from the collection and underlying database.
 	 * 
 	 * @param item
 	 *            the element to remove
 	 * @throws CoreException
 	 */
-	public IStatus delete(AggregatorItem item) throws CoreException {
+	public IStatus deleteChild(AggregatorItem item) throws CoreException {
 		// Remove the item from the cache (if it's there).
 		synchronized (children) {
 			children.remove(item);

@@ -39,8 +39,13 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
  */
 public class FeedCollection extends AggregatorItemParent {
 
-	private static final UUID DEFAULT_ID = UUID
+	private static final String TRASH_FOLDER_NAME = "Trash"; //$NON-NLS-1$
+	private static final UUID COLLECTION_ID = UUID
 			.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"); //$NON-NLS-1$
+
+	/** Trash folder identifier */
+	private static final UUID TRASH_ID = UUID
+			.fromString("448119fa-609c-4463-89cf-31d41d94ad05"); //$NON-NLS-1$
 
 	/** The list of feed change listeners */
 	private static ArrayList<IAggregatorEventListener> feedListeners = new ArrayList<IAggregatorEventListener>();
@@ -69,7 +74,7 @@ public class FeedCollection extends AggregatorItemParent {
 	private HashMap<UUID, Feed> fFeeds;
 
 	public FeedCollection(String id, boolean pub, boolean def) {
-		super(null, DEFAULT_ID);
+		super(null, COLLECTION_ID);
 		this.id = id;
 		this.fPublic = pub;
 		this.fDefault = def;
@@ -274,7 +279,7 @@ public class FeedCollection extends AggregatorItemParent {
 	 * @see no.resheim.aggregator.data.AggregatorItem#getUUID()
 	 */
 	public UUID getUUID() {
-		return DEFAULT_ID;
+		return COLLECTION_ID;
 	}
 
 	/**
@@ -308,6 +313,8 @@ public class FeedCollection extends AggregatorItemParent {
 		}
 	}
 
+	private Folder fTrashFolder;
+
 	/**
 	 * Loads all feeds from the given backend storage and initializes.
 	 * 
@@ -316,6 +323,7 @@ public class FeedCollection extends AggregatorItemParent {
 	public void initialize(IAggregatorStorage storage) {
 		this.fDatabase = storage;
 		fFeeds = storage.getFeeds();
+		createTrashFolder();
 		// Start a new update job that will periodically wake up and create
 		// FeedUpdateJobs when a feed is scheduled for an update.
 		fRegistryUpdateJob.addJobChangeListener(new JobChangeAdapter() {
@@ -325,6 +333,30 @@ public class FeedCollection extends AggregatorItemParent {
 			}
 		});
 		fRegistryUpdateJob.schedule();
+	}
+
+	private void createTrashFolder() {
+		try {
+			for (AggregatorItem item : getChildren()) {
+				if (item.isSystem() && item.getUUID().equals(TRASH_ID)) {
+					fTrashFolder = (Folder) item;
+					break;
+				}
+			}
+			if (fTrashFolder == null) {
+				InternalFolder trash = new InternalFolder(this, TRASH_ID);
+				trash.setHidden(true);
+				trash.setTitle(TRASH_FOLDER_NAME);
+				addNew(trash);
+				fTrashFolder = trash;
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Folder getTrashFolder() {
+		return fTrashFolder;
 	}
 
 	IAggregatorStorage getStorage() {
@@ -521,6 +553,7 @@ public class FeedCollection extends AggregatorItemParent {
 		for (int i = item.getOrdering() + 1; i < count; i++) {
 			long start = System.currentTimeMillis();
 			AggregatorItem sibling = parent.getChildAt(i);
+			Assert.isNotNull(sibling);
 			int oldOrder = sibling.getOrdering();
 			sibling.setOrdering(sibling.getOrdering() - 1);
 			fDatabase.move((AggregatorItem) sibling);

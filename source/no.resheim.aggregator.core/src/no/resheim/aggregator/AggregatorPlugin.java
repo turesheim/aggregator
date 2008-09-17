@@ -210,7 +210,7 @@ public class AggregatorPlugin extends Plugin {
 
 	private void initialize() {
 		final IExtensionRegistry ereg = Platform.getExtensionRegistry();
-		Job job = new Job(Messages.AggregatorPlugin_Initializing) {
+		final Job job = new Job(Messages.AggregatorPlugin_Initializing) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				synchronized (collectionMap) {
@@ -224,6 +224,7 @@ public class AggregatorPlugin extends Plugin {
 			}
 		};
 		job.schedule();
+
 	}
 
 	private IStatus addCollections(IExtensionRegistry ereg,

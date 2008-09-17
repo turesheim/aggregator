@@ -250,24 +250,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * no.resheim.aggregator.model.IAggregatorStorage#deleteOutdated(no.resheim
-	 * .aggregator.model.Feed, long)
-	 */
-	public void deleteOutdated(Feed feed, long date) {
-		try {
-			executeUpdate("delete from articles where feed_uuid='" //$NON-NLS-1$
-					+ feed.getUUID().toString() + "' and is_read=1" //$NON-NLS-1$
-					+ " and ((publication_date>0 and publication_date<=" + date //$NON-NLS-1$
-					+ ") or (publication_date=0 and added_date<=" + date + "))"); //$NON-NLS-1$ //$NON-NLS-2$
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	private void executeUpdate(String query) throws SQLException {
 		Statement s = connection.createStatement();
 		s.executeUpdate(query);
@@ -498,40 +480,11 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		} else {
 			ps.setNull(4, Types.CHAR);
 		}
-		ps.setInt(5, folder.isHidden() ? 1 : 0);
+		ps.setInt(5, folder.isSystem() ? 1 : 0);
 		ps.setString(6, folder.getTitle());
 		ps.setString(7, encode(folder.getMarks()));
 		ps.executeUpdate();
 		ps.close();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * no.resheim.aggregator.model.IAggregatorStorage#keepMaximum(no.resheim
-	 * .aggregator.model.Feed, int) FIXME: THis method is totally broken
-	 */
-	public void keepMaximum(Feed feed, int keep) {
-		try {
-			Statement s = connection.createStatement();
-			String query = "select * from articles where feed_uuid='" //$NON-NLS-1$
-					+ feed.getUUID().toString() + "' order by added_date desc"; //$NON-NLS-1$
-			ResultSet rs = s.executeQuery(query);
-			int count = 0;
-			// Browse through the ones that we want to keep
-			while (rs.next() && count < keep) {
-				// Do nothing.
-			}
-			// And delete the rest
-			while (rs.next()) {
-				// Article item = composeArticle(feed, rs);
-				// delete(item);
-			}
-			s.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/*
@@ -830,5 +783,10 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			e.printStackTrace();
 		}
 		return item;
+	}
+
+	public void emptyTrash() {
+		// TODO Auto-generated method stub
+
 	}
 }

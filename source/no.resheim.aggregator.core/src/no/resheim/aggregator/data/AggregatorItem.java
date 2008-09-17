@@ -45,17 +45,17 @@ public abstract class AggregatorItem {
 
 	protected UUID uuid = null;
 
-	private boolean hidden = false;
+	private boolean fSystem = false;
 
 	/** The folder title */
 	protected String title = ""; //$NON-NLS-1$
 
-	public boolean isHidden() {
-		return hidden;
+	public boolean isSystem() {
+		return fSystem;
 	}
 
 	public void setHidden(boolean hidden) {
-		this.hidden = hidden;
+		this.fSystem = hidden;
 	}
 
 	/**

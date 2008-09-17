@@ -40,7 +40,7 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
 			}
 			for (AggregatorItem item : getSelectedItems(event)) {
 				try {
-					item.getParent().delete(item);
+					item.getParent().trash(item);
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}

@@ -16,6 +16,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorStorage;
 import no.resheim.aggregator.data.AggregatorItem.Mark;
@@ -70,7 +71,13 @@ public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
 	}
 
 	public void saving(ISaveContext context) throws CoreException {
-		// Does nothing per default. It is up to subclasses to implement.
+		if (context.getKind() == ISaveContext.FULL_SAVE) {
+			AggregatorItem[] children = collection.getTrashFolder()
+					.getChildren();
+			for (AggregatorItem aggregatorItem : children) {
+				collection.deleteChild(aggregatorItem);
+			}
+		}
 	}
 
 	/**

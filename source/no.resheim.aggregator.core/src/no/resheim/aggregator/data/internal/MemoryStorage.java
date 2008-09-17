@@ -94,10 +94,6 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		feeds.remove(feed.getUUID());
 	}
 
-	public void deleteOutdated(Feed feed, long date) {
-		// TODO Auto-generated method stub
-	}
-
 	public int getChildCount(AggregatorItem parent) {
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
@@ -168,11 +164,6 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 			}
 		}
 		return false;
-	}
-
-	public void keepMaximum(Feed feed, int keep) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void move(AggregatorItem item) {

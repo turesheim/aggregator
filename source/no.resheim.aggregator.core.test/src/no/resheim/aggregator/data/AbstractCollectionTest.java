@@ -47,9 +47,9 @@ public abstract class AbstractCollectionTest extends TestCase {
 			failNotEquals("Title differs", item_b.getTitle(), item_a //$NON-NLS-1$
 					.getTitle());
 		}
-		if (item_a.isHidden() != item_b.isHidden()) {
-			failNotEquals("Hidden differs", item_b.isHidden(), item_a //$NON-NLS-1$
-					.isHidden());
+		if (item_a.isSystem() != item_b.isSystem()) {
+			failNotEquals("Hidden differs", item_b.isSystem(), item_a //$NON-NLS-1$
+					.isSystem());
 		}
 	}
 
@@ -99,7 +99,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 		if (item == null) {
 			fail("Folder item could not be retrieved"); //$NON-NLS-1$
 		}
-		item.getParent().delete(item);
+		item.getParent().trash(item);
 		item = collection.getChildAt(0);
 		if (item != null) {
 			fail("Folder item was not deleted"); //$NON-NLS-1$
@@ -114,7 +114,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 		getCollection().addNew(feed);
 		AggregatorItem item = getCollection().getChildAt(0);
 		// Remove the folder.
-		getCollection().delete(item);
+		getCollection().trash(item);
 
 		// Compare
 		if (item == null) {

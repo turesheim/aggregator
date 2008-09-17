@@ -45,28 +45,27 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	public abstract IStatus add(AggregatorItem item);
 
 	/**
-	 * Deletes the specified item from the storage.
+	 * Deletes the specified item from the storage. The implementor is
+	 * responsible for also deleting all child items.
 	 * 
 	 * @param item
 	 *            The item to delete
 	 */
 	public abstract void delete(AggregatorItem item);
 
-	public abstract void delete(Feed feed);
-
-	public abstract void add(Feed feed);
-
 	/**
-	 * Deletes all read articles from the specified feed which publication date
-	 * (or added date if the publication date is not available) is older than
-	 * the given date.
+	 * Deletes the feed from the storage.
 	 * 
 	 * @param feed
-	 *            The feed to delete articles from
-	 * @param date
-	 *            The limit date
 	 */
-	public abstract void deleteOutdated(Feed feed, long date);
+	public abstract void delete(Feed feed);
+
+	/**
+	 * Adds a new feed to the storage.
+	 * 
+	 * @param feed
+	 */
+	public abstract void add(Feed feed);
 
 	/**
 	 * Calculates and returns the number of children the <i>parent</i> item has.
@@ -144,18 +143,6 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @return <b>true</b> if a feed with the given URL exists in the collection
 	 */
 	public abstract boolean hasFeed(String url);
-
-	/**
-	 * Keeps the <i>keep</i> newest articles in the feed. The rest are deleted.
-	 * Articles are deleted even if they are not placed as a direct child of the
-	 * feed in the tree structure.
-	 * 
-	 * @param feed
-	 *            The feed to remove articles from
-	 * @param keep
-	 *            The number of articles to keep
-	 */
-	public abstract void keepMaximum(Feed feed, int keep);
 
 	/**
 	 * Updates the database to indicate that the aggregator item has a new
