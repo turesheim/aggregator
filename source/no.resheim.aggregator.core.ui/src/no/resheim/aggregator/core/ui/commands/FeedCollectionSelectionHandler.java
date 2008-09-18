@@ -24,6 +24,10 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class FeedCollectionSelectionHandler extends
 		AbstractAggregatorCommandHandler {
+	public FeedCollectionSelectionHandler() {
+		super(false);
+	}
+
 	public static final String PARM_COLLECTION = "collectionId"; //$NON-NLS-1$
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {

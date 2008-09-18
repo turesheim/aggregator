@@ -73,6 +73,9 @@
                commandId="no.resheim.aggregator.core.ui.addFeed"
                label="Add Feed"
                style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
          </command>
       </menuContribution>
       <menuContribution
@@ -104,20 +107,15 @@
          <command
                commandId="no.resheim.aggregator.core.ui.newFolder"
                label="Add Folder">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
          </command>
          <command
                commandId="no.resheim.aggregator.core.ui.renameFolder"
                label="Rename">
-            <visibleWhen>
-               <with
-                     variable="selection">
-                  <iterate
-                        ifEmpty="false">
-                     <adapt
-                           type="no.resheim.aggregator.data.Folder">
-                     </adapt>
-                  </iterate>
-               </with>
+            <visibleWhen
+                  checkEnabled="true">
             </visibleWhen>
          </command>
          <command
@@ -133,31 +131,24 @@
          <command
                commandId="no.resheim.aggregator.core.ui.update"
                label="Update">
-            <visibleWhen>
-               <with
-                     variable="selection">
-                  <iterate
-                        ifEmpty="false">
-                     <adapt
-                           type="no.resheim.aggregator.data.Folder">
-                     </adapt>
-                  </iterate>
-               </with>
+            <visibleWhen
+                  checkEnabled="true">
             </visibleWhen>
          </command>
          <command
                commandId="no.resheim.aggregator.core.ui.setRead"
                label="Mark As Read">
-            <visibleWhen>
-               <count
-                     value="1">
-               </count>
+            <visibleWhen
+                  checkEnabled="true">
             </visibleWhen>
          </command>
          <command
                commandId="no.resheim.aggregator.core.ui.copyLinkCommand"
                label="Copy Link Location"
                style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
          </command>
          <separator
                name="properties"
@@ -166,16 +157,8 @@
          <command
                commandId="no.resheim.aggregator.core.ui.properties"
                label="Properties">
-            <visibleWhen>
-               <with
-                     variable="selection">
-                  <iterate
-                        ifEmpty="false">
-                     <adapt
-                           type="no.resheim.aggregator.data.Folder">
-                     </adapt>
-                  </iterate>
-               </with>
+            <visibleWhen
+                  checkEnabled="true">
             </visibleWhen>
          </command>
       </menuContribution>

@@ -149,7 +149,7 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 								IWorkbenchBrowserSupport.NAVIGATION_BAR
 										| IWorkbenchBrowserSupport.LOCATION_BAR
 										| IWorkbenchBrowserSupport.AS_EDITOR,
-								AggregatorPlugin.PLUGIN_ID, "Aggregator", "");
+								AggregatorPlugin.PLUGIN_ID, Messages.AggregatorUIPlugin_Browser_Title, Messages.AggregatorUIPlugin_Browser_Tooltip);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

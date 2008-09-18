@@ -24,6 +24,10 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class PrintTreeCommand extends AbstractAggregatorCommandHandler {
 
+	public PrintTreeCommand() {
+		super(false);
+	}
+
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {

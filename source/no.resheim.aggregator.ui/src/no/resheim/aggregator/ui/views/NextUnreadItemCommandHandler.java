@@ -33,6 +33,10 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class NextUnreadItemCommandHandler extends
 		AbstractAggregatorCommandHandler implements IHandler {
 
+	public NextUnreadItemCommandHandler() {
+		super(false);
+	}
+
 	@Override
 	public boolean isEnabled() {
 		return true;

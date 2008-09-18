@@ -42,6 +42,10 @@ import org.eclipse.ui.handlers.HandlerUtil;
  */
 public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
 
+	public CreateArticlesHandler() {
+		super(false);
+	}
+
 	private static final String COUNT_PARAMETER_ID = "count"; //$NON-NLS-1$
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
@@ -68,7 +72,8 @@ public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
 								UUID.randomUUID(), feed.getUUID());
 						article.setTitle("Article #" + a); //$NON-NLS-1$
 						article.setGuid(article.getUUID().toString());
-						article.internalSetText(Messages.CreateArticlesHandler_NewArticle_Description);
+						article
+								.internalSetText(Messages.CreateArticlesHandler_NewArticle_Description);
 						article.setLink(EMPTY_STRING);
 						collection.addNew(article);
 					}

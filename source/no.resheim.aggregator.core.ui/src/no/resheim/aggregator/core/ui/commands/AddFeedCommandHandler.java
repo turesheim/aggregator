@@ -41,6 +41,10 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 		implements IHandler {
 
+	public AddFeedCommandHandler() {
+		super(false);
+	}
+
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
 		FeedCollection collection = getCollection(event);

@@ -19,11 +19,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 /**
@@ -35,22 +32,11 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
 		implements IHandler, ISelectionListener {
 
-	@Override
-	public void dispose() {
-		super.dispose();
-		// ISelectionService s = PlatformUI.getWorkbench()
-		// .getActiveWorkbenchWindow().getSelectionService();
-		// s.removeSelectionListener(this);
-	}
-
 	/**
 	 * 
 	 */
 	public DeleteItemCommandHandler() {
-		super();
-		ISelectionService s = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getSelectionService();
-		s.addSelectionListener(this);
+		super(true);
 	}
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -69,18 +55,5 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
 			}
 		}
 		return null;
-	}
-
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (part instanceof IFeedView) {
-			setBaseEnabled(true);
-			for (AggregatorItem item : getSelectedItems(selection)) {
-				if (item.isSystem()) {
-					setBaseEnabled(false);
-					break;
-				}
-
-			}
-		}
 	}
 }

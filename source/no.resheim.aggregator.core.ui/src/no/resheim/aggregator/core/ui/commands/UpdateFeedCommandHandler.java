@@ -21,6 +21,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.statushandlers.StatusManager;
@@ -32,6 +33,10 @@ import org.eclipse.ui.statushandlers.StatusManager;
  */
 public class UpdateFeedCommandHandler extends AbstractAggregatorCommandHandler
 		implements IHandler {
+
+	public UpdateFeedCommandHandler() {
+		super(false);
+	}
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
@@ -56,5 +61,10 @@ public class UpdateFeedCommandHandler extends AbstractAggregatorCommandHandler
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		setBaseEnabled(isFeedSelected(selection));
 	}
 }

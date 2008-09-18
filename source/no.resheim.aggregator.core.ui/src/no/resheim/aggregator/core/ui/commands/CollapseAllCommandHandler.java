@@ -29,6 +29,10 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class CollapseAllCommandHandler extends AbstractAggregatorCommandHandler
 		implements IHandler {
 
+	public CollapseAllCommandHandler() {
+		super(false);
+	}
+
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {

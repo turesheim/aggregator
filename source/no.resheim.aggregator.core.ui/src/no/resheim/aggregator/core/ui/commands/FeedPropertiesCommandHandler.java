@@ -27,12 +27,17 @@ import org.eclipse.core.commands.IHandler;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class FeedPropertiesCommandHandler extends
 		AbstractAggregatorCommandHandler implements IHandler {
+
+	public FeedPropertiesCommandHandler() {
+		super(true);
+	}
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
@@ -84,8 +89,15 @@ public class FeedPropertiesCommandHandler extends
 			feedNode.put(AggregatorPlugin.SECURE_STORAGE_PASSWORD, wc
 					.getPassword(), true);
 		} catch (StorageException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		super.selectionChanged(part, selection);
+		if (!isFeedSelected(selection)) {
+			setBaseEnabled(false);
 		}
 	}
 

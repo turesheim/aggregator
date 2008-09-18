@@ -20,6 +20,7 @@ import no.resheim.aggregator.data.Folder;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
@@ -35,6 +36,10 @@ import org.eclipse.ui.handlers.HandlerUtil;
  */
 public class CopyLinkLocationCommandHandler extends
 		AbstractAggregatorCommandHandler implements IHandler {
+
+	public CopyLinkLocationCommandHandler() {
+		super(true);
+	}
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
@@ -64,5 +69,10 @@ public class CopyLinkLocationCommandHandler extends
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		setBaseEnabled(isArticleSelected(selection));
 	}
 }

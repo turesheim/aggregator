@@ -1,8 +1,8 @@
 package no.resheim.aggregator.core.ui.commands;
 
 import no.resheim.aggregator.core.ui.IFeedView;
-import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.AggregatorItem;
+import no.resheim.aggregator.data.FeedCollection;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -20,6 +20,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
+
+	public RenameFolderCommand() {
+		super(false);
+	}
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
@@ -39,8 +43,7 @@ public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 	}
 
 	private void renameItem(final TreeItem item, final TreeViewer treeView,
-			final AggregatorItem aggregatorItem,
-			final FeedCollection collection) {
+			final AggregatorItem aggregatorItem, final FeedCollection collection) {
 		TreeEditor treeEditor = new TreeEditor(treeView.getTree());
 		treeEditor.horizontalAlignment = SWT.LEFT;
 		treeEditor.grabHorizontal = true;

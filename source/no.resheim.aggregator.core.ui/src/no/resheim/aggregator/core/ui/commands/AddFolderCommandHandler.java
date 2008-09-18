@@ -15,13 +15,14 @@ import java.util.UUID;
 
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.data.AggregatorItem;
-import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.AggregatorItemParent;
+import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.internal.InternalFolder;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -35,6 +36,10 @@ import org.eclipse.ui.handlers.HandlerUtil;
 @SuppressWarnings("restriction")
 public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 		implements IHandler {
+
+	public AddFolderCommandHandler() {
+		super(true);
+	}
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
@@ -54,5 +59,13 @@ public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		super.selectionChanged(part, selection);
+		if (isEnabled()) {
+			setBaseEnabled(isFolderSelected(selection));
+		}
 	}
 }
