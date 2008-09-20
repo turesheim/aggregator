@@ -6,6 +6,7 @@ import no.resheim.aggregator.data.FeedCollection;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
@@ -86,4 +87,12 @@ public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 		treeEditor.setEditor(text, item);
 	}
 
+	@Override
+	protected boolean handleSelection(ISelection selection) {
+		boolean enabled = super.handleSelection(selection);
+		if (enabled) {
+			enabled = isFolderSelected(selection);
+		}
+		return enabled;
+	}
 }

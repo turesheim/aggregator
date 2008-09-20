@@ -64,7 +64,7 @@ public class UpdateFeedCommandHandler extends AbstractAggregatorCommandHandler
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		setBaseEnabled(isFeedSelected(selection));
+	protected boolean handleSelection(ISelection selection) {
+		return isFeedSelected(selection);
 	}
 }

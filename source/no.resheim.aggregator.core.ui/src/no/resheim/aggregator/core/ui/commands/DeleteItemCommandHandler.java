@@ -17,9 +17,7 @@ import no.resheim.aggregator.data.FeedCollection;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -29,8 +27,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
-		implements IHandler, ISelectionListener {
+public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler {
 
 	/**
 	 * 

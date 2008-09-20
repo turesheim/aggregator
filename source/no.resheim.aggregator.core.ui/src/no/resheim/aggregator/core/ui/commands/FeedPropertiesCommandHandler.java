@@ -94,11 +94,8 @@ public class FeedPropertiesCommandHandler extends
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		super.selectionChanged(part, selection);
-		if (!isFeedSelected(selection)) {
-			setBaseEnabled(false);
-		}
+	protected boolean handleSelection(ISelection selection) {
+		return isFeedSelected(selection);
 	}
 
 	private void removeCredentials(Feed wc) {

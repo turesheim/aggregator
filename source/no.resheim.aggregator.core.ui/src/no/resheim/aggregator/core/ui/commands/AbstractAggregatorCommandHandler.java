@@ -24,8 +24,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -34,29 +32,24 @@ import org.eclipse.ui.handlers.HandlerUtil;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public abstract class AbstractAggregatorCommandHandler extends AbstractHandler
-		implements ISelectionListener {
+public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 
-	private boolean fIgnoreSystemItems = false;
-
-	ISelectionService service = null;
+	private boolean fDisallowSystemItems = false;
 
 	/**
-	 * @param ignoreSystemItems
+	 * @param disallowSystemItems
 	 */
-	public AbstractAggregatorCommandHandler(boolean ignoreSystemItems) {
+	public AbstractAggregatorCommandHandler(boolean disallowSystemItems) {
 		super();
-		fIgnoreSystemItems = ignoreSystemItems;
-		service = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-				.getSelectionService();
-		service.addSelectionListener(this);
+		fDisallowSystemItems = disallowSystemItems;
 	}
 
 	@Override
-	public void dispose() {
-		if (service != null) {
-			service.removeSelectionListener(this);
-		}
+	public boolean isEnabled() {
+		ISelection selection = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getSelectionService()
+				.getSelection();
+		return handleSelection(selection);
 	}
 
 	/**
@@ -156,16 +149,14 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler
 		return false;
 	}
 
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (fIgnoreSystemItems && part instanceof IFeedView) {
-			setBaseEnabled(true);
+	protected boolean handleSelection(ISelection selection) {
+		if (fDisallowSystemItems) {
 			for (AggregatorItem item : getSelectedItems(selection)) {
 				if (item.isSystem()) {
-					setBaseEnabled(false);
-					break;
+					return false;
 				}
-
 			}
 		}
+		return true;
 	}
 }

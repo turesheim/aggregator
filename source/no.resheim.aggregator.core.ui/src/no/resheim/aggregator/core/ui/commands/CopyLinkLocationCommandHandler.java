@@ -72,7 +72,7 @@ public class CopyLinkLocationCommandHandler extends
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		setBaseEnabled(isArticleSelected(selection));
+	protected boolean handleSelection(ISelection selection) {
+		return isArticleSelected(selection);
 	}
 }

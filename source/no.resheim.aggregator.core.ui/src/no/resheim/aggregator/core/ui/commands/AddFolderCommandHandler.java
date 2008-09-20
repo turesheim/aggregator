@@ -62,10 +62,11 @@ public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		super.selectionChanged(part, selection);
-		if (isEnabled()) {
-			setBaseEnabled(isFolderSelected(selection));
+	protected boolean handleSelection(ISelection selection) {
+		boolean enabled = super.handleSelection(selection);
+		if (enabled) {
+			enabled = isFolderSelected(selection);
 		}
+		return enabled;
 	}
 }
