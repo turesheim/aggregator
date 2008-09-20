@@ -46,7 +46,9 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler
 			if (collection == null) {
 				return null;
 			}
-			for (AggregatorItem item : getSelectedItems(event)) {
+			AggregatorItem[] items = getSelectedItems(event);
+			((IFeedView) part).getFeedViewer().setSelection(null);
+			for (AggregatorItem item : items) {
 				try {
 					item.getParent().trash(item);
 				} catch (CoreException e) {
