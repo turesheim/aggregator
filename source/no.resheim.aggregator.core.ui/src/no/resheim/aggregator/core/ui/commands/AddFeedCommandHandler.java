@@ -42,7 +42,7 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 		implements IHandler {
 
 	public AddFeedCommandHandler() {
-		super(false);
+		super(false, true);
 	}
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -93,5 +93,4 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 				.getString(PreferenceConstants.P_UPDATING_PERIOD)));
 		return wc;
 	}
-
 }

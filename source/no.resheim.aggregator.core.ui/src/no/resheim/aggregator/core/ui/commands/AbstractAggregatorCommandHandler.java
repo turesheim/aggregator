@@ -35,17 +35,30 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 
 	private boolean fDisallowSystemItems = false;
+	private boolean fDisregardSelection = false;
+
+	/**
+	 * @param disallowSystemItems
+	 */
+	public AbstractAggregatorCommandHandler(boolean disallowSystemItems,
+			boolean disregardSelection) {
+		super();
+		fDisallowSystemItems = disallowSystemItems;
+		fDisregardSelection = disregardSelection;
+	}
 
 	/**
 	 * @param disallowSystemItems
 	 */
 	public AbstractAggregatorCommandHandler(boolean disallowSystemItems) {
-		super();
-		fDisallowSystemItems = disallowSystemItems;
+		this(disallowSystemItems, false);
 	}
 
 	@Override
 	public boolean isEnabled() {
+		if (fDisregardSelection) {
+			return super.isEnabled();
+		}
 		ISelection selection = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getSelectionService()
 				.getSelection();
@@ -150,6 +163,9 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 	}
 
 	protected boolean handleSelection(ISelection selection) {
+		if (selection.isEmpty()) {
+			return false;
+		}
 		if (fDisallowSystemItems) {
 			for (AggregatorItem item : getSelectedItems(selection)) {
 				if (item.isSystem()) {
