@@ -115,5 +115,11 @@
             icon="icons/clcl16/collapse_all.gif">
       </image>
    </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="no.resheim.aggregator.core.ui.KickStarter">
+      </startup>
+   </extension>
 
 </plugin>
