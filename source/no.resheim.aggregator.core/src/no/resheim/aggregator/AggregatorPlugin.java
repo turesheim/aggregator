@@ -208,6 +208,8 @@ public class AggregatorPlugin extends Plugin {
 		}
 	}
 
+	private boolean fDoneInitializing = false;
+
 	private void initialize() {
 		final IExtensionRegistry ereg = Platform.getExtensionRegistry();
 		final Job job = new Job(Messages.AggregatorPlugin_Initializing) {
@@ -219,12 +221,18 @@ public class AggregatorPlugin extends Plugin {
 						addFeeds(ereg);
 						Collections.sort(fDefaultFeeds);
 					}
+					fDoneInitializing = true;
+					System.out.println("Aggregator core initialized"); //$NON-NLS-1$
 					return status;
 				}
 			}
 		};
 		job.schedule();
 
+	}
+
+	public boolean isCollectionsInitialized() {
+		return fDoneInitializing;
 	}
 
 	private IStatus addCollections(IExtensionRegistry ereg,

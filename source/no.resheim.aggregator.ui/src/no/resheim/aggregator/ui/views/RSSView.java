@@ -29,7 +29,6 @@ import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -63,7 +62,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
-import org.osgi.framework.Bundle;
 
 /**
  * 
@@ -295,7 +293,12 @@ public class RSSView extends ViewPart implements IFeedView,
 			}
 		});
 		// Register for collection events
-		if (Platform.getBundle(CORE_PLUGIN_ID).getState() == Bundle.ACTIVE) {
+		// if (Platform.getBundle(CORE_PLUGIN_ID).getState() == Bundle.ACTIVE) {
+		// setDefaultCollection();
+		// } else {
+		// AggregatorPlugin.getDefault().addFeedCollectionListener(this);
+		// }
+		if (AggregatorPlugin.getDefault().isCollectionsInitialized()) {
 			setDefaultCollection();
 		} else {
 			AggregatorPlugin.getDefault().addFeedCollectionListener(this);
