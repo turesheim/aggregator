@@ -53,7 +53,7 @@ public class RSS092ItemHandler extends AbstractElementHandler {
 		}
 		if (qName.equals(ITEM)) {
 			if (!collection.hasArticle(item.getGuid())) {
-				collection.addNew(item);
+				feed.getTempItems().add(item);
 			}
 		}
 	}

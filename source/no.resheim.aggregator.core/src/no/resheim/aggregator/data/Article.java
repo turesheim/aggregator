@@ -15,7 +15,7 @@ import org.eclipse.core.runtime.CoreException;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class Article extends AggregatorItem {
+public class Article extends AggregatorItem implements Comparable<Article> {
 
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
@@ -158,5 +158,9 @@ public class Article extends AggregatorItem {
 
 		}
 		return sb.toString();
+	}
+
+	public int compareTo(Article arg0) {
+		return (int) (arg0.addedDate - addedDate);
 	}
 }

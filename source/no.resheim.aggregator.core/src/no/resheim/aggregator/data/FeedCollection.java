@@ -102,24 +102,23 @@ public class FeedCollection extends AggregatorItemParent {
 	 * @param feed
 	 *            the aggregator item to add
 	 */
-	public void addNew(AggregatorItem item) {
-		long start = System.currentTimeMillis();
+	public void addNew(AggregatorItem[] items) {
 		try {
 			fDatabase.writeLock().lock();
-			if (item instanceof Folder) {
-				AggregatorItem folder = (AggregatorItem) item;
-				fDatabase.add(folder);
-			} else if (item instanceof Article) {
-				Article feedItem = (Article) item;
-				validate(feedItem);
-				fDatabase.add(feedItem);
+			for (AggregatorItem item : items) {
+				if (item instanceof Folder) {
+					AggregatorItem folder = (AggregatorItem) item;
+					fDatabase.add(folder);
+				} else if (item instanceof Article) {
+					Article feedItem = (Article) item;
+					validate(feedItem);
+					fDatabase.add(feedItem);
+				}
 			}
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
-		notifyListerners(new Object[] {
-			item
-		}, EventType.CREATED);
+		notifyListerners(items, EventType.CREATED);
 	}
 
 	private void validate(Article article) {
@@ -135,7 +134,6 @@ public class FeedCollection extends AggregatorItemParent {
 	public Folder addNew(Feed feed) {
 		Assert.isNotNull(feed.getUUID(),
 				"Cannot add feed with unspecified UUID"); //$NON-NLS-1$
-		long start = System.currentTimeMillis();
 		InternalFolder folder = null;
 		try {
 			fDatabase.writeLock().lock();
@@ -145,7 +143,9 @@ public class FeedCollection extends AggregatorItemParent {
 				folder = new InternalFolder(this, UUID.randomUUID());
 				folder.setFeed(feed.getUUID());
 				folder.setTitle(feed.getTitle());
-				addNew(folder);
+				addNew(new AggregatorItem[] {
+					folder
+				});
 				feed.setLocation(folder.getUUID());
 			}
 			fFeeds.put(feed.getUUID(), feed);
@@ -349,7 +349,9 @@ public class FeedCollection extends AggregatorItemParent {
 				trash.setSystem(true);
 				trash.setFlags(EnumSet.of(Flag.TRASH));
 				trash.setTitle(TRASH_FOLDER_NAME);
-				addNew(trash);
+				addNew(new AggregatorItem[] {
+					trash
+				});
 				fTrashFolder = trash;
 			}
 		} catch (CoreException e) {

@@ -152,7 +152,7 @@ public class AtomItemHandler extends AbstractElementHandler {
 		}
 		if (qName.equals(ENTRY)) {
 			if (!collection.hasArticle(item.getGuid())) {
-				collection.addNew(item);
+				feed.getTempItems().add(item);
 			}
 		}
 	}

@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
+import java.util.Collections;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -64,6 +65,7 @@ public class FeedUpdateJob extends Job {
 		}
 		synchronized (feed) {
 			feed.setUpdating(true);
+			feed.getTempItems().clear();
 		}
 		boolean debug = AggregatorPlugin.getDefault().isDebugging();
 		// registry.notifyListerners(new AggregatorItemChangedEvent(feed,
@@ -81,10 +83,13 @@ public class FeedUpdateJob extends Job {
 			// Store changes to the feed
 			registry.feedUpdated(feed);
 		}
-		// registry.notifyListerners(new Object[] {feed}
-		// FeedChangeEventType.UPDATED));
 		synchronized (feed) {
 			feed.setUpdating(false);
+			Collections.sort(feed.getTempItems());
+			if (feed.getTempItems().size() > 0) {
+				registry.addNew(feed.getTempItems().toArray(
+						new AggregatorItem[feed.getTempItems().size()]));
+			}
 		}
 		return ds;
 

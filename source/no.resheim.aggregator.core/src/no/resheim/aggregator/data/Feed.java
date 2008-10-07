@@ -11,6 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.data;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.eclipse.core.runtime.IStatus;
@@ -24,11 +25,18 @@ import org.eclipse.core.runtime.Status;
  */
 public class Feed implements Comparable<Feed> {
 
+	public ArrayList<Article> getTempItems() {
+		return tempItems;
+	}
+
+	ArrayList<Article> tempItems;
+
 	/**
 	 * A unique identifier will be created for the feed as it is instantiated.
 	 */
 	public Feed() {
 		uuid = UUID.randomUUID();
+		tempItems = new ArrayList<Article>();
 	}
 
 	/**

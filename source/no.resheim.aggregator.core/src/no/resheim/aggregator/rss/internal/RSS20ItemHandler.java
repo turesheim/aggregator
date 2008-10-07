@@ -94,7 +94,7 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 				item.setGuid(item.getLink());
 			}
 			if (!collection.hasArticle(item.getGuid())) {
-				collection.addNew(item);
+				feed.getTempItems().add(item);
 			}
 		}
 	}
