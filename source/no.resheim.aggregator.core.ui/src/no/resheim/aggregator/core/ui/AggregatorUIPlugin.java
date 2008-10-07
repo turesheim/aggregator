@@ -61,6 +61,8 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 
 	public static final String IMG_ARTICLE_OBJ = "article_obj"; //$NON-NLS-1$
 
+	public static final String IMG_TRASH_OBJ = "trash_obj"; //$NON-NLS-1$
+
 	public static final String IMG_NEW_FEED_WIZBAN = "new_feed_banner"; //$NON-NLS-1$
 
 	public static final String IMG_DEC_WARNING = "warning_dec"; //$NON-NLS-1$
@@ -113,6 +115,8 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 				"icons/obj16/add_obj.gif")); //$NON-NLS-1$
 		reg.put(IMG_FEED_OBJ, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/obj16/feed_obj.gif")); //$NON-NLS-1$
+		reg.put(IMG_TRASH_OBJ, imageDescriptorFromPlugin(PLUGIN_ID,
+				"icons/obj16/trashfolder_obj.gif")); //$NON-NLS-1$
 		reg.put(IMG_NEW_FEED_WIZBAN, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/wizban/new_feed_wizard.png")); //$NON-NLS-1$
 		reg.put(IMG_DEC_WARNING, imageDescriptorFromPlugin(PLUGIN_ID,
@@ -149,7 +153,9 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 								IWorkbenchBrowserSupport.NAVIGATION_BAR
 										| IWorkbenchBrowserSupport.LOCATION_BAR
 										| IWorkbenchBrowserSupport.AS_EDITOR,
-								AggregatorPlugin.PLUGIN_ID, Messages.AggregatorUIPlugin_Browser_Title, Messages.AggregatorUIPlugin_Browser_Tooltip);
+								AggregatorPlugin.PLUGIN_ID,
+								Messages.AggregatorUIPlugin_Browser_Title,
+								Messages.AggregatorUIPlugin_Browser_Tooltip);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -170,8 +176,12 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 
 		if (item instanceof Feed)
 			baseId = IMG_FEED_OBJ;
-		if (item instanceof Folder)
+		if (item instanceof Folder) {
 			baseId = IMG_FOLDER_OBJ;
+			if (((Folder) item).isSystem()) {
+				baseId = IMG_TRASH_OBJ;
+			}
+		}
 		if (item instanceof Article)
 			baseId = IMG_ARTICLE_OBJ;
 		if (baseId == null)
