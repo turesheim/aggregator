@@ -19,7 +19,7 @@ package no.resheim.aggregator.data;
  */
 public class AggregatorItemChangedEvent {
 
-	public enum FeedChangeEventType {
+	public enum EventType {
 		/** The item has been created */
 		CREATED,
 		/** Something bad happened */
@@ -46,86 +46,27 @@ public class AggregatorItemChangedEvent {
 	 */
 	public static final int NEW_PARENT = 0x1;
 
-	private int details;
+	private Object[] items;
 
-	private Object item;
+	private EventType type;
 
-	private int oldOrder;
-
-	private Object oldParent;
-
-	private long time;
-
-	private FeedChangeEventType type;
-
-	public AggregatorItemChangedEvent(Feed feed, FeedChangeEventType type) {
-		this.item = feed;
+	/**
+	 * 
+	 * @param items
+	 *            the affected items
+	 * @param type
+	 *            the type of event
+	 */
+	public AggregatorItemChangedEvent(Object[] items, EventType type) {
+		this.items = items;
 		this.type = type;
 	}
 
-	public AggregatorItemChangedEvent(AggregatorItem feed,
-			FeedChangeEventType type, int details,
-			AggregatorItem oldParent, int oldOrder, long time) {
-		this(feed, type, details);
-		this.oldParent = oldParent;
-		this.oldOrder = oldOrder;
-		this.time = time;
+	public Object[] getItems() {
+		return items;
 	}
 
-	public AggregatorItemChangedEvent(AggregatorItem feed,
-			FeedChangeEventType type, long time) {
-		this.item = feed;
-		this.type = type;
-		this.time = time;
-	}
-
-	public AggregatorItemChangedEvent(AggregatorItem feed,
-			FeedChangeEventType type, long time, int details) {
-		this(feed, type, time);
-		this.details = details;
-	}
-
-	public int getDetails() {
-		return details;
-	}
-
-	public Object getItem() {
-		return item;
-	}
-
-	public int getOldOrder() {
-		return oldOrder;
-	}
-
-	public Object getOldParent() {
-		return oldParent;
-	}
-
-	public FeedChangeEventType getType() {
+	public EventType getType() {
 		return type;
-	}
-
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(type.toString());
-		sb.append(": "); //$NON-NLS-1$
-		sb.append(item.toString());
-		if (time > 0) {
-			sb.append(" in "); //$NON-NLS-1$
-			sb.append(time);
-			sb.append("ms"); //$NON-NLS-1$
-		}
-		switch (type) {
-		case MOVED:
-			//			sb.append(MessageFormat.format(" from \"{0},{1}\" to \"{2},{3}\"", //$NON-NLS-1$
-			// new Object[] {
-			// oldParent, oldOrder, item.getParent(),
-			// item.getOrdering()
-			// }));
-			break;
-		default:
-			break;
-		}
-		return sb.toString();
 	}
 }
