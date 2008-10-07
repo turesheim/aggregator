@@ -29,6 +29,8 @@ import org.xml.sax.SAXException;
  * 
  */
 public class AtomItemHandler extends AbstractElementHandler {
+	private static final String UPDATED = "updated"; //$NON-NLS-1$
+
 	/*
 	The "atom:entry" element represents an individual entry, acting as a
 	container for metadata and data associated with the entry.  This
@@ -107,8 +109,6 @@ public class AtomItemHandler extends AbstractElementHandler {
 
 	private static final String SUMMARY = "summary"; //$NON-NLS-1$
 
-	private Attributes attributes;
-
 	/** WordPress full content element */
 	private static final String CONTENT = "content"; //$NON-NLS-1$
 
@@ -162,7 +162,7 @@ public class AtomItemHandler extends AbstractElementHandler {
 		super.startElement(qName, atts);
 		if (qName.equals(TITLE) || qName.equals(SUMMARY)
 				|| qName.equals(ISSUED) || qName.equals(ID)
-				|| qName.equals(CONTENT) || qName.equals("updated")) {
+				|| qName.equals(CONTENT) || qName.equals(UPDATED)) {
 			setCapture(true);
 		}
 		// Must exist if there is not a "content" element
