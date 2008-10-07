@@ -47,7 +47,7 @@ public abstract class AbstractElementHandler implements IElementHandler {
 			"yyyy-MM-dd'T'hh:mm:ss'Z'"); //$NON-NLS-1$	
 
 	// Dublin Core Elements
-	//http://homepage.univie.ac.at/horst.prillinger/blog/archives/2005/01/000922.
+	// http://homepage.univie.ac.at/horst.prillinger/blog/archives/2005/01/000922.
 	// html
 	// http://purl.org/dc/elements/1.1/
 	static final String DC_DATE = "dc:date"; //$NON-NLS-1$
@@ -160,5 +160,4 @@ public abstract class AbstractElementHandler implements IElementHandler {
 		return this;
 
 	}
-
 }

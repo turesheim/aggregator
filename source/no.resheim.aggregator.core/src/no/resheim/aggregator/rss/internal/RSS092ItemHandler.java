@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class RSS092ItemHandler extends AbstractElementHandler {
+public class RSS092ItemHandler extends AbstractItemHandler {
 
 	public RSS092ItemHandler(FeedCollection registry, Feed feed) {
 		this.collection = registry;
@@ -53,7 +53,7 @@ public class RSS092ItemHandler extends AbstractElementHandler {
 		}
 		if (qName.equals(ITEM)) {
 			if (!collection.hasArticle(item.getGuid())) {
-				feed.getTempItems().add(item);
+				addArticle(item);
 			}
 		}
 	}

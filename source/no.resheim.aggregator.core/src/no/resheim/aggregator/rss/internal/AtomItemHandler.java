@@ -28,7 +28,7 @@ import org.xml.sax.SAXException;
  * @since 1.0
  * 
  */
-public class AtomItemHandler extends AbstractElementHandler {
+public class AtomItemHandler extends AbstractItemHandler {
 	private static final String UPDATED = "updated"; //$NON-NLS-1$
 
 	/*
@@ -152,7 +152,7 @@ public class AtomItemHandler extends AbstractElementHandler {
 		}
 		if (qName.equals(ENTRY)) {
 			if (!collection.hasArticle(item.getGuid())) {
-				feed.getTempItems().add(item);
+				addArticle(item);
 			}
 		}
 	}

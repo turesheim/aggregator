@@ -28,7 +28,7 @@ import org.xml.sax.SAXException;
  * @since 1.0
  * 
  */
-public class RSS20ItemHandler extends AbstractElementHandler {
+public class RSS20ItemHandler extends AbstractItemHandler {
 
 	private static final String AUTHOR = "author"; //$NON-NLS-1$
 
@@ -94,7 +94,7 @@ public class RSS20ItemHandler extends AbstractElementHandler {
 				item.setGuid(item.getLink());
 			}
 			if (!collection.hasArticle(item.getGuid())) {
-				feed.getTempItems().add(item);
+				addArticle(item);
 			}
 		}
 	}
