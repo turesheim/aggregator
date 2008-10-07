@@ -87,52 +87,14 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 	 * .model.FeedChangedEvent)
 	 */
 	public void aggregatorItemChanged(final AggregatorItemChangedEvent event) {
-		synchronized (fViewer) {
-			Display.getDefault().asyncExec(new Runnable() {
+		Display.getDefault().syncExec(new Runnable() {
 
-				private void updateStructure(AggregatorItem item) {
-					AggregatorItem parent = item.getParent();
-					fViewer.update(item, STATE_PROPERTIES);
-					if (!(parent instanceof FeedCollection)) {
-						updateStructure(parent);
-					}
+			public void run() {
+				if (fViewer != null) {
+					fViewer.refresh();
 				}
-
-				public void run() {
-					if (fViewer != null) {
-						switch (event.getType()) {
-						case READ:
-							updateStructure((AggregatorItem) event.getItem());
-							break;
-						case UPDATED:
-							// We _have_ to refresh deeply after adding new
-							// articles or the viewer will become confused.
-							fViewer.refresh();
-							break;
-						case MOVED:
-							fViewer.refresh();
-							break;
-						case REMOVED:
-							fViewer.refresh();
-							break;
-						case CREATED:
-							// fViewer.add(event.getItem().getParent(), event
-							// .getItem());
-							// fViewer.update(event.getItem().getParent(),
-							// STATE_PROPERTIES);
-							fViewer.refresh();
-							break;
-						case UPDATING:
-							fViewer.update(event.getItem(), STATE_PROPERTIES);
-							break;
-						default:
-							fViewer.refresh();
-							break;
-						}
-					}
-				}
-			});
-		}
+			}
+		});
 	}
 
 	/**

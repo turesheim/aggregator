@@ -15,11 +15,9 @@ import java.util.UUID;
 
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.commands.AbstractAggregatorCommandHandler;
-import no.resheim.aggregator.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
 import no.resheim.aggregator.data.internal.InternalArticle;
@@ -65,8 +63,6 @@ public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
 				protected IStatus run(IProgressMonitor monitor) {
 					Feed feed = createNewFeed(collection, "** Test feed **"); //$NON-NLS-1$
 					Folder folder = collection.addNew(feed);
-					collection.notifyListerners(new AggregatorItemChangedEvent(
-							feed, FeedChangeEventType.UPDATING));
 					for (int a = 0; a < count; a++) {
 						InternalArticle article = new InternalArticle(folder,
 								UUID.randomUUID(), feed.getUUID());
@@ -77,8 +73,6 @@ public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
 						article.setLink(EMPTY_STRING);
 						collection.addNew(article);
 					}
-					collection.notifyListerners(new AggregatorItemChangedEvent(
-							feed, FeedChangeEventType.UPDATED));
 					return Status.OK_STATUS;
 				}
 			};

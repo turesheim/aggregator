@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import junit.framework.TestCase;
 import no.resheim.aggregator.TestUtils;
-import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
 import no.resheim.aggregator.data.internal.InternalArticle;
 import no.resheim.aggregator.data.internal.InternalFolder;
 
@@ -164,8 +163,6 @@ public abstract class AbstractCollectionTest extends TestCase {
 		FeedCollection collection = getCollection();
 		Feed feed = TestUtils.createNewFeed("1000 articles"); //$NON-NLS-1$
 		Folder folder = collection.addNew(feed);
-		collection.notifyListerners(new AggregatorItemChangedEvent(feed,
-				FeedChangeEventType.UPDATING));
 		for (int a = 0; a < 1000; a++) {
 			InternalArticle article = new InternalArticle(folder, UUID
 					.randomUUID(), feed.getUUID());
@@ -175,8 +172,6 @@ public abstract class AbstractCollectionTest extends TestCase {
 			article.setLink(""); //$NON-NLS-1$
 			collection.addNew(article);
 		}
-		collection.notifyListerners(new AggregatorItemChangedEvent(feed,
-				FeedChangeEventType.UPDATED));
 	}
 
 	public final void testGetThe1000Articles() throws CoreException {

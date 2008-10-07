@@ -15,7 +15,7 @@ import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorEventListener;
 import no.resheim.aggregator.data.AggregatorItemParent;
-import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
+import no.resheim.aggregator.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.rss.internal.FeedParser;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -60,7 +60,7 @@ public class FeedParserTest extends TestCase {
 
 			public void aggregatorItemChanged(AggregatorItemChangedEvent event) {
 				System.out.println(event.getType());
-				if (event.getType().equals(FeedChangeEventType.UPDATED)) {
+				if (event.getType().equals(EventType.UPDATED)) {
 					// The folder should now contain 20 items
 					try {
 						AggregatorItemParent folder = (AggregatorItemParent) getCollection()

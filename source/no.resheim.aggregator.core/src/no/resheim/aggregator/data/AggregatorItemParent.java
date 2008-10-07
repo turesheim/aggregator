@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import no.resheim.aggregator.AggregatorPlugin;
-import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
+import no.resheim.aggregator.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.data.Feed.Archiving;
 
 import org.eclipse.core.runtime.CoreException;
@@ -119,9 +119,18 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 						if (article.getPublicationDate() > 0
 								&& article.getPublicationDate() <= lim) {
 							trash(article);
+							article.getCollection().notifyListerners(
+									new Object[] {
+										article
+									}, EventType.MOVED);
 						} else if (article.getPublicationDate() == 0
 								&& article.addedDate <= lim) {
 							trash(article);
+							// Tell our listeners that the deed is done
+							article.getCollection().notifyListerners(
+									new Object[] {
+										article
+									}, EventType.MOVED);
 						}
 					}
 				}
@@ -129,7 +138,11 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 			break;
 		case KEEP_SOME:
 			while (getChildCount() > articles) {
-				trash(getChildAt(0));
+				AggregatorItem item = getChildAt(0);
+				trash(item);
+				item.getCollection().notifyListerners(new Object[] {
+					item
+				}, EventType.MOVED);
 			}
 			break;
 		default:
@@ -173,12 +186,18 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 
 	/**
 	 * Removes the specified item from the collection and underlying database.
+	 * Normally <i>shift</i> should be set to <b>true</b> but in some cases,
+	 * such as when removing all child items of a folder this will create a lot
+	 * of overhead and is not required.
 	 * 
 	 * @param item
 	 *            the element to remove
+	 * @param shift
+	 *            whether or not to shift siblings upwards
 	 * @throws CoreException
 	 */
-	public IStatus deleteChild(AggregatorItem item) throws CoreException {
+	public IStatus deleteChild(AggregatorItem item, boolean shift)
+			throws CoreException {
 		// Remove the item from the cache (if it's there).
 		synchronized (children) {
 			children.remove(item);
@@ -186,8 +205,8 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		IAggregatorStorage storage = getCollection().getStorage();
 		try {
 			storage.writeLock().lock();
-			long start = System.currentTimeMillis();
-			getCollection().shiftUp((AggregatorItem) item);
+			if (shift)
+				getCollection().shiftUp((AggregatorItem) item);
 			storage.delete((AggregatorItem) item);
 			if (item instanceof Folder) {
 				UUID feedId = ((Folder) item).getFeedUUID();
@@ -201,11 +220,6 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 					feedNode.removeNode();
 				}
 			}
-			getCollection().notifyListerners(
-					new AggregatorItemChangedEvent(item,
-							FeedChangeEventType.REMOVED, System
-									.currentTimeMillis()
-									- start));
 			return Status.OK_STATUS;
 		} finally {
 			storage.writeLock().unlock();

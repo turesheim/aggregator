@@ -19,16 +19,14 @@ import java.util.List;
 import java.util.UUID;
 
 import no.resheim.aggregator.AggregatorPlugin;
-import no.resheim.aggregator.data.AggregatorItemChangedEvent.FeedChangeEventType;
+import no.resheim.aggregator.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.data.internal.CollectionUpdateJob;
 import no.resheim.aggregator.data.internal.InternalArticle;
 import no.resheim.aggregator.data.internal.InternalFolder;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
@@ -119,8 +117,9 @@ public class FeedCollection extends AggregatorItemParent {
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
-		notifyListerners(new AggregatorItemChangedEvent(item,
-				FeedChangeEventType.CREATED, System.currentTimeMillis() - start));
+		notifyListerners(new Object[] {
+			item
+		}, EventType.CREATED);
 	}
 
 	private void validate(Article article) {
@@ -156,8 +155,9 @@ public class FeedCollection extends AggregatorItemParent {
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
-		notifyListerners(new AggregatorItemChangedEvent(folder,
-				FeedChangeEventType.CREATED, System.currentTimeMillis() - start));
+		notifyListerners(new Object[] {
+			folder
+		}, EventType.CREATED);
 		return folder;
 	}
 
@@ -387,7 +387,6 @@ public class FeedCollection extends AggregatorItemParent {
 			throws CoreException {
 		try {
 			fDatabase.writeLock().lock();
-			long start = System.currentTimeMillis();
 			int details = 0;
 			if (!oldParent.equals(newParent)) {
 				// The item is moved into a new parent
@@ -413,14 +412,12 @@ public class FeedCollection extends AggregatorItemParent {
 				item.setOrdering(newOrder);
 				fDatabase.move((AggregatorItem) item);
 			}
-			// Tell our listeners that the deed is done
-			notifyListerners(new AggregatorItemChangedEvent(item,
-					FeedChangeEventType.MOVED, details, oldParent, oldOrder,
-					System.currentTimeMillis() - start));
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
 	}
+
+	int count = 0;
 
 	/**
 	 * Notify feed listeners about the aggregator item change.
@@ -428,21 +425,20 @@ public class FeedCollection extends AggregatorItemParent {
 	 * @param event
 	 *            The change event with details
 	 */
-	public void notifyListerners(final AggregatorItemChangedEvent event) {
-		if (AggregatorPlugin.getDefault().isDebugging()) {
-			System.out.println("[DEBUG] " + event); //$NON-NLS-1$
-		}
+	public void notifyListerners(Object[] items, EventType type) {
+		final AggregatorItemChangedEvent event = new AggregatorItemChangedEvent(
+				items, type);
 		for (final IAggregatorEventListener listener : feedListeners) {
-			SafeRunner.run(new ISafeRunnable() {
-				public void handleException(Throwable exception) {
-					exception.printStackTrace();
-				}
-
-				public void run() throws Exception {
-					listener.aggregatorItemChanged(event);
-				}
-
-			});
+			// SafeRunner.run(new ISafeRunnable() {
+			// public void handleException(Throwable exception) {
+			// exception.printStackTrace();
+			// }
+			//
+			// public void run() throws Exception {
+			listener.aggregatorItemChanged(event);
+			// }
+			//
+			// });
 		}
 	}
 
@@ -491,7 +487,6 @@ public class FeedCollection extends AggregatorItemParent {
 	 * @throws CoreException
 	 */
 	public void setRead(AggregatorItem item) throws CoreException {
-		long start = System.currentTimeMillis();
 		try {
 			fDatabase.writeLock().lock();
 			fDatabase.updateReadFlag((AggregatorItem) item);
@@ -500,18 +495,17 @@ public class FeedCollection extends AggregatorItemParent {
 		}
 		if (item instanceof Article) {
 			((InternalArticle) item).setRead(true);
-			notifyListerners(new AggregatorItemChangedEvent(item,
-					FeedChangeEventType.READ, System.currentTimeMillis()
-							- start));
+			notifyListerners(new Object[] {
+				item
+			}, EventType.READ);
 		} else if (item instanceof AggregatorItemParent) {
 			AggregatorItem[] children = ((AggregatorItemParent) item)
 					.getChildren();
 			for (AggregatorItem child : children) {
 				if (child instanceof Article)
-					notifyListerners(new AggregatorItemChangedEvent(child,
-							FeedChangeEventType.READ, System
-									.currentTimeMillis()
-									- start));
+					notifyListerners(new Object[] {
+						child
+					}, EventType.READ);
 			}
 		}
 	}
@@ -535,15 +529,13 @@ public class FeedCollection extends AggregatorItemParent {
 			throws CoreException {
 		AggregatorItemParent parent = item.getParent();
 		for (int i = from - 1; i >= to; i--) {
-			long start = System.currentTimeMillis();
 			AggregatorItem sibling = parent.getChildAt(i);
-			int oldOrder = sibling.getOrdering();
 			sibling.setOrdering(sibling.getOrdering() + 1);
 			fDatabase.move((AggregatorItem) sibling);
-			notifyListerners(new AggregatorItemChangedEvent(sibling,
-					FeedChangeEventType.SHIFTED,
-					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
-					System.currentTimeMillis() - start));
+			// notifyListerners(new AggregatorItemChangedEvent(sibling,
+			// FeedChangeEventType.SHIFTED,
+			// AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
+			// System.currentTimeMillis() - start));
 		}
 	}
 
@@ -553,16 +545,14 @@ public class FeedCollection extends AggregatorItemParent {
 		int count = parent.getChildCount();
 		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
 		for (int i = item.getOrdering() + 1; i < count; i++) {
-			long start = System.currentTimeMillis();
 			AggregatorItem sibling = parent.getChildAt(i);
 			Assert.isNotNull(sibling);
-			int oldOrder = sibling.getOrdering();
 			sibling.setOrdering(sibling.getOrdering() - 1);
 			fDatabase.move((AggregatorItem) sibling);
-			events.add(new AggregatorItemChangedEvent(sibling,
-					FeedChangeEventType.SHIFTED,
-					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
-					System.currentTimeMillis() - start));
+			// events.add(new AggregatorItemChangedEvent(sibling,
+			// FeedChangeEventType.SHIFTED,
+			// AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
+			// System.currentTimeMillis() - start));
 		}
 		return events;
 	}
@@ -583,15 +573,13 @@ public class FeedCollection extends AggregatorItemParent {
 		AggregatorItemParent parent = item.getParent();
 		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
 		for (int i = from + 1; i <= to; i++) {
-			long start = System.currentTimeMillis();
 			AggregatorItem sibling = parent.getChildAt(i);
-			int oldOrder = sibling.getOrdering();
 			sibling.setOrdering(sibling.getOrdering() - 1);
 			fDatabase.move((AggregatorItem) sibling);
-			events.add(new AggregatorItemChangedEvent(sibling,
-					FeedChangeEventType.SHIFTED,
-					AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
-					System.currentTimeMillis() - start));
+			// events.add(new AggregatorItemChangedEvent(sibling,
+			// FeedChangeEventType.SHIFTED,
+			// AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
+			// System.currentTimeMillis() - start));
 		}
 		return events;
 	}

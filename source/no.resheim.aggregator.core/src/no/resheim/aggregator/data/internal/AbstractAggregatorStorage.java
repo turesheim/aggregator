@@ -21,6 +21,7 @@ import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorStorage;
 import no.resheim.aggregator.data.AggregatorItem.Flag;
 import no.resheim.aggregator.data.AggregatorItem.Mark;
+import no.resheim.aggregator.data.AggregatorItemChangedEvent.EventType;
 
 import org.eclipse.core.resources.ISaveContext;
 import org.eclipse.core.runtime.CoreException;
@@ -76,8 +77,9 @@ public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
 			AggregatorItem[] children = collection.getTrashFolder()
 					.getChildren();
 			for (AggregatorItem aggregatorItem : children) {
-				collection.deleteChild(aggregatorItem);
+				collection.deleteChild(aggregatorItem, false);
 			}
+			collection.notifyListerners(children, EventType.REMOVED);
 		}
 	}
 

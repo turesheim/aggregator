@@ -14,6 +14,7 @@ package no.resheim.aggregator.core.ui.commands;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.data.AggregatorItemChangedEvent.EventType;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -36,22 +37,31 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler {
 		super(true);
 	}
 
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IWorkbenchPart part = HandlerUtil.getActivePart(event);
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedCollection collection = ((IFeedView) part).getFeedCollection();
+			final FeedCollection collection = ((IFeedView) part)
+					.getFeedCollection();
 			if (collection == null) {
 				return null;
 			}
-			AggregatorItem[] items = getSelectedItems(event);
-			((IFeedView) part).getFeedViewer().setSelection(null);
-			for (AggregatorItem item : items) {
-				try {
-					item.getParent().trash(item);
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
-			}
+			part.getSite().getPart().getSite().getWorkbenchWindow().getShell()
+					.getDisplay().syncExec(new Runnable() {
+						public void run() {
+							AggregatorItem[] items = getSelectedItems(event);
+							((IFeedView) part).getFeedViewer().setSelection(
+									null);
+							for (AggregatorItem item : items) {
+								try {
+									item.getParent().trash(item);
+								} catch (CoreException e) {
+									e.printStackTrace();
+								}
+							}
+							// Tell our listeners that the deed is done
+							collection.notifyListerners(items, EventType.MOVED);
+						}
+					});
 		}
 		return null;
 	}

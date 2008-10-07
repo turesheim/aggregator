@@ -17,6 +17,7 @@ import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.AggregatorItemParent;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
+import no.resheim.aggregator.data.AggregatorItemChangedEvent.EventType;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -193,6 +194,11 @@ public class FeedTreeViewer extends TreeViewer {
 						collection.move(source, oldParent, oldOrder, newParent,
 								newOrder);
 					}
+					// Tell our listeners that the deed is done
+					collection.notifyListerners(new Object[] {
+						source
+					}, EventType.MOVED);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
