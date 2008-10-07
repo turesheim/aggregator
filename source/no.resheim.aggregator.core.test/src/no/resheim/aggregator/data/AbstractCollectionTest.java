@@ -48,7 +48,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 					.getTitle());
 		}
 		if (item_a.isSystem() != item_b.isSystem()) {
-			failNotEquals("Hidden differs", item_b.isSystem(), item_a //$NON-NLS-1$
+			failNotEquals("System differs", item_b.isSystem(), item_a //$NON-NLS-1$
 					.isSystem());
 		}
 	}

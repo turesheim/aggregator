@@ -5,7 +5,8 @@ CREATE TABLE folders (
 		feed_uuid CHAR(36),
 		hidden INT NOT NULL,
         title VARCHAR(256) NOT NULL,
-		marks VARCHAR(64) NOT NULL,
+		marks VARCHAR(128) NOT NULL,
+		flags VARCHAR(128) NOT NULL,
 		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);
 
@@ -17,7 +18,8 @@ CREATE TABLE articles (
 		guid VARCHAR(256) NOT NULL,
 		title VARCHAR(256) NOT NULL,
 		url VARCHAR(128) NOT NULL,
-		marks VARCHAR(64) NOT NULL,		
+		marks VARCHAR(128) NOT NULL,		
+		flags VARCHAR(128) NOT NULL,
 		is_read INT NOT NULL,
 	    publication_date BIGINT NOT NULL,
 		read_date BIGINT NOT NULL,

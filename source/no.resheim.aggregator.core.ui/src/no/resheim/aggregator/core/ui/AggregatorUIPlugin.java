@@ -12,9 +12,11 @@
 package no.resheim.aggregator.core.ui;
 
 import no.resheim.aggregator.AggregatorPlugin;
+import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.Folder;
+import no.resheim.aggregator.data.AggregatorItem.Flag;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -178,7 +180,7 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 			baseId = IMG_FEED_OBJ;
 		if (item instanceof Folder) {
 			baseId = IMG_FOLDER_OBJ;
-			if (((Folder) item).isSystem()) {
+			if (((AggregatorItem) item).getFlags().contains(Flag.TRASH)) {
 				baseId = IMG_TRASH_OBJ;
 			}
 		}

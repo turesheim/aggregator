@@ -19,6 +19,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorStorage;
+import no.resheim.aggregator.data.AggregatorItem.Flag;
 import no.resheim.aggregator.data.AggregatorItem.Mark;
 
 import org.eclipse.core.resources.ISaveContext;
@@ -96,6 +97,15 @@ public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
 		return sb.toString();
 	}
 
+	protected String encodeFlags(EnumSet<Flag> flags) {
+		StringBuffer sb = new StringBuffer();
+		for (Flag flag : flags) {
+			sb.append(flag.toString());
+			sb.append(',');
+		}
+		return sb.toString();
+	}
+
 	/**
 	 * Decodes a comma separated string containing a list of all enabled <q>
 	 * marks</q> into a enumeration set.
@@ -109,6 +119,15 @@ public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
 		for (String mark : markString.split(",")) { //$NON-NLS-1$
 			if (mark.trim().length() > 0)
 				marks.add(Mark.valueOf(mark));
+		}
+		return marks;
+	}
+
+	protected EnumSet<Flag> decodeFlags(String flagsString) {
+		EnumSet<Flag> marks = EnumSet.noneOf(Flag.class);
+		for (String mark : flagsString.split(",")) { //$NON-NLS-1$
+			if (mark.trim().length() > 0)
+				marks.add(Flag.valueOf(mark));
 		}
 		return marks;
 	}

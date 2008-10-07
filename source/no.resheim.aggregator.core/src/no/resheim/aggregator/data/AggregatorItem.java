@@ -32,10 +32,29 @@ import org.eclipse.core.runtime.Status;
 public abstract class AggregatorItem {
 
 	public enum Mark {
-		DONE, FIRST_PRIORITY, IMPORTANT, SECOND_PRIORITY, THIRD_PRIORITY, TODO
+		/** Done markings */
+		DONE,
+		/** First priority marking */
+		FIRST_PRIORITY,
+		/** Important marking */
+		IMPORTANT,
+		/** Second priority marking */
+		SECOND_PRIORITY,
+		/** Trash folder marking */
+		THIRD_PRIORITY,
+		/** Todo marking */
+		TODO
+	}
+
+	/** Flags are for internal use */
+	public enum Flag {
+		/** The item is a trash folder item */
+		TRASH
 	}
 
 	private EnumSet<Mark> marks = EnumSet.noneOf(Mark.class);
+
+	private EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
 
 	protected int ordering;
 
@@ -54,7 +73,7 @@ public abstract class AggregatorItem {
 		return fSystem;
 	}
 
-	public void setHidden(boolean hidden) {
+	public void setSystem(boolean hidden) {
 		this.fSystem = hidden;
 	}
 
@@ -66,8 +85,22 @@ public abstract class AggregatorItem {
 		this.uuid = uuid;
 	}
 
+	/**
+	 * Returns the user marks of this aggregator item.
+	 * 
+	 * @return the marks
+	 */
 	public EnumSet<Mark> getMarks() {
 		return marks;
+	}
+
+	/**
+	 * Returns the system flags of this aggregator item.
+	 * 
+	 * @return the flags
+	 */
+	public EnumSet<Flag> getFlags() {
+		return flags;
 	}
 
 	public int getOrdering() {
@@ -89,6 +122,10 @@ public abstract class AggregatorItem {
 
 	public void setMarks(EnumSet<Mark> mark) {
 		this.marks = mark;
+	}
+
+	public void setFlags(EnumSet<Flag> flags) {
+		this.flags = flags;
 	}
 
 	public void setOrdering(int ordering) {

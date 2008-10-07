@@ -13,6 +13,7 @@ package no.resheim.aggregator.data;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -338,14 +339,15 @@ public class FeedCollection extends AggregatorItemParent {
 	private void createTrashFolder() {
 		try {
 			for (AggregatorItem item : getChildren()) {
-				if (item.isSystem() && item.getUUID().equals(TRASH_ID)) {
+				if (item.getUUID().equals(TRASH_ID)) {
 					fTrashFolder = (Folder) item;
 					break;
 				}
 			}
 			if (fTrashFolder == null) {
 				InternalFolder trash = new InternalFolder(this, TRASH_ID);
-				trash.setHidden(true);
+				trash.setSystem(true);
+				trash.setFlags(EnumSet.of(Flag.TRASH));
 				trash.setTitle(TRASH_FOLDER_NAME);
 				addNew(trash);
 				fTrashFolder = trash;

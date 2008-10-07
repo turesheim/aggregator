@@ -125,11 +125,12 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		item.setTitle(rs.getString(6).trim());
 		item.setLink(rs.getString(7));
 		item.setMarks(decode(rs.getString(8)));
-		item.setRead(rs.getInt(9) != 0);
-		item.setPublicationDate(rs.getLong(10));
-		item.setReadDate(rs.getLong(11));
-		item.setAddedDate(rs.getLong(12));
-		item.setCreator(rs.getString(14));
+		item.setFlags(decodeFlags(rs.getString(9)));
+		item.setRead(rs.getInt(10) != 0);
+		item.setPublicationDate(rs.getLong(11));
+		item.setReadDate(rs.getLong(12));
+		item.setAddedDate(rs.getLong(13));
+		item.setCreator(rs.getString(15));
 		return item;
 	}
 
@@ -152,9 +153,10 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		if (rs.getString(4) != null) {
 			item.setFeed(UUID.fromString(rs.getString(4)));
 		}
-		item.setHidden(rs.getInt(5) != 0);
+		item.setSystem(rs.getInt(5) != 0);
 		item.setTitle(rs.getString(6).trim());
 		item.setMarks(decode(rs.getString(7)));
+		item.setFlags(decodeFlags(rs.getString(8)));
 		return item;
 	}
 
@@ -193,7 +195,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			// required for maintaining relation integrity.
 			Folder root = new InternalFolder(null, collection.getUUID());
 			root.setTitle("ROOT"); //$NON-NLS-1$
-			root.setHidden(true);
+			root.setSystem(true);
 			insert(root);
 
 			return Status.OK_STATUS;
@@ -248,12 +250,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private void executeUpdate(String query) throws SQLException {
-		Statement s = connection.createStatement();
-		s.executeUpdate(query);
-		s.close();
 	}
 
 	/*
@@ -401,7 +397,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private void insert(InternalArticle item) throws SQLException {
 		PreparedStatement ps = connection
-				.prepareStatement("insert into articles values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+				.prepareStatement("insert into articles values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
 		ps.setString(1, item.getUUID().toString());
 		ps.setString(2, item.getLocation().toString());
@@ -411,12 +407,13 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		ps.setString(6, item.getTitle());
 		ps.setString(7, item.getLink());
 		ps.setString(8, encode(item.getMarks()));
-		ps.setInt(9, item.isRead() ? 1 : 0);
-		ps.setLong(10, item.getPublicationDate());
-		ps.setLong(11, item.getReadDate());
-		ps.setLong(12, item.getAdded());
-		ps.setString(13, item.internalGetText());
-		ps.setString(14, item.getCreator());
+		ps.setString(9, encodeFlags(item.getFlags()));
+		ps.setInt(10, item.isRead() ? 1 : 0);
+		ps.setLong(11, item.getPublicationDate());
+		ps.setLong(12, item.getReadDate());
+		ps.setLong(13, item.getAdded());
+		ps.setString(14, item.internalGetText());
+		ps.setString(15, item.getCreator());
 		ps.executeUpdate();
 		ps.close();
 	}
@@ -463,7 +460,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private void insert(Folder folder) throws SQLException {
 		PreparedStatement ps = connection
-				.prepareStatement("insert into folders values(?,?,?,?,?,?,?) "); //$NON-NLS-1$
+				.prepareStatement("insert into folders values(?,?,?,?,?,?,?,?) "); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
 		ps.setString(1, folder.getUUID().toString());
 		// Folders are used to represent the root aggregator item
@@ -483,6 +480,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		ps.setInt(5, folder.isSystem() ? 1 : 0);
 		ps.setString(6, folder.getTitle());
 		ps.setString(7, encode(folder.getMarks()));
+		ps.setString(8, encodeFlags(folder.getFlags()));
 		ps.executeUpdate();
 		ps.close();
 	}
