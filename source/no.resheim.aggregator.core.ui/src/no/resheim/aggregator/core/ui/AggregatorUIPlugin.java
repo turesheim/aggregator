@@ -23,10 +23,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
-import org.eclipse.jface.viewers.IDecoration;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
@@ -71,8 +69,9 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 
 	public static final String IMG_DEC_WARNING = "warning_dec"; //$NON-NLS-1$
 
-	public static final String IMG_DEC_ERRROR = "error_dec"; //$NON-NLS-1$
+	public static final String IMG_DEC_ERROR = "error_dec"; //$NON-NLS-1$
 
+	public static final String IMG_DEC_FLASH = "flash_dec"; //$NON-NLS-1$
 	private static AggregatorUIPlugin plugin;
 
 	/**
@@ -125,8 +124,10 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 				"icons/wizban/new_feed_wizard.png")); //$NON-NLS-1$
 		reg.put(IMG_DEC_WARNING, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/ovr16/warning_co.gif")); //$NON-NLS-1$
-		reg.put(IMG_DEC_ERRROR, imageDescriptorFromPlugin(PLUGIN_ID,
+		reg.put(IMG_DEC_ERROR, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/ovr16/error_co.gif")); //$NON-NLS-1$
+		reg.put(IMG_DEC_FLASH, imageDescriptorFromPlugin(PLUGIN_ID,
+				"icons/ovr16/flash_co.gif")); //$NON-NLS-1$
 		// Copy some stuff from the shared
 		reg.put(IMG_ARTICLE_OBJ, PlatformUI.getWorkbench().getSharedImages()
 				.getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
@@ -170,6 +171,10 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	/**
 	 * Return an image for the aggregator item and decorate if the status is not
 	 * null
+	 * <p>
+	 * Overlays should be 7x8 pixels. See
+	 * http://wiki.eclipse.org/User_Interface_Guidelines
+	 * </p>
 	 * 
 	 * @param item
 	 * @param status
@@ -177,6 +182,7 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	 */
 	Image getImage(Object item, IStatus status) {
 		String baseId = null;
+		ImageDescriptor type = null;
 
 		if (item instanceof Feed)
 			baseId = IMG_FEED_OBJ;
@@ -186,18 +192,25 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 				baseId = IMG_TRASH_OBJ;
 			}
 		}
-		if (item instanceof Article)
+		if (item instanceof Article) {
 			baseId = IMG_ARTICLE_OBJ;
+		}
 		if (baseId == null)
 			return null;
 
-		String id = baseId;
-
+		String id = "MANAGED_" + baseId; //$NON-NLS-1$
+		if (item instanceof Article) {
+			if (((Article) item).getMediaEnclosureType().equals(
+					"application/x-shockwave-flash")) {
+				type = getImageRegistry().getDescriptor(IMG_DEC_FLASH);
+				id += "_flash";
+			}
+		}
 		ImageDescriptor si = null;
 		if (status != null) {
 			switch (status.getSeverity()) {
 			case IStatus.ERROR:
-				si = getImageRegistry().getDescriptor(IMG_DEC_ERRROR);
+				si = getImageRegistry().getDescriptor(IMG_DEC_ERROR);
 				break;
 			case IStatus.WARNING:
 				si = getImageRegistry().getDescriptor(IMG_DEC_WARNING);
@@ -207,12 +220,17 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 				id = id + "_" + Integer.toString(status.getSeverity()); //$NON-NLS-1$
 			}
 		}
+
 		if (getImageRegistry().get(id) != null) {
 			return getImageRegistry().get(id);
 		}
 		Image baseImage = getImageRegistry().get(baseId);
-		DecorationOverlayIcon icon = new DecorationOverlayIcon(baseImage, si,
-				IDecoration.BOTTOM_LEFT);
+		Point size = new Point(16, 16);
+		DecorationOverlayIcon icon = new DecorationOverlayIcon(baseImage,
+				new ImageDescriptor[] {
+						type, null, null, si, null
+				}, size) {
+		};
 		getImageRegistry().put(id, icon);
 		return getImage(id);
 	}

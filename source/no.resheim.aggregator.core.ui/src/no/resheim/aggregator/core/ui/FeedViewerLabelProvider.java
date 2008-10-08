@@ -28,8 +28,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * This label provider will listen to any preference changes and update it's
@@ -114,8 +112,7 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		if (element instanceof Article) {
 			return AggregatorUIPlugin.getDefault().getImage(element, null);
 		}
-		return PlatformUI.getWorkbench().getSharedImages().getImage(
-				ISharedImages.IMG_OBJ_ELEMENT);
+		return null;
 	}
 
 	public String getText(Object element) {
