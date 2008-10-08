@@ -306,6 +306,15 @@
             updatePeriod="HOURS"
             url="https://gmail.google.com/gmail/feed/atom">
       </feed>
+      <feed
+            archivingDays="0"
+            archivingItems="0"
+            archivingMethod="KEEP_ALL"
+            title="AVR Television"
+            updateInterval="1"
+            updatePeriod="DAYS"
+            url="http://www.youtube.com/rss/user/avrtvtube/videos.rss">
+      </feed>
    </extension>
 
 </plugin>
