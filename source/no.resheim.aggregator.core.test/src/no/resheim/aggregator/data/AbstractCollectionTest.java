@@ -69,7 +69,9 @@ public abstract class AbstractCollectionTest extends TestCase {
 		InternalFolder folder_a = new InternalFolder(getCollection(), UUID
 				.randomUUID());
 		// Add it to the collection
-		getCollection().addNew(folder_a);
+		getCollection().addNew(new Folder[] {
+			folder_a
+		});
 		// See that it's available in from the storage
 		AggregatorItem item = getCollection().getChildAt(0);
 		if (item == null) {
@@ -138,7 +140,9 @@ public abstract class AbstractCollectionTest extends TestCase {
 						.getUUID());
 		article_a.setGuid("myGUID"); //$NON-NLS-1$
 		// Add it to the collection
-		collection.addNew(article_a);
+		collection.addNew(new Article[] {
+			article_a
+		});
 		// See that it's there (at position 0 in the folder)
 		AggregatorItem item = folder.getChildAt(0);
 		if (item == null) {
@@ -170,7 +174,9 @@ public abstract class AbstractCollectionTest extends TestCase {
 			article.setGuid(article.getUUID().toString());
 			article.internalSetText(""); //$NON-NLS-1$
 			article.setLink(""); //$NON-NLS-1$
-			collection.addNew(article);
+			collection.addNew(new Article[] {
+				article
+			});
 		}
 	}
 
