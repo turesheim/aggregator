@@ -58,11 +58,11 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 
 	// HTML/CSS code for specifying the description font when using the
 	// integrated web browser.
-	private static final String FONT_FIX_5 = "</div>"; //$NON-NLS-1$
+	private static final String FONT_FIX_5 = "</body>"; //$NON-NLS-1$
 	private static final String FONT_FIX_4 = "pt\">"; //$NON-NLS-1$
 	private static final String FONT_FIX_3 = "';font-size: "; //$NON-NLS-1$
-	private static final String FONT_FIX_2 = " style=\"font-family: '"; //$NON-NLS-1$
-	private static final String FONT_FIX_1 = "<div"; //$NON-NLS-1$
+	private static final String FONT_FIX_2 = " font-family: '"; //$NON-NLS-1$
+	private static final String FONT_FIX_1 = "<body style=\"margin=0px;"; //$NON-NLS-1$
 
 	public void addListener(IArticleViewerListener listener) {
 		listeners.add(listener);
@@ -89,15 +89,15 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	public ArticleViewer(Composite parent, int style) {
 		super(parent, style);
 		final FeedViewWidgetFactory factory = new FeedViewWidgetFactory();
+		setLayout();
 		// Special widget for item title
 		title = new FeedItemTitle(this, factory);
 		title.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING,
 				true, false));
 		listeners = new ListenerList();
 		browser = new Browser(this, SWT.NONE);
-		browser.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true,
-				true));
-		setLayout();
+		GridData gd = new GridData(GridData.FILL, GridData.FILL, true, true);
+		browser.setLayoutData(gd);
 		updateFromPreferences();
 		AggregatorUIPlugin.getDefault().getPreferenceStore()
 				.addPropertyChangeListener(this);
@@ -163,6 +163,8 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		layout.verticalSpacing = 0;
 		layout.marginWidth = 0;
 		layout.marginHeight = 0;
+		layout.marginBottom = 0;
+		layout.marginTop = 0;
 		setLayout(layout);
 	}
 
