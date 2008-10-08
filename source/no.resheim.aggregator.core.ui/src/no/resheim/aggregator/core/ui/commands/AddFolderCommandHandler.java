@@ -55,7 +55,9 @@ public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 				InternalFolder folder = new InternalFolder(
 						(AggregatorItemParent) parent, UUID.randomUUID());
 				folder.setTitle(Messages.AddFolderCommandHandler_NewFolderName);
-				collection.addNew(folder);
+				collection.addNew(new AggregatorItem[] {
+					folder
+				});
 			}
 		}
 		return null;
