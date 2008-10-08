@@ -39,6 +39,7 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 
 	/**
 	 * @param disallowSystemItems
+	 * @param disregardSelection
 	 */
 	public AbstractAggregatorCommandHandler(boolean disallowSystemItems,
 			boolean disregardSelection) {
