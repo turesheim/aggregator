@@ -6,12 +6,17 @@
       <command
             defaultHandler="no.resheim.aggregator.ui.test.CreateArticlesHandler"
             id="no.resheim.aggregator.ui.test.addArticles"
-            name="name">
+            name="Add Articles">
          <commandParameter
                id="count"
                name="Article count"
                optional="false">
          </commandParameter>
+      </command>
+      <command
+            defaultHandler="no.resheim.aggregator.ui.test.CreateYouTubeArticlesHandler"
+            id="no.resheim.aggregator.ui.test.addYouTumeArticles"
+            name="Add YouTube Articles">
       </command>
       <command
             defaultHandler="no.resheim.aggregator.ui.test.PrintTreeCommand"
@@ -47,6 +52,10 @@
                commandId="no.resheim.aggregator.ui.test.printTreeCommand"
                label="Print Tree"
                style="push">
+         </command>
+         <command
+               commandId="no.resheim.aggregator.ui.test.addYouTumeArticles"
+               label="Add YouTube Test Articles">
          </command>
       </menuContribution>
    </extension>

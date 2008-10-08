@@ -39,14 +39,37 @@ import org.eclipse.ui.handlers.HandlerUtil;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
+public class CreateYouTubeArticlesHandler extends
+		AbstractAggregatorCommandHandler {
 
-	public CreateArticlesHandler() {
+	public CreateYouTubeArticlesHandler() {
 		super(false, true);
 	}
 
 	private static final String COUNT_PARAMETER_ID = "count"; //$NON-NLS-1$
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+
+	private static final String[][] ARTICLES = new String[][] {
+			{
+					"KdkPcMWynKk", "New battery management parts"
+			}, {
+					"Mk102mPkQuc", "STK500"
+			}, {
+					"RODTFfEX31I", "XMEGA!"
+			}, {
+					"mRgpYyP6e-E", "The first issue"
+			}, {
+					"0c9Kgusa2O4", "UC3 Introduction"
+			}, {
+					"7kV7XFPO_es", "NGW100 part II: Demo"
+			}, {
+					"qv8Vq15-mRM", "DB101, BC100, EVK525, Buildroot"
+			}, {
+					"g8SB9NQSEGc", "STK600, AVR ONE!, Raven"
+			}, {
+					"148_M6N6Opk", "Wireless sensor in 90s"
+			}
+	};
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
@@ -56,22 +79,33 @@ public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
 			if (collection == null) {
 				return null;
 			}
-			final int count = Integer.parseInt(event
-					.getParameter(COUNT_PARAMETER_ID));
 			Job job = new Job("Adding test data") { //$NON-NLS-1$
 				@SuppressWarnings("restriction")
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					Feed feed = createNewFeed(collection, "** Test feed **"); //$NON-NLS-1$
+					Feed feed = createNewFeed(collection,
+							"YouTube Support Test"); //$NON-NLS-1$
 					Folder folder = collection.addNew(feed);
-					for (int a = 0; a < count; a++) {
+					for (int a = 0; a < ARTICLES.length; a++) {
 						InternalArticle article = new InternalArticle(folder,
 								UUID.randomUUID(), feed.getUUID());
-						article.setTitle("Article #" + a); //$NON-NLS-1$
+						article.setTitle(ARTICLES[a][1]); //$NON-NLS-1$
 						article.setGuid(article.getUUID().toString());
+						article.setLink("http://www.youtube.com/watch?v="
+								+ ARTICLES[a][0]);
+						// article
+						// .internalSetText(Messages.CreateArticlesHandler_NewArticle_Description);
 						article
-								.internalSetText(Messages.CreateArticlesHandler_NewArticle_Description);
-						article.setLink(EMPTY_STRING);
+								.internalSetText("<object width=\"100%\" height=\"100%\" bgcolor=\"#000000\"><param name=\"movie\" "
+										+ "value=\"http://www.youtube.com/v/"
+										+ ARTICLES[a][0]
+										+ "&hl=en&fs=1\"></param><param "
+										+ "name=\"allowFullScreen\" value=\"false\"></param>"
+										+ "<embed src=\"http://www.youtube.com/v/"
+										+ ARTICLES[a][0]
+										+ "&hl=en&fs=1\" "
+										+ "type=\"application/x-shockwave-flash\" allowfullscreen=\"false\" enablejavascript=\"true\" width=\"100%\" "
+										+ "height=\"100%\"></embed></object>");
 						collection.addNew(new Article[] {
 							article
 						});
