@@ -17,6 +17,7 @@ public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "no.resheim.aggregator.core.ui.messages"; //$NON-NLS-1$
 	public static String AggregatorUIPlugin_Browser_Title;
 	public static String AggregatorUIPlugin_Browser_Tooltip;
+	public static String ArticleViewer_ObjectHTMLCode;
 	public static String ArticleViewer_Published;
 	public static String ArticleViewer_UnknownPublicationDate;
 	public static String ArticleViewer_Updated;

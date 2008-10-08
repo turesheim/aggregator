@@ -30,6 +30,16 @@ import org.xml.sax.SAXException;
  */
 public class RSS20ItemHandler extends AbstractItemHandler {
 
+	private static final String DURATION = "duration"; //$NON-NLS-1$
+
+	private static final String TYPE = "type"; //$NON-NLS-1$
+
+	private static final String ENCLOSURE = "enclosure"; //$NON-NLS-1$
+
+	private static final String URL = "url"; //$NON-NLS-1$
+
+	private static final String MEDIA_PLAYER = "media:player"; //$NON-NLS-1$
+
 	private static final String AUTHOR = "author"; //$NON-NLS-1$
 
 	public static final String PUBDATE = "pubDate"; //$NON-NLS-1$
@@ -107,7 +117,15 @@ public class RSS20ItemHandler extends AbstractItemHandler {
 				|| qName.equals(GUID) || qName.equals(CONTENT_ENCODED)) {
 			setCapture(true);
 		}
+		if (qName.equals(MEDIA_PLAYER)) {
+			item.setMediaPlayerURL(atts.getValue(URL));
+		}
+		if (qName.equals(ENCLOSURE)) {
+			item.setMediaEnclosureDuration(Integer.parseInt(atts
+					.getValue(DURATION)));
+			item.setMediaEnclosureType(atts.getValue(TYPE));
+			item.setMediaEnclosureURL(atts.getValue(URL));
+		}
 		return this;
 	}
-
 }

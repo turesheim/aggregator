@@ -131,6 +131,10 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		item.setReadDate(rs.getLong(12));
 		item.setAddedDate(rs.getLong(13));
 		item.setCreator(rs.getString(15));
+		item.setMediaPlayerURL(rs.getString(16));
+		item.setMediaEnclosureURL(rs.getString(17));
+		item.setMediaEnclosureDuration(rs.getInt(18));
+		item.setMediaEnclosureType(rs.getString(19));
 		return item;
 	}
 
@@ -397,7 +401,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private void insert(InternalArticle item) throws SQLException {
 		PreparedStatement ps = connection
-				.prepareStatement("insert into articles values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+				.prepareStatement("insert into articles values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
 		ps.setString(1, item.getUUID().toString());
 		ps.setString(2, item.getLocation().toString());
@@ -414,6 +418,10 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		ps.setLong(13, item.getAdded());
 		ps.setString(14, item.internalGetText());
 		ps.setString(15, item.getCreator());
+		ps.setString(16, item.getMediaPlayerURL());
+		ps.setString(17, item.getMediaEnclosureURL());
+		ps.setInt(18, item.getMediaEnclosureDuration());
+		ps.setString(19, item.getMediaEnclosureType());
 		ps.executeUpdate();
 		ps.close();
 	}

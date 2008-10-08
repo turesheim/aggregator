@@ -26,6 +26,10 @@ CREATE TABLE articles (
 		added_date BIGINT NOT NULL,
 		description LONG VARCHAR,
 		creator VARCHAR(128),
+		media_player_url VARCHAR(128),
+		media_enclosure_url VARCHAR(128),
+		media_enclosure_duration VARCHAR(128),
+		media_enclosure_type VARCHAR(128),
 		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);
 

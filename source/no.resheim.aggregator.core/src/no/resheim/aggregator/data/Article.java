@@ -17,6 +17,22 @@ import org.eclipse.core.runtime.CoreException;
  */
 public class Article extends AggregatorItem implements Comparable<Article> {
 
+	public String getMediaPlayerURL() {
+		return mediaPlayerURL;
+	}
+
+	public String getMediaEnclosureURL() {
+		return mediaEnclosureURL;
+	}
+
+	public int getMediaEnclosureDuration() {
+		return mediaEnclosureDuration;
+	}
+
+	public String getMediaEnclosureType() {
+		return mediaEnclosureType;
+	}
+
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
 	/** The date and time the feed was added to the database */
@@ -36,6 +52,14 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 
 	/** Link of the item */
 	protected String link = EMPTY_STRING;
+
+	protected String mediaPlayerURL = EMPTY_STRING;
+
+	protected String mediaEnclosureURL = EMPTY_STRING;
+
+	protected int mediaEnclosureDuration = 0;
+
+	protected String mediaEnclosureType = EMPTY_STRING;
 
 	protected UUID location;
 

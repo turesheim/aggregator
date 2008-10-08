@@ -13,6 +13,7 @@ package no.resheim.aggregator.core.ui;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.MessageFormat;
 
 import no.resheim.aggregator.core.ui.internal.FeedDescriptionFormatter;
 import no.resheim.aggregator.core.ui.internal.FeedItemTitle;
@@ -92,12 +93,14 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		setLayout();
 		// Special widget for item title
 		title = new FeedItemTitle(this, factory);
-		title.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING,
-				true, false));
+		title.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false));
 		listeners = new ListenerList();
 		browser = new Browser(this, SWT.NONE);
-		GridData gd = new GridData(GridData.FILL, GridData.FILL, true, true);
-		browser.setLayoutData(gd);
+		browser.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		// Button playButton = new Button(parent, SWT.NONE);
+		// playButton.setText(">");
+
 		updateFromPreferences();
 		AggregatorUIPlugin.getDefault().getPreferenceStore()
 				.addPropertyChangeListener(this);
@@ -186,17 +189,27 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	private void showDescription(Article item) {
 		if (item == null)
 			return;
-		StringBuffer description = new StringBuffer();
-		description.append(FONT_FIX_1);
-		description.append(FONT_FIX_2);
-		description.append(pPresentationFontFamily);
-		description.append(FONT_FIX_3);
-		description.append(pPresentationFontSize);
-		description.append(FONT_FIX_4);
-		description.append(item.getText());
-		description.append(FONT_FIX_5);
 		title.setTitle(item.getTitle(), null);
-		browser.setText(description.toString());
+		if (item.getMediaEnclosureDuration() == 0) {
+			StringBuffer description = new StringBuffer();
+			description.append(FONT_FIX_1);
+			description.append(FONT_FIX_2);
+			description.append(pPresentationFontFamily);
+			description.append(FONT_FIX_3);
+			description.append(pPresentationFontSize);
+			description.append(FONT_FIX_4);
+			description.append(item.getText());
+			description.append(FONT_FIX_5);
+			browser.setText(description.toString());
+		} else {
+			browser.setText(MessageFormat.format(
+					Messages.ArticleViewer_ObjectHTMLCode, new Object[] {
+							item.getMediaPlayerURL(),
+							item.getMediaEnclosureURL(),
+							item.getMediaEnclosureType(),
+							item.getMediaEnclosureDuration()
+					}));
+		}
 	}
 
 	private void showDescription(Feed feed) {

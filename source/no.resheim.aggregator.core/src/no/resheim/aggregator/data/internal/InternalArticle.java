@@ -152,4 +152,20 @@ public class InternalArticle extends Article {
 		return location;
 	}
 
+	public void setMediaPlayerURL(String mediaPlayerURL) {
+		this.mediaPlayerURL = mediaPlayerURL;
+	}
+
+	public void setMediaEnclosureURL(String mediaEnclosureURL) {
+		this.mediaEnclosureURL = mediaEnclosureURL;
+	}
+
+	public void setMediaEnclosureDuration(int mediaEnclosureDuration) {
+		this.mediaEnclosureDuration = mediaEnclosureDuration;
+	}
+
+	public void setMediaEnclosureType(String mediaEnclosureType) {
+		this.mediaEnclosureType = mediaEnclosureType;
+	}
+
 }
