@@ -87,7 +87,7 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 	 * .model.FeedChangedEvent)
 	 */
 	public void aggregatorItemChanged(final AggregatorItemChangedEvent event) {
-		Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
 				if (fViewer != null) {
