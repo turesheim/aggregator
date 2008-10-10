@@ -49,12 +49,14 @@ public abstract class AggregatorItem {
 	/** Flags are for internal use */
 	public enum Flag {
 		/** The item is a trash folder item */
-		TRASH
+		TRASH,
+		/** The item has been prepared for deletion */
+		TRASHED
 	}
 
 	private EnumSet<Mark> marks = EnumSet.noneOf(Mark.class);
 
-	private EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
+	private EnumSet<Flag> fFlags = EnumSet.noneOf(Flag.class);
 
 	protected int ordering;
 
@@ -100,7 +102,7 @@ public abstract class AggregatorItem {
 	 * @return the flags
 	 */
 	public EnumSet<Flag> getFlags() {
-		return flags;
+		return fFlags;
 	}
 
 	public int getOrdering() {
@@ -125,7 +127,11 @@ public abstract class AggregatorItem {
 	}
 
 	public void setFlags(EnumSet<Flag> flags) {
-		this.flags = flags;
+		this.fFlags = flags;
+	}
+
+	public void setFlag(Flag flag) {
+		fFlags.add(flag);
 	}
 
 	public void setOrdering(int ordering) {

@@ -14,11 +14,13 @@ package no.resheim.aggregator.core.ui.commands;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.data.AggregatorItem.Flag;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.EventType;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -30,11 +32,21 @@ import org.eclipse.ui.handlers.HandlerUtil;
  */
 public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler {
 
+	@Override
+	protected boolean handleSelection(ISelection selection) {
+		for (AggregatorItem item : getSelectedItems(selection)) {
+			if (item.getFlags().contains(Flag.TRASHED)) {
+				return false;
+			}
+		}
+		return super.handleSelection(selection);
+	}
+
 	/**
 	 * 
 	 */
 	public DeleteItemCommandHandler() {
-		super(true);
+		super(true, false);
 	}
 
 	public Object execute(final ExecutionEvent event) throws ExecutionException {

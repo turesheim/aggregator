@@ -179,6 +179,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	public void trash(AggregatorItem item) throws CoreException {
 		FeedCollection c = getCollection();
 		Folder t = c.getTrashFolder();
+		item.setFlag(Flag.TRASHED);
 		c
 				.move(item, item.getParent(), item.getOrdering(), t, t
 						.getChildCount());

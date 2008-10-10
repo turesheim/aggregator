@@ -34,7 +34,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
  */
 public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 
-	private boolean fDisallowSystemItems = false;
+	private boolean fDisallowSystemItems = true;
 	private boolean fDisregardSelection = false;
 
 	/**
@@ -153,6 +153,14 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 		return false;
 	}
 
+	/**
+	 * Tests if the selection consists of only one article and returns
+	 * <b>true</b> if this is the case.
+	 * 
+	 * @param selection
+	 *            the selection to consider
+	 * @return <b>true</b> if one article is selected
+	 */
 	protected boolean isArticleSelected(ISelection selection) {
 		AggregatorItem[] items = getSelectedItems(selection);
 		if (items.length == 1) {
