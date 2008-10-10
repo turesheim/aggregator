@@ -88,10 +88,11 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 	 */
 	public void aggregatorItemChanged(final AggregatorItemChangedEvent event) {
 		Display.getDefault().asyncExec(new Runnable() {
-
 			public void run() {
 				if (fViewer != null) {
-					fViewer.refresh();
+					synchronized (fViewer) {
+						fViewer.refresh();
+					}
 				}
 			}
 		});
