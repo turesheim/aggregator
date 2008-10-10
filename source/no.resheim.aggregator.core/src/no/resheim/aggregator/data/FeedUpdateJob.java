@@ -127,9 +127,10 @@ public class FeedUpdateJob extends Job {
 							.getBytes());
 					yc.setRequestProperty("Authorization", "Basic" + encoding); //$NON-NLS-1$ //$NON-NLS-2$
 				} catch (StorageException e) {
-
+					return new Status(IStatus.ERROR,
+							AggregatorPlugin.PLUGIN_ID,
+							"Could not obtain credentials", e); //$NON-NLS-1$
 				}
-
 			}
 			FeedParser handler = new FeedParser(registry, site);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
