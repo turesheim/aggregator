@@ -65,10 +65,11 @@ public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 
 	@Override
 	protected boolean handleSelection(ISelection selection) {
-		boolean enabled = super.handleSelection(selection);
-		if (enabled) {
-			enabled = isFolderSelected(selection);
-		}
-		return enabled;
+		// Allow no selection
+		if (selection.isEmpty())
+			return true;
+		if (!isFolderSelected(selection))
+			return false;
+		return super.handleSelection(selection);
 	}
 }
