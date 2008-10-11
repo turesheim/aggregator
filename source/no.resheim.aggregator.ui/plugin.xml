@@ -9,7 +9,7 @@
             class="no.resheim.aggregator.ui.views.RSSView"
             icon="icons/view.gif"
             id="no.resheim.aggregator.ui.RSSView"
-            name="Aggregator">
+            name="News Feeds">
       </view>
    </extension>
    <extension
@@ -121,6 +121,13 @@
          <command
                commandId="no.resheim.aggregator.core.ui.delete"
                label="Delete">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.emptyTrash"
+               label="Empty Trash">
             <visibleWhen
                   checkEnabled="true">
             </visibleWhen>

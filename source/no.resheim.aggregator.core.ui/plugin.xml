@@ -87,6 +87,11 @@
             id="no.resheim.aggregator.core.ui.collapseAll"
             name="Collapse All">
       </command>
+      <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.EmptyTrashCommandHandler"
+            id="no.resheim.aggregator.core.ui.emptyTrash"
+            name="Empty Trash">
+      </command>
       <commandParameterType
             converter="no.resheim.aggregator.core.ui.commands.CollectionParameterValueConverter"
             id="no.resheim.aggregator.core.ui.collectionCommandParameterType"

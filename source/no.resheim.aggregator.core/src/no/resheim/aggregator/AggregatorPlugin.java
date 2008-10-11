@@ -131,10 +131,13 @@ public class AggregatorPlugin extends Plugin {
 
 	private boolean fDebugging;
 
+	/** Preference key for the secure storage password */
 	public static final String SECURE_STORAGE_PASSWORD = "password"; //$NON-NLS-1$
 
+	/** Preference key for the secure storage user name */
 	public static final String SECURE_STORAGE_USERNAME = "username"; //$NON-NLS-1$
 
+	/** Preference key for the secure storage root */
 	public static final String SECURE_STORAGE_ROOT = PLUGIN_ID;
 
 	@Override
