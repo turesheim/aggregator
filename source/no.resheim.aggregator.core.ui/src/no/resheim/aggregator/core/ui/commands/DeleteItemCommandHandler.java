@@ -21,6 +21,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -57,23 +59,25 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler {
 			if (collection == null) {
 				return null;
 			}
-			part.getSite().getPart().getSite().getWorkbenchWindow().getShell()
-					.getDisplay().syncExec(new Runnable() {
-						public void run() {
-							AggregatorItem[] items = getSelectedItems(event);
-							((IFeedView) part).getFeedViewer().setSelection(
-									null);
-							for (AggregatorItem item : items) {
-								try {
-									item.getParent().trash(item);
-								} catch (CoreException e) {
-									e.printStackTrace();
-								}
-							}
-							// Tell our listeners that the deed is done
-							collection.notifyListerners(items, EventType.MOVED);
+			Runnable runnable = new Runnable() {
+				public void run() {
+					AggregatorItem[] items = getSelectedItems(event);
+					((IFeedView) part).getFeedViewer().setSelection(null);
+					for (AggregatorItem item : items) {
+						try {
+							item.getParent().trash(item);
+						} catch (CoreException e) {
+							e.printStackTrace();
 						}
-					});
+					}
+					// Tell our listeners that the deed is done
+					collection.notifyListerners(items, EventType.MOVED);
+				}
+			};
+			Display display = part.getSite().getPart().getSite()
+					.getWorkbenchWindow().getShell().getDisplay();
+			BusyIndicator.showWhile(display, runnable);
+			display.syncExec(runnable);
 		}
 		return null;
 	}
