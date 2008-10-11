@@ -203,7 +203,7 @@
             archivingDays="30"
             archivingItems="0"
             archivingMethod="KEEP_NEWEST"
-            create="true"
+            create="false"
             title="Resheim Software News"
             updateInterval="1"
             updatePeriod="DAYS"
@@ -321,6 +321,15 @@
             updateInterval="1"
             updatePeriod="DAYS"
             url="http://www.youtube.com/rss/user/avrtvtube/videos.rss">
+      </feed>
+      <feed
+            archivingDays="0"
+            archivingItems="0"
+            archivingMethod="KEEP_ALL"
+            title="Torkild&apos;s Blog"
+            updateInterval="1"
+            updatePeriod="DAYS"
+            url="http://torkildr.blogspot.com/feeds/posts/default">
       </feed>
    </extension>
 
