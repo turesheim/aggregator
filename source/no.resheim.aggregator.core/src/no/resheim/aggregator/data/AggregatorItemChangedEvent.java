@@ -34,10 +34,8 @@ public class AggregatorItemChangedEvent {
 		RESTORED,
 		/** The item has been moved as a result of another item being moved */
 		SHIFTED,
-		/** The item has been updated */
-		UPDATED,
-		/** The item is being updated */
-		UPDATING
+		/** The item has been changed */
+		CHANGED
 	}
 
 	/**

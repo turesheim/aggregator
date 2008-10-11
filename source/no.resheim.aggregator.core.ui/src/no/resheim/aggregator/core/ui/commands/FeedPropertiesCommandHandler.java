@@ -20,6 +20,7 @@ import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.FeedWorkingCopy;
 import no.resheim.aggregator.data.Folder;
+import no.resheim.aggregator.data.AggregatorItemChangedEvent.EventType;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -72,6 +73,11 @@ public class FeedPropertiesCommandHandler extends
 						}
 						feed.updateFromWorkingCopy(wc);
 						registry.updateFeedData(feed);
+						// Reflect the feed title in the folder title.
+						o.setTitle(feed.getTitle());
+						registry.notifyListerners(new Object[] {
+							o
+						}, EventType.CHANGED);
 					}
 				}
 			}

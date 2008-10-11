@@ -99,10 +99,15 @@ public class Feed implements Comparable<Feed> {
 	private String link;
 
 	protected UUID location;
+
 	protected boolean threaded;
+
 	protected String title;
+
 	private String type;
+
 	protected int updateInterval = 1;
+
 	protected UpdatePeriod updatePeriod;
 
 	boolean updating;

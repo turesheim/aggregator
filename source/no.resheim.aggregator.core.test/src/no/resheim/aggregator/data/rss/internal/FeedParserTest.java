@@ -60,7 +60,7 @@ public class FeedParserTest extends TestCase {
 
 			public void aggregatorItemChanged(AggregatorItemChangedEvent event) {
 				System.out.println(event.getType());
-				if (event.getType().equals(EventType.UPDATED)) {
+				if (event.getType().equals(EventType.CHANGED)) {
 					// The folder should now contain 20 items
 					try {
 						AggregatorItemParent folder = (AggregatorItemParent) getCollection()
