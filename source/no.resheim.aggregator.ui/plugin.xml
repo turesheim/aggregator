@@ -71,7 +71,7 @@
          </separator>
          <command
                commandId="no.resheim.aggregator.core.ui.addFeed"
-               label="Add Feed"
+               label="New Feed"
                style="push">
             <visibleWhen
                   checkEnabled="true">
@@ -106,7 +106,7 @@
             locationURI="popup:no.resheim.aggregator.ui.RSSView?after=modify">
          <command
                commandId="no.resheim.aggregator.core.ui.newFolder"
-               label="Add Folder">
+               label="New Folder">
             <visibleWhen
                   checkEnabled="true">
             </visibleWhen>
