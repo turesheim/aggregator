@@ -162,25 +162,6 @@ public class FeedCollection extends AggregatorItemParent {
 	}
 
 	/**
-	 * Uses the archiving rules of the site to remove articles from the feed.
-	 * Should only be called after a FeedUpdateJob has been executed.
-	 * 
-	 * @param site
-	 */
-	void cleanUp(Feed site) {
-		// First find the folder
-		try {
-			for (Folder folder : this.getDescendingFolders()) {
-				if (folder.getUUID().equals(site.getLocation())) {
-					folder.cleanUp(site);
-				}
-			}
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Updates the feed data in the persistent storage. Should only be called by
 	 * {@link FeedUpdateJob} after the feed has be updated with new information.
 	 * 

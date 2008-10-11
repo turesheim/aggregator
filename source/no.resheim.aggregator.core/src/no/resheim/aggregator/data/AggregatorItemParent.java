@@ -104,6 +104,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 */
 	void cleanUp(Feed site) throws CoreException {
 		Archiving archiving = site.getArchiving();
+		ArrayList<Article> trashed = new ArrayList<Article>();
 		int days = site.getArchivingDays();
 		int articles = site.getArchivingItems();
 		switch (archiving) {
@@ -118,19 +119,12 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 					if (article.isRead()) {
 						if (article.getPublicationDate() > 0
 								&& article.getPublicationDate() <= lim) {
+							trashed.add(article);
 							trash(article);
-							article.getCollection().notifyListerners(
-									new Object[] {
-										article
-									}, EventType.MOVED);
 						} else if (article.getPublicationDate() == 0
 								&& article.addedDate <= lim) {
+							trashed.add(article);
 							trash(article);
-							// Tell our listeners that the deed is done
-							article.getCollection().notifyListerners(
-									new Object[] {
-										article
-									}, EventType.MOVED);
 						}
 					}
 				}
@@ -139,15 +133,15 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		case KEEP_SOME:
 			while (getChildCount() > articles) {
 				AggregatorItem item = getChildAt(0);
+				trashed.add((Article) item);
 				trash(item);
-				item.getCollection().notifyListerners(new Object[] {
-					item
-				}, EventType.MOVED);
 			}
 			break;
 		default:
 			break;
 		}
+		getCollection().notifyListerners(
+				trashed.toArray(new Article[trashed.size()]), EventType.MOVED);
 	}
 
 	protected List<Folder> getDescendingFolders() throws CoreException {

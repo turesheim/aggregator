@@ -26,6 +26,7 @@ import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.rss.internal.FeedParser;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -45,14 +46,14 @@ public class FeedUpdateJob extends Job {
 
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 	private Feed feed;
-	private FeedCollection registry;
+	private FeedCollection collection;
 
-	public FeedUpdateJob(FeedCollection registry, Feed feed) {
+	public FeedUpdateJob(FeedCollection collection, Feed feed) {
 		super(MessageFormat.format(Messages.FeedUpdateJob_Title, new Object[] {
 			feed.getTitle()
 		}));
 		this.feed = feed;
-		this.registry = registry;
+		this.collection = collection;
 		setPriority(Job.DECORATE);
 		setUser(false);
 	}
@@ -78,21 +79,41 @@ public class FeedUpdateJob extends Job {
 		IStatus ds = download(feed, debug);
 		feed.setLastStatus(ds);
 		if (ds.isOK()) {
-			registry.cleanUp(feed);
+			setName("Cleaning up");
+			cleanUp(feed);
 			feed.setLastUpdate(System.currentTimeMillis());
 			// Store changes to the feed
-			registry.feedUpdated(feed);
+			collection.feedUpdated(feed);
 		}
 		synchronized (feed) {
 			feed.setUpdating(false);
 			Collections.sort(feed.getTempItems());
 			if (feed.getTempItems().size() > 0) {
-				registry.addNew(feed.getTempItems().toArray(
+				collection.addNew(feed.getTempItems().toArray(
 						new AggregatorItem[feed.getTempItems().size()]));
 			}
 		}
 		return ds;
 
+	}
+
+	/**
+	 * Uses the archiving rules of the site to remove articles from the feed.
+	 * Should only be called after a FeedUpdateJob has been executed.
+	 * 
+	 * @param site
+	 */
+	void cleanUp(Feed site) {
+		// First find the folder
+		try {
+			for (Folder folder : collection.getDescendingFolders()) {
+				if (folder.getUUID().equals(site.getLocation())) {
+					folder.cleanUp(site);
+				}
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -132,7 +153,7 @@ public class FeedUpdateJob extends Job {
 							"Could not obtain credentials", e); //$NON-NLS-1$
 				}
 			}
-			FeedParser handler = new FeedParser(registry, site);
+			FeedParser handler = new FeedParser(collection, site);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser parser = factory.newSAXParser();
 			InputStream is = yc.getInputStream();
