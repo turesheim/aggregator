@@ -9,6 +9,7 @@ public class Messages extends NLS {
 	public static String Article_PublishedByAndDownloaded;
 	public static String FeedCollection_NoDelete_Locked;
 	public static String FeedCollection_UpdateInProgress;
+	public static String FeedUpdateJob_CleaningUp;
 	public static String FeedUpdateJob_Error_Title;
 	public static String FeedUpdateJob_Title;
 	static {

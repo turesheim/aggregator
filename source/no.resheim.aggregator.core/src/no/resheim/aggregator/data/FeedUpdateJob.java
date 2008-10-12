@@ -79,7 +79,7 @@ public class FeedUpdateJob extends Job {
 		IStatus ds = download(feed, debug);
 		feed.setLastStatus(ds);
 		if (ds.isOK()) {
-			setName("Cleaning up");
+			setName(Messages.FeedUpdateJob_CleaningUp);
 			cleanUp(feed);
 			feed.setLastUpdate(System.currentTimeMillis());
 			// Store changes to the feed
