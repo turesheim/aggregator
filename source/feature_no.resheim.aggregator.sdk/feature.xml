@@ -13,15 +13,15 @@
       Copyright &amp;copy; 2008 Resheim Software.
    </copyright>
 
-   <includes
-         id="no.resheim.aggregator.core.source"
-         version="0.0.0"
-         name="Aggregator Source Code"/>
-
    <plugin
          id="no.resheim.aggregator.sdk"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
 
+   <plugin
+         id="no.resheim.aggregator.core.source"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 </feature>
