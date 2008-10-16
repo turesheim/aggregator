@@ -217,10 +217,10 @@ litigation.
    </url>
 
    <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="no.resheim.aggregator.core.ui"/>
-      <import plugin="no.resheim.aggregator.core"/>
+      <import plugin="org.eclipse.ui" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.core.runtime" version="3.4.0" match="compatible"/>
+      <import plugin="no.resheim.aggregator.core.ui" version="1.0.0" match="equivalent"/>
+      <import plugin="no.resheim.aggregator.core" version="1.0.0" match="equivalent"/>
    </requires>
 
    <plugin

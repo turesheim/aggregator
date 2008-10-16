@@ -216,6 +216,18 @@ litigation.
       <update label="Resheim Aggregator Update Site" url="http://update.resheim.no/aggregator"/>
    </url>
 
+   <requires>
+      <import plugin="org.eclipse.core.runtime" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.core.resources" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.core.net" version="1.1.0" match="compatible"/>
+      <import plugin="org.apache.derby.core" version="10.3.0" match="compatible"/>
+      <import plugin="org.eclipse.equinox.security" version="1.0.0" match="compatible"/>
+      <import plugin="org.eclipse.core.expressions" version="3.4.0" match="compatible"/>
+      <import plugin="org.eclipse.ui" version="3.4.0" match="compatible"/>
+      <import plugin="no.resheim.aggregator.core" version="1.0.0" match="equivalent"/>
+      <import plugin="org.eclipse.ui.forms" version="3.3.0" match="compatible"/>
+   </requires>
+
    <plugin
          id="no.resheim.aggregator.core"
          download-size="0"
