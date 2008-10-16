@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.equinox.security.storage.EncodingUtils;
 
 /**
  * Aggregator storage that uses the Derby embedded database to store it's data.
@@ -105,6 +106,9 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		feed.setType(rs.getString(16));
 		feed.setHidden(rs.getInt(17) != 0);
 		feed.setAnonymousAccess(rs.getInt(18) != 0);
+		if (rs.getString(19) != null) {
+			feed.setImageData(EncodingUtils.decodeBase64(rs.getString(19)));
+		}
 		return feed;
 	}
 
@@ -435,7 +439,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private void insert(Feed feed) throws SQLException {
 		PreparedStatement ps = connection
-				.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+				.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
 		ps.setString(1, feed.getUUID().toString());
 		ps.setString(2, feed.getTitle());
@@ -455,6 +459,18 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		ps.setString(16, feed.getType()); // feed_type
 		ps.setInt(17, feed.isHidden() ? 1 : 0);
 		ps.setInt(18, feed.isAnonymousAccess() ? 1 : 0);
+		// Make sure we don't attempt to insert null image data or data that we
+		// do not enough space for.
+		if (feed.getImageData() == null) {
+			ps.setNull(19, Types.VARCHAR);
+		} else {
+			String data = EncodingUtils.encodeBase64(feed.getImageData());
+			if (data.length() <= 10240) {
+				ps.setString(19, data);
+			} else {
+				ps.setNull(19, Types.VARCHAR);
+			}
+		}
 		ps.executeUpdate();
 		ps.close();
 	}

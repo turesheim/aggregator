@@ -5,11 +5,11 @@ Bundle-SymbolicName: no.resheim.aggregator.core.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: no.resheim.aggregator.core.ui.AggregatorUIPlugin
 Bundle-Vendor: Resheim Software
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- no.resheim.aggregator.core,
- org.eclipse.ui.forms,
- org.eclipse.equinox.security;bundle-version="1.0.0"
+Require-Bundle: org.eclipse.ui;bundle-version="[3.4.0,4.0.0)",
+ org.eclipse.core.runtime;bundle-version="[3.4.0,4.0.0)";visibility:=reexport,
+ no.resheim.aggregator.core;bundle-version="[1.0.0,1.1.0)",
+ org.eclipse.ui.forms;bundle-version="[3.3.0,4.0.0)",
+ org.eclipse.equinox.security;bundle-version="[1.0.0,2.0.0)"
 Export-Package: no.resheim.aggregator.core.ui,
  no.resheim.aggregator.core.ui.commands,
  no.resheim.aggregator.core.ui.internal;x-internal:=true,

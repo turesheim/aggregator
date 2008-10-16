@@ -11,8 +11,10 @@
  *******************************************************************************/
 package no.resheim.aggregator.data;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
@@ -121,45 +123,27 @@ public class FeedUpdateJob extends Job {
 	 * @param debug
 	 * @return
 	 */
-	private IStatus download(Feed site, boolean debug) {
+	private IStatus download(Feed feed, boolean debug) {
 		try {
-			URL feed = new URL(site.getURL());
-			if (feed == null) {
+			URL feedURL = new URL(feed.getURL());
+			if (feedURL == null) {
 				return Status.CANCEL_STATUS;
 			}
 
-			// IProxyService proxy = Aggregator.getDefault().getProxyService();
-			URLConnection yc = feed.openConnection();
-			yc.setAllowUserInteraction(true);
-			if (!site.isAnonymousAccess()) {
-				ISecurePreferences root = SecurePreferencesFactory.getDefault()
-						.node(AggregatorPlugin.SECURE_STORAGE_ROOT);
-				ISecurePreferences feedNode = root.node(site.getUUID()
-						.toString());
-				try {
-					String credentials = feedNode.get(
-							AggregatorPlugin.SECURE_STORAGE_USERNAME,
-							EMPTY_STRING)
-							+ ":" //$NON-NLS-1$
-							+ feedNode.get(
-									AggregatorPlugin.SECURE_STORAGE_PASSWORD,
-									EMPTY_STRING);
-					String encoding = EncodingUtils.encodeBase64(credentials
-							.getBytes());
-					yc.setRequestProperty("Authorization", "Basic" + encoding); //$NON-NLS-1$ //$NON-NLS-2$
-				} catch (StorageException e) {
-					return new Status(IStatus.ERROR,
-							AggregatorPlugin.PLUGIN_ID,
-							"Could not obtain credentials", e); //$NON-NLS-1$
-				}
-			}
-			FeedParser handler = new FeedParser(collection, site);
+			// Download the feed
+			URLConnection yc = getConnection(feed, feedURL);
+			FeedParser handler = new FeedParser(collection, feed);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser parser = factory.newSAXParser();
 			InputStream is = yc.getInputStream();
 			parser.parse(is, handler);
 			is.close();
+			// Download the favicon
+			dowloadFavicon(feed, feedURL);
 			return Status.OK_STATUS;
+		} catch (StorageException e) {
+			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
+					"Could not obtain credentials", e); //$NON-NLS-1$
 		} catch (IOException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID, 0,
 					Messages.FeedUpdateJob_Error_Title, e);
@@ -170,5 +154,47 @@ public class FeedUpdateJob extends Job {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID, 0,
 					Messages.FeedUpdateJob_Error_Title, e);
 		}
+	}
+
+	private void dowloadFavicon(Feed feed, URL feedURL)
+			throws MalformedURLException, StorageException {
+		URL favicon = new URL(MessageFormat.format("{0}://{1}/favicon.ico", //$NON-NLS-1$
+				new Object[] {
+						feedURL.getProtocol(), feedURL.getHost()
+				}));
+		try {
+			URLConnection ic = getConnection(feed, favicon);
+			InputStream is = ic.getInputStream();
+			ByteArrayOutputStream fos = new ByteArrayOutputStream();
+			byte buffer[] = new byte[0xffff];
+			int nbytes;
+			while ((nbytes = is.read(buffer)) != -1)
+				fos.write(buffer, 0, nbytes);
+			feed.setImageData(fos.toByteArray());
+			is.close();
+			System.out.println(feed.getImageData().length);
+		} catch (IOException e) {
+			// Silently ignore that the image file could not be found
+		}
+	}
+
+	private URLConnection getConnection(Feed site, URL feed)
+			throws IOException, StorageException {
+		URLConnection yc = feed.openConnection();
+		yc.setAllowUserInteraction(true);
+		if (!site.isAnonymousAccess()) {
+			ISecurePreferences root = SecurePreferencesFactory.getDefault()
+					.node(AggregatorPlugin.SECURE_STORAGE_ROOT);
+			ISecurePreferences feedNode = root.node(site.getUUID().toString());
+			String credentials = feedNode.get(
+					AggregatorPlugin.SECURE_STORAGE_USERNAME, EMPTY_STRING)
+					+ ":" //$NON-NLS-1$
+					+ feedNode.get(AggregatorPlugin.SECURE_STORAGE_PASSWORD,
+							EMPTY_STRING);
+			String encoding = EncodingUtils
+					.encodeBase64(credentials.getBytes());
+			yc.setRequestProperty("Authorization", "Basic" + encoding); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		return yc;
 	}
 }

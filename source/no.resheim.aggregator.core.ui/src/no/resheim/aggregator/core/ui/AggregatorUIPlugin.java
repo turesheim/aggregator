@@ -11,6 +11,12 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DirectColorModel;
+import java.awt.image.IndexColorModel;
+import java.awt.image.WritableRaster;
+import java.io.ByteArrayInputStream;
+
 import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.Article;
@@ -24,7 +30,10 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
@@ -38,6 +47,8 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plug-in life cycle
  */
 public class AggregatorUIPlugin extends AbstractUIPlugin {
+	private static final String MIME_FLASH = "application/x-shockwave-flash";
+
 	/** Identifier for the select feed collection command */
 	public static final String CMD_SELECT_COLLECTION = "no.resheim.aggregator.core.ui.selectCollection"; //$NON-NLS-1$
 
@@ -168,6 +179,59 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 		return fEditorBrowser;
 	}
 
+	static ImageData convertToSWT(BufferedImage bufferedImage) {
+		if (bufferedImage.getColorModel() instanceof DirectColorModel) {
+			DirectColorModel colorModel = (DirectColorModel) bufferedImage
+					.getColorModel();
+			PaletteData palette = new PaletteData(colorModel.getRedMask(),
+					colorModel.getGreenMask(), colorModel.getBlueMask());
+			ImageData data = new ImageData(bufferedImage.getWidth(),
+					bufferedImage.getHeight(), colorModel.getPixelSize(),
+					palette);
+			WritableRaster raster = bufferedImage.getRaster();
+			int[] pixelArray = new int[3];
+			for (int y = 0; y < data.height; y++) {
+				for (int x = 0; x < data.width; x++) {
+					raster.getPixel(x, y, pixelArray);
+					int pixel = palette.getPixel(new RGB(pixelArray[0],
+							pixelArray[1], pixelArray[2]));
+					data.setPixel(x, y, pixel);
+				}
+			}
+			return data;
+		} else if (bufferedImage.getColorModel() instanceof IndexColorModel) {
+			IndexColorModel colorModel = (IndexColorModel) bufferedImage
+					.getColorModel();
+			int size = colorModel.getMapSize();
+			byte[] reds = new byte[size];
+			byte[] greens = new byte[size];
+			byte[] blues = new byte[size];
+			colorModel.getReds(reds);
+			colorModel.getGreens(greens);
+			colorModel.getBlues(blues);
+			RGB[] rgbs = new RGB[size];
+			for (int i = 0; i < rgbs.length; i++) {
+				rgbs[i] = new RGB(reds[i] & 0xFF, greens[i] & 0xFF,
+						blues[i] & 0xFF);
+			}
+			PaletteData palette = new PaletteData(rgbs);
+			ImageData data = new ImageData(bufferedImage.getWidth(),
+					bufferedImage.getHeight(), colorModel.getPixelSize(),
+					palette);
+			data.transparentPixel = colorModel.getTransparentPixel();
+			WritableRaster raster = bufferedImage.getRaster();
+			int[] pixelArray = new int[1];
+			for (int y = 0; y < data.height; y++) {
+				for (int x = 0; x < data.width; x++) {
+					raster.getPixel(x, y, pixelArray);
+					data.setPixel(x, y, pixelArray[0]);
+				}
+			}
+			return data;
+		}
+		return null;
+	}
+
 	/**
 	 * Return an image for the aggregator item and decorate if the status is not
 	 * null
@@ -184,8 +248,23 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 		String baseId = null;
 		ImageDescriptor type = null;
 
-		if (item instanceof Feed)
+		if (item instanceof Feed) {
 			baseId = IMG_FEED_OBJ;
+			Feed feed = (Feed) item;
+			if (feed.getImageData() != null) {
+				baseId = feed.getUUID().toString();
+				ImageDescriptor id = getImageRegistry().getDescriptor(baseId);
+				// It's not in the registry so we need to make an instance
+				if (id == null) {
+					ByteArrayInputStream bis = new ByteArrayInputStream(
+							((Feed) item).getImageData());
+					ImageData data = new ImageData(bis);
+					Image image = new Image(getStandardDisplay(), data
+							.scaledTo(16, 16));
+					getImageRegistry().put(baseId, image);
+				}
+			}
+		}
 		if (item instanceof Folder) {
 			baseId = IMG_FOLDER_OBJ;
 			if (((AggregatorItem) item).getFlags().contains(Flag.TRASH)) {
@@ -200,10 +279,9 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 
 		String id = "MANAGED_" + baseId; //$NON-NLS-1$
 		if (item instanceof Article) {
-			if (((Article) item).getMediaEnclosureType().equals(
-					"application/x-shockwave-flash")) {
+			if (((Article) item).getMediaEnclosureType().equals(MIME_FLASH)) {
 				type = getImageRegistry().getDescriptor(IMG_DEC_FLASH);
-				id += "_flash";
+				id += "_flash"; //$NON-NLS-1$
 			}
 		}
 		ImageDescriptor si = null;

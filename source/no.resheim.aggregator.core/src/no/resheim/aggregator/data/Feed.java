@@ -25,6 +25,16 @@ import org.eclipse.core.runtime.Status;
  */
 public class Feed implements Comparable<Feed> {
 
+	public byte[] getImageData() {
+		return imageData;
+	}
+
+	public void setImageData(byte[] imageData) {
+		this.imageData = imageData;
+	}
+
+	byte[] imageData;
+
 	public ArrayList<Article> getTempItems() {
 		return tempItems;
 	}

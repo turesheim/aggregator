@@ -4,9 +4,9 @@ Bundle-Name: Aggregator UI
 Bundle-SymbolicName: no.resheim.aggregator.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Resheim Software
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- no.resheim.aggregator.core.ui,
- no.resheim.aggregator.core
+Require-Bundle: org.eclipse.ui;bundle-version="[3.4.0,4.0.0)",
+ org.eclipse.core.runtime;bundle-version="[3.4.0,4.0.0)",
+ no.resheim.aggregator.core.ui;bundle-version="[1.0.0,1.1.0)",
+ no.resheim.aggregator.core;bundle-version="[1.0.0,1.1.0)"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy

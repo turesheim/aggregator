@@ -51,7 +51,8 @@ CREATE TABLE feeds (
 		copyright VARCHAR(256),
 		feed_type VARCHAR(32),
 		hidden INT NOT NULL,
-		anonymous_access INT NOT NULL
+		anonymous_access INT NOT NULL,
+		image_data VARCHAR(10240)
 	);
 
 /* Selection*/
