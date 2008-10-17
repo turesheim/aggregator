@@ -13,7 +13,6 @@ import no.resheim.aggregator.data.Feed.UpdatePeriod;
 import no.resheim.aggregator.data.internal.DerbySQLStorage;
 import no.resheim.aggregator.data.internal.MemoryStorage;
 
-import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -27,7 +26,6 @@ import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * This type is responsible for handling the feed registries that contains the
@@ -73,8 +71,6 @@ public class AggregatorPlugin extends Plugin {
 		return fDefaultFeeds;
 	}
 
-	private ServiceTracker serviceTracker;
-
 	/**
 	 * Name of the default feed collection.
 	 */
@@ -99,20 +95,6 @@ public class AggregatorPlugin extends Plugin {
 		synchronized (fCollectionListeners) {
 			fCollectionListeners.remove(listener);
 		}
-	}
-
-	/**
-	 * Returns the proxy service for this bundle.
-	 * 
-	 * @return The proxy service
-	 */
-	public IProxyService getProxyService() {
-		if (serviceTracker == null) {
-			this.serviceTracker = new ServiceTracker(getBundle()
-					.getBundleContext(), IProxyService.class.getName(), null);
-
-		}
-		return (IProxyService) this.serviceTracker.getService();
 	}
 
 	/*

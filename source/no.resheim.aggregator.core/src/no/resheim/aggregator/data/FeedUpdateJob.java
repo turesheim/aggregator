@@ -14,9 +14,14 @@ package no.resheim.aggregator.data;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownHostException;
+import java.net.Proxy.Type;
 import java.text.MessageFormat;
 import java.util.Collections;
 
@@ -28,15 +33,20 @@ import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.rss.internal.FeedParser;
 
+import org.eclipse.core.net.proxy.IProxyData;
+import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.security.storage.EncodingUtils;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
 import org.xml.sax.SAXException;
 
 /**
@@ -141,6 +151,11 @@ public class FeedUpdateJob extends Job {
 			// Download the favicon
 			dowloadFavicon(feed, feedURL);
 			return Status.OK_STATUS;
+		} catch (UnknownHostException e) {
+			return new Status(
+					IStatus.ERROR,
+					AggregatorPlugin.PLUGIN_ID,
+					"Could not connect to host. Please ensure that your feed URL and proxy settings are correct."); //$NON-NLS-1$			
 		} catch (StorageException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
 					"Could not obtain credentials", e); //$NON-NLS-1$
@@ -178,10 +193,55 @@ public class FeedUpdateJob extends Job {
 		}
 	}
 
+	private static final String CORE_NET_BUNDLE = "org.eclipse.core.net"; //$NON-NLS-1$
+
+	/**
+	 * Returns the proxy service for this bundle.
+	 * 
+	 * @return The proxy service
+	 */
+	public IProxyService getProxyService() {
+		Bundle bundle = Platform.getBundle(CORE_NET_BUNDLE);
+		// The bundle may not be active yet and hence the service we're looking
+		// for is unavailable. We must wait until everything is ready.
+		while (bundle.getState() != Bundle.ACTIVE) {
+			System.out.print(".");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		ServiceReference ref = bundle.getBundleContext().getServiceReference(
+				IProxyService.class.getName());
+		if (ref != null)
+			return (IProxyService) bundle.getBundleContext().getService(ref);
+		return null;
+	}
+
 	private URLConnection getConnection(Feed site, URL feed)
-			throws IOException, StorageException {
-		URLConnection yc = feed.openConnection();
-		yc.setAllowUserInteraction(true);
+			throws IOException, StorageException, UnknownHostException {
+		IProxyData proxyData = null;
+		IProxyService service = getProxyService();
+		// We might be unable to get a proxy service in that we'll try to
+		// connect anyways.
+		if (service != null) {
+			// Note that we expect the URL protocol to one of HTTP and HTTPS.
+			proxyData = service.getProxyDataForHost(feed.getHost(), feed
+					.getProtocol().toUpperCase());
+		}
+		// If we have no proxy data we'll use a direct connection
+		Type type = proxyData == null ? Type.DIRECT : Type.HTTP;
+		InetSocketAddress sockAddr = new InetSocketAddress(InetAddress
+				.getByName(proxyData.getHost()), proxyData.getPort());
+		Proxy proxy = new Proxy(type, sockAddr);
+		URLConnection yc = feed.openConnection(proxy);
+		if (proxyData != null && proxyData.isRequiresAuthentication()) {
+			String proxyLogin = proxyData.getUserId()
+					+ ":" + proxyData.getPassword(); //$NON-NLS-1$
+			yc.setRequestProperty("Proxy-Authorization", "Basic " //$NON-NLS-1$ //$NON-NLS-2$
+					+ EncodingUtils.encodeBase64(proxyLogin.getBytes()));
+		}
 		if (!site.isAnonymousAccess()) {
 			ISecurePreferences root = SecurePreferencesFactory.getDefault()
 					.node(AggregatorPlugin.SECURE_STORAGE_ROOT);
@@ -191,9 +251,9 @@ public class FeedUpdateJob extends Job {
 					+ ":" //$NON-NLS-1$
 					+ feedNode.get(AggregatorPlugin.SECURE_STORAGE_PASSWORD,
 							EMPTY_STRING);
-			String encoding = EncodingUtils
-					.encodeBase64(credentials.getBytes());
-			yc.setRequestProperty("Authorization", "Basic" + encoding); //$NON-NLS-1$ //$NON-NLS-2$
+			yc
+					.setRequestProperty(
+							"Authorization", "Basic" + EncodingUtils.encodeBase64(credentials.getBytes())); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return yc;
 	}
