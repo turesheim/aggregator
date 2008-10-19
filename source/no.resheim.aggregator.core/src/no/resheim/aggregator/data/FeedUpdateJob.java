@@ -155,10 +155,11 @@ public class FeedUpdateJob extends Job {
 			return new Status(
 					IStatus.ERROR,
 					AggregatorPlugin.PLUGIN_ID,
-					"Could not connect to host. Please ensure that your feed URL and proxy settings are correct."); //$NON-NLS-1$			
+					Messages.FeedUpdateJob_HostError,
+					e);
 		} catch (StorageException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
-					"Could not obtain credentials", e); //$NON-NLS-1$
+					Messages.FeedUpdateJob_CredentialsError, e);
 		} catch (IOException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID, 0,
 					Messages.FeedUpdateJob_Error_Title, e);
@@ -187,7 +188,6 @@ public class FeedUpdateJob extends Job {
 				fos.write(buffer, 0, nbytes);
 			feed.setImageData(fos.toByteArray());
 			is.close();
-			System.out.println(feed.getImageData().length);
 		} catch (IOException e) {
 			// Silently ignore that the image file could not be found
 		}
@@ -205,7 +205,6 @@ public class FeedUpdateJob extends Job {
 		// The bundle may not be active yet and hence the service we're looking
 		// for is unavailable. We must wait until everything is ready.
 		while (bundle.getState() != Bundle.ACTIVE) {
-			System.out.print(".");
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
