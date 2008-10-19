@@ -152,11 +152,11 @@ public class FeedUpdateJob extends Job {
 			dowloadFavicon(feed, feedURL);
 			return Status.OK_STATUS;
 		} catch (UnknownHostException e) {
-			return new Status(
-					IStatus.ERROR,
-					AggregatorPlugin.PLUGIN_ID,
-					Messages.FeedUpdateJob_HostError,
-					e);
+			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
+					MessageFormat.format(Messages.FeedUpdateJob_HostError,
+							new Object[] {
+								e.getMessage()
+							}));
 		} catch (StorageException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
 					Messages.FeedUpdateJob_CredentialsError, e);
@@ -221,20 +221,24 @@ public class FeedUpdateJob extends Job {
 	private URLConnection getConnection(Feed site, URL feed)
 			throws IOException, StorageException, UnknownHostException {
 		IProxyData proxyData = null;
+		URLConnection yc = null;
 		IProxyService service = getProxyService();
 		// We might be unable to get a proxy service in that we'll try to
 		// connect anyways.
-		if (service != null) {
+		if (service != null && service.isProxiesEnabled()) {
 			// Note that we expect the URL protocol to one of HTTP and HTTPS.
 			proxyData = service.getProxyDataForHost(feed.getHost(), feed
 					.getProtocol().toUpperCase());
 		}
 		// If we have no proxy data we'll use a direct connection
-		Type type = proxyData == null ? Type.DIRECT : Type.HTTP;
-		InetSocketAddress sockAddr = new InetSocketAddress(InetAddress
-				.getByName(proxyData.getHost()), proxyData.getPort());
-		Proxy proxy = new Proxy(type, sockAddr);
-		URLConnection yc = feed.openConnection(proxy);
+		if (proxyData == null) {
+			yc = feed.openConnection();
+		} else {
+			InetSocketAddress sockAddr = new InetSocketAddress(InetAddress
+					.getByName(proxyData.getHost()), proxyData.getPort());
+			Proxy proxy = new Proxy(Type.HTTP, sockAddr);
+			yc = feed.openConnection(proxy);
+		}
 		if (proxyData != null && proxyData.isRequiresAuthentication()) {
 			String proxyLogin = proxyData.getUserId()
 					+ ":" + proxyData.getPassword(); //$NON-NLS-1$
