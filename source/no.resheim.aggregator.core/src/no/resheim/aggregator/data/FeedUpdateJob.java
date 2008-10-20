@@ -256,7 +256,7 @@ public class FeedUpdateJob extends Job {
 							EMPTY_STRING);
 			yc
 					.setRequestProperty(
-							"Authorization", "Basic" + EncodingUtils.encodeBase64(credentials.getBytes())); //$NON-NLS-1$ //$NON-NLS-2$
+							"Authorization", "Basic " + EncodingUtils.encodeBase64(credentials.getBytes())); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return yc;
 	}
