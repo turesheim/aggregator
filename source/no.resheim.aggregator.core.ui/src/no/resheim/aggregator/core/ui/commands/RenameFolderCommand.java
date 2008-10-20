@@ -22,8 +22,12 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 
+	public RenameFolderCommand(boolean b) {
+		super(b);
+	}
+
 	public RenameFolderCommand() {
-		super(false);
+		super(true);
 	}
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -43,7 +47,7 @@ public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 		return null;
 	}
 
-	private void renameItem(final TreeItem item, final TreeViewer treeView,
+	protected void renameItem(final TreeItem item, final TreeViewer treeView,
 			final AggregatorItem aggregatorItem, final FeedCollection collection) {
 		TreeEditor treeEditor = new TreeEditor(treeView.getTree());
 		treeEditor.horizontalAlignment = SWT.LEFT;

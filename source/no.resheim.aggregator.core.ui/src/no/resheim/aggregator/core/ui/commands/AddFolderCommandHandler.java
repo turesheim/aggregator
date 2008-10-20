@@ -14,7 +14,6 @@ package no.resheim.aggregator.core.ui.commands;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.ui.IFeedView;
-import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.AggregatorItemParent;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.internal.InternalFolder;
@@ -22,7 +21,12 @@ import no.resheim.aggregator.data.internal.InternalFolder;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -34,8 +38,8 @@ import org.eclipse.ui.handlers.HandlerUtil;
  * @since 1.0
  */
 @SuppressWarnings("restriction")
-public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
-		implements IHandler {
+public class AddFolderCommandHandler extends RenameFolderCommand implements
+		IHandler {
 
 	public AddFolderCommandHandler() {
 		super(true);
@@ -48,17 +52,44 @@ public class AddFolderCommandHandler extends AbstractAggregatorCommandHandler
 			if (collection == null) {
 				return null;
 			}
-			AggregatorItem parent = getSelection(event);
-			if (parent == null)
-				parent = collection;
-			if (parent instanceof AggregatorItemParent) {
-				InternalFolder folder = new InternalFolder(
-						(AggregatorItemParent) parent, UUID.randomUUID());
-				folder.setTitle(Messages.AddFolderCommandHandler_NewFolderName);
-				collection.addNew(new AggregatorItem[] {
-					folder
-				});
+			Viewer viewer = ((IFeedView) part).getFeedViewer();
+			// We must have a tree viewer for this to work
+			if (!(viewer instanceof TreeViewer)) {
+				return null;
 			}
+			TreeViewer treeViewer = (TreeViewer) viewer;
+			TreeItem newItem = null;
+			AggregatorItemParent parent = null;
+			// We're expecting that the selected item is a parent here.
+			// handleSelection should ensure that this is the case.
+			TreeItem[] items = treeViewer.getTree().getSelection();
+			if (items.length == 0) {
+				newItem = new TreeItem(treeViewer.getTree(), SWT.NONE);
+				parent = collection;
+			} else {
+				newItem = new TreeItem(items[0], SWT.NONE, items[0]
+						.getItemCount());
+				parent = (AggregatorItemParent) items[0].getData();
+				// Make sure we'll see the new item
+				items[0].setExpanded(true);
+			}
+			// Create the folder
+			InternalFolder folder = new InternalFolder(parent, UUID
+					.randomUUID());
+			folder.setTitle(Messages.AddFolderCommandHandler_NewFolderName);
+			newItem.setData(folder);
+			try {
+				// Add the folder to it's parent (and the database)
+				parent.add(folder);
+				// The new item must be selected
+				treeViewer.getTree().deselectAll();
+				treeViewer.getTree().select(newItem);
+				// Do the renaming
+				renameItem(newItem, treeViewer, folder, collection);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+
 		}
 		return null;
 	}
