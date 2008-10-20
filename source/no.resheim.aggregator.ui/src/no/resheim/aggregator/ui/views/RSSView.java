@@ -362,7 +362,7 @@ public class RSSView extends ViewPart implements IFeedView,
 		super.init(site, memento);
 		// It's possible that no saved state exists yet
 		if (memento == null) {
-			fHorizontalLayout = true;
+			fHorizontalLayout = false;
 			return;
 		}
 		final String name = this.getClass().getName();
@@ -372,7 +372,7 @@ public class RSSView extends ViewPart implements IFeedView,
 						+ MEMENTO_ORIENTATION));
 			}
 		} else {
-			fHorizontalLayout = true;
+			fHorizontalLayout = false;
 		}
 
 	}
