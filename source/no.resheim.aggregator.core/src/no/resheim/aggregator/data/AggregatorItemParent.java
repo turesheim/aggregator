@@ -67,6 +67,21 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	}
 
 	/**
+	 * Adds a new feed to the database and immediately stores it's data in the
+	 * persistent storage.
+	 * 
+	 * @param feed
+	 *            the aggregator item to add
+	 * @throws CoreException
+	 */
+	public void add(AggregatorItem item) throws CoreException {
+		internalAdd(item);
+		getCollection().addNew(new AggregatorItem[] {
+			item
+		});
+	}
+
+	/**
 	 * Returns the child at the given position starting at 0.
 	 * 
 	 * @param index
