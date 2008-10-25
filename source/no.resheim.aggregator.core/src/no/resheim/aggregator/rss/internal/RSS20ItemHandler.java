@@ -121,10 +121,16 @@ public class RSS20ItemHandler extends AbstractItemHandler {
 			item.setMediaPlayerURL(atts.getValue(URL));
 		}
 		if (qName.equals(ENCLOSURE)) {
-			item.setMediaEnclosureDuration(Integer.parseInt(atts
-					.getValue(DURATION)));
-			item.setMediaEnclosureType(atts.getValue(TYPE));
-			item.setMediaEnclosureURL(atts.getValue(URL));
+			if (atts.getValue(DURATION) != null) {
+				item.setMediaEnclosureDuration(Integer.parseInt(atts
+						.getValue(DURATION)));
+			}
+			if (atts.getValue(TYPE) != null) {
+				item.setMediaEnclosureType(atts.getValue(TYPE));
+			}
+			if (atts.getValue(URL) != null) {
+				item.setMediaEnclosureURL(atts.getValue(URL));
+			}
 		}
 		return this;
 	}
