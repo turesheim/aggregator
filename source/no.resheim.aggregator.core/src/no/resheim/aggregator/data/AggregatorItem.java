@@ -32,18 +32,18 @@ import org.eclipse.core.runtime.Status;
 public abstract class AggregatorItem {
 
 	public enum Mark {
-		/** Done markings */
-		DONE,
-		/** First priority marking */
-		FIRST_PRIORITY,
+		/** No marking */
+		NONE,
 		/** Important marking */
 		IMPORTANT,
+		/** Todo marking */
+		TODO,
+		/** First priority marking */
+		FIRST_PRIORITY,
 		/** Second priority marking */
 		SECOND_PRIORITY,
 		/** Trash folder marking */
-		THIRD_PRIORITY,
-		/** Todo marking */
-		TODO
+		THIRD_PRIORITY
 	}
 
 	/** Flags are for internal use */
@@ -54,7 +54,7 @@ public abstract class AggregatorItem {
 		TRASHED
 	}
 
-	private EnumSet<Mark> marks = EnumSet.noneOf(Mark.class);
+	private Mark fMark = Mark.NONE;
 
 	private EnumSet<Flag> fFlags = EnumSet.noneOf(Flag.class);
 
@@ -92,8 +92,8 @@ public abstract class AggregatorItem {
 	 * 
 	 * @return the marks
 	 */
-	public EnumSet<Mark> getMarks() {
-		return marks;
+	public Mark getMark() {
+		return fMark;
 	}
 
 	/**
@@ -122,8 +122,8 @@ public abstract class AggregatorItem {
 		return uuid;
 	}
 
-	public void setMarks(EnumSet<Mark> mark) {
-		this.marks = mark;
+	public void setMark(Mark mark) {
+		this.fMark = mark;
 	}
 
 	public void setFlags(EnumSet<Flag> flags) {

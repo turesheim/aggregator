@@ -203,4 +203,9 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		// TODO Auto-generated method stub
 
 	}
+
+	public void update(AggregatorItem item) {
+		// TODO Auto-generated method stub
+
+	}
 }

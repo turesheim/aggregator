@@ -133,9 +133,6 @@
                   checkEnabled="true">
             </visibleWhen>
          </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="popup:no.resheim.aggregator.ui.RSSView?after=selection">
          <command
                commandId="no.resheim.aggregator.core.ui.update"
                label="Update">
@@ -150,6 +147,13 @@
                   checkEnabled="true">
             </visibleWhen>
          </command>
+         <menu
+               label="Mark As">
+            <dynamic
+                  class="no.resheim.aggregator.core.ui.commands.MarkItemMenu"
+                  id="no.resheim.aggregator.ui.markAsMenu">
+            </dynamic>
+         </menu>
          <command
                commandId="no.resheim.aggregator.core.ui.copyLinkCommand"
                label="Copy Link Location"

@@ -20,7 +20,6 @@ import no.resheim.aggregator.data.AggregatorItem;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorStorage;
 import no.resheim.aggregator.data.AggregatorItem.Flag;
-import no.resheim.aggregator.data.AggregatorItem.Mark;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.EventType;
 
 import org.eclipse.core.resources.ISaveContext;
@@ -83,22 +82,6 @@ public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
 		}
 	}
 
-	/**
-	 * Creates a comma separated string containing a list of all enabled <q>
-	 * marks</q>.
-	 * 
-	 * @param marks
-	 * @return
-	 */
-	protected String encode(EnumSet<Mark> marks) {
-		StringBuffer sb = new StringBuffer();
-		for (Mark mark : marks) {
-			sb.append(mark.toString());
-			sb.append(',');
-		}
-		return sb.toString();
-	}
-
 	protected String encodeFlags(EnumSet<Flag> flags) {
 		StringBuffer sb = new StringBuffer();
 		for (Flag flag : flags) {
@@ -106,23 +89,6 @@ public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
 			sb.append(',');
 		}
 		return sb.toString();
-	}
-
-	/**
-	 * Decodes a comma separated string containing a list of all enabled <q>
-	 * marks</q> into a enumeration set.
-	 * 
-	 * @param markString
-	 *            the string to decode
-	 * @return the enumeration set
-	 */
-	protected EnumSet<Mark> decode(String markString) {
-		EnumSet<Mark> marks = EnumSet.noneOf(Mark.class);
-		for (String mark : markString.split(",")) { //$NON-NLS-1$
-			if (mark.trim().length() > 0)
-				marks.add(Mark.valueOf(mark));
-		}
-		return marks;
 	}
 
 	protected EnumSet<Flag> decodeFlags(String flagsString) {

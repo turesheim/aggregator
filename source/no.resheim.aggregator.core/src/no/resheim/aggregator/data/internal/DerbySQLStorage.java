@@ -24,6 +24,7 @@ import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.Folder;
+import no.resheim.aggregator.data.AggregatorItem.Mark;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
 
@@ -128,7 +129,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		item.setGuid(rs.getString(5));
 		item.setTitle(rs.getString(6).trim());
 		item.setLink(rs.getString(7));
-		item.setMarks(decode(rs.getString(8)));
+		item.setMark(Mark.valueOf(rs.getString(8)));
 		item.setFlags(decodeFlags(rs.getString(9)));
 		item.setRead(rs.getInt(10) != 0);
 		item.setPublicationDate(rs.getLong(11));
@@ -163,7 +164,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		}
 		item.setSystem(rs.getInt(5) != 0);
 		item.setTitle(rs.getString(6).trim());
-		item.setMarks(decode(rs.getString(7)));
+		item.setMark(Mark.valueOf(rs.getString(7)));
 		item.setFlags(decodeFlags(rs.getString(8)));
 		return item;
 	}
@@ -414,7 +415,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		ps.setString(5, item.getGuid());
 		ps.setString(6, item.getTitle());
 		ps.setString(7, item.getLink());
-		ps.setString(8, encode(item.getMarks()));
+		ps.setString(8, item.getMark().toString());
 		ps.setString(9, encodeFlags(item.getFlags()));
 		ps.setInt(10, item.isRead() ? 1 : 0);
 		ps.setLong(11, item.getPublicationDate());
@@ -503,7 +504,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		}
 		ps.setInt(5, folder.isSystem() ? 1 : 0);
 		ps.setString(6, folder.getTitle());
-		ps.setString(7, encode(folder.getMarks()));
+		ps.setString(7, folder.getMark().toString());
 		ps.setString(8, encodeFlags(folder.getFlags()));
 		ps.executeUpdate();
 		ps.close();
@@ -810,5 +811,19 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	public void emptyTrash() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void update(AggregatorItem item) {
+		try {
+			Statement s = connection.createStatement();
+			s.setEscapeProcessing(true);
+			if (item instanceof Article) {
+				s.executeUpdate("update articles set marking='" //$NON-NLS-1$
+						+ item.getMark().toString() + "' where uuid='" //$NON-NLS-1$
+						+ item.getUUID() + "'"); //$NON-NLS-1$
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

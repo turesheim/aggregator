@@ -23,6 +23,7 @@ import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.AggregatorItem.Flag;
+import no.resheim.aggregator.data.AggregatorItem.Mark;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -47,7 +48,9 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plug-in life cycle
  */
 public class AggregatorUIPlugin extends AbstractUIPlugin {
-	private static final String MIME_FLASH = "application/x-shockwave-flash";
+
+	/** Flash MIME type */
+	private static final String MIME_FLASH = "application/x-shockwave-flash"; //$NON-NLS-1$
 
 	/** Identifier for the select feed collection command */
 	public static final String CMD_SELECT_COLLECTION = "no.resheim.aggregator.core.ui.selectCollection"; //$NON-NLS-1$
@@ -83,6 +86,13 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	public static final String IMG_DEC_ERROR = "error_dec"; //$NON-NLS-1$
 
 	public static final String IMG_DEC_FLASH = "flash_dec"; //$NON-NLS-1$
+
+	public static final String IMG_MARK_IMPORTANT = "mark_important"; //$NON-NLS-1$
+
+	public static final String IMG_MARK_1PRI = "mark_1pri"; //$NON-NLS-1$
+	public static final String IMG_MARK_2PRI = "mark_2pri"; //$NON-NLS-1$
+	public static final String IMG_MARK_3PRI = "mark_3pri"; //$NON-NLS-1$
+	public static final String IMG_MARK_TODO = "mark_todo"; //$NON-NLS-1$
 	private static AggregatorUIPlugin plugin;
 
 	/**
@@ -139,6 +149,16 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 				"icons/ovr16/error_co.gif")); //$NON-NLS-1$
 		reg.put(IMG_DEC_FLASH, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/ovr16/flash_co.gif")); //$NON-NLS-1$
+		reg.put(IMG_MARK_IMPORTANT, imageDescriptorFromPlugin(PLUGIN_ID,
+				"icons/ovr16/mark_important.gif")); //$NON-NLS-1$
+		reg.put(IMG_MARK_TODO, imageDescriptorFromPlugin(PLUGIN_ID,
+				"icons/ovr16/mark_todo.gif")); //$NON-NLS-1$
+		reg.put(IMG_MARK_1PRI, imageDescriptorFromPlugin(PLUGIN_ID,
+				"icons/ovr16/mark_1.gif")); //$NON-NLS-1$
+		reg.put(IMG_MARK_2PRI, imageDescriptorFromPlugin(PLUGIN_ID,
+				"icons/ovr16/mark_2.gif")); //$NON-NLS-1$
+		reg.put(IMG_MARK_3PRI, imageDescriptorFromPlugin(PLUGIN_ID,
+				"icons/ovr16/mark_3.gif")); //$NON-NLS-1$
 		// Copy some stuff from the shared
 		reg.put(IMG_ARTICLE_OBJ, PlatformUI.getWorkbench().getSharedImages()
 				.getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
@@ -278,12 +298,42 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 			return null;
 
 		String id = "MANAGED_" + baseId; //$NON-NLS-1$
+
+		// Add MIME type overlays
 		if (item instanceof Article) {
 			if (((Article) item).getMediaEnclosureType().equals(MIME_FLASH)) {
 				type = getImageRegistry().getDescriptor(IMG_DEC_FLASH);
 				id += "_flash"; //$NON-NLS-1$
 			}
 		}
+		// Add marking overlays
+		ImageDescriptor mark = null;
+		if (item instanceof AggregatorItem) {
+			Mark marking = ((AggregatorItem) item).getMark();
+			id += "_" + marking; //$NON-NLS-1$
+			switch (marking) {
+			case IMPORTANT:
+				mark = getImageRegistry().getDescriptor(IMG_MARK_IMPORTANT);
+				break;
+			case TODO:
+				mark = getImageRegistry().getDescriptor(IMG_MARK_TODO);
+				break;
+			case FIRST_PRIORITY:
+				mark = getImageRegistry().getDescriptor(IMG_MARK_1PRI);
+				break;
+			case SECOND_PRIORITY:
+				mark = getImageRegistry().getDescriptor(IMG_MARK_2PRI);
+				break;
+			case THIRD_PRIORITY:
+				mark = getImageRegistry().getDescriptor(IMG_MARK_3PRI);
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		// Add status overlays
 		ImageDescriptor si = null;
 		if (status != null) {
 			switch (status.getSeverity()) {
@@ -295,7 +345,7 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 				break;
 			}
 			if (si != null) {
-				id = id + "_" + Integer.toString(status.getSeverity()); //$NON-NLS-1$
+				id += "_" + Integer.toString(status.getSeverity()); //$NON-NLS-1$
 			}
 		}
 
@@ -306,7 +356,7 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 		Point size = new Point(16, 16);
 		DecorationOverlayIcon icon = new DecorationOverlayIcon(baseImage,
 				new ImageDescriptor[] {
-						type, null, null, si, null
+						type, mark, null, si, null
 				}, size) {
 		};
 		getImageRegistry().put(id, icon);

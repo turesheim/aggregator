@@ -78,6 +78,17 @@
          </commandParameter>
       </command>
       <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.MarkItemSelectionHandler"
+            id="no.resheim.aggregator.core.ui.markItem"
+            name="Mark Item">
+         <commandParameter
+               id="markId"
+               name="Mark Type"
+               optional="true"
+               typeId="no.resheim.aggregator.core.ui.markItemCommandParameterType">
+         </commandParameter>
+      </command>
+      <command
             defaultHandler="no.resheim.aggregator.core.ui.commands.CopyLinkLocationCommandHandler"
             id="no.resheim.aggregator.core.ui.copyLinkCommand"
             name="Copy Link Location">
@@ -96,6 +107,11 @@
             converter="no.resheim.aggregator.core.ui.commands.CollectionParameterValueConverter"
             id="no.resheim.aggregator.core.ui.collectionCommandParameterType"
             type="no.resheim.aggregator.data.FeedCollection">
+      </commandParameterType>
+      <commandParameterType
+            converter="no.resheim.aggregator.core.ui.commands.MarkItemParameterValueConverter"
+            id="no.resheim.aggregator.core.ui.markItemCommandParameterType"
+            type="no.resheim.aggregator.data.Mark">
       </commandParameterType>
    </extension>
    <extension

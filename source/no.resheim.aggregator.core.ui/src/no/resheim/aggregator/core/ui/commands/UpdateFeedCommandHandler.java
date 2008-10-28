@@ -48,7 +48,7 @@ public class UpdateFeedCommandHandler extends AbstractAggregatorCommandHandler
 			AggregatorItem item = getSelection(event);
 			if (item != null && item instanceof Folder) {
 				try {
-					IStatus s = registry.update(item);
+					IStatus s = registry.refresh(item);
 					if (!s.isOK()) {
 						StatusManager.getManager().handle(s,
 								StatusManager.BLOCK);

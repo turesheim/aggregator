@@ -188,6 +188,8 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 */
 	public abstract void updateFeed(Feed feed);
 
+	public abstract void update(AggregatorItem item);
+
 	/**
 	 * Indicates that the feed item has been read.
 	 * 

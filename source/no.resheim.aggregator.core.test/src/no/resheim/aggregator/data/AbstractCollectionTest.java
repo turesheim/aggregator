@@ -29,9 +29,9 @@ public abstract class AbstractCollectionTest extends TestCase {
 			failNotEquals("Unique identifier differs", item_b.getUUID(), item_a //$NON-NLS-1$
 					.getUUID());
 		}
-		if (!item_a.getMarks().equals(item_a.getMarks())) {
-			failNotEquals("Marks identifier differs", item_b.getMarks(), item_a //$NON-NLS-1$
-					.getMarks());
+		if (!item_a.getMark().equals(item_a.getMark())) {
+			failNotEquals("Marks identifier differs", item_b.getMark(), item_a //$NON-NLS-1$
+					.getMark());
 		}
 		if (item_a.getOrdering() != item_a.getOrdering()) {
 			failNotEquals(

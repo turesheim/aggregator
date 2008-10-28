@@ -493,6 +493,18 @@ public class FeedCollection extends AggregatorItemParent {
 		}
 	}
 
+	public void update(Article item) throws CoreException {
+		try {
+			fDatabase.writeLock().lock();
+			fDatabase.update((AggregatorItem) item);
+		} finally {
+			fDatabase.writeLock().unlock();
+		}
+		notifyListerners(new Object[] {
+			item
+		}, EventType.CHANGED);
+	}
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
@@ -567,7 +579,7 @@ public class FeedCollection extends AggregatorItemParent {
 		return events;
 	}
 
-	public IStatus update(AggregatorItem item) throws CoreException {
+	public IStatus refresh(AggregatorItem item) throws CoreException {
 		List<AggregatorItem> items = getDescendants(item);
 		items.add(item);
 		for (AggregatorItem aggregatorItem : items) {
