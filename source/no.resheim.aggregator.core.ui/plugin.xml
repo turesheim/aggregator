@@ -111,7 +111,7 @@
       <commandParameterType
             converter="no.resheim.aggregator.core.ui.commands.MarkItemParameterValueConverter"
             id="no.resheim.aggregator.core.ui.markItemCommandParameterType"
-            type="no.resheim.aggregator.data.Mark">
+            type="no.resheim.aggregator.data.AggregatorItem.Mark">
       </commandParameterType>
    </extension>
    <extension
