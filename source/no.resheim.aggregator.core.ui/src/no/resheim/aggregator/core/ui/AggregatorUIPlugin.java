@@ -15,25 +15,16 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
-import java.io.ByteArrayInputStream;
 
 import no.resheim.aggregator.AggregatorPlugin;
-import no.resheim.aggregator.data.AggregatorItem;
-import no.resheim.aggregator.data.Article;
-import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.AggregatorItem.Flag;
-import no.resheim.aggregator.data.AggregatorItem.Mark;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -50,7 +41,7 @@ import org.osgi.framework.BundleContext;
 public class AggregatorUIPlugin extends AbstractUIPlugin {
 
 	/** Flash MIME type */
-	private static final String MIME_FLASH = "application/x-shockwave-flash"; //$NON-NLS-1$
+	public static final String MIME_FLASH = "application/x-shockwave-flash"; //$NON-NLS-1$
 
 	/** Identifier for the select feed collection command */
 	public static final String CMD_SELECT_COLLECTION = "no.resheim.aggregator.core.ui.selectCollection"; //$NON-NLS-1$
@@ -250,117 +241,6 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 			return data;
 		}
 		return null;
-	}
-
-	/**
-	 * Return an image for the aggregator item and decorate if the status is not
-	 * null
-	 * <p>
-	 * Overlays should be 7x8 pixels. See
-	 * http://wiki.eclipse.org/User_Interface_Guidelines
-	 * </p>
-	 * 
-	 * @param item
-	 * @param status
-	 * @return an image representing the item
-	 */
-	Image getImage(Object item, IStatus status) {
-		String baseId = null;
-		ImageDescriptor type = null;
-
-		if (item instanceof Feed) {
-			baseId = IMG_FEED_OBJ;
-			Feed feed = (Feed) item;
-			if (feed.getImageData() != null) {
-				baseId = feed.getUUID().toString();
-				ImageDescriptor id = getImageRegistry().getDescriptor(baseId);
-				// It's not in the registry so we need to make an instance
-				if (id == null) {
-					ByteArrayInputStream bis = new ByteArrayInputStream(
-							((Feed) item).getImageData());
-					ImageData data = new ImageData(bis);
-					Image image = new Image(getStandardDisplay(), data
-							.scaledTo(16, 16));
-					getImageRegistry().put(baseId, image);
-				}
-			}
-		}
-		if (item instanceof Folder) {
-			baseId = IMG_FOLDER_OBJ;
-			if (((AggregatorItem) item).getFlags().contains(Flag.TRASH)) {
-				baseId = IMG_TRASH_OBJ;
-			}
-		}
-		if (item instanceof Article) {
-			baseId = IMG_ARTICLE_OBJ;
-		}
-		if (baseId == null)
-			return null;
-
-		String id = "MANAGED_" + baseId; //$NON-NLS-1$
-
-		// Add MIME type overlays
-		if (item instanceof Article) {
-			if (((Article) item).getMediaEnclosureType().equals(MIME_FLASH)) {
-				type = getImageRegistry().getDescriptor(IMG_DEC_FLASH);
-				id += "_flash"; //$NON-NLS-1$
-			}
-		}
-		// Add marking overlays
-		ImageDescriptor mark = null;
-		if (item instanceof AggregatorItem) {
-			Mark marking = ((AggregatorItem) item).getMark();
-			id += "_" + marking; //$NON-NLS-1$
-			switch (marking) {
-			case IMPORTANT:
-				mark = getImageRegistry().getDescriptor(IMG_MARK_IMPORTANT);
-				break;
-			case TODO:
-				mark = getImageRegistry().getDescriptor(IMG_MARK_TODO);
-				break;
-			case FIRST_PRIORITY:
-				mark = getImageRegistry().getDescriptor(IMG_MARK_1PRI);
-				break;
-			case SECOND_PRIORITY:
-				mark = getImageRegistry().getDescriptor(IMG_MARK_2PRI);
-				break;
-			case THIRD_PRIORITY:
-				mark = getImageRegistry().getDescriptor(IMG_MARK_3PRI);
-				break;
-
-			default:
-				break;
-			}
-		}
-
-		// Add status overlays
-		ImageDescriptor si = null;
-		if (status != null) {
-			switch (status.getSeverity()) {
-			case IStatus.ERROR:
-				si = getImageRegistry().getDescriptor(IMG_DEC_ERROR);
-				break;
-			case IStatus.WARNING:
-				si = getImageRegistry().getDescriptor(IMG_DEC_WARNING);
-				break;
-			}
-			if (si != null) {
-				id += "_" + Integer.toString(status.getSeverity()); //$NON-NLS-1$
-			}
-		}
-
-		if (getImageRegistry().get(id) != null) {
-			return getImageRegistry().get(id);
-		}
-		Image baseImage = getImageRegistry().get(baseId);
-		Point size = new Point(16, 16);
-		DecorationOverlayIcon icon = new DecorationOverlayIcon(baseImage,
-				new ImageDescriptor[] {
-						type, mark, null, si, null
-				}, size) {
-		};
-		getImageRegistry().put(id, icon);
-		return getImage(id);
 	}
 
 	/**
