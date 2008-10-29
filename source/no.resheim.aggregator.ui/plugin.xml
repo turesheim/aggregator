@@ -336,6 +336,16 @@
             updatePeriod="DAYS"
             url="http://torkildr.blogspot.com/feeds/posts/default">
       </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="Atmel Finance News"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://finance.google.com/finance?morenews=10&amp;rating=1&amp;q=NASDAQ:ATML&amp;output=rss">
+      </feed>
    </extension>
 
 </plugin>
