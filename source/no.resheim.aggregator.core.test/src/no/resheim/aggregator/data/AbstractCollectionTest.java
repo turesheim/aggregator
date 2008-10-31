@@ -13,8 +13,6 @@ import org.junit.Test;
 public abstract class AbstractCollectionTest extends TestCase {
 
 	private Feed feed;
-	private Folder feedFolder;
-	private Folder folder_1000;
 
 	/**
 	 * Used to obtain a correctly configured feed collection.

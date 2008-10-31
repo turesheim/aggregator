@@ -18,11 +18,11 @@ public class FolderTest extends TestCase {
 
 	@Test
 	public final void testGetFeed() {
-		fail("Not yet implemented"); // TODO
+		fail("Not yet implemented"); // TODO //$NON-NLS-1$
 	}
 
 	@Test
 	public final void testFolder() {
-		fail("Not yet implemented"); // TODO
+		fail("Not yet implemented"); // TODO //$NON-NLS-1$
 	}
 }

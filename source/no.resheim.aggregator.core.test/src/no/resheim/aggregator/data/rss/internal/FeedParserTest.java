@@ -11,10 +11,10 @@ import junit.framework.TestCase;
 import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.TestUtils;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent;
+import no.resheim.aggregator.data.AggregatorItemParent;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
 import no.resheim.aggregator.data.IAggregatorEventListener;
-import no.resheim.aggregator.data.AggregatorItemParent;
 import no.resheim.aggregator.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.rss.internal.FeedParser;
 
@@ -67,13 +67,12 @@ public class FeedParserTest extends TestCase {
 								.getChildAt(0);
 						int count = folder.getChildCount();
 						if (count != 20) {
-							fail("The associated folder should contain 20 items, not "
+							fail("The associated folder should contain 20 items, not " //$NON-NLS-1$
 									+ count);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					System.out.println("OK");
 				}
 			}
 
