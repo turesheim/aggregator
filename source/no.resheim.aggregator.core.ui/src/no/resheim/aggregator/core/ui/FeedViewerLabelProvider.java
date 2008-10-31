@@ -223,7 +223,11 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 	}
 
 	private Image getImage(Feed feed, IStatus status) {
-		String id = feed.getUUID().toString();
+		String id = AggregatorUIPlugin.IMG_FEED_OBJ;
+		// The feed has a custom image
+		if (feed.getImageData() != null) {
+			id = feed.getUUID().toString();
+		}
 		// Add status overlays
 		ImageDescriptor si = null;
 		if (status != null) {
