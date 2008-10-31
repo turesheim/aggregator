@@ -77,7 +77,6 @@ public class RSSView extends ViewPart implements IFeedView,
 		IFeedCollectionEventListener {
 
 	private static final String CONTEXT_ID = "no.resheim.aggregator.ui.context"; //$NON-NLS-1$
-	private static final String CORE_PLUGIN_ID = "no.resheim.aggregator.core"; //$NON-NLS-1$
 
 	class BrowserTitleListener implements TitleListener {
 

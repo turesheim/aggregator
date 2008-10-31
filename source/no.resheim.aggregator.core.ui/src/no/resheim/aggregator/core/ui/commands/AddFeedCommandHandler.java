@@ -41,6 +41,9 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 		implements IHandler {
 
+	private static final String NEW_WIZARD_ACTION = "NewWizardAction"; //$NON-NLS-1$
+	private static final String SELECTION_ROOT = "selectionRoot"; //$NON-NLS-1$
+
 	public AddFeedCommandHandler() {
 		super(false, true);
 	}
@@ -54,8 +57,9 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 		NewFeedWizard wizard = new NewFeedWizard(collection);
 		AggregatorItem parent = collection;
 		AggregatorItem item = getSelection(event);
-		String selectionRoot = event.getParameter("selectionRoot"); //$NON-NLS-1$
-		if (selectionRoot != null && selectionRoot.equals("true")) { //$NON-NLS-1$
+		String selectionRoot = event.getParameter(SELECTION_ROOT);
+		if (selectionRoot != null
+				&& selectionRoot.equals(Boolean.TRUE.toString())) {
 			if (item != null)
 				parent = collection;
 		}
@@ -64,9 +68,9 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 		IDialogSettings workbenchSettings = AggregatorUIPlugin.getDefault()
 				.getDialogSettings();
 		IDialogSettings wizardSettings = workbenchSettings
-				.getSection("NewWizardAction");//$NON-NLS-1$
+				.getSection(NEW_WIZARD_ACTION);
 		if (wizardSettings == null) {
-			wizardSettings = workbenchSettings.addNewSection("NewWizardAction");//$NON-NLS-1$
+			wizardSettings = workbenchSettings.addNewSection(NEW_WIZARD_ACTION);
 		}
 		wizard.setDialogSettings(wizardSettings);
 		WizardDialog dialog = new WizardDialog(HandlerUtil
