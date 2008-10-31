@@ -96,18 +96,18 @@ public class FeedUpdateJob extends Job {
 						feed.getTitle()
 					}));
 			cleanUp(feed);
-			feed.setLastUpdate(System.currentTimeMillis());
-			// Store changes to the feed
-			collection.feedUpdated(feed);
 		}
 		synchronized (feed) {
 			feed.setUpdating(false);
-			Collections.sort(feed.getTempItems());
-			if (feed.getTempItems().size() > 0) {
-				collection.addNew(feed.getTempItems().toArray(
-						new AggregatorItem[feed.getTempItems().size()]));
-			}
 		}
+		Collections.sort(feed.getTempItems());
+		if (feed.getTempItems().size() > 0) {
+			collection.addNew(feed.getTempItems().toArray(
+					new AggregatorItem[feed.getTempItems().size()]));
+		}
+		feed.setLastUpdate(System.currentTimeMillis());
+		// Store changes to the feed
+		collection.feedUpdated(feed);
 		return ds;
 
 	}
