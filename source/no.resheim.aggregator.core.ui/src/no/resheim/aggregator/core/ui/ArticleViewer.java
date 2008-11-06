@@ -202,13 +202,24 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 			description.append(FONT_FIX_5);
 			browser.setText(description.toString());
 		} else {
-			browser.setText(MessageFormat.format(
-					Messages.ArticleViewer_ObjectHTMLCode, new Object[] {
-							item.getMediaPlayerURL(),
-							item.getMediaEnclosureURL(),
-							item.getMediaEnclosureType(),
-							item.getMediaEnclosureDuration()
-					}));
+			if (item.getMediaEnclosureURL().length() > 0) {
+				browser.setText(MessageFormat.format(
+						Messages.ArticleViewer_ObjectHTMLCode_File,
+						new Object[] {
+								item.getMediaPlayerURL(),
+								item.getMediaEnclosureURL(),
+								item.getMediaEnclosureType(),
+								item.getMediaEnclosureDuration()
+						}));
+			} else {
+				browser.setText(MessageFormat.format(
+						Messages.ArticleViewer_ObjectHTMLCode, new Object[] {
+								item.getMediaPlayerURL(),
+								item.getMediaEnclosureURL(),
+								item.getMediaEnclosureType(),
+								item.getMediaEnclosureDuration()
+						}));
+			}
 		}
 	}
 
