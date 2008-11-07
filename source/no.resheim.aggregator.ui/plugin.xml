@@ -325,7 +325,7 @@
             title="AVR Television"
             updateInterval="1"
             updatePeriod="DAYS"
-            url="http://www.youtube.com/rss/user/avrtvtube/videos.rss">
+            url="http://www.avrtv.com/wp-rss2-astudio.php">
       </feed>
       <feed
             archivingDays="0"
