@@ -359,10 +359,19 @@
             archivingDays="1"
             archivingItems="1"
             archivingMethod="KEEP_NONE"
-            title="YouTube Top Rated"
+            title="YouTube Most Recent"
             updateInterval="1"
             updatePeriod="HOURS"
-            url="http://gdata.youtube.com/feeds/base/standardfeeds/top_rated?client=ytapi-youtube-browse&amp;alt=rss">
+            url="http://gdata.youtube.com/feeds/base/standardfeeds/most_recent?alt=rss">
+      </feed>
+      <feed
+            archivingDays="1"
+            archivingItems="0"
+            archivingMethod="KEEP_ALL"
+            title="YouTube, user &quot;avrtvtube&quot;"
+            updateInterval="1"
+            updatePeriod="DAYS"
+            url="http://www.youtube.com/rss/user/avrtvtube/videos.rss">
       </feed>
    </extension>
 
