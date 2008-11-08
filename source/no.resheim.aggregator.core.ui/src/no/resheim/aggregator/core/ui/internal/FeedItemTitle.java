@@ -10,22 +10,29 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal;
 
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.forms.IFormColors;
+import org.eclipse.ui.internal.forms.widgets.FormsResources;
 
 /**
  * The title in the aggregator view title. Adapted from a type in the tabbed
@@ -34,13 +41,16 @@ import org.eclipse.ui.forms.IFormColors;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
+@SuppressWarnings("restriction")
 public class FeedItemTitle extends Composite {
 
+	@Override
+	public void dispose() {
+		super.dispose();
+		backgroundImage.dispose();
+	}
+
 	private CLabel label;
-
-	private Image image = null;
-
-	private String text = null;
 
 	private static final String BLANK = ""; //$NON-NLS-1$
 
@@ -59,27 +69,19 @@ public class FeedItemTitle extends Composite {
 	public FeedItemTitle(Composite parent, FeedViewWidgetFactory factory) {
 		// super(parent, SWT.NO_FOCUS);
 		super(parent, SWT.NONE);
+		setBackgroundMode(SWT.INHERIT_DEFAULT);
+
 		this.factory = factory;
-
-		this.addPaintListener(new PaintListener() {
-
-			public void paintControl(PaintEvent e) {
-				if (image == null && (text == null || text.equals(BLANK))) {
-					label.setVisible(false);
-				} else {
-					label.setVisible(true);
-					drawTitleBackground(e);
-				}
-			}
-		});
 
 		factory.getColors().initializeSectionToolBarColors();
 		setBackground(factory.getColors().getBackground());
 		setForeground(factory.getColors().getForeground());
 
-		FormLayout layout = new FormLayout();
-		layout.marginWidth = 1;
-		layout.marginHeight = 2;
+		GridLayout layout = new GridLayout(2, false);
+
+		// FormLayout layout = new FormLayout();
+		// layout.marginWidth = 1;
+		// layout.marginHeight = 2;
 		setLayout(layout);
 
 		Font font;
@@ -99,33 +101,66 @@ public class FeedItemTitle extends Composite {
 		}, true);
 		label.setFont(font);
 		label.setForeground(factory.getColors().getColor(IFormColors.TITLE));
-		FormData data = new FormData();
-		data.left = new FormAttachment(0, 0);
-		data.top = new FormAttachment(0, 0);
-		data.right = new FormAttachment(100, 0);
-		data.bottom = new FormAttachment(100, 0);
-		label.setLayoutData(data);
+		GridData gd = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+		label.setLayoutData(gd);
 
-		/*
-		 * setImage(PlatformUI.getWorkbench().getSharedImages().getImage(
-		 * ISharedImages.IMG_OBJ_ELEMENT));
-		 */
+		addListener(SWT.Resize, new Listener() {
+
+			public void handleEvent(Event event) {
+				createBackground();
+				setBackgroundImage(backgroundImage);
+			}
+		});
+
 	}
 
+	ToolBarManager toolBarManager;
+	Image backgroundImage;
+
 	/**
-	 * @param e
+	 * Returns the tool bar manager that is used to manage tool items in the
+	 * form's title area.
+	 * 
+	 * @return form tool bar manager
 	 */
-	protected void drawTitleBackground(PaintEvent e) {
-		Rectangle bounds = getClientArea();
-		label.setBackground(new Color[] {
-				factory.getColors().getColor(IFormColors.H_GRADIENT_END),
-				factory.getColors().getColor(IFormColors.H_GRADIENT_START)
-		}, new int[] {
-			100
-		}, true);
+	public IToolBarManager getToolBarManager() {
+		if (toolBarManager == null) {
+			toolBarManager = new ToolBarManager(SWT.FLAT);
+			final ToolBar toolbar = toolBarManager.createControl(this);
+			toolbar.setBackground(getBackground());
+			toolbar.setForeground(getForeground());
+			toolbar.setCursor(FormsResources.getHandCursor());
+			addDisposeListener(new DisposeListener() {
+				public void widgetDisposed(DisposeEvent e) {
+					if (toolBarManager != null) {
+						toolBarManager.dispose();
+						toolBarManager = null;
+					}
+				}
+			});
+			toolbar.setBackgroundImage(backgroundImage);
+			toolbar.addListener(SWT.Resize, new Listener() {
+
+				public void handleEvent(Event event) {
+					ToolItem[] items = toolbar.getItems();
+					for (ToolItem toolItem : items) {
+						System.out.println(toolItem.getControl());
+					}
+				}
+
+			});
+		}
+		return toolBarManager;
+	}
+
+	private void createBackground() {
 		Color bg = factory.getColors().getColor(IFormColors.H_GRADIENT_END);
 		Color gbg = factory.getColors().getColor(IFormColors.H_GRADIENT_START);
-		GC gc = e.gc;
+		Rectangle rect = getClientArea();
+		Display display = getDisplay();
+		Image newImage = new Image(display, 1, Math.max(1, rect.height));
+		Rectangle bounds = newImage.getBounds();
+		GC gc = new GC(newImage);
 		gc.setForeground(bg);
 		gc.setBackground(gbg);
 		gc.fillGradientRectangle(bounds.x, bounds.y, bounds.width,
@@ -139,6 +174,10 @@ public class FeedItemTitle extends Composite {
 				IFormColors.H_BOTTOM_KEYLINE2));
 		gc.drawLine(bounds.x, bounds.height - 1, bounds.x + bounds.width - 1,
 				bounds.height - 1);
+		if (backgroundImage != null) {
+			backgroundImage.dispose();
+		}
+		backgroundImage = newImage;
 	}
 
 	/**
@@ -150,8 +189,6 @@ public class FeedItemTitle extends Composite {
 	 *            the image for the label.
 	 */
 	public void setTitle(String text, Image image) {
-		this.text = text;
-		this.image = image;
 		if (text != null) {
 			label.setText(text);
 		} else {
