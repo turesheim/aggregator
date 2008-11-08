@@ -17,7 +17,7 @@ CREATE TABLE articles (
 		feed_uuid CHAR(36) NOT NULL,
 		guid VARCHAR(256) NOT NULL,
 		title VARCHAR(256) NOT NULL,
-		url VARCHAR(128) NOT NULL,
+		url VARCHAR(256) NOT NULL,
 		marking VARCHAR(32) NOT NULL,		
 		flags VARCHAR(128) NOT NULL,
 		is_read INT NOT NULL,
@@ -55,6 +55,39 @@ CREATE TABLE feeds (
 		image_data VARCHAR(10240)
 	);
 
+/** A filter with a title */	
+CREATE TABLE filters (
+		uuid CHAR(36) NOT NULL PRIMARY KEY,
+		title VARCHAR(256) NOT NULL
+	);
+
+/** A criteria for the filter */  
+CREATE TABLE filter_criteria (
+		uuid CHAR(36) NOT NULL PRIMARY KEY,
+		filter_uuid CHAR(36) NOT NULL,
+		field VARCHAR(32),
+		operator VARCHAR(32),
+		value_match VARCHAR(128),
+		FOREIGN KEY (filter_uuid) references filters (uuid) ON DELETE CASCADE
+	);
+	
+/* Ties filters and folders together */	
+CREATE TABLE filter_folders (
+		folder_uuid CHAR(36) NOT NULL,
+		filter_uuid CHAR(36) NOT NULL,
+		FOREIGN KEY (folder_uuid) references folders (uuid) ON DELETE CASCADE,
+		FOREIGN KEY (filter_uuid) references filters (uuid) ON DELETE CASCADE
+	);
+
+/** A filter action to perform */	
+CREATE TABLE filter_actions (
+		uuid CHAR(36) NOT NULL PRIMARY KEY,
+		filter_uuid CHAR(36) NOT NULL,
+		operation VARCHAR(32),
+		operator VARCHAR(32),
+		FOREIGN KEY (filter_uuid) references filters (uuid) ON DELETE CASCADE
+	);	
+	
 /* Selection*/
 CREATE INDEX folders_parent ON folders (parent_uuid,uuid);
 CREATE INDEX feeds_url ON feeds (url,uuid);

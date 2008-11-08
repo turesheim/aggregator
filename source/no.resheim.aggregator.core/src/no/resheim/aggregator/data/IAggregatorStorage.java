@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 
+import no.resheim.aggregator.filter.Filter;
+
 import org.eclipse.core.resources.ISaveParticipant;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -189,6 +191,21 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	public abstract void updateFeed(Feed feed);
 
 	public abstract void update(AggregatorItem item);
+
+	/**
+	 * Updates the storage with the given filters.
+	 * 
+	 * @param filters
+	 *            the new filter set
+	 */
+	public abstract void setFilters(Filter[] filters);
+
+	/**
+	 * Retrieves the filter set from the storage.
+	 * 
+	 * @return the filter set
+	 */
+	public abstract Filter[] getFilters();
 
 	/**
 	 * Indicates that the feed item has been read.

@@ -20,6 +20,7 @@ import no.resheim.aggregator.data.AggregatorItemParent;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.filter.Filter;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
@@ -205,6 +206,16 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 	}
 
 	public void update(AggregatorItem item) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public Filter[] getFilters() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setFilters(Filter[] filters) {
 		// TODO Auto-generated method stub
 
 	}

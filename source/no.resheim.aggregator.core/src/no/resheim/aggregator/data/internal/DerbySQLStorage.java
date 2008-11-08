@@ -27,6 +27,7 @@ import no.resheim.aggregator.data.Folder;
 import no.resheim.aggregator.data.AggregatorItem.Mark;
 import no.resheim.aggregator.data.Feed.Archiving;
 import no.resheim.aggregator.data.Feed.UpdatePeriod;
+import no.resheim.aggregator.filter.Filter;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
@@ -808,11 +809,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		return item;
 	}
 
-	public void emptyTrash() {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void update(AggregatorItem item) {
 		try {
 			Statement s = connection.createStatement();
@@ -825,5 +821,34 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Filter[] getFilters() {
+		ArrayList<Filter> filters = new ArrayList<Filter>();
+		try {
+			Statement s = connection.createStatement();
+			ResultSet rs = s.executeQuery("select * from filters"); //$NON-NLS-1$
+			while (rs.next()) {
+				Filter filter = new Filter(rs.getString("title"), UUID //$NON-NLS-1$
+						.fromString(rs.getString("uuid"))); //$NON-NLS-1$
+				// Add filter actions
+				ResultSet rs2 = s
+						.executeQuery("select * from filter_actions where filter_uuid='" //$NON-NLS-1$
+								+ filter.getUuid().toString() + "'"); //$NON-NLS-1$
+				while (rs2.next()) {
+
+				}
+				filters.add(filter);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return filters.toArray(new Filter[filters.size()]);
+	}
+
+	public void setFilters(Filter[] filters) {
+		// TODO Auto-generated method stub
+
 	}
 }
