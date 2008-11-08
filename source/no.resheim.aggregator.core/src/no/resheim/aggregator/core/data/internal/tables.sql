@@ -26,11 +26,34 @@ CREATE TABLE articles (
 		added_date BIGINT NOT NULL,
 		description LONG VARCHAR,
 		creator VARCHAR(128),
-		media_player_url VARCHAR(128),
-		media_enclosure_url VARCHAR(128),
-		media_enclosure_duration VARCHAR(128),
-		media_enclosure_type VARCHAR(128),
+		media_player VARCHAR(128),
+		enclosure_url VARCHAR(128),
+		enclosure_duration VARCHAR(128),
+		enclosure_type VARCHAR(128),
 		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
+	);
+
+/* Holds RSS Media elements */
+CREATE TABLE media_content (
+		ordering INT NOT NULL,
+		article_uuid CHAR(36) NOT NULL,
+		content_url VARCHAR(128),
+		thumbnail_url VARCHAR(128),
+		content_type VARCHAR(128),
+		filesize BIGINT,
+		medium VARCHAR(32),
+		is_default INT NOT NULL,
+		expression VARCHAR(32),
+		bitrate INT,
+		framerate INT,
+		samplingrate INT,
+		channels INT, 
+		duration INT,
+		height VARCHAR(32),
+		width VARCHAR(32),
+		lang VARCHAR(32),
+		player_url VARCHAR(128),
+		FOREIGN KEY (article_uuid) references articles (uuid) ON DELETE CASCADE
 	);
 
 CREATE TABLE feeds (
@@ -100,3 +123,5 @@ CREATE INDEX articles_tree ON articles (parent_uuid,ordering,uuid);
 
 /* Finding read articles */
 CREATE INDEX articles_old ON articles (feed_uuid,is_read);
+
+CREATE UNIQUE INDEX media_content ON media_content (ordering, article_uuid);

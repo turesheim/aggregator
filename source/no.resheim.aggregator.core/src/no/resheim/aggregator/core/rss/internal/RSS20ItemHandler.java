@@ -16,6 +16,8 @@ import java.util.UUID;
 
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.MediaContent;
+import no.resheim.aggregator.core.data.MediaContent.Medium;
 import no.resheim.aggregator.core.data.internal.InternalArticle;
 
 import org.xml.sax.Attributes;
@@ -29,6 +31,8 @@ import org.xml.sax.SAXException;
  * 
  */
 public class RSS20ItemHandler extends AbstractItemHandler {
+
+	private static final String MEDIUM = "medium";
 
 	private static final String DURATION = "duration"; //$NON-NLS-1$
 
@@ -127,13 +131,19 @@ public class RSS20ItemHandler extends AbstractItemHandler {
 				item.setMediaPlayerURL(atts.getValue(URL));
 			}
 			if (qName.equals(MEDIA_CONTENT)) {
+				// TODO: Parse the rest of the item
+				MediaContent media = new MediaContent();
 				if (atts.getValue(TYPE) != null) {
-					item.setMediaEnclosureType(atts.getValue(TYPE));
+					media.setContentType(atts.getValue(TYPE));
 				}
 				if (atts.getValue(URL) != null) {
-					item.setMediaEnclosureURL(atts.getValue(URL));
-					System.out.println(atts.getValue(URL));
+					media.setContentURL(atts.getValue(URL));
 				}
+				if (atts.getValue(MEDIUM) != null) {
+					media.setMedium(Medium.valueOf(atts.getValue(MEDIUM)
+							.toUpperCase()));
+				}
+				item.addMediaContent(media);
 			}
 			if (qName.equals(ENCLOSURE)) {
 				if (atts.getValue(DURATION) != null) {
@@ -141,7 +151,6 @@ public class RSS20ItemHandler extends AbstractItemHandler {
 							.getValue(DURATION)));
 				}
 				if (atts.getValue(TYPE) != null) {
-					System.out.println(atts.getValue(TYPE));
 					item.setMediaEnclosureType(atts.getValue(TYPE));
 				}
 				if (atts.getValue(URL) != null) {
