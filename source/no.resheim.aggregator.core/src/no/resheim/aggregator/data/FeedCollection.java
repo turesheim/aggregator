@@ -23,46 +23,41 @@ import no.resheim.aggregator.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.data.internal.CollectionUpdateJob;
 import no.resheim.aggregator.data.internal.InternalArticle;
 import no.resheim.aggregator.data.internal.InternalFolder;
+import no.resheim.aggregator.filter.Filter;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 
 /**
+ * TODO: Rename to AggregatorCollection
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
 public class FeedCollection extends AggregatorItemParent {
 
-	private static final String TRASH_FOLDER_NAME = "Trash"; //$NON-NLS-1$
 	private static final UUID COLLECTION_ID = UUID
 			.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"); //$NON-NLS-1$
+
+	/** The list of feed change listeners */
+	private static ArrayList<IAggregatorEventListener> feedListeners = new ArrayList<IAggregatorEventListener>();
+	private static final String TRASH_FOLDER_NAME = "Trash"; //$NON-NLS-1$
 
 	/** Trash folder identifier */
 	private static final UUID TRASH_ID = UUID
 			.fromString("448119fa-609c-4463-89cf-31d41d94ad05"); //$NON-NLS-1$
 
-	/** The list of feed change listeners */
-	private static ArrayList<IAggregatorEventListener> feedListeners = new ArrayList<IAggregatorEventListener>();
+	int count = 0;
 
 	/** The storage for our data */
 	private IAggregatorStorage fDatabase;
 
-	private boolean fPublic;
-
 	private boolean fDefault;
-
-	final CollectionUpdateJob fRegistryUpdateJob = new CollectionUpdateJob(this);
-
-	/**
-	 * The identifier of the registry as specified when the registry was
-	 * declared.
-	 */
-	private String id;
 
 	/**
 	 * List of <i>live</i> feeds that we must keep track of even if none of the
@@ -72,15 +67,36 @@ public class FeedCollection extends AggregatorItemParent {
 	 */
 	private HashMap<UUID, Feed> fFeeds;
 
+	private ArrayList<Filter> fFilters;
+
+	private boolean fPublic;
+
+	final CollectionUpdateJob fRegistryUpdateJob = new CollectionUpdateJob(this);
+
+	private Folder fTrashFolder;
+
+	/**
+	 * The identifier of the registry as specified when the registry was
+	 * declared.
+	 */
+	private String id;
+
+	/**
+	 * Initialises the new collection.
+	 * 
+	 * @param id
+	 *            the identifier of the collection
+	 * @param pub
+	 *            whether or not the collection is public
+	 * @param def
+	 *            whether or not the collection is the default collection
+	 */
 	public FeedCollection(String id, boolean pub, boolean def) {
 		super(null, COLLECTION_ID);
 		this.id = id;
-		this.fPublic = pub;
-		this.fDefault = def;
-	}
-
-	public boolean isDefault() {
-		return fDefault;
+		fPublic = pub;
+		fDefault = def;
+		fFilters = new ArrayList<Filter>();
 	}
 
 	/**
@@ -102,29 +118,26 @@ public class FeedCollection extends AggregatorItemParent {
 	 * @param feed
 	 *            the aggregator item to add
 	 */
-	public void addNew(AggregatorItem[] items) {
+	public IStatus addNew(AggregatorItem[] items) {
+		MultiStatus ms = new MultiStatus(AggregatorPlugin.PLUGIN_ID,
+				IStatus.OK, "Adding new items", null); //$NON-NLS-1$
 		try {
 			fDatabase.writeLock().lock();
 			for (AggregatorItem item : items) {
 				if (item instanceof Folder) {
 					AggregatorItem folder = (AggregatorItem) item;
-					fDatabase.add(folder);
+					ms.add(fDatabase.add(folder));
 				} else if (item instanceof Article) {
 					Article feedItem = (Article) item;
 					validate(feedItem);
-					fDatabase.add(feedItem);
+					ms.add(fDatabase.add(feedItem));
 				}
 			}
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
 		notifyListerners(items, EventType.CREATED);
-	}
-
-	private void validate(Article article) {
-		Assert
-				.isNotNull(article.getGuid(),
-						"Cannot add article without a guid"); //$NON-NLS-1$
+		return ms;
 	}
 
 	/**
@@ -159,6 +172,29 @@ public class FeedCollection extends AggregatorItemParent {
 			folder
 		}, EventType.CREATED);
 		return folder;
+	}
+
+	private void createTrashFolder() {
+		try {
+			for (AggregatorItem item : getChildren()) {
+				if (item.getUUID().equals(TRASH_ID)) {
+					fTrashFolder = (Folder) item;
+					break;
+				}
+			}
+			if (fTrashFolder == null) {
+				InternalFolder trash = new InternalFolder(this, TRASH_ID);
+				trash.setSystem(true);
+				trash.setFlags(EnumSet.of(Flag.TRASH));
+				trash.setTitle(TRASH_FOLDER_NAME);
+				addNew(new AggregatorItem[] {
+					trash
+				});
+				fTrashFolder = trash;
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -214,6 +250,10 @@ public class FeedCollection extends AggregatorItemParent {
 		return fFeeds;
 	}
 
+	public ArrayList<Filter> getFilters() {
+		return fFilters;
+	}
+
 	/**
 	 * Returns the identifier of the feed collection as specified in the
 	 * collection declaration.
@@ -251,8 +291,16 @@ public class FeedCollection extends AggregatorItemParent {
 		return null;
 	}
 
+	IAggregatorStorage getStorage() {
+		return fDatabase;
+	}
+
 	public String getTitle() {
 		return title;
+	}
+
+	public Folder getTrashFolder() {
+		return fTrashFolder;
 	}
 
 	/*
@@ -295,8 +343,6 @@ public class FeedCollection extends AggregatorItemParent {
 		}
 	}
 
-	private Folder fTrashFolder;
-
 	/**
 	 * Loads all feeds from the given backend storage and initializes.
 	 * 
@@ -317,35 +363,8 @@ public class FeedCollection extends AggregatorItemParent {
 		fRegistryUpdateJob.schedule();
 	}
 
-	private void createTrashFolder() {
-		try {
-			for (AggregatorItem item : getChildren()) {
-				if (item.getUUID().equals(TRASH_ID)) {
-					fTrashFolder = (Folder) item;
-					break;
-				}
-			}
-			if (fTrashFolder == null) {
-				InternalFolder trash = new InternalFolder(this, TRASH_ID);
-				trash.setSystem(true);
-				trash.setFlags(EnumSet.of(Flag.TRASH));
-				trash.setTitle(TRASH_FOLDER_NAME);
-				addNew(new AggregatorItem[] {
-					trash
-				});
-				fTrashFolder = trash;
-			}
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public Folder getTrashFolder() {
-		return fTrashFolder;
-	}
-
-	IAggregatorStorage getStorage() {
-		return fDatabase;
+	public boolean isDefault() {
+		return fDefault;
 	}
 
 	public boolean isPublic() {
@@ -357,6 +376,8 @@ public class FeedCollection extends AggregatorItemParent {
 	 * will be updated with new information and which can be used after the
 	 * storage update.
 	 * 
+	 * TODO: Move to AggregatorItemParent
+	 * 
 	 * @param item
 	 *            the item that is being moved
 	 * @param parentUuid
@@ -364,6 +385,7 @@ public class FeedCollection extends AggregatorItemParent {
 	 * @param newOrder
 	 *            the new order of the item
 	 * @throws CoreException
+	 * 
 	 */
 	public void move(AggregatorItem item, AggregatorItem oldParent,
 			int oldOrder, AggregatorItemParent newParent, int newOrder)
@@ -400,8 +422,6 @@ public class FeedCollection extends AggregatorItemParent {
 		}
 	}
 
-	int count = 0;
-
 	/**
 	 * Notify feed listeners about the aggregator item change.
 	 * 
@@ -423,6 +443,32 @@ public class FeedCollection extends AggregatorItemParent {
 			//
 			// });
 		}
+	}
+
+	public IStatus refresh(AggregatorItem item) throws CoreException {
+		List<AggregatorItem> items = getDescendants(item);
+		items.add(item);
+		for (AggregatorItem aggregatorItem : items) {
+			if (aggregatorItem instanceof Folder) {
+				UUID feedId = ((Folder) aggregatorItem).getFeedUUID();
+				if (feedId != null) {
+					Feed feed = getFeeds().get(feedId);
+					if (!feed.isUpdating()) {
+						FeedUpdateJob job = new FeedUpdateJob(this, feed);
+						job.schedule();
+					} else {
+						return new Status(
+								IStatus.ERROR,
+								AggregatorPlugin.PLUGIN_ID,
+								MessageFormat
+										.format(
+												Messages.FeedCollection_UpdateInProgress,
+												feed.getTitle()));
+					}
+				}
+			}
+		}
+		return Status.OK_STATUS;
 	}
 
 	/**
@@ -493,24 +539,14 @@ public class FeedCollection extends AggregatorItemParent {
 		}
 	}
 
-	public void update(Article item) throws CoreException {
-		try {
-			fDatabase.writeLock().lock();
-			fDatabase.update((AggregatorItem) item);
-		} finally {
-			fDatabase.writeLock().unlock();
-		}
-		notifyListerners(new Object[] {
-			item
-		}, EventType.CHANGED);
-	}
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
 	/**
 	 * Updates the sibling item positions by shifting them downwards.
+	 * 
+	 * TODO: Move to AggregatorItemParent
 	 * 
 	 * @param item
 	 *            the item that was moved
@@ -519,6 +555,7 @@ public class FeedCollection extends AggregatorItemParent {
 	 * @param to
 	 *            the new position of the moved item
 	 * @throws CoreException
+	 * 
 	 */
 	private void shiftDown(AggregatorItem item, int from, int to)
 			throws CoreException {
@@ -534,6 +571,13 @@ public class FeedCollection extends AggregatorItemParent {
 		}
 	}
 
+	/**
+	 * TODO: Move to AggregatorItemParent
+	 * 
+	 * @param item
+	 * @return
+	 * @throws CoreException
+	 */
 	List<AggregatorItemChangedEvent> shiftUp(AggregatorItem item)
 			throws CoreException {
 		AggregatorItemParent parent = item.getParent();
@@ -554,6 +598,8 @@ public class FeedCollection extends AggregatorItemParent {
 
 	/**
 	 * Updates the sibling item positions by shifting them upwards.
+	 * 
+	 * TODO: Move to AggregatorItemParent
 	 * 
 	 * @param item
 	 *            the item that was moved
@@ -579,30 +625,16 @@ public class FeedCollection extends AggregatorItemParent {
 		return events;
 	}
 
-	public IStatus refresh(AggregatorItem item) throws CoreException {
-		List<AggregatorItem> items = getDescendants(item);
-		items.add(item);
-		for (AggregatorItem aggregatorItem : items) {
-			if (aggregatorItem instanceof Folder) {
-				UUID feedId = ((Folder) aggregatorItem).getFeedUUID();
-				if (feedId != null) {
-					Feed feed = getFeeds().get(feedId);
-					if (!feed.isUpdating()) {
-						FeedUpdateJob job = new FeedUpdateJob(this, feed);
-						job.schedule();
-					} else {
-						return new Status(
-								IStatus.ERROR,
-								AggregatorPlugin.PLUGIN_ID,
-								MessageFormat
-										.format(
-												Messages.FeedCollection_UpdateInProgress,
-												feed.getTitle()));
-					}
-				}
-			}
+	public void update(Article item) throws CoreException {
+		try {
+			fDatabase.writeLock().lock();
+			fDatabase.update((AggregatorItem) item);
+		} finally {
+			fDatabase.writeLock().unlock();
 		}
-		return Status.OK_STATUS;
+		notifyListerners(new Object[] {
+			item
+		}, EventType.CHANGED);
 	}
 
 	public void updateFeedData(Feed item) {
@@ -614,5 +646,11 @@ public class FeedCollection extends AggregatorItemParent {
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
+	}
+
+	private void validate(Article article) {
+		Assert
+				.isNotNull(article.getGuid(),
+						"Cannot add article without a guid"); //$NON-NLS-1$
 	}
 }
