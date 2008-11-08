@@ -162,7 +162,7 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 
 		// Add MIME type overlays
 		if (item instanceof Article) {
-			if (((Article) item).getMediaEnclosureType().equals(
+			if (((Article) item).getEnclosureType().equals(
 					AggregatorUIPlugin.MIME_FLASH)) {
 				type = registry.getDescriptor(AggregatorUIPlugin.IMG_DEC_FLASH);
 				id += "_flash"; //$NON-NLS-1$
