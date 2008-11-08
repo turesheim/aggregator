@@ -186,12 +186,13 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 					}
 					in = br.readLine();
 				}
-				if (in.endsWith(SQL_SEPARATOR)) {
+				if (in.contains(SQL_SEPARATOR)) {
 					create.append(in.substring(0, in.length() - 1));
 					try {
 						s.executeUpdate(create.toString());
 					} catch (SQLException sqle) {
-						System.out.println(sqle.getMessage());
+						System.err.println(sqle.getMessage());
+						System.err.println(create.toString());
 						// In case the table already exists
 					}
 					create.setLength(0);
@@ -211,7 +212,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			return Status.OK_STATUS;
 		} catch (IOException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
-					"Could not create feeds", e); //$NON-NLS-1$
+					"Could not create tables", e); //$NON-NLS-1$
 		} finally {
 			try {
 				br.close();
