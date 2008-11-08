@@ -30,7 +30,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.forms.IFormColors;
 import org.eclipse.ui.internal.forms.widgets.FormsResources;
 
@@ -138,14 +137,10 @@ public class FeedItemTitle extends Composite {
 					}
 				}
 			});
-			toolbar.setBackgroundImage(backgroundImage);
-			toolbar.addListener(SWT.Resize, new Listener() {
+			toolbar.addListener(SWT.Paint, new Listener() {
 
 				public void handleEvent(Event event) {
-					ToolItem[] items = toolbar.getItems();
-					for (ToolItem toolItem : items) {
-						System.out.println(toolItem.getControl());
-					}
+					toolbar.setBackgroundImage(backgroundImage);
 				}
 
 			});

@@ -27,13 +27,10 @@ CREATE TABLE articles (
 		description LONG VARCHAR,
 		creator VARCHAR(128),
 		media_player VARCHAR(128),
-		enclosure_url VARCHAR(128),
-		enclosure_duration VARCHAR(128),
-		enclosure_type VARCHAR(128),
 		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);
 
-/* Holds RSS Media elements */
+/* Holds media:content and enclosure elements */
 CREATE TABLE media_content (
 		ordering INT NOT NULL,
 		article_uuid CHAR(36) NOT NULL,

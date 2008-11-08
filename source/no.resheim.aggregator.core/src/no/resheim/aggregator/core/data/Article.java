@@ -28,12 +28,6 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	/** The creator of the feed */
 	protected String creator;
 
-	protected int enclosureDuration = 0;
-
-	protected String enclosureType = EMPTY_STRING;
-
-	protected String enclosureURL = EMPTY_STRING;
-
 	/** The UUID of the feed this article belongs to */
 	protected UUID feed_uuid;
 
@@ -117,39 +111,6 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	}
 
 	/**
-	 * Returns the enclosure <i>duration</i>. There may be only one enclosure
-	 * element per feed item. This value represents the <b>duration</b>
-	 * attribute. See http://en.wikipedia.org/wiki/RSS_Enclosures for details.
-	 * 
-	 * @return
-	 */
-	public int getEnclosureDuration() {
-		return enclosureDuration;
-	}
-
-	/**
-	 * Returns the enclosure <i>type</i>. There may be only one enclosure
-	 * element per feed item. This value represents the <b>type</b> attribute.
-	 * See http://en.wikipedia.org/wiki/RSS_Enclosures for details.
-	 * 
-	 * @return
-	 */
-	public String getEnclosureType() {
-		return enclosureType;
-	}
-
-	/**
-	 * Returns the enclosure <i>URL</i>. There may be only one enclosure element
-	 * per feed item. This value represents the <b>url</b> attribute. See
-	 * http://en.wikipedia.org/wiki/RSS_Enclosures for details.
-	 * 
-	 * @return
-	 */
-	public String getEnclosureURL() {
-		return enclosureURL;
-	}
-
-	/**
 	 * 
 	 * @return
 	 */
@@ -214,7 +175,7 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	}
 
 	public boolean hasMedia() {
-		return getEnclosureType().length() > 0 || getMediaContent().length > 0;
+		return getMediaContent().length > 0;
 	}
 
 	@Override

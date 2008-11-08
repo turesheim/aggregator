@@ -160,17 +160,4 @@ public class InternalArticle extends Article {
 	public void setMediaPlayerURL(String mediaPlayerURL) {
 		this.mediaPlayerURL = mediaPlayerURL;
 	}
-
-	public void setMediaEnclosureURL(String mediaEnclosureURL) {
-		this.enclosureURL = mediaEnclosureURL;
-	}
-
-	public void setMediaEnclosureDuration(int mediaEnclosureDuration) {
-		this.enclosureDuration = mediaEnclosureDuration;
-	}
-
-	public void setMediaEnclosureType(String mediaEnclosureType) {
-		this.enclosureType = mediaEnclosureType;
-	}
-
 }

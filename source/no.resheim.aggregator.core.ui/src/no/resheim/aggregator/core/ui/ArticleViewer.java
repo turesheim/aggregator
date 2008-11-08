@@ -18,6 +18,7 @@ import java.text.MessageFormat;
 
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.MediaContent;
 import no.resheim.aggregator.core.ui.internal.FeedDescriptionFormatter;
 import no.resheim.aggregator.core.ui.internal.FeedItemTitle;
 import no.resheim.aggregator.core.ui.internal.FeedViewWidgetFactory;
@@ -28,6 +29,10 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -42,6 +47,8 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
@@ -83,6 +90,8 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		browser.removeStatusTextListener(fBrowserListener);
 		super.dispose();
 	}
+
+	private IAction playMediaAction;
 
 	/**
 	 * @param parent
@@ -148,6 +157,77 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 				}
 			}
 		});
+
+		createActions();
+	}
+
+	ActionContributionItem playMediaItem;
+
+	class PlayMediaAction extends Action implements IMenuCreator {
+		/**
+		 * @param text
+		 * @param style
+		 */
+		public PlayMediaAction(String text, int style) {
+			super(text, style);
+			setMenuCreator(this);
+		}
+
+		@Override
+		public void run() {
+			if (selectedArticle != null) {
+				viewContent(selectedArticle, true);
+			}
+		}
+
+		public void dispose() {
+			if (fMenu != null) {
+				fMenu.dispose();
+			}
+		}
+
+		protected void addActionToMenu(Menu parent, IAction action) {
+			ActionContributionItem item = new ActionContributionItem(action);
+			item.fill(parent, -1);
+		}
+
+		Menu fMenu;
+
+		public Menu getMenu(Control parent) {
+			if (fMenu != null) {
+				fMenu.dispose();
+			}
+			fMenu = new Menu(parent);
+			if (selectedArticle.hasMedia()) {
+				MediaContent[] media = selectedArticle.getMediaContent();
+				for (MediaContent mediaContent : media) {
+					Action action = new Action() {
+
+					};
+					action.setText(mediaContent.getContentURL());
+					addActionToMenu(fMenu, action);
+				}
+			}
+			return fMenu;
+		}
+
+		public Menu getMenu(Menu parent) {
+			return null;
+		}
+
+	}
+
+	private void createActions() {
+		playMediaAction = new PlayMediaAction("Play media",
+				IAction.AS_DROP_DOWN_MENU);
+		playMediaAction.setImageDescriptor(AggregatorUIPlugin.getDefault()
+				.getImageRegistry().getDescriptor(
+						AggregatorUIPlugin.IMG_PLAY_MEDIA));
+
+		playMediaItem = new ActionContributionItem(playMediaAction);
+		title.getToolBarManager().add(playMediaItem);
+		title.getToolBarManager().update(true);
+
 	}
 
 	private BrowserStatusTextListener fBrowserListener;
@@ -172,10 +252,13 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		setLayout(layout);
 	}
 
+	private Article selectedArticle;
+
 	public void show(Object item) {
 		fInterceptBrowser = false;
 		if (item instanceof Article) {
-			showDescription((Article) item);
+			selectedArticle = (Article) item;
+			viewArticle(selectedArticle);
 		} else if (item instanceof Feed) {
 			showDescription((Feed) item);
 		}
@@ -183,27 +266,40 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	}
 
 	/**
-	 * Shows the description of the selected item
+	 * Displays the selected article. If the article contains media, the first
+	 * media content is being used. If it's plain text the "text/html" content
+	 * handler is used, and if it contains a closure, this is being used.
 	 * 
 	 * @param item
+	 *            the article to display
 	 */
-	private void showDescription(Article item) {
+	private void viewArticle(Article item) {
 		if (item == null)
 			return;
 		title.setTitle(item.getTitle(), null);
-		try {
-			if (item.getMediaEnclosureType().length() == 0) {
-				String text = getMediaPlayerHTML(DEFAULT_CONTENT_TYPE, item
-						.getText());
+		playMediaItem.setVisible(item.hasMedia());
+		title.getToolBarManager().update(true);
+		viewContent(item, false);
+	}
+
+	private void viewContent(Article item, boolean showMedia) {
+		fInterceptBrowser = false;
+		String text = null;
+		if (showMedia) {
+			if (item.getMediaContent().length > 0) {
+				MediaContent media = item.getMediaContent()[0];
+				text = getContentHandlerHTML(media.getContentType(), media
+						.getContentURL());
 				browser.setText(text);
-			} else {
-				String text = getMediaPlayerHTML(item.getMediaEnclosureType(),
-						item.getMediaEnclosureURL());
-				browser.setText(text);
+				return;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		// Revert to default (we may not be able to set media content
+		if (text == null) {
+			text = getContentHandlerHTML(DEFAULT_CONTENT_TYPE, item.getText());
+		}
+		browser.setText(text);
+		fInterceptBrowser = true;
 	}
 
 	private void showDescription(Feed feed) {
@@ -216,8 +312,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 
 	final IExtensionRegistry ereg = Platform.getExtensionRegistry();
 
-	private String getMediaPlayerHTML(String contentType, String content)
-			throws IOException {
+	private String getContentHandlerHTML(String contentType, String content) {
 		String code = MessageFormat.format(
 				Messages.ArticleViewer_NoContentHandler, new Object[] {
 					contentType
@@ -238,8 +333,12 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 								.getContributor().getName());
 						Path path = new Path(player.getAttribute("file")); //$NON-NLS-1$
 						URL url = FileLocator.find(bundle, path, null);
-						code = code.replaceAll("\\$\\{file\\}", FileLocator //$NON-NLS-1$
-								.resolve(url).toExternalForm());
+						try {
+							code = code.replaceAll("\\$\\{file\\}", FileLocator //$NON-NLS-1$
+									.resolve(url).toExternalForm());
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
 					code = code.replaceAll("\\$\\{content\\}", content); //$NON-NLS-1$
 					code = code.replaceAll(

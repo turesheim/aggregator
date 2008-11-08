@@ -58,6 +58,8 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	/** Identifier for enabled refresh button image descriptor */
 	public static final String IMG_ENABLED_REFRESH = "enabled_refresh"; //$NON-NLS-1$
 
+	public static final String IMG_PLAY_MEDIA = "play_media"; //$NON-NLS-1$
+
 	/** Identifier for feed item image descriptor */
 	public static final String IMG_ADD_OBJ = "add_obj"; //$NON-NLS-1$
 
@@ -122,6 +124,8 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 		super.initializeImageRegistry(reg);
 		reg.put(IMG_VIEW_ICON, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/feed-icon-16x16.png")); //$NON-NLS-1$
+		reg.put(IMG_PLAY_MEDIA, imageDescriptorFromPlugin(PLUGIN_ID,
+				"icons/etool16/play_media.gif")); //$NON-NLS-1$
 		reg.put(IMG_ENABLED_REFRESH, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/clcl16/nav_refresh.gif")); //$NON-NLS-1$
 		reg.put(IMG_DISABLED_REFRESH, imageDescriptorFromPlugin(PLUGIN_ID,
