@@ -148,7 +148,7 @@
       <handler
             name="default">
          <code>
-            &lt;body style=&quot;margin:0px;font-family:&apos;${font-family}&apos;;font-size:${font-size}pt&quot;&gt;${content}
+            &lt;body style=&quot;margin:4px;font-family:&apos;${font-family}&apos;;font-size:${font-size}pt&quot;&gt;${content}
 &lt;/body&gt;
          </code>
          <type

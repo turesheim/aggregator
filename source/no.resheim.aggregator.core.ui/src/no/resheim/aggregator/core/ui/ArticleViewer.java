@@ -55,7 +55,7 @@ import org.osgi.framework.Bundle;
  */
 public class ArticleViewer extends Composite implements IPropertyChangeListener {
 	private static final String DEFAULT_CONTENT_TYPE = "text/html"; //$NON-NLS-1$
-	private static final String MEDIAPLAYERS_ID = "no.resheim.aggregator.core.ui.mediaHandlers"; //$NON-NLS-1$
+	private static final String MEDIAPLAYERS_ID = "no.resheim.aggregator.core.ui.contentHandlers"; //$NON-NLS-1$
 	private FeedItemTitle title;
 	private Browser browser;
 	/** Preference: Name of the font used in the details pane */
