@@ -16,5 +16,6 @@ Bundle-ClassPath: .
 Export-Package: no.resheim.aggregator,
  no.resheim.aggregator.data,
  no.resheim.aggregator.data.internal;x-friends:="no.resheim.aggregator.core.test",
+ no.resheim.aggregator.filter,
  no.resheim.aggregator.rss.internal;x-friends:="no.resheim.aggregator.core.test"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
