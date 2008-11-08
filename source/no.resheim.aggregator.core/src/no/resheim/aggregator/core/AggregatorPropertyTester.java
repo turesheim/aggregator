@@ -21,7 +21,6 @@ public class AggregatorPropertyTester extends PropertyTester {
 
 	public boolean test(Object receiver, String property, Object[] args,
 			Object expectedValue) {
-		System.out.println(receiver);
 		if (property != null && property.equals(MULTIPLE_COLLECTIONS)) {
 			return (AggregatorPlugin.getDefault().getCollections().size() > 1);
 		}
