@@ -90,9 +90,11 @@ public class FeedUpdateJob extends Job {
 			// TODO: Implement cleanup.
 		}
 		MultiStatus ms = new MultiStatus(AggregatorPlugin.PLUGIN_ID,
-				IStatus.OK, "Updating feed", null);
+				IStatus.OK, MessageFormat.format(
+						Messages.FeedUpdateJob_StatusTitle, new Object[] {
+							feed.getTitle()
+						}), null);
 		ms.add(download(feed, debug));
-		feed.setLastStatus(ms);
 		if (ms.isOK()) {
 			setName(MessageFormat.format(Messages.FeedUpdateJob_CleaningUp,
 					new Object[] {
@@ -109,6 +111,7 @@ public class FeedUpdateJob extends Job {
 					new AggregatorItem[feed.getTempItems().size()])));
 		}
 		feed.setLastUpdate(System.currentTimeMillis());
+		feed.setLastStatus(ms);
 		// Store changes to the feed
 		collection.feedUpdated(feed);
 		return ms;

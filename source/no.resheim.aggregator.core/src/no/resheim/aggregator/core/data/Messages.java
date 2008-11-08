@@ -13,6 +13,7 @@ public class Messages extends NLS {
 	public static String FeedUpdateJob_CredentialsError;
 	public static String FeedUpdateJob_Error_Title;
 	public static String FeedUpdateJob_HostError;
+	public static String FeedUpdateJob_StatusTitle;
 	public static String FeedUpdateJob_Title;
 	static {
 		// initialize resource bundle
