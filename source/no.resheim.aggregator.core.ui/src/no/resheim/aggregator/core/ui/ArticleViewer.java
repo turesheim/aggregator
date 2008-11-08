@@ -11,6 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
@@ -21,7 +22,12 @@ import no.resheim.aggregator.core.ui.internal.FeedViewWidgetFactory;
 import no.resheim.aggregator.data.Article;
 import no.resheim.aggregator.data.Feed;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -38,6 +44,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.Bundle;
 
 /**
  * A control that is used to show aggregator articles. A {@link Browser}
@@ -47,6 +54,8 @@ import org.eclipse.ui.PlatformUI;
  * @since 1.0
  */
 public class ArticleViewer extends Composite implements IPropertyChangeListener {
+	private static final String DEFAULT_CONTENT_TYPE = "text/html"; //$NON-NLS-1$
+	private static final String MEDIAPLAYERS_ID = "no.resheim.aggregator.core.ui.mediaHandlers"; //$NON-NLS-1$
 	private FeedItemTitle title;
 	private Browser browser;
 	/** Preference: Name of the font used in the details pane */
@@ -56,14 +65,6 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	private int pPresentationFontSize;
 
 	private ListenerList listeners;
-
-	// HTML/CSS code for specifying the description font when using the
-	// integrated web browser.
-	private static final String FONT_FIX_5 = "</body>"; //$NON-NLS-1$
-	private static final String FONT_FIX_4 = "pt\">"; //$NON-NLS-1$
-	private static final String FONT_FIX_3 = "';font-size: "; //$NON-NLS-1$
-	private static final String FONT_FIX_2 = " font-family: '"; //$NON-NLS-1$
-	private static final String FONT_FIX_1 = "<body style=\"margin=0px;"; //$NON-NLS-1$
 
 	public void addListener(IArticleViewerListener listener) {
 		listeners.add(listener);
@@ -190,36 +191,18 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		if (item == null)
 			return;
 		title.setTitle(item.getTitle(), null);
-		if (item.getMediaEnclosureDuration() == 0) {
-			StringBuffer description = new StringBuffer();
-			description.append(FONT_FIX_1);
-			description.append(FONT_FIX_2);
-			description.append(pPresentationFontFamily);
-			description.append(FONT_FIX_3);
-			description.append(pPresentationFontSize);
-			description.append(FONT_FIX_4);
-			description.append(item.getText());
-			description.append(FONT_FIX_5);
-			browser.setText(description.toString());
-		} else {
-			if (item.getMediaEnclosureURL().length() > 0) {
-				browser.setText(MessageFormat.format(
-						Messages.ArticleViewer_ObjectHTMLCode_File,
-						new Object[] {
-								item.getMediaPlayerURL(),
-								item.getMediaEnclosureURL(),
-								item.getMediaEnclosureType(),
-								item.getMediaEnclosureDuration()
-						}));
+		try {
+			if (item.getMediaEnclosureType().length() == 0) {
+				String text = getMediaPlayerHTML(DEFAULT_CONTENT_TYPE, item
+						.getText());
+				browser.setText(text);
 			} else {
-				browser.setText(MessageFormat.format(
-						Messages.ArticleViewer_ObjectHTMLCode, new Object[] {
-								item.getMediaPlayerURL(),
-								item.getMediaEnclosureURL(),
-								item.getMediaEnclosureType(),
-								item.getMediaEnclosureDuration()
-						}));
+				String text = getMediaPlayerHTML(item.getMediaEnclosureType(),
+						item.getMediaEnclosureURL());
+				browser.setText(text);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -229,6 +212,46 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		browser.setText(FeedDescriptionFormatter.format(feed,
 				pPresentationFontFamily, pPresentationFontSize));
 		title.setTitle(feed.getTitle(), null);
+	}
+
+	final IExtensionRegistry ereg = Platform.getExtensionRegistry();
+
+	private String getMediaPlayerHTML(String contentType, String content)
+			throws IOException {
+		String code = MessageFormat.format(
+				Messages.ArticleViewer_NoContentHandler, new Object[] {
+					contentType
+				});
+
+		IConfigurationElement[] players = ereg
+				.getConfigurationElementsFor(MEDIAPLAYERS_ID);
+		for (IConfigurationElement player : players) {
+			IConfigurationElement[] types = player.getChildren("type"); //$NON-NLS-1$
+			for (IConfigurationElement type : types) {
+				if (type.getAttribute("id").equals(contentType)) { //$NON-NLS-1$
+					// There has to be one code element
+					code = player.getChildren("code")[0].getValue(); //$NON-NLS-1$
+					// If a file is specified, we must merge in the location of
+					// that.
+					if (player.getAttribute("file") != null) { //$NON-NLS-1$
+						Bundle bundle = Platform.getBundle(player
+								.getContributor().getName());
+						Path path = new Path(player.getAttribute("file")); //$NON-NLS-1$
+						URL url = FileLocator.find(bundle, path, null);
+						code = code.replaceAll("\\$\\{file\\}", FileLocator //$NON-NLS-1$
+								.resolve(url).toExternalForm());
+					}
+					code = code.replaceAll("\\$\\{content\\}", content); //$NON-NLS-1$
+					code = code.replaceAll(
+							"\\$\\{font-family\\}", pPresentationFontFamily); //$NON-NLS-1$
+					code = code
+							.replaceAll(
+									"\\$\\{font-size\\}", String.valueOf(pPresentationFontSize)); //$NON-NLS-1$
+					return code;
+				}
+			}
+		}
+		return code;
 	}
 
 	private void updateFromPreferences() {

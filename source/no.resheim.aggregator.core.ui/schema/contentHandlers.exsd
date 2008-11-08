@@ -3,7 +3,7 @@
 <schema targetNamespace="no.resheim.aggregator.core.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="no.resheim.aggregator.core.ui" id="mediaPlayer" name="Aggregator Media Players"/>
+         <meta.schema plugin="no.resheim.aggregator.core.ui" id="mediaHandlers" name="Aggregator Media Handlers"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="player" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="handler" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,7 +47,7 @@
       </complexType>
    </element>
 
-   <element name="player">
+   <element name="handler">
       <annotation>
          <documentation>
             The media player object.
@@ -58,13 +58,23 @@
             <element ref="type" minOccurs="1" maxOccurs="unbounded"/>
             <element ref="code"/>
          </sequence>
-         <attribute name="file" type="string" use="required">
+         <attribute name="file" type="string">
             <annotation>
                <documentation>
-                  the media player.
+                  helper application that can be embedded in the browser widget.
                </documentation>
                <appinfo>
                   <meta.attribute kind="resource"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
                </appinfo>
             </annotation>
          </attribute>

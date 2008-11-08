@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="mediaPlayers" name="Aggregator Media Players" schema="schema/mediaPlayers.exsd"/>
+   <extension-point id="contentHandlers" name="Aggregator Media Handlers" schema="schema/contentHandlers.exsd"/>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -143,5 +143,33 @@
             class="no.resheim.aggregator.core.ui.KickStarter">
       </startup>
    </extension>
-
+   <extension
+         point="no.resheim.aggregator.core.ui.contentHandlers">
+      <handler
+            name="default">
+         <code>
+            &lt;body style=&quot;margin:0px;font-family:&apos;${font-family}&apos;;font-size:${font-size}pt&quot;&gt;${content}
+&lt;/body&gt;
+         </code>
+         <type
+               id="text/html">
+         </type>
+         <type
+               id="text/plain">
+         </type>
+      </handler>
+      <handler
+            name="flash">
+         <code>
+            &lt;body style=&quot;margin:0px;&quot;&gt;
+&lt;OBJECT classid=&quot;clsid:D27CDB6E-AE6D-11cf-96B8-444553540000&quot; codebase=&quot;http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0&quot;
+WIDTH=&quot;100%&quot; HEIGHT=&quot;100%&quot;&gt;&lt;PARAM NAME=movie VALUE=&quot;${content}&quot;&gt;&lt;PARAM NAME=quality VALUE=high&gt;&lt;PARAM NAME=bgcolor VALUE=#FFFFFF&gt;&lt;EMBED src=&quot;${content}&quot; quality=high bgcolor=#FFFFFF WIDTH=&quot;100%&quot; HEIGHT=&quot;100%&quot;
+TYPE=&quot;application/x-shockwave-flash&quot;
+PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBED&gt;&lt;/OBJECT&gt;&lt;/body&gt;
+         </code>
+         <type
+               id="application/x-shockwave-flash">
+         </type>
+      </handler>
+   </extension>
 </plugin>
