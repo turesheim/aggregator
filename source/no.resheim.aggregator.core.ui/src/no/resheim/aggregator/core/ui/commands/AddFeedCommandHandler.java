@@ -11,15 +11,15 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.commands;
 
+import no.resheim.aggregator.core.data.AggregatorItem;
+import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.FeedWorkingCopy;
+import no.resheim.aggregator.core.data.Feed.Archiving;
+import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.NewFeedWizard;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
-import no.resheim.aggregator.data.AggregatorItem;
-import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.FeedWorkingCopy;
-import no.resheim.aggregator.data.Feed.Archiving;
-import no.resheim.aggregator.data.Feed.UpdatePeriod;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;

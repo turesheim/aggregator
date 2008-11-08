@@ -11,10 +11,10 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal;
 
-import no.resheim.aggregator.AggregatorPlugin;
-import no.resheim.aggregator.data.FeedWorkingCopy;
-import no.resheim.aggregator.data.Feed.Archiving;
-import no.resheim.aggregator.data.Feed.UpdatePeriod;
+import no.resheim.aggregator.core.AggregatorPlugin;
+import no.resheim.aggregator.core.data.FeedWorkingCopy;
+import no.resheim.aggregator.core.data.Feed.Archiving;
+import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
 
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;

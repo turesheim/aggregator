@@ -11,16 +11,16 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.commands;
 
-import no.resheim.aggregator.AggregatorPlugin;
+import no.resheim.aggregator.core.AggregatorPlugin;
+import no.resheim.aggregator.core.data.AggregatorItem;
+import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.FeedWorkingCopy;
+import no.resheim.aggregator.core.data.Folder;
+import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.FeedPropertiesDialog;
 import no.resheim.aggregator.core.ui.IFeedView;
-import no.resheim.aggregator.data.AggregatorItem;
-import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.FeedWorkingCopy;
-import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.AggregatorItemChangedEvent.EventType;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;

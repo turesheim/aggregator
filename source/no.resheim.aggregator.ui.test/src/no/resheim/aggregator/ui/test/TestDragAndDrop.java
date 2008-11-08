@@ -1,10 +1,10 @@
 package no.resheim.aggregator.ui.test;
 
 import junit.framework.TestCase;
-import no.resheim.aggregator.AggregatorPlugin;
+import no.resheim.aggregator.core.AggregatorPlugin;
+import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.ui.FeedTreeViewer;
 import no.resheim.aggregator.core.ui.FeedViewerContentProvider;
-import no.resheim.aggregator.data.FeedCollection;
 
 import org.eclipse.swt.widgets.Shell;
 

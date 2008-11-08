@@ -1,8 +1,8 @@
 package no.resheim.aggregator;
 
-import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.Feed.Archiving;
-import no.resheim.aggregator.data.Feed.UpdatePeriod;
+import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Feed.Archiving;
+import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
 
 import org.eclipse.core.runtime.Plugin;
 

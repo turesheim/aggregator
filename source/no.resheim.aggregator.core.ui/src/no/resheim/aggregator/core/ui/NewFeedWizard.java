@@ -11,12 +11,12 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import no.resheim.aggregator.AggregatorPlugin;
+import no.resheim.aggregator.core.AggregatorPlugin;
+import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.FeedWorkingCopy;
 import no.resheim.aggregator.core.ui.internal.NewFeedWizardGeneralPage;
 import no.resheim.aggregator.core.ui.internal.NewFeedWizardOptionsPage;
-import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.FeedWorkingCopy;
 
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;

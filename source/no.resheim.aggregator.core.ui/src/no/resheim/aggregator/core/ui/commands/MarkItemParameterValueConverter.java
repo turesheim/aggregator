@@ -11,7 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.commands;
 
-import no.resheim.aggregator.data.AggregatorItem.Mark;
+import no.resheim.aggregator.core.data.AggregatorItem.Mark;
 
 import org.eclipse.core.commands.AbstractParameterValueConverter;
 import org.eclipse.core.commands.ParameterValueConversionException;

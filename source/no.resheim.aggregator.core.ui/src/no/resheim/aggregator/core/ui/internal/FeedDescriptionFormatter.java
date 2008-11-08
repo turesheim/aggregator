@@ -12,7 +12,7 @@
 
 package no.resheim.aggregator.core.ui.internal;
 
-import no.resheim.aggregator.data.Feed;
+import no.resheim.aggregator.core.data.Feed;
 
 /**
  * This type formats information about a given {@link Feed} as HTML.

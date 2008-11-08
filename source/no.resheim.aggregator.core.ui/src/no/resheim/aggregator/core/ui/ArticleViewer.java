@@ -16,11 +16,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
 
+import no.resheim.aggregator.core.data.Article;
+import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.ui.internal.FeedDescriptionFormatter;
 import no.resheim.aggregator.core.ui.internal.FeedItemTitle;
 import no.resheim.aggregator.core.ui.internal.FeedViewWidgetFactory;
-import no.resheim.aggregator.data.Article;
-import no.resheim.aggregator.data.Feed;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;

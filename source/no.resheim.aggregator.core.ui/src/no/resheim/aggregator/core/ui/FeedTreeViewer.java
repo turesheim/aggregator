@@ -13,11 +13,11 @@ package no.resheim.aggregator.core.ui;
 
 import java.text.MessageFormat;
 
-import no.resheim.aggregator.data.AggregatorItem;
-import no.resheim.aggregator.data.AggregatorItemParent;
-import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.AggregatorItemChangedEvent.EventType;
+import no.resheim.aggregator.core.data.AggregatorItem;
+import no.resheim.aggregator.core.data.AggregatorItemParent;
+import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.Folder;
+import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;

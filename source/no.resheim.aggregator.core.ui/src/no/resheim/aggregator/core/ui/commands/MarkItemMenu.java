@@ -14,7 +14,7 @@ package no.resheim.aggregator.core.ui.commands;
 import java.util.HashMap;
 import java.util.Map;
 
-import no.resheim.aggregator.data.AggregatorItem.Mark;
+import no.resheim.aggregator.core.data.AggregatorItem.Mark;
 
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.swt.SWT;

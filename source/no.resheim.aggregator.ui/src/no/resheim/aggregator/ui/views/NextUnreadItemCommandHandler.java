@@ -11,10 +11,10 @@
  *******************************************************************************/
 package no.resheim.aggregator.ui.views;
 
+import no.resheim.aggregator.core.data.AggregatorItem;
+import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.commands.AbstractAggregatorCommandHandler;
-import no.resheim.aggregator.data.AggregatorItem;
-import no.resheim.aggregator.data.Article;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;

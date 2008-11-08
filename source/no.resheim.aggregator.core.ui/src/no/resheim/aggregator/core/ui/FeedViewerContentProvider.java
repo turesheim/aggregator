@@ -11,11 +11,11 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import no.resheim.aggregator.data.AggregatorItem;
-import no.resheim.aggregator.data.AggregatorItemChangedEvent;
-import no.resheim.aggregator.data.AggregatorItemParent;
-import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.IAggregatorEventListener;
+import no.resheim.aggregator.core.data.AggregatorItem;
+import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
+import no.resheim.aggregator.core.data.AggregatorItemParent;
+import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.IAggregatorEventListener;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IBasicPropertyConstants;

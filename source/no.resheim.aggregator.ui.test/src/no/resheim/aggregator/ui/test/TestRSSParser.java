@@ -1,10 +1,10 @@
 package no.resheim.aggregator.ui.test;
 
 import junit.framework.TestCase;
-import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.Feed.Archiving;
-import no.resheim.aggregator.data.Feed.UpdatePeriod;
+import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.Feed.Archiving;
+import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
 
 public class TestRSSParser extends TestCase {
 

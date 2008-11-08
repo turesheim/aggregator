@@ -13,12 +13,12 @@ package no.resheim.aggregator.core.ui;
 
 import java.io.ByteArrayInputStream;
 
-import no.resheim.aggregator.data.AggregatorItem;
-import no.resheim.aggregator.data.Article;
-import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.Folder;
-import no.resheim.aggregator.data.AggregatorItem.Flag;
+import no.resheim.aggregator.core.data.AggregatorItem;
+import no.resheim.aggregator.core.data.Article;
+import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.Folder;
+import no.resheim.aggregator.core.data.AggregatorItem.Flag;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.preference.IPreferenceStore;

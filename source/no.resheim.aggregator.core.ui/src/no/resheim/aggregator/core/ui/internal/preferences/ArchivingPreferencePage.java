@@ -11,9 +11,9 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal.preferences;
 
+import no.resheim.aggregator.core.data.Feed.Archiving;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
-import no.resheim.aggregator.data.Feed.Archiving;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;

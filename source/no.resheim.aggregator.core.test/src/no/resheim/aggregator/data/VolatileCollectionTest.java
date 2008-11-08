@@ -1,7 +1,8 @@
 package no.resheim.aggregator.data;
 
-import no.resheim.aggregator.AggregatorPlugin;
 import no.resheim.aggregator.TestUtils;
+import no.resheim.aggregator.core.AggregatorPlugin;
+import no.resheim.aggregator.core.data.FeedCollection;
 
 public class VolatileCollectionTest extends AbstractCollectionTest {
 	@Override

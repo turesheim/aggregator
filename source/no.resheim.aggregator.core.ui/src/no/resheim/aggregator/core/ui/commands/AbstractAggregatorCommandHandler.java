@@ -13,12 +13,12 @@ package no.resheim.aggregator.core.ui.commands;
 
 import java.util.ArrayList;
 
+import no.resheim.aggregator.core.data.AggregatorItem;
+import no.resheim.aggregator.core.data.Article;
+import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.ui.IFeedView;
-import no.resheim.aggregator.data.AggregatorItem;
-import no.resheim.aggregator.data.Article;
-import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.Folder;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;

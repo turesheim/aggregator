@@ -5,7 +5,7 @@
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
    <propertyTester
-         class="no.resheim.aggregator.AggregatorPropertyTester"
+         class="no.resheim.aggregator.core.AggregatorPropertyTester"
          id="no.resheim.aggregator.propertyTester"
          namespace="no.resheim.aggregator"
          properties="multipleCollections,systemFolder"

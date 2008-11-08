@@ -13,7 +13,7 @@ package no.resheim.aggregator.core.ui;
 
 import org.eclipse.jface.viewers.Viewer;
 
-import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.core.data.FeedCollection;
 
 /**
  * 

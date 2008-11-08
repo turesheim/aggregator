@@ -11,11 +11,11 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal.preferences;
 
+import no.resheim.aggregator.core.data.Feed.Archiving;
+import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
 import no.resheim.aggregator.core.ui.PreferenceConstants.LinkOpen;
-import no.resheim.aggregator.data.Feed.Archiving;
-import no.resheim.aggregator.data.Feed.UpdatePeriod;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;

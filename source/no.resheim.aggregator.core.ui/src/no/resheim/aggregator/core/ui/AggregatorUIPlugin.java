@@ -16,7 +16,7 @@ import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
 
-import no.resheim.aggregator.AggregatorPlugin;
+import no.resheim.aggregator.core.AggregatorPlugin;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;

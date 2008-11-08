@@ -13,11 +13,11 @@ package no.resheim.aggregator.core.ui.internal;
 
 import java.util.ArrayList;
 
-import no.resheim.aggregator.AggregatorPlugin;
+import no.resheim.aggregator.core.AggregatorPlugin;
+import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.FeedWorkingCopy;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.NewFeedWizard;
-import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedWorkingCopy;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;

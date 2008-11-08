@@ -13,10 +13,10 @@ package no.resheim.aggregator.core.ui.commands;
 
 import java.util.UUID;
 
+import no.resheim.aggregator.core.data.AggregatorItemParent;
+import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.internal.InternalFolder;
 import no.resheim.aggregator.core.ui.IFeedView;
-import no.resheim.aggregator.data.AggregatorItemParent;
-import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.internal.InternalFolder;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;

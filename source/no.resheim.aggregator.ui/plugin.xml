@@ -346,6 +346,24 @@
             updatePeriod="HOURS"
             url="http://finance.google.com/finance?morenews=10&amp;rating=1&amp;q=NASDAQ:ATML&amp;output=rss">
       </feed>
+      <feed
+            archivingDays="1"
+            archivingItems="1"
+            archivingMethod="KEEP_ALL"
+            title="JW Player Example Media RSS"
+            updateInterval="60"
+            updatePeriod="DAYS"
+            url="http://www.jeroenwijering.com/upload/mrss.xml">
+      </feed>
+      <feed
+            archivingDays="1"
+            archivingItems="1"
+            archivingMethod="KEEP_NONE"
+            title="YouTube Top Rated"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://gdata.youtube.com/feeds/base/standardfeeds/top_rated?client=ytapi-youtube-browse&amp;alt=rss">
+      </feed>
    </extension>
 
 </plugin>

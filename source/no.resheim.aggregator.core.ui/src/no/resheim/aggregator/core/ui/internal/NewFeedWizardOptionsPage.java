@@ -11,11 +11,11 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal;
 
+import no.resheim.aggregator.core.data.FeedWorkingCopy;
+import no.resheim.aggregator.core.data.Feed.Archiving;
+import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.NewFeedWizard;
-import no.resheim.aggregator.data.FeedWorkingCopy;
-import no.resheim.aggregator.data.Feed.Archiving;
-import no.resheim.aggregator.data.Feed.UpdatePeriod;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;

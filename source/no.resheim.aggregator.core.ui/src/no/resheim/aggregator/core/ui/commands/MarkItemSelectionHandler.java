@@ -14,9 +14,9 @@ package no.resheim.aggregator.core.ui.commands;
 import java.util.HashMap;
 import java.util.Map;
 
-import no.resheim.aggregator.data.AggregatorItem;
-import no.resheim.aggregator.data.Article;
-import no.resheim.aggregator.data.AggregatorItem.Mark;
+import no.resheim.aggregator.core.data.AggregatorItem;
+import no.resheim.aggregator.core.data.Article;
+import no.resheim.aggregator.core.data.AggregatorItem.Mark;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;

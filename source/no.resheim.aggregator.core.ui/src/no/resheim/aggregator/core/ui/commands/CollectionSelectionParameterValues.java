@@ -15,8 +15,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import no.resheim.aggregator.AggregatorPlugin;
-import no.resheim.aggregator.data.FeedCollection;
+import no.resheim.aggregator.core.AggregatorPlugin;
+import no.resheim.aggregator.core.data.FeedCollection;
 
 import org.eclipse.core.commands.IParameterValues;
 

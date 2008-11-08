@@ -13,8 +13,12 @@ package no.resheim.aggregator.ui.views;
 
 import java.net.URL;
 
-import no.resheim.aggregator.AggregatorPlugin;
-import no.resheim.aggregator.IFeedCollectionEventListener;
+import no.resheim.aggregator.core.AggregatorPlugin;
+import no.resheim.aggregator.core.IFeedCollectionEventListener;
+import no.resheim.aggregator.core.data.Article;
+import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.ArticleViewer;
 import no.resheim.aggregator.core.ui.FeedTreeViewer;
@@ -23,10 +27,6 @@ import no.resheim.aggregator.core.ui.FeedViewerLabelProvider;
 import no.resheim.aggregator.core.ui.IArticleViewerListener;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
-import no.resheim.aggregator.data.Article;
-import no.resheim.aggregator.data.Feed;
-import no.resheim.aggregator.data.FeedCollection;
-import no.resheim.aggregator.data.Folder;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
