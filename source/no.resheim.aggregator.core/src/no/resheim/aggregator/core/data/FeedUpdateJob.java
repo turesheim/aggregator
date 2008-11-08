@@ -38,6 +38,7 @@ import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
@@ -88,9 +89,11 @@ public class FeedUpdateJob extends Job {
 		if (feed.getArchiving() == Archiving.KEEP_NONE) {
 			// TODO: Implement cleanup.
 		}
-		IStatus ds = download(feed, debug);
-		feed.setLastStatus(ds);
-		if (ds.isOK()) {
+		MultiStatus ms = new MultiStatus(AggregatorPlugin.PLUGIN_ID,
+				IStatus.OK, "Updating feed", null);
+		ms.add(download(feed, debug));
+		feed.setLastStatus(ms);
+		if (ms.isOK()) {
 			setName(MessageFormat.format(Messages.FeedUpdateJob_CleaningUp,
 					new Object[] {
 						feed.getTitle()
@@ -102,13 +105,13 @@ public class FeedUpdateJob extends Job {
 		}
 		Collections.sort(feed.getTempItems());
 		if (feed.getTempItems().size() > 0) {
-			collection.addNew(feed.getTempItems().toArray(
-					new AggregatorItem[feed.getTempItems().size()]));
+			ms.addAll(collection.addNew(feed.getTempItems().toArray(
+					new AggregatorItem[feed.getTempItems().size()])));
 		}
 		feed.setLastUpdate(System.currentTimeMillis());
 		// Store changes to the feed
 		collection.feedUpdated(feed);
-		return ds;
+		return ms;
 
 	}
 
