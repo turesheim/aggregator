@@ -52,7 +52,7 @@ CREATE TABLE feeds (
 		feed_type VARCHAR(32),
 		hidden INT NOT NULL,
 		anonymous_access INT NOT NULL,
-		image_data VARCHAR(10240)
+		image_data VARCHAR(16384)
 	);
 
 /** A filter with a title */	
@@ -79,15 +79,15 @@ CREATE TABLE filter_folders (
 		FOREIGN KEY (filter_uuid) references filters (uuid) ON DELETE CASCADE
 	);
 
-/** A filter action to perform */	
-CREATE TABLE filter_actions (
+/* A filter action to perform */	
+CREATE TABLE filter_action (
 		uuid CHAR(36) NOT NULL PRIMARY KEY,
 		filter_uuid CHAR(36) NOT NULL,
-		operation VARCHAR(32),
 		operator VARCHAR(32),
+		operand VARCHAR(32),
 		FOREIGN KEY (filter_uuid) references filters (uuid) ON DELETE CASCADE
-	);	
-	
+	);
+
 /* Selection*/
 CREATE INDEX folders_parent ON folders (parent_uuid,uuid);
 CREATE INDEX feeds_url ON feeds (url,uuid);
