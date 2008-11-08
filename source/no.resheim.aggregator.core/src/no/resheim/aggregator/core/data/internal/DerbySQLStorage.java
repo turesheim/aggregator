@@ -24,9 +24,11 @@ import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
+import no.resheim.aggregator.core.data.MediaContent;
 import no.resheim.aggregator.core.data.AggregatorItem.Mark;
 import no.resheim.aggregator.core.data.Feed.Archiving;
 import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
+import no.resheim.aggregator.core.data.MediaContent.Medium;
 import no.resheim.aggregator.core.filter.Filter;
 
 import org.eclipse.core.runtime.Assert;
@@ -142,6 +144,16 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		item.setMediaEnclosureDuration(rs.getInt(18));
 		item.setMediaEnclosureType(rs.getString(19));
 		return item;
+	}
+
+	private MediaContent composeMediaContent(ResultSet rs) throws SQLException {
+		MediaContent content = new MediaContent();
+		content.setContentURL(rs.getString(3));
+		content.setThumbnailURL(rs.getString(4));
+		content.setContentType(rs.getString(5));
+		content.setMedium(Medium.valueOf(rs.getString(7)));
+		// TODO:FIX THE REST
+		return content;
 	}
 
 	/**
@@ -426,11 +438,45 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		ps.setString(14, item.internalGetText());
 		ps.setString(15, item.getCreator());
 		ps.setString(16, item.getMediaPlayerURL());
-		ps.setString(17, item.getMediaEnclosureURL());
-		ps.setInt(18, item.getMediaEnclosureDuration());
-		ps.setString(19, item.getMediaEnclosureType());
+		ps.setString(17, item.getEnclosureURL());
+		ps.setInt(18, item.getEnclosureDuration());
+		ps.setString(19, item.getEnclosureType());
 		ps.executeUpdate();
 		ps.close();
+		int count = 0;
+		for (MediaContent content : item.getMediaContent()) {
+			count += 1;
+			insert(content, item, count);
+		}
+	}
+
+	private void insert(MediaContent content, Article article, int order)
+			throws SQLException {
+		PreparedStatement ps = connection
+				.prepareStatement("insert into media_content values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+		ps.setEscapeProcessing(true);
+		ps.setInt(1, order);
+		ps.setString(2, article.getUUID().toString());
+		ps.setString(3, content.getContentURL());
+		ps.setString(4, content.getThumbnailURL());
+		ps.setString(5, content.getContentType());
+		ps.setLong(6, content.getFilesSize());
+		ps.setString(7, content.getMedium().toString());
+		ps.setInt(8, content.isDefault() ? 1 : 0);
+		ps.setString(9, content.getExpression().toString());
+		ps.setInt(10, content.getBitrate());
+		ps.setInt(11, content.getFramerate());
+		ps.setInt(12, content.getSamplingrate());
+		ps.setInt(13, content.getChannels());
+		ps.setInt(14, content.getDuration());
+		ps.setString(15, content.getHeight());
+		ps.setString(16, content.getWidth());
+		ps.setString(17, content.getLang());
+		// Optional elements
+		ps.setString(18, content.getMediaPlayer());
+		ps.executeUpdate();
+		ps.close();
+
 	}
 
 	/**
@@ -726,7 +772,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	private AggregatorItem selectArticle(AggregatorItemParent parent, int index)
 			throws SQLException {
 		Statement s = connection.createStatement();
-		Article article = null;
+		InternalArticle article = null;
 		ResultSet rs = s
 				.executeQuery("select * from articles where parent_uuid='" //$NON-NLS-1$
 						+ ((AggregatorItem) parent).getUUID().toString()
@@ -735,6 +781,16 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			article = composeArticle(parent, rs);
 		}
 		rs.close();
+		if (article != null) {
+			ResultSet rs2 = s
+					.executeQuery("select * from media_content where article_uuid='" //$NON-NLS-1$
+							+ article.getUUID().toString()
+							+ "' order by ordering"); //$NON-NLS-1$
+			while (rs2.next()) {
+				article.addMediaContent(composeMediaContent(rs2));
+			}
+			rs2.close();
+		}
 		return article;
 	}
 

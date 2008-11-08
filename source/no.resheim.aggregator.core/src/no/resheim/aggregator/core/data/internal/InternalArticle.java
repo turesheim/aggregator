@@ -16,6 +16,7 @@ import java.util.UUID;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.MediaContent;
 
 import org.eclipse.core.runtime.Assert;
 
@@ -45,6 +46,10 @@ public class InternalArticle extends Article {
 		Assert.isNotNull(feed);
 		location = feed.getLocation();
 		feed_uuid = feed.getUUID();
+	}
+
+	public void addMediaContent(MediaContent content) {
+		mediaContent.add(content);
 	}
 
 	/**
@@ -157,15 +162,15 @@ public class InternalArticle extends Article {
 	}
 
 	public void setMediaEnclosureURL(String mediaEnclosureURL) {
-		this.mediaEnclosureURL = mediaEnclosureURL;
+		this.enclosureURL = mediaEnclosureURL;
 	}
 
 	public void setMediaEnclosureDuration(int mediaEnclosureDuration) {
-		this.mediaEnclosureDuration = mediaEnclosureDuration;
+		this.enclosureDuration = mediaEnclosureDuration;
 	}
 
 	public void setMediaEnclosureType(String mediaEnclosureType) {
-		this.mediaEnclosureType = mediaEnclosureType;
+		this.enclosureType = mediaEnclosureType;
 	}
 
 }
