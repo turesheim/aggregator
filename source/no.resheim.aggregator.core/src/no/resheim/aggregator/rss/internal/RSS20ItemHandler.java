@@ -40,11 +40,15 @@ public class RSS20ItemHandler extends AbstractItemHandler {
 
 	private static final String MEDIA_PLAYER = "media:player"; //$NON-NLS-1$
 
+	private static final String MEDIA_CONTENT = "media:content"; //$NON-NLS-1$
+
 	private static final String AUTHOR = "author"; //$NON-NLS-1$
 
 	public static final String PUBDATE = "pubDate"; //$NON-NLS-1$
 
 	public static final String GUID = "guid"; //$NON-NLS-1$
+
+	/** xmlns:media="http://search.yahoo.com/mrss/" */
 
 	/** WordPress full content element */
 	public static final String CONTENT_ENCODED = "content:encoded"; //$NON-NLS-1$
@@ -112,25 +116,40 @@ public class RSS20ItemHandler extends AbstractItemHandler {
 	public IElementHandler startElement(String qName, Attributes atts)
 			throws SAXException {
 		super.startElement(qName, atts);
-		if (qName.equals(TITLE) || qName.equals(LINK) || qName.equals(AUTHOR)
-				|| qName.equals(DESCRIPTION) || qName.equals(PUBDATE)
-				|| qName.equals(GUID) || qName.equals(CONTENT_ENCODED)) {
-			setCapture(true);
-		}
-		if (qName.equals(MEDIA_PLAYER)) {
-			item.setMediaPlayerURL(atts.getValue(URL));
-		}
-		if (qName.equals(ENCLOSURE)) {
-			if (atts.getValue(DURATION) != null) {
-				item.setMediaEnclosureDuration(Integer.parseInt(atts
-						.getValue(DURATION)));
+		try {
+			if (qName.equals(TITLE) || qName.equals(LINK)
+					|| qName.equals(AUTHOR) || qName.equals(DESCRIPTION)
+					|| qName.equals(PUBDATE) || qName.equals(GUID)
+					|| qName.equals(CONTENT_ENCODED)) {
+				setCapture(true);
 			}
-			if (atts.getValue(TYPE) != null) {
-				item.setMediaEnclosureType(atts.getValue(TYPE));
+			if (qName.equals(MEDIA_PLAYER)) {
+				item.setMediaPlayerURL(atts.getValue(URL));
 			}
-			if (atts.getValue(URL) != null) {
-				item.setMediaEnclosureURL(atts.getValue(URL));
+			if (qName.equals(MEDIA_CONTENT)) {
+				if (atts.getValue(TYPE) != null) {
+					item.setMediaEnclosureType(atts.getValue(TYPE));
+				}
+				if (atts.getValue(URL) != null) {
+					item.setMediaEnclosureURL(atts.getValue(URL));
+					System.out.println(atts.getValue(URL));
+				}
 			}
+			if (qName.equals(ENCLOSURE)) {
+				if (atts.getValue(DURATION) != null) {
+					item.setMediaEnclosureDuration(Integer.parseInt(atts
+							.getValue(DURATION)));
+				}
+				if (atts.getValue(TYPE) != null) {
+					System.out.println(atts.getValue(TYPE));
+					item.setMediaEnclosureType(atts.getValue(TYPE));
+				}
+				if (atts.getValue(URL) != null) {
+					item.setMediaEnclosureURL(atts.getValue(URL));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return this;
 	}
