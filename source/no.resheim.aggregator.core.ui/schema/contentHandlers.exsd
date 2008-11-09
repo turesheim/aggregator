@@ -55,7 +55,6 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="type" minOccurs="1" maxOccurs="unbounded"/>
             <element ref="code"/>
          </sequence>
          <attribute name="file" type="string">
@@ -71,27 +70,17 @@
          <attribute name="name" type="string">
             <annotation>
                <documentation>
-                  
+                  name to use when presenting the content.
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
                </appinfo>
             </annotation>
          </attribute>
-      </complexType>
-   </element>
-
-   <element name="type">
-      <annotation>
-         <documentation>
-            MIME media type that the player supports.
-         </documentation>
-      </annotation>
-      <complexType>
-         <attribute name="id" type="string" use="required">
+         <attribute name="type" type="string">
             <annotation>
                <documentation>
-                  
+                  MIME media type that the handler supports.
                </documentation>
             </annotation>
          </attribute>

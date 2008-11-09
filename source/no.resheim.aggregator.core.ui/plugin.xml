@@ -146,20 +146,14 @@
    <extension
          point="no.resheim.aggregator.core.ui.contentHandlers">
       <handler
-            name="default">
+            name="Document" type="text/html">
          <code>
             &lt;body style=&quot;margin:4px;font-family:&apos;${font-family}&apos;;font-size:${font-size}pt&quot;&gt;${content}
 &lt;/body&gt;
          </code>
-         <type
-               id="text/html">
-         </type>
-         <type
-               id="text/plain">
-         </type>
       </handler>
       <handler
-            name="flash">
+            name="Flash animation" type="application/x-shockwave-flash">
          <code>
             &lt;body style=&quot;margin:0px;&quot;&gt;
 &lt;OBJECT classid=&quot;clsid:D27CDB6E-AE6D-11cf-96B8-444553540000&quot; codebase=&quot;http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0&quot;
@@ -167,15 +161,9 @@ WIDTH=&quot;100%&quot; HEIGHT=&quot;100%&quot;&gt;&lt;PARAM NAME=movie VALUE=&qu
 TYPE=&quot;application/x-shockwave-flash&quot;
 PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBED&gt;&lt;/OBJECT&gt;&lt;/body&gt;
          </code>
-         <type
-               id="application/x-shockwave-flash">
-         </type>
       </handler>
       <handler
-            name="quicktime">
-         <type
-               id="video/quicktime">
-         </type>
+            name="Quicktime video" type="video/quicktime">
          <code>
             &lt;body style=&quot;margin:0px;&quot;&gt;
 &lt;object CLASSID=&quot;clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B&quot; width=&quot;100%&quot; height=&quot;100%&quot; CODEBASE=&quot;http://www.apple.com/qtactivex/qtplugin.cab&quot;&gt;

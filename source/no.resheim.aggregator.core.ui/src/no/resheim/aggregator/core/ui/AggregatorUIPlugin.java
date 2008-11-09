@@ -15,10 +15,15 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -104,6 +109,42 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+	}
+
+	final IExtensionRegistry ereg = Platform.getExtensionRegistry();
+
+	private static final String MEDIAPLAYERS_ID = "no.resheim.aggregator.core.ui.contentHandlers"; //$NON-NLS-1$
+
+	private HashMap<String, ArrayList<ContentHandler>> contentHandlers;
+
+	public ContentHandler getContentHandler(String type) {
+		if (contentHandlers == null) {
+			initContentHandlers();
+		}
+		ArrayList<ContentHandler> typeHandlers = contentHandlers.get(type);
+		if (typeHandlers != null && typeHandlers.size() > 0) {
+			return typeHandlers.get(0);
+		}
+		return null;
+	}
+
+	private void initContentHandlers() {
+		contentHandlers = new HashMap<String, ArrayList<ContentHandler>>();
+		synchronized (contentHandlers) {
+			IConfigurationElement[] players = ereg
+					.getConfigurationElementsFor(MEDIAPLAYERS_ID);
+			for (IConfigurationElement player : players) {
+				String code = player.getChildren("code")[0].getValue(); //$NON-NLS-1$
+				String type = player.getAttribute("type"); //$NON-NLS-1$
+				String name = player.getAttribute("name"); //$NON-NLS-1$
+				ArrayList<ContentHandler> typeHandlers = contentHandlers
+						.get(type);
+				if (typeHandlers == null)
+					typeHandlers = new ArrayList<ContentHandler>();
+				typeHandlers.add(new ContentHandler(type, name, code));
+				contentHandlers.put(type, typeHandlers);
+			}
+		}
 	}
 
 	/*

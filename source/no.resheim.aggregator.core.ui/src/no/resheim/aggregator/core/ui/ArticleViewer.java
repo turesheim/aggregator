@@ -11,7 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
@@ -23,11 +22,8 @@ import no.resheim.aggregator.core.ui.internal.FeedDescriptionFormatter;
 import no.resheim.aggregator.core.ui.internal.FeedItemTitle;
 import no.resheim.aggregator.core.ui.internal.FeedViewWidgetFactory;
 
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.ListenerList;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -51,7 +47,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.osgi.framework.Bundle;
 
 /**
  * A control that is used to show aggregator articles. A {@link Browser}
@@ -62,7 +57,6 @@ import org.osgi.framework.Bundle;
  */
 public class ArticleViewer extends Composite implements IPropertyChangeListener {
 	private static final String DEFAULT_CONTENT_TYPE = "text/html"; //$NON-NLS-1$
-	private static final String MEDIAPLAYERS_ID = "no.resheim.aggregator.core.ui.contentHandlers"; //$NON-NLS-1$
 	private FeedItemTitle title;
 	private Browser browser;
 	/** Preference: Name of the font used in the details pane */
@@ -163,12 +157,32 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 
 	ActionContributionItem playMediaItem;
 
-	class PlayMediaAction extends Action implements IMenuCreator {
+	private class PlayMediaAction extends Action {
+
+		/**
+		 * @param mediaIndex
+		 */
+		public PlayMediaAction(int mediaIndex) {
+			super();
+			this.mediaIndex = mediaIndex;
+		}
+
+		int mediaIndex = 0;
+
+		@Override
+		public void run() {
+			if (selectedArticle != null) {
+				viewContent(selectedArticle, true, mediaIndex);
+			}
+		}
+	}
+
+	private class PlayMediaMenuAction extends Action implements IMenuCreator {
 		/**
 		 * @param text
 		 * @param style
 		 */
-		public PlayMediaAction(String text, int style) {
+		public PlayMediaMenuAction(String text, int style) {
 			super(text, style);
 			setMenuCreator(this);
 		}
@@ -176,7 +190,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		@Override
 		public void run() {
 			if (selectedArticle != null) {
-				viewContent(selectedArticle, true);
+				viewContent(selectedArticle, true, 0);
 			}
 		}
 
@@ -200,11 +214,17 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 			fMenu = new Menu(parent);
 			if (selectedArticle.hasMedia()) {
 				MediaContent[] media = selectedArticle.getMediaContent();
+				int count = 0;
 				for (MediaContent mediaContent : media) {
-					Action action = new Action() {
-
-					};
-					action.setText(mediaContent.getContentURL());
+					PlayMediaAction action = new PlayMediaAction(count++);
+					ContentHandler handler = AggregatorUIPlugin.getDefault()
+							.getContentHandler(mediaContent.getContentType());
+					if (handler != null) {
+						action.setText(handler
+								.getFormattedContentName(mediaContent));
+					} else {
+						action.setText(Messages.ArticleViewer_UnhandledContent);
+					}
 					addActionToMenu(fMenu, action);
 				}
 			}
@@ -218,7 +238,8 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	}
 
 	private void createActions() {
-		playMediaAction = new PlayMediaAction("Play media",
+		playMediaAction = new PlayMediaMenuAction(
+				Messages.ArticleViewer_PlayMediaActionLabel,
 				IAction.AS_DROP_DOWN_MENU);
 		playMediaAction.setImageDescriptor(AggregatorUIPlugin.getDefault()
 				.getImageRegistry().getDescriptor(
@@ -255,47 +276,27 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	private Article selectedArticle;
 
 	public void show(Object item) {
-		fInterceptBrowser = false;
 		if (item instanceof Article) {
 			selectedArticle = (Article) item;
-			viewArticle(selectedArticle);
+			title.setTitle(selectedArticle.getTitle(), null);
+			viewContent(selectedArticle, false, 0);
+			// playMediaItem.setVisible(selectedArticle.hasMedia());
+			// title.getToolBarManager().update(true);
 		} else if (item instanceof Feed) {
 			showDescription((Feed) item);
 		}
-		fInterceptBrowser = true;
 	}
 
-	/**
-	 * Displays the selected article. If the article contains media, the first
-	 * media content is being used. If it's plain text the "text/html" content
-	 * handler is used, and if it contains a closure, this is being used.
-	 * 
-	 * @param item
-	 *            the article to display
-	 */
-	private void viewArticle(Article item) {
-		if (item == null)
-			return;
-		title.setTitle(item.getTitle(), null);
-		playMediaItem.setVisible(item.hasMedia());
-		title.getToolBarManager().update(true);
-		viewContent(item, false);
-	}
-
-	private void viewContent(Article item, boolean showMedia) {
+	private void viewContent(Article item, boolean showMedia, int mediaIndex) {
 		fInterceptBrowser = false;
 		String text = null;
 		if (showMedia) {
-			if (item.getMediaContent().length > 0) {
-				MediaContent media = item.getMediaContent()[0];
+			if (item.getMediaContent().length >= mediaIndex) {
+				MediaContent media = item.getMediaContent()[mediaIndex];
 				text = getContentHandlerHTML(media.getContentType(), media
 						.getContentURL());
-				browser.setText(text);
-				return;
 			}
-		}
-		// Revert to default (we may not be able to set media content
-		if (text == null) {
+		} else {
 			text = getContentHandlerHTML(DEFAULT_CONTENT_TYPE, item.getText());
 		}
 		browser.setText(text);
@@ -317,39 +318,12 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 				Messages.ArticleViewer_NoContentHandler, new Object[] {
 					contentType
 				});
-
-		IConfigurationElement[] players = ereg
-				.getConfigurationElementsFor(MEDIAPLAYERS_ID);
-		for (IConfigurationElement player : players) {
-			IConfigurationElement[] types = player.getChildren("type"); //$NON-NLS-1$
-			for (IConfigurationElement type : types) {
-				if (type.getAttribute("id").equals(contentType)) { //$NON-NLS-1$
-					// There has to be one code element
-					code = player.getChildren("code")[0].getValue(); //$NON-NLS-1$
-					// If a file is specified, we must merge in the location of
-					// that.
-					if (player.getAttribute("file") != null) { //$NON-NLS-1$
-						Bundle bundle = Platform.getBundle(player
-								.getContributor().getName());
-						Path path = new Path(player.getAttribute("file")); //$NON-NLS-1$
-						URL url = FileLocator.find(bundle, path, null);
-						try {
-							code = code.replaceAll("\\$\\{file\\}", FileLocator //$NON-NLS-1$
-									.resolve(url).toExternalForm());
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-					code = code.replaceAll("\\$\\{content\\}", content); //$NON-NLS-1$
-					code = code.replaceAll(
-							"\\$\\{font-family\\}", pPresentationFontFamily); //$NON-NLS-1$
-					code = code
-							.replaceAll(
-									"\\$\\{font-size\\}", String.valueOf(pPresentationFontSize)); //$NON-NLS-1$
-					return code;
-				}
-			}
-		}
+		ContentHandler handler = AggregatorUIPlugin.getDefault()
+				.getContentHandler(contentType);
+		if (handler == null)
+			return code;
+		code = handler.getEmbedCode(content, pPresentationFontFamily,
+				pPresentationFontSize);
 		return code;
 	}
 

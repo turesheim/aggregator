@@ -68,7 +68,7 @@ public class FeedItemTitle extends Composite {
 	public FeedItemTitle(Composite parent, FeedViewWidgetFactory factory) {
 		// super(parent, SWT.NO_FOCUS);
 		super(parent, SWT.NONE);
-		setBackgroundMode(SWT.INHERIT_DEFAULT);
+		setBackgroundMode(SWT.INHERIT_FORCE);
 
 		this.factory = factory;
 
@@ -126,6 +126,7 @@ public class FeedItemTitle extends Composite {
 		if (toolBarManager == null) {
 			toolBarManager = new ToolBarManager(SWT.FLAT);
 			final ToolBar toolbar = toolBarManager.createControl(this);
+			toolbar.setBackgroundMode(SWT.INHERIT_FORCE);
 			toolbar.setBackground(getBackground());
 			toolbar.setForeground(getForeground());
 			toolbar.setCursor(FormsResources.getHandCursor());
