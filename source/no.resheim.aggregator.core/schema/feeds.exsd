@@ -101,6 +101,9 @@
          </documentation>
       </annotation>
       <complexType>
+         <sequence>
+            <element ref="description" minOccurs="0" maxOccurs="1"/>
+         </sequence>
          <attribute name="url" type="string" use="required">
             <annotation>
                <documentation>
@@ -198,6 +201,14 @@
             </annotation>
          </attribute>
       </complexType>
+   </element>
+
+   <element name="description" type="string">
+      <annotation>
+         <documentation>
+            the feed description.
+         </documentation>
+      </annotation>
    </element>
 
    <annotation>
