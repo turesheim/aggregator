@@ -113,7 +113,11 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 				&& ((Folder) element).getFeedUUID() != null) {
 			Feed feed = collection.getFeeds().get(
 					((Folder) element).getFeedUUID());
-			return getImage(feed, feed.getLastStatus());
+			if (feed != null) {
+				return getImage(feed, feed.getLastStatus());
+			} else {
+				return getImage(feed, null);
+			}
 		} else if (element instanceof AggregatorItem) {
 			return getImage((AggregatorItem) element);
 		}
