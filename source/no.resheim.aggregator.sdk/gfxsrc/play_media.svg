@@ -16,7 +16,7 @@
    inkscape:version="0.46"
    sodipodi:docname="play_media.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-filename="/home/torkild/privat/eclipse-ws-resheim/no.resheim.aggregator.core.ui/icons/etool16/play_media.gif.png"
+   inkscape:export-filename="/home/torkild/privat/eclipse-ws-resheim/no.resheim.aggregator.core.ui/icons/etool16/play_media.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -24,15 +24,15 @@
     <linearGradient
        id="linearGradient3165">
       <stop
-         style="stop-color:#3e9ade;stop-opacity:1;"
+         style="stop-color:#a5d9ff;stop-opacity:1;"
          offset="0"
          id="stop3167" />
       <stop
          id="stop3173"
          offset="0.5"
-         style="stop-color:#a5d9ff;stop-opacity:1;" />
+         style="stop-color:#3e9ade;stop-opacity:1;" />
       <stop
-         style="stop-color:#3e9ade;stop-opacity:1;"
+         style="stop-color:#a5d9ff;stop-opacity:1;"
          offset="1"
          id="stop3169" />
     </linearGradient>
@@ -61,7 +61,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="22.197802"
-     inkscape:cx="8.5215997"
+     inkscape:cx="0.86318379"
      inkscape:cy="7.639604"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -99,7 +99,7 @@
        id="guide3207" />
     <sodipodi:guide
        orientation="1,0"
-       position="13.965347,4.4148515"
+       position="13.334654,17.389109"
        id="guide3209" />
     <sodipodi:guide
        orientation="0,1"
@@ -109,6 +109,22 @@
        orientation="0,1"
        position="9.0099011,3.5138614"
        id="guide3213" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="8.1539605,15.49703"
+       id="guide2405" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="0.40544555,6.2168317"
+       id="guide2407" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="8.469307,0.49554456"
+       id="guide2409" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="15.587129,6.6673268"
+       id="guide2411" />
   </sodipodi:namedview>
   <metadata
      id="metadata2388">
@@ -134,11 +150,14 @@
        sodipodi:rx="7.7485151"
        sodipodi:ry="7.7935643"
        d="M 15.451981,7.8009901 A 7.7485151,7.7935643 0 1 1 -0.045049667,7.8009901 A 7.7485151,7.7935643 0 1 1 15.451981,7.8009901 z"
-       transform="matrix(0.9704843,0,0,0.9533139,0.5201948,0.5218712)" />
+       transform="matrix(0.9100443,0,0,0.904784,0.9857913,0.9455014)" />
     <path
-       style="fill:#ffffff;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
-       d="M 4.9103961,3.4762371 L 13.965347,8.1163366 L 4.8653466,12.531188 L 4.9103961,3.4762371 z"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 5.3550927,3.521287 L 13.244555,8.1613865 L 5.3158417,12.576238 L 5.3550927,3.521287 z"
        id="path3175"
-       sodipodi:nodetypes="cccc" />
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/torkild/privat/eclipse-ws-resheim/no.resheim.aggregator.core.ui/icons/etool16/path3175.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
 </svg>

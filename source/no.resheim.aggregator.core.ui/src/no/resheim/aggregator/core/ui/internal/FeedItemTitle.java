@@ -17,6 +17,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -42,6 +44,10 @@ import org.eclipse.ui.internal.forms.widgets.FormsResources;
  */
 @SuppressWarnings("restriction")
 public class FeedItemTitle extends Composite {
+
+	public Image getBackgroundImage() {
+		return backgroundImage;
+	}
 
 	@Override
 	public void dispose() {
@@ -124,10 +130,9 @@ public class FeedItemTitle extends Composite {
 	 */
 	public IToolBarManager getToolBarManager() {
 		if (toolBarManager == null) {
-			toolBarManager = new ToolBarManager(SWT.FLAT);
+			toolBarManager = new ToolBarManager(SWT.RIGHT | SWT.FLAT);
 			final ToolBar toolbar = toolBarManager.createControl(this);
-			toolbar.setBackgroundMode(SWT.INHERIT_FORCE);
-			toolbar.setBackground(getBackground());
+			// toolbar.setBackground(getBackground());
 			toolbar.setForeground(getForeground());
 			toolbar.setCursor(FormsResources.getHandCursor());
 			addDisposeListener(new DisposeListener() {
@@ -138,12 +143,11 @@ public class FeedItemTitle extends Composite {
 					}
 				}
 			});
-			toolbar.addListener(SWT.Paint, new Listener() {
-
-				public void handleEvent(Event event) {
-					toolbar.setBackgroundImage(backgroundImage);
+			// Make sure we don't draw a background. We want the gradient to
+			// show through.
+			toolbar.addPaintListener(new PaintListener() {
+				public void paintControl(PaintEvent e) {
 				}
-
 			});
 		}
 		return toolBarManager;

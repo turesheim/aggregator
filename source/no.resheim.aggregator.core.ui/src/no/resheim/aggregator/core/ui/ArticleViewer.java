@@ -246,8 +246,9 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 						AggregatorUIPlugin.IMG_PLAY_MEDIA));
 
 		playMediaItem = new ActionContributionItem(playMediaAction);
+		playMediaItem.setVisible(false);
 		title.getToolBarManager().add(playMediaItem);
-		title.getToolBarManager().update(true);
+		title.getToolBarManager().update(false);
 
 	}
 
@@ -280,8 +281,8 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 			selectedArticle = (Article) item;
 			title.setTitle(selectedArticle.getTitle(), null);
 			viewContent(selectedArticle, false, 0);
-			// playMediaItem.setVisible(selectedArticle.hasMedia());
-			// title.getToolBarManager().update(true);
+			playMediaItem.setVisible(selectedArticle.hasMedia());
+			title.getToolBarManager().update(true);
 		} else if (item instanceof Feed) {
 			showDescription((Feed) item);
 		}
