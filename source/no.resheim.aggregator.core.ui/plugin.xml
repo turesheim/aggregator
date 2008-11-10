@@ -206,5 +206,14 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
 &lt;/body&gt;
          </code>
       </handler>
+      <handler
+            name="JPEG image"
+            type="image/jpeg">
+         <code>
+            &lt;body style=&quot;margin:0px;&quot;&gt;
+&lt;img src=&quot;${content}&quot; width=&quot;100%&quot; /&gt;
+&lt;/html&gt;
+         </code>
+      </handler>
    </extension>
 </plugin>
