@@ -93,8 +93,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	private Feed composeFeed(ResultSet rs) throws SQLException {
 		Feed feed = new Feed();
 		feed.setUUID(UUID.fromString(rs.getString(1)));
+		feed.setLocation(UUID.fromString(rs.getString(2)));
 		feed.setTitle(rs.getString(2).trim());
-		feed.setLocation(UUID.fromString(rs.getString(3)));
 		feed.setURL(rs.getString(4).trim());
 		feed.setArchiving(Archiving.valueOf(rs.getString(5)));
 		feed.setArchivingItems(rs.getInt(6));
@@ -485,8 +485,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 				.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
 		ps.setString(1, feed.getUUID().toString());
-		ps.setString(2, feed.getTitle());
-		ps.setString(3, feed.getLocation().toString());
+		ps.setString(2, feed.getLocation().toString());
+		ps.setString(3, feed.getTitle());
 		ps.setString(4, feed.getURL());
 		ps.setString(5, feed.getArchiving().toString());
 		ps.setInt(6, feed.getArchivingItems());
