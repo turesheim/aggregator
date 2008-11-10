@@ -116,7 +116,7 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 			if (feed != null) {
 				return getImage(feed, feed.getLastStatus());
 			} else {
-				return getImage(feed, null);
+				return null;
 			}
 		} else if (element instanceof AggregatorItem) {
 			return getImage((AggregatorItem) element);
