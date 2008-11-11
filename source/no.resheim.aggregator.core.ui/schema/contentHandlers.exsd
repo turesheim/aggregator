@@ -84,6 +84,13 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="suffix" type="string">
+            <annotation>
+               <documentation>
+                  comma separated list of file suffixes that can be used to identify the data.
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

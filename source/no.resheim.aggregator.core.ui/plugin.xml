@@ -178,8 +178,9 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
       </handler>
      
       <handler
-            name="MPEG audio (fixme)"
-            type="audio/mpeg">
+            name="MPEG audio"
+            suffix="mp3,mp4"
+            type="audio/mpeg,audio/mp4,audio/mp3">
          <code>
             &lt;body style=&quot;margin:0px;&quot;&gt;
 &lt;object CLASSID=&quot;clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B&quot; width=&quot;100%&quot; height=&quot;100%&quot; CODEBASE=&quot;http://www.apple.com/qtactivex/qtplugin.cab&quot;&gt;
@@ -193,7 +194,7 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
          </code>
       </handler> 
       <handler
-            name="MPEG video (fixme)"
+            name="MPEG video"
             type="video/mpeg"> <code>
                                   &lt;body style=&quot;margin:0px;&quot;&gt;
 &lt;object CLASSID=&quot;clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B&quot; width=&quot;100%&quot; height=&quot;100%&quot; CODEBASE=&quot;http://www.apple.com/qtactivex/qtplugin.cab&quot;&gt;
@@ -206,8 +207,26 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
 &lt;/body&gt;
          </code>
       </handler>
+      <!-- See http://www.rfc-editor.org/rfc/rfc4337.txt -->
+      <handler
+            name="MPEG4 Video"
+            suffix="m4v,mpg4"
+            type="video/x-m4v,video/mp4">
+         <code>
+            &lt;body style=&quot;margin:0px;&quot;&gt;
+&lt;object CLASSID=&quot;clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B&quot; width=&quot;100%&quot; height=&quot;100%&quot; CODEBASE=&quot;http://www.apple.com/qtactivex/qtplugin.cab&quot;&gt;
+&lt;param name=&quot;src&quot; value=&quot;${content}&quot;&gt;
+&lt;param name=&quot;autoplay&quot; value=&quot;true&quot;&gt;
+&lt;param name=&quot;loop&quot; value=&quot;false&quot;&gt;
+&lt;param name=&quot;controller&quot; value=&quot;true&quot;&gt;
+&lt;embed src=&quot;${content}&quot;  width=&quot;100%&quot; height=&quot;100%&quot; autoplay=&quot;true&quot; loop=&quot;false&quot; TYPE=&quot;video/mp4&quot; controller=&quot;true&quot; pluginspage=&quot;http://www.apple.com/quicktime/&quot;&gt;&lt;/embed&gt;
+&lt;/object&gt;
+&lt;/body&gt;
+         </code>
+      </handler>
       <handler
             name="JPEG image"
+            suffix="jpg,jpeg"
             type="image/jpeg">
          <code>
             &lt;body style=&quot;margin:0px;&quot;&gt;

@@ -19,6 +19,10 @@ import no.resheim.aggregator.core.data.MediaContent;
  * @since 1.0
  */
 public class ContentHandler {
+	public String getSuffix() {
+		return suffix;
+	}
+
 	public String getContentType() {
 		return contentType;
 	}
@@ -26,9 +30,12 @@ public class ContentHandler {
 	private String code;
 	private String contentType;
 	private String name;
+	private String suffix;
 
-	public ContentHandler(String contentType, String name, String code) {
+	public ContentHandler(String contentType, String suffix, String name,
+			String code) {
 		this.contentType = contentType;
+		this.suffix = suffix;
 		this.name = name;
 		this.code = code;
 	}

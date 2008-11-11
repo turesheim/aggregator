@@ -15,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
@@ -115,34 +114,61 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 
 	private static final String MEDIAPLAYERS_ID = "no.resheim.aggregator.core.ui.contentHandlers"; //$NON-NLS-1$
 
-	private HashMap<String, ArrayList<ContentHandler>> contentHandlers;
+	private HashMap<String, ContentHandler> contentTypeHandlers;
+	private HashMap<String, ContentHandler> contentURLHandlers;
 
-	public ContentHandler getContentHandler(String type) {
-		if (contentHandlers == null) {
+	/**
+	 * If the file name is a better match than the declared media type, it will
+	 * be used instead to determine the content handler.
+	 * 
+	 * @param type
+	 *            the content type or <b>null</b>
+	 * @param url
+	 *            the URL or <b>null</b>
+	 * @return
+	 */
+	public ContentHandler getContentHandler(String type, String url) {
+		if (contentTypeHandlers == null) {
 			initContentHandlers();
 		}
-		ArrayList<ContentHandler> typeHandlers = contentHandlers.get(type);
-		if (typeHandlers != null && typeHandlers.size() > 0) {
-			return typeHandlers.get(0);
+		ContentHandler handler = null;
+		if (url != null && url.indexOf('.') > -1) {
+			handler = contentURLHandlers.get(url
+					.substring(url.lastIndexOf('.') + 1));
+			System.out.println(handler);
 		}
-		return null;
+		if (type != null && handler == null) {
+			handler = contentTypeHandlers.get(type);
+		}
+		return handler;
 	}
 
 	private void initContentHandlers() {
-		contentHandlers = new HashMap<String, ArrayList<ContentHandler>>();
-		synchronized (contentHandlers) {
+		contentTypeHandlers = new HashMap<String, ContentHandler>();
+		contentURLHandlers = new HashMap<String, ContentHandler>();
+		synchronized (contentTypeHandlers) {
 			IConfigurationElement[] players = ereg
 					.getConfigurationElementsFor(MEDIAPLAYERS_ID);
 			for (IConfigurationElement player : players) {
 				String code = player.getChildren("code")[0].getValue(); //$NON-NLS-1$
 				String type = player.getAttribute("type"); //$NON-NLS-1$
 				String name = player.getAttribute("name"); //$NON-NLS-1$
-				ArrayList<ContentHandler> typeHandlers = contentHandlers
-						.get(type);
-				if (typeHandlers == null)
-					typeHandlers = new ArrayList<ContentHandler>();
-				typeHandlers.add(new ContentHandler(type, name, code));
-				contentHandlers.put(type, typeHandlers);
+				String suffix = player.getAttribute("suffix"); //$NON-NLS-1$
+
+				ContentHandler handler = new ContentHandler(type, suffix, name,
+						code);
+				// Add a handler for the MIME type
+				if (type != null) {
+					for (String t : type.split(",")) { //$NON-NLS-1$
+						contentTypeHandlers.put(t, handler);
+					}
+				}
+				// Add a handler for the file name extension
+				if (suffix != null) {
+					for (String t : suffix.split(",")) { //$NON-NLS-1$
+						contentURLHandlers.put(t, handler);
+					}
+				}
 			}
 		}
 	}

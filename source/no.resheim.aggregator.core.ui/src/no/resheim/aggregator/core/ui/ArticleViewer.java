@@ -218,7 +218,8 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 				for (MediaContent mediaContent : media) {
 					PlayMediaAction action = new PlayMediaAction(count++);
 					ContentHandler handler = AggregatorUIPlugin.getDefault()
-							.getContentHandler(mediaContent.getContentType());
+							.getContentHandler(mediaContent.getContentType(),
+									mediaContent.getContentURL());
 					if (handler != null) {
 						action.setText(handler
 								.getFormattedContentName(mediaContent));
@@ -281,6 +282,16 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 			selectedArticle = (Article) item;
 			title.setTitle(selectedArticle.getTitle(), null);
 			viewContent(selectedArticle, false, 0);
+			if (selectedArticle.hasMedia()) {
+				MediaContent content = selectedArticle.getMediaContent()[0];
+				ContentHandler handler = AggregatorUIPlugin.getDefault()
+						.getContentHandler(content.getContentType(),
+								content.getContentURL());
+				playMediaAction.setToolTipText(MessageFormat.format("Play {0}",
+						new Object[] {
+							handler.getFormattedContentName(content)
+						}));
+			}
 			playMediaItem.setVisible(selectedArticle.hasMedia());
 			title.getToolBarManager().update(true);
 		} else if (item instanceof Feed) {
@@ -295,10 +306,11 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 			if (item.getMediaContent().length >= mediaIndex) {
 				MediaContent media = item.getMediaContent()[mediaIndex];
 				text = getContentHandlerHTML(media.getContentType(), media
-						.getContentURL());
+						.getContentURL(), media.getContentURL());
 			}
 		} else {
-			text = getContentHandlerHTML(DEFAULT_CONTENT_TYPE, item.getText());
+			text = getContentHandlerHTML(DEFAULT_CONTENT_TYPE, null, item
+					.getText());
 		}
 		browser.setText(text);
 		fInterceptBrowser = true;
@@ -314,13 +326,14 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 
 	final IExtensionRegistry ereg = Platform.getExtensionRegistry();
 
-	private String getContentHandlerHTML(String contentType, String content) {
+	private String getContentHandlerHTML(String contentType, String url,
+			String content) {
 		String code = MessageFormat.format(
 				Messages.ArticleViewer_NoContentHandler, new Object[] {
 					contentType
 				});
 		ContentHandler handler = AggregatorUIPlugin.getDefault()
-				.getContentHandler(contentType);
+				.getContentHandler(contentType, url);
 		if (handler == null)
 			return code;
 		code = handler.getEmbedCode(content, pPresentationFontFamily,
