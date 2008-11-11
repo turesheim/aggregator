@@ -83,7 +83,7 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 
 	public static final String IMG_DEC_ERROR = "error_dec"; //$NON-NLS-1$
 
-	public static final String IMG_DEC_FLASH = "flash_dec"; //$NON-NLS-1$
+	public static final String IMG_DEC_MEDIA = "media_dec"; //$NON-NLS-1$
 
 	public static final String IMG_MARK_IMPORTANT = "mark_important"; //$NON-NLS-1$
 
@@ -183,8 +183,8 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 				"icons/ovr16/warning_co.gif")); //$NON-NLS-1$
 		reg.put(IMG_DEC_ERROR, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/ovr16/error_co.gif")); //$NON-NLS-1$
-		reg.put(IMG_DEC_FLASH, imageDescriptorFromPlugin(PLUGIN_ID,
-				"icons/ovr16/flash_co.gif")); //$NON-NLS-1$
+		reg.put(IMG_DEC_MEDIA, imageDescriptorFromPlugin(PLUGIN_ID,
+				"icons/ovr16/media_co.gif")); //$NON-NLS-1$
 		reg.put(IMG_MARK_IMPORTANT, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/ovr16/mark_important.gif")); //$NON-NLS-1$
 		reg.put(IMG_MARK_TODO, imageDescriptorFromPlugin(PLUGIN_ID,
