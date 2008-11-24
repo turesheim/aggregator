@@ -18,6 +18,7 @@ public class Messages extends NLS {
 	public static String AggregatorUIPlugin_Browser_Title;
 	public static String AggregatorUIPlugin_Browser_Tooltip;
 	public static String ArticleViewer_NoContentHandler;
+	public static String ArticleViewer_PlayActionTitle;
 	public static String ArticleViewer_PlayMediaActionLabel;
 	public static String ArticleViewer_Published;
 	public static String ArticleViewer_UnhandledContent;

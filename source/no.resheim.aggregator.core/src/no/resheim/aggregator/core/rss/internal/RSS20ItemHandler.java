@@ -32,7 +32,7 @@ import org.xml.sax.SAXException;
  */
 public class RSS20ItemHandler extends AbstractItemHandler {
 
-	private static final String MEDIUM = "medium";
+	private static final String MEDIUM = "medium"; //$NON-NLS-1$
 
 	private static final String DURATION = "duration"; //$NON-NLS-1$
 
