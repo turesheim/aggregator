@@ -10,6 +10,9 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import java.util.HashMap;
+import java.util.regex.Matcher;
+
 import no.resheim.aggregator.core.data.MediaContent;
 
 /**
@@ -57,13 +60,16 @@ public class ContentHandler {
 	 * FIXME: Use properties and a proper variable replacer.
 	 * 
 	 * @param content
+	 *            the content of the article
 	 * @param fontFace
+	 *            the font face to use
 	 * @param fontFamily
+	 *            the font family to use
 	 * 
 	 * 
 	 * @return
 	 */
-	public String getEmbedCode(String content, String fontFace, int fontFamily) {
+	public String getEmbedCode(HashMap<String, String> properties) {
 		// // There has to be one code element
 		//		code = player.getChildren("code")[0].getValue(); //$NON-NLS-1$
 		// // If a file is specified, we must merge in the location of
@@ -81,10 +87,10 @@ public class ContentHandler {
 		// }
 		// }
 		String result = code;
-		result = result.replaceAll("\\$\\{content\\}", content); //$NON-NLS-1$
-		result = result.replaceAll("\\$\\{font-family\\}", fontFace); //$NON-NLS-1$
-		result = result.replaceAll(
-				"\\$\\{font-size\\}", String.valueOf(fontFamily)); //$NON-NLS-1$
+		for (String property : properties.keySet()) {
+			String value = Matcher.quoteReplacement(properties.get(property));
+			result = result.replaceAll("\\$\\{" + property + "\\}", value); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 		return result;
 
 	}

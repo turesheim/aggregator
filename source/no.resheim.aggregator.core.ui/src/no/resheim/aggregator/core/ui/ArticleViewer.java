@@ -14,6 +14,7 @@ package no.resheim.aggregator.core.ui;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.HashMap;
 
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
@@ -59,11 +60,6 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	private static final String DEFAULT_CONTENT_TYPE = "text/html"; //$NON-NLS-1$
 	private FeedItemTitle title;
 	private Browser browser;
-	/** Preference: Name of the font used in the details pane */
-	private String pPresentationFontFamily;
-
-	/** Preference: The size of the font used in the details pane (pixels) */
-	private int pPresentationFontSize;
 
 	private ListenerList listeners;
 
@@ -93,6 +89,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	 */
 	public ArticleViewer(Composite parent, int style) {
 		super(parent, style);
+		contentProperties = new HashMap<String, String>();
 		final FeedViewWidgetFactory factory = new FeedViewWidgetFactory();
 		setLayout();
 		// Special widget for item title
@@ -319,12 +316,13 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	private void showDescription(Feed feed) {
 		if (feed == null)
 			return;
-		browser.setText(FeedDescriptionFormatter.format(feed,
-				pPresentationFontFamily, pPresentationFontSize));
+		browser.setText(FeedDescriptionFormatter.format(feed, "verdana", 8)); //$NON-NLS-1$
 		title.setTitle(feed.getTitle(), null);
 	}
 
 	final IExtensionRegistry ereg = Platform.getExtensionRegistry();
+
+	HashMap<String, String> contentProperties;
 
 	private String getContentHandlerHTML(String contentType, String url,
 			String content) {
@@ -336,8 +334,8 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 				.getContentHandler(contentType, url);
 		if (handler == null)
 			return code;
-		code = handler.getEmbedCode(content, pPresentationFontFamily,
-				pPresentationFontSize);
+		contentProperties.put("content", content); //$NON-NLS-1$
+		code = handler.getEmbedCode(contentProperties);
 		return code;
 	}
 
@@ -346,8 +344,9 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 				.getPreferenceStore();
 		FontData fd = PreferenceConverter.getFontData(store,
 				PreferenceConstants.P_PREVIEW_FONT);
-		pPresentationFontFamily = fd.getName();
-		pPresentationFontSize = fd.getHeight();
+		contentProperties.put("font-family", fd.getName()); //$NON-NLS-1$
+		contentProperties.put("font-size", String.valueOf(fd.getHeight())); //$NON-NLS-1$
+
 	}
 
 	public void propertyChange(PropertyChangeEvent event) {
