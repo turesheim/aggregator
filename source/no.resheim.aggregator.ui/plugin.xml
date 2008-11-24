@@ -392,6 +392,15 @@
             url="http://www.jpl.nasa.gov/multimedia/podcast/podfeed.xml">
 						<description>High-definition (HD) videos from NASA's Jet Propulsion Laboratory feature the latest news on space and science findings from JPL and NASA. Topics include discoveries made by spacecraft studying planets in our solar system, including Mars, Saturn and our home planet, Earth. Missions also study stars and galaxies in our universe.</description>      
 						</feed>
+      <feed
+            archivingDays="1"
+            archivingItems="1"
+            archivingMethod="KEEP_NONE"
+            title="Monty Python (YouTube)"
+            updateInterval="1"
+            updatePeriod="DAYS"
+            url="http://www.youtube.com/rss/user/montypython/videos.rss">
+      </feed>
    </extension>
 
 </plugin>
