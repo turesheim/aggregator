@@ -141,7 +141,11 @@ public class FeedCollection extends AggregatorItemParent {
 	}
 
 	/**
+	 * Adds a new feed to the collection. If the feed location is not specified
+	 * a new folder will automatically be created and associated with the feed.
+	 * 
 	 * @param feed
+	 *            the new feed to add
 	 * @return the {@link Folder} where feed items will be put
 	 */
 	public Folder addNew(Feed feed) {
@@ -156,21 +160,26 @@ public class FeedCollection extends AggregatorItemParent {
 				folder = new InternalFolder(this, UUID.randomUUID());
 				folder.setFeed(feed.getUUID());
 				folder.setTitle(feed.getTitle());
-				addNew(new AggregatorItem[] {
-					folder
-				});
+				fDatabase.add(folder);
+				move(folder, this, folder.getOrdering(), this, 0);
 				feed.setLocation(folder.getUUID());
+			} else {
+				// FIXME: Determine the folder from the location
 			}
 			fFeeds.put(feed.getUUID(), feed);
 			fDatabase.add(feed);
 			FeedUpdateJob job = new FeedUpdateJob(this, feed);
 			job.schedule();
+		} catch (CoreException e) {
+			e.printStackTrace();
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
-		notifyListerners(new Object[] {
-			folder
-		}, EventType.CREATED);
+		if (folder != null) {
+			notifyListerners(new Object[] {
+				folder
+			}, EventType.CREATED);
+		}
 		return folder;
 	}
 
