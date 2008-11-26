@@ -573,10 +573,6 @@ public class FeedCollection extends AggregatorItemParent {
 			AggregatorItem sibling = parent.getChildAt(i);
 			sibling.setOrdering(sibling.getOrdering() + 1);
 			fDatabase.move((AggregatorItem) sibling);
-			// notifyListerners(new AggregatorItemChangedEvent(sibling,
-			// FeedChangeEventType.SHIFTED,
-			// AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
-			// System.currentTimeMillis() - start));
 		}
 	}
 
@@ -597,10 +593,6 @@ public class FeedCollection extends AggregatorItemParent {
 			Assert.isNotNull(sibling);
 			sibling.setOrdering(sibling.getOrdering() - 1);
 			fDatabase.move((AggregatorItem) sibling);
-			// events.add(new AggregatorItemChangedEvent(sibling,
-			// FeedChangeEventType.SHIFTED,
-			// AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
-			// System.currentTimeMillis() - start));
 		}
 		return events;
 	}
