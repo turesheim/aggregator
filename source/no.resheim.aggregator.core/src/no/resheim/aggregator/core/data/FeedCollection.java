@@ -406,7 +406,7 @@ public class FeedCollection extends AggregatorItemParent {
 				// The item is moved into a new parent
 				details |= AggregatorItemChangedEvent.NEW_PARENT;
 				// Shift affected siblings
-				shiftUp((AggregatorItem) item);
+				shiftUp(item);
 				// Switch parent item
 				item.getParent().internalRemove(item);
 				item.parent = newParent;
@@ -414,17 +414,69 @@ public class FeedCollection extends AggregatorItemParent {
 				// Change the order
 				item.setOrdering(newOrder);
 				// Update the database
-				fDatabase.move((AggregatorItem) item);
+				fDatabase.move(item);
 			} else if (newOrder > oldOrder) {
 				// The item is moved down (new order is higher)
 				shiftUp(item, oldOrder, newOrder);
 				item.setOrdering(newOrder);
-				fDatabase.move((AggregatorItem) item);
+				fDatabase.move(item);
 			} else {
 				// The item is moved up
 				shiftDown(item, oldOrder, newOrder);
 				item.setOrdering(newOrder);
-				fDatabase.move((AggregatorItem) item);
+				fDatabase.move(item);
+			}
+		} finally {
+			fDatabase.writeLock().unlock();
+		}
+	}
+
+	/**
+	 * Moves a number of consecutive items to a new parent. This method assumes
+	 * that all the supplied items have the same parent and that they are in
+	 * consecutive order. If this is not the case unpredictable results will
+	 * occur. No verification is performed.
+	 * 
+	 * @param items
+	 *            the items to move
+	 * @param newParent
+	 *            the new parent of the items
+	 * @throws CoreException
+	 */
+	public void move(AggregatorItem[] items, AggregatorItemParent newParent)
+			throws CoreException {
+		// We don't care about empty arrays
+		if (items.length == 0)
+			return;
+		try {
+			fDatabase.writeLock().lock();
+			int details = 0;
+			// The (shared) parent item
+			AggregatorItemParent oldParent = items[0].getParent();
+			// The number of items moved
+			int length = items.length;
+			// The old number of children
+			int count = oldParent.getChildCount();
+			if (!oldParent.equals(newParent)) {
+				// The item is moved into a new parent
+				details |= AggregatorItemChangedEvent.NEW_PARENT;
+				// Shift affected siblings
+				for (int i = items[length - 1].getOrdering() + 1; i < count; i++) {
+					AggregatorItem sibling = oldParent.getChildAt(i);
+					Assert.isNotNull(sibling);
+					sibling.setOrdering(sibling.getOrdering() - length);
+					fDatabase.move((AggregatorItem) sibling);
+				}
+				// Switch parent on the moved items
+				for (AggregatorItem item : items) {
+					oldParent.internalRemove(item);
+					item.parent = newParent;
+					item.getParent().internalAdd(item);
+					// Change the order
+					item.setOrdering(newParent.getChildCount());
+					// Update the database
+					fDatabase.move(item);
+				}
 			}
 		} finally {
 			fDatabase.writeLock().unlock();
@@ -618,10 +670,6 @@ public class FeedCollection extends AggregatorItemParent {
 			AggregatorItem sibling = parent.getChildAt(i);
 			sibling.setOrdering(sibling.getOrdering() - 1);
 			fDatabase.move((AggregatorItem) sibling);
-			// events.add(new AggregatorItemChangedEvent(sibling,
-			// FeedChangeEventType.SHIFTED,
-			// AggregatorItemChangedEvent.NEW_PARENT, parent, oldOrder,
-			// System.currentTimeMillis() - start));
 		}
 		return events;
 	}

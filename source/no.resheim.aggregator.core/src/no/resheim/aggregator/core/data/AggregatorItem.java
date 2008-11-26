@@ -134,6 +134,11 @@ public abstract class AggregatorItem {
 		fFlags.add(flag);
 	}
 
+	/**
+	 * <b>Must only be called when inside a collection lock</b>
+	 * 
+	 * @param ordering
+	 */
 	public void setOrdering(int ordering) {
 		this.ordering = ordering;
 	}
