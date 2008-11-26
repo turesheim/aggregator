@@ -73,10 +73,6 @@ public class FeedUpdateJob extends Job {
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-		// We won't update these
-		if (feed.getURL().startsWith("test://")) { //$NON-NLS-1$
-			return Status.OK_STATUS;
-		}
 		synchronized (feed) {
 			feed.setUpdating(true);
 			feed.getTempItems().clear();
@@ -94,7 +90,9 @@ public class FeedUpdateJob extends Job {
 						Messages.FeedUpdateJob_StatusTitle, new Object[] {
 							feed.getTitle()
 						}), null);
-		ms.add(download(feed, debug));
+		if (!feed.getURL().startsWith("test://")) { //$NON-NLS-1$
+			ms.add(download(feed, debug));
+		}
 		if (ms.isOK()) {
 			setName(MessageFormat.format(Messages.FeedUpdateJob_CleaningUp,
 					new Object[] {
