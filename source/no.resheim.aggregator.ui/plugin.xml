@@ -9,7 +9,7 @@
             class="no.resheim.aggregator.ui.views.RSSView"
             icon="icons/view.gif"
             id="no.resheim.aggregator.ui.RSSView"
-            name="News Feeds">
+            name="Feeds">
       </view>
    </extension>
    <extension
