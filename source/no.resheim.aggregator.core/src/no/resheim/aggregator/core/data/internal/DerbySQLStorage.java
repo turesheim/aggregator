@@ -94,7 +94,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		Feed feed = new Feed();
 		feed.setUUID(UUID.fromString(rs.getString(1)));
 		feed.setLocation(UUID.fromString(rs.getString(2)));
-		feed.setTitle(rs.getString(2).trim());
+		feed.setTitle(rs.getString(3).trim());
 		feed.setURL(rs.getString(4).trim());
 		feed.setArchiving(Archiving.valueOf(rs.getString(5)));
 		feed.setArchivingItems(rs.getInt(6));
