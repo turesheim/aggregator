@@ -284,10 +284,16 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 				ContentHandler handler = AggregatorUIPlugin.getDefault()
 						.getContentHandler(content.getContentType(),
 								content.getContentURL());
-				playMediaAction.setToolTipText(MessageFormat.format(
-						Messages.ArticleViewer_PlayActionTitle, new Object[] {
-							handler.getFormattedContentName(content)
-						}));
+				if (handler != null) {
+					playMediaAction.setToolTipText(MessageFormat.format(
+							Messages.ArticleViewer_PlayActionTitle,
+							new Object[] {
+								handler.getFormattedContentName(content)
+							}));
+				} else {
+					playMediaAction
+							.setText(Messages.ArticleViewer_UnhandledContent);
+				}
 			}
 			playMediaItem.setVisible(selectedArticle.hasMedia());
 			title.getToolBarManager().update(true);
