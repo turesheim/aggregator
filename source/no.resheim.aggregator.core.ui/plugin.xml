@@ -220,5 +220,18 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
 &lt;/html&gt;
          </code>
       </handler>
+      <handler
+            name="PDF Document"
+            suffix="pdf"
+            type="application/pdf">
+         <code>
+            &lt;body style=&quot;margin:0px;&quot;&gt;
+&lt;object CLASSID=&quot;clsid:CA8A9780-280D-11CF-A24D-444553540000&quot; width=&quot;100%&quot; height=&quot;100%&quot;&gt;
+&lt;param name=&quot;pdf&quot; value=&quot;${content}&quot;&gt;
+&lt;embed src=&quot;${content}&quot;  width=&quot;100%&quot; height=&quot;100%&quot; TYPE=&quot;application/pdf&quot; &gt;&lt;/embed&gt;
+&lt;/object&gt;
+&lt;/body&gt;
+         </code>
+      </handler>
    </extension>
 </plugin>
