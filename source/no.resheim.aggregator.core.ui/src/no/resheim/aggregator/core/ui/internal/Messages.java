@@ -83,6 +83,8 @@ public class Messages extends NLS {
 	public static String FeedPropertiesComposite_7;
 	public static String FeedPropertiesComposite_8;
 	public static String FeedPropertiesComposite_9;
+	public static String FeedPropertiesComposite_KeepUnreadLabel;
+	public static String FeedPropertiesComposite_KeepUnreadTooltip;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

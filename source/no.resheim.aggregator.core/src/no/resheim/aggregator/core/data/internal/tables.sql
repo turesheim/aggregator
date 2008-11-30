@@ -72,6 +72,7 @@ CREATE TABLE feeds (
 		feed_type VARCHAR(32),
 		hidden INT NOT NULL,
 		anonymous_access INT NOT NULL,
+		keep_unread INT NOT NULL,
 		image_data VARCHAR(16384)
 	);
 

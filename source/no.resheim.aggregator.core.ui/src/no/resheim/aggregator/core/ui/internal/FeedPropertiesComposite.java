@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class FeedPropertiesComposite extends Composite {
 
+	private Button keepUnreadItemsButton;
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
 	private FeedWorkingCopy feed = null;
@@ -301,6 +302,21 @@ public class FeedPropertiesComposite extends Composite {
 						feed.setArchiving(Archiving.KEEP_NONE);
 					}
 				});
+		new Label(archiveGroup, SWT.NONE);
+		new Label(archiveGroup, SWT.NONE);
+
+		keepUnreadItemsButton = new Button(archiveGroup, SWT.CHECK);
+		keepUnreadItemsButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(final SelectionEvent e) {
+				feed.setKeepUread(keepUnreadItemsButton.getSelection());
+			}
+		});
+		final GridData gd_onlyDeleteReadButton = new GridData(SWT.LEFT,
+				SWT.CENTER, false, false, 3, 1);
+		keepUnreadItemsButton.setLayoutData(gd_onlyDeleteReadButton);
+		keepUnreadItemsButton.setText(Messages.FeedPropertiesComposite_KeepUnreadLabel);
+		keepUnreadItemsButton
+				.setToolTipText(Messages.FeedPropertiesComposite_KeepUnreadTooltip);
 	}
 
 	private void updateArchivingWidgets() {
@@ -326,6 +342,7 @@ public class FeedPropertiesComposite extends Composite {
 			days.setEnabled(false);
 			break;
 		}
+		keepUnreadItemsButton.setSelection(feed.keepUnread());
 	}
 
 	private void updateLoginWidgets() {

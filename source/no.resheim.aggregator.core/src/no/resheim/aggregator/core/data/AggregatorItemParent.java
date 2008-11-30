@@ -123,26 +123,31 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		ArrayList<Article> trashed = new ArrayList<Article>();
 		int days = site.getArchivingDays();
 		int articles = site.getArchivingItems();
+		boolean doTrash = false;
 		switch (archiving) {
 		case KEEP_ALL:
 			// Do nothing as we want to keep all items
 			break;
 		// Keep only items that are newer than the specified date. The read
 		// state of the item is not considered.
+		// TODO: Optimise
 		case KEEP_NEWEST:
 			long lim = System.currentTimeMillis() - ((long) days * DAY);
 			for (AggregatorItem item : getChildren()) {
+				doTrash = false;
 				if (item instanceof Article) {
 					Article article = (Article) item;
-					if (article.getPublicationDate() > 0
-							&& article.getPublicationDate() <= lim) {
-						trashed.add((Article) item);
-						item.setFlag(Flag.TRASHED);
-					} else if (article.getPublicationDate() == 0
-							&& article.addedDate <= lim) {
-						trashed.add((Article) item);
-						item.setFlag(Flag.TRASHED);
+					if (site.keepUnread()) {
+						if (((Article) item).isRead()) {
+							doTrash = considerDate(lim, article);
+						}
+					} else {
+						doTrash = considerDate(lim, article);
 					}
+				}
+				if (doTrash) {
+					trashed.add((Article) item);
+					item.setFlag(Flag.TRASHED);
 				}
 			}
 			break;
@@ -154,11 +159,25 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 			synchronized (this) {
 				int position = 0;
 				while (children > articles) {
+					doTrash = false;
 					AggregatorItem item = getChildAt(position);
-					trashed.add((Article) item);
-					item.setFlag(Flag.TRASHED);
+					// We're at the end
+					if (item == null)
+						break;
+					if (site.keepUnread()) {
+						if (((Article) item).isRead()) {
+							doTrash = true;
+						}
+					} else {
+						doTrash = true;
+					}
+					if (doTrash) {
+						System.out.println(position + ":" + item);
+						trashed.add((Article) item);
+						item.setFlag(Flag.TRASHED);
+						children--;
+					}
 					position++;
-					children--;
 				}
 			}
 			break;
@@ -168,10 +187,46 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		if (trashed.size() > 0) {
 			FeedCollection collection = getCollection();
 			Folder trashFolder = collection.getTrashFolder();
-			Article[] items = trashed.toArray(new Article[trashed.size()]);
-			collection.move(items, trashFolder);
-			collection.notifyListerners(items, EventType.MOVED);
+			ArrayList<Article> tempTrashed = new ArrayList<Article>();
+			// Move each set of consecutive items into the trash folder. We try
+			// to do this set-wise as it will save us a lot of processing and
+			// updating of the GUI.
+			for (Article article : trashed) {
+				if (tempTrashed.size() == 0) {
+					tempTrashed.add(article);
+				} else {
+					Article prev = tempTrashed.get(tempTrashed.size() - 1);
+					if (prev.getParent().equals(article.getParent())
+							&& prev.getOrdering() == article.getOrdering() - 1) {
+						tempTrashed.add(article);
+					} else {
+						Article[] items = tempTrashed
+								.toArray(new Article[tempTrashed.size()]);
+						collection.move(items, trashFolder);
+						collection.notifyListerners(items, EventType.MOVED);
+						tempTrashed.clear();
+					}
+				}
+			} // for
+			if (tempTrashed.size() > 0) {
+				Article[] items = tempTrashed.toArray(new Article[tempTrashed
+						.size()]);
+				collection.move(items, trashFolder);
+				collection.notifyListerners(items, EventType.MOVED);
+
+			}
 		}
+	}
+
+	private boolean considerDate(long lim, Article article) {
+		if (article.getPublicationDate() > 0
+				&& article.getPublicationDate() <= lim) {
+			return true;
+		} else if (article.getPublicationDate() == 0
+				&& article.addedDate <= lim) {
+			return true;
+		}
+		return false;
 	}
 
 	protected List<Folder> getDescendingFolders() throws CoreException {
@@ -204,11 +259,6 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		FeedCollection c = getCollection();
 		Folder trashFolder = c.getTrashFolder();
 		int newPosition = trashFolder.getChildCount();
-		trash(item, c, trashFolder, newPosition);
-	}
-
-	private void trash(AggregatorItem item, FeedCollection c,
-			Folder trashFolder, int newPosition) throws CoreException {
 		item.setFlag(Flag.TRASHED);
 		c.move(item, item.getParent(), item.getOrdering(), trashFolder,
 				newPosition);

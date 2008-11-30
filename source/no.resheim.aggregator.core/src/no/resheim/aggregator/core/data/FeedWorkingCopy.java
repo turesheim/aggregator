@@ -31,15 +31,16 @@ public final class FeedWorkingCopy extends Feed {
 	}
 
 	public void copy(Feed feed) {
-		this.title = feed.getTitle();
-		this.url = feed.url;
-		this.archiving = feed.archiving;
-		this.archivingItems = feed.archivingItems;
-		this.archivingDays = feed.archivingDays;
-		this.updateInterval = feed.updateInterval;
-		this.updatePeriod = feed.updatePeriod;
-		this.hidden = feed.hidden;
-		this.anonymousAccess = feed.anonymousAccess;
+		title = feed.getTitle();
+		url = feed.url;
+		archiving = feed.archiving;
+		archivingItems = feed.archivingItems;
+		archivingDays = feed.archivingDays;
+		updateInterval = feed.updateInterval;
+		updatePeriod = feed.updatePeriod;
+		hidden = feed.hidden;
+		anonymousAccess = feed.anonymousAccess;
+		keepUnread = feed.keepUnread;
 	}
 
 	public Feed getFeed() {
@@ -53,6 +54,7 @@ public final class FeedWorkingCopy extends Feed {
 			feed.updatePeriod = updatePeriod;
 			feed.hidden = hidden;
 			feed.anonymousAccess = anonymousAccess;
+			feed.keepUnread = keepUnread;
 		}
 		return feed;
 	}

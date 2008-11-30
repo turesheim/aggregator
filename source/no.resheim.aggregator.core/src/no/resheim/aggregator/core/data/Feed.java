@@ -25,30 +25,6 @@ import org.eclipse.core.runtime.Status;
  */
 public class Feed implements Comparable<Feed> {
 
-	public byte[] getImageData() {
-		return imageData;
-	}
-
-	public void setImageData(byte[] imageData) {
-		this.imageData = imageData;
-	}
-
-	byte[] imageData;
-
-	public ArrayList<Article> getTempItems() {
-		return tempItems;
-	}
-
-	ArrayList<Article> tempItems;
-
-	/**
-	 * A unique identifier will be created for the feed as it is instantiated.
-	 */
-	public Feed() {
-		uuid = UUID.randomUUID();
-		tempItems = new ArrayList<Article>();
-	}
-
 	/**
 	 * 
 	 */
@@ -69,6 +45,8 @@ public class Feed implements Comparable<Feed> {
 
 	private static final String BLANK_STRING = ""; //$NON-NLS-1$
 
+	protected boolean anonymousAccess = true;
+
 	protected Archiving archiving = Archiving.KEEP_ALL;
 
 	protected int archivingDays = 30;
@@ -81,34 +59,22 @@ public class Feed implements Comparable<Feed> {
 
 	private String editor;
 
-	/** Default is OK */
-	private IStatus lastStatus = Status.OK_STATUS;
-
-	public IStatus getLastStatus() {
-		return lastStatus;
-	}
-
-	public void setLastStatus(IStatus lastStatus) {
-		this.lastStatus = lastStatus;
-	}
-
 	boolean hidden;
 
-	protected boolean anonymousAccess = true;
+	byte[] imageData;
 
-	public boolean isAnonymousAccess() {
-		return anonymousAccess;
-	}
+	protected boolean keepUnread;
 
-	public void setAnonymousAccess(boolean anonymousAccess) {
-		this.anonymousAccess = anonymousAccess;
-	}
+	/** Default is OK */
+	private IStatus lastStatus = Status.OK_STATUS;
 
 	protected long lastUpdate;
 
 	private String link;
 
 	protected UUID location;
+
+	ArrayList<Article> tempItems;
 
 	protected boolean threaded;
 
@@ -125,7 +91,20 @@ public class Feed implements Comparable<Feed> {
 	protected String url = BLANK_STRING;
 
 	protected UUID uuid;
+
 	private String webmaster;
+
+	/**
+	 * A unique identifier will be created for the feed as it is instantiated.
+	 */
+	public Feed() {
+		uuid = UUID.randomUUID();
+		tempItems = new ArrayList<Article>();
+	}
+
+	public int compareTo(Feed arg) {
+		return this.getTitle().compareTo(arg.getTitle());
+	}
 
 	public Archiving getArchiving() {
 		return archiving;
@@ -154,6 +133,14 @@ public class Feed implements Comparable<Feed> {
 		return editor;
 	}
 
+	public byte[] getImageData() {
+		return imageData;
+	}
+
+	public IStatus getLastStatus() {
+		return lastStatus;
+	}
+
 	public long getLastUpdate() {
 		return lastUpdate;
 	}
@@ -164,6 +151,10 @@ public class Feed implements Comparable<Feed> {
 
 	public UUID getLocation() {
 		return location;
+	}
+
+	public ArrayList<Article> getTempItems() {
+		return tempItems;
 	}
 
 	public String getTitle() {
@@ -219,6 +210,10 @@ public class Feed implements Comparable<Feed> {
 		return webmaster;
 	}
 
+	public boolean isAnonymousAccess() {
+		return anonymousAccess;
+	}
+
 	public boolean isHidden() {
 		return hidden;
 	}
@@ -229,6 +224,14 @@ public class Feed implements Comparable<Feed> {
 
 	public boolean isUpdating() {
 		return updating;
+	}
+
+	public boolean keepUnread() {
+		return keepUnread;
+	}
+
+	public void setAnonymousAccess(boolean anonymousAccess) {
+		this.anonymousAccess = anonymousAccess;
 	}
 
 	public void setArchiving(Archiving archiving) {
@@ -257,6 +260,18 @@ public class Feed implements Comparable<Feed> {
 
 	public void setHidden(boolean hidden) {
 		this.hidden = hidden;
+	}
+
+	public void setImageData(byte[] imageData) {
+		this.imageData = imageData;
+	}
+
+	public void setKeepUread(boolean keep) {
+		keepUnread = keep;
+	}
+
+	public void setLastStatus(IStatus lastStatus) {
+		this.lastStatus = lastStatus;
 	}
 
 	/**
@@ -337,18 +352,15 @@ public class Feed implements Comparable<Feed> {
 	 * @param wc
 	 */
 	public void updateFromWorkingCopy(FeedWorkingCopy wc) {
-		this.title = wc.title;
-		this.url = wc.url;
-		this.archiving = wc.archiving;
-		this.archivingItems = wc.archivingItems;
-		this.archivingDays = wc.archivingDays;
-		this.updateInterval = wc.updateInterval;
-		this.updatePeriod = wc.updatePeriod;
-		this.hidden = wc.hidden;
-		this.anonymousAccess = wc.anonymousAccess;
-	}
-
-	public int compareTo(Feed arg) {
-		return this.getTitle().compareTo(arg.getTitle());
+		title = wc.title;
+		url = wc.url;
+		archiving = wc.archiving;
+		archivingItems = wc.archivingItems;
+		archivingDays = wc.archivingDays;
+		updateInterval = wc.updateInterval;
+		updatePeriod = wc.updatePeriod;
+		hidden = wc.hidden;
+		anonymousAccess = wc.anonymousAccess;
+		keepUnread = wc.keepUnread;
 	}
 }
