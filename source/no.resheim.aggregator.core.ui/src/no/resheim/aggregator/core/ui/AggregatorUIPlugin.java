@@ -19,6 +19,7 @@ import java.util.HashMap;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IStatus;
@@ -118,16 +119,19 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	private HashMap<String, ContentHandler> contentURLHandlers;
 
 	/**
-	 * If the file name is a better match than the declared media type, it will
-	 * be used instead to determine the content handler.
+	 * If the file name matches a content handler this will be used instead of
+	 * the declared media type. At least one of <i>type</i> and <i>url</i> must
+	 * be specified.
 	 * 
 	 * @param type
-	 *            the content type or <b>null</b>
+	 *            the content type or <code>null</code>
 	 * @param url
-	 *            the URL or <b>null</b>
-	 * @return
+	 *            the URL of the media or <code>null</code>
+	 * @return the content handler or <code>null</code> if none could be found.
 	 */
 	public ContentHandler getContentHandler(String type, String url) {
+		Assert.isTrue(type != null || url != null,
+				"At least one parameter must be given"); //$NON-NLS-1$
 		if (contentTypeHandlers == null) {
 			initContentHandlers();
 		}
