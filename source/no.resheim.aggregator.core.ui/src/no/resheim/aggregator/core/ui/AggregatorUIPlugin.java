@@ -135,7 +135,6 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 		if (url != null && url.indexOf('.') > -1) {
 			handler = contentURLHandlers.get(url
 					.substring(url.lastIndexOf('.') + 1));
-			System.out.println(handler);
 		}
 		if (type != null && handler == null) {
 			handler = contentTypeHandlers.get(type);
