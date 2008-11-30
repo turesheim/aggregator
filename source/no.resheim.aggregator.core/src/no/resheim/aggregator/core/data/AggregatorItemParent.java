@@ -172,7 +172,6 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 						doTrash = true;
 					}
 					if (doTrash) {
-						System.out.println(position + ":" + item);
 						trashed.add((Article) item);
 						item.setFlag(Flag.TRASHED);
 						children--;
