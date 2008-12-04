@@ -48,8 +48,6 @@ import org.eclipse.equinox.security.storage.EncodingUtils;
  */
 public class DerbySQLStorage extends AbstractAggregatorStorage {
 
-	private static final String SQL_SEPARATOR = ";"; //$NON-NLS-1$
-
 	/** Connection options */
 	private static final String CONNECT_OPTIONS = ";create=true"; //$NON-NLS-1$
 
@@ -60,6 +58,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	private static final String DISCONNECT_OPTIONS = ";shutdown=true"; //$NON-NLS-1$
 
 	private static final String JDBC_DERBY = "jdbc:derby:"; //$NON-NLS-1$
+
+	private static final String SQL_SEPARATOR = ";"; //$NON-NLS-1$
 
 	/** Name of the SQL file used to create the tables */
 	private static final String TABLES_SQL = "tables.sql"; //$NON-NLS-1$
@@ -77,17 +77,85 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.IAggregatorStorage#shutdown()
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#add(no.resheim.aggregator
+	 * .model.AggregatorItem)
 	 */
-	public IStatus shutdown() {
+	public IStatus add(AggregatorItem item) {
 		try {
-			connection = DriverManager.getConnection(JDBC_DERBY
-					+ path.toOSString() + DISCONNECT_OPTIONS);
-			connection.close();
+			if (item instanceof Article) {
+				// Set the order of the item
+				((InternalArticle) item)
+						.setOrdering(getChildCount(((InternalArticle) item)
+								.getLocation()));
+				insert((InternalArticle) item);
+			}
+			if (item instanceof Folder) {
+				((AggregatorItem) item)
+						.setOrdering(getChildCount(((AggregatorItem) item)
+								.getParent()));
+				insert((Folder) item);
+			}
+			return Status.OK_STATUS;
 		} catch (SQLException e) {
-			// Should throw ERROR 08006 which we will ignore.
+			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
+					MessageFormat.format(Messages.DerbySQLStorage_StoreError,
+							item), e);
 		}
-		return Status.OK_STATUS;
+	}
+
+	public void add(Feed feed) {
+		try {
+			insert(feed);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Adds a new {@link Filter} to the database. All contained criteria and
+	 * actions are also stored.
+	 * 
+	 * @param filter
+	 *            the {@link Filter} instance to store
+	 * @return the operation status
+	 */
+	public IStatus add(Filter filter) {
+		try {
+			insert(filter);
+			return Status.OK_STATUS;
+		} catch (SQLException e) {
+			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
+					MessageFormat.format(Messages.DerbySQLStorage_StoreError,
+							filter), e);
+		}
+	}
+
+	/**
+	 * Composes an Item instance from the result set but leaves out the
+	 * description field.
+	 * 
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
+	private InternalArticle composeArticle(AggregatorItemParent parent,
+			ResultSet rs) throws SQLException {
+		InternalArticle item = new InternalArticle(parent, UUID.fromString(rs
+				.getString(1)), UUID.fromString(rs.getString(4)));
+		item.setOrdering(rs.getInt(3));
+		item.setGuid(rs.getString(5));
+		item.setTitle(rs.getString(6).trim());
+		item.setLink(rs.getString(7));
+		item.setMark(Mark.valueOf(rs.getString(8)));
+		item.setFlags(decodeFlags(rs.getString(9)));
+		item.setRead(rs.getInt(10) != 0);
+		item.setPublicationDate(rs.getLong(11));
+		item.setReadDate(rs.getLong(12));
+		item.setAddedDate(rs.getLong(13));
+		item.setCreator(rs.getString(15));
+		item.setMediaPlayerURL(rs.getString(16));
+		return item;
 	}
 
 	private Feed composeFeed(ResultSet rs) throws SQLException {
@@ -118,43 +186,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	}
 
 	/**
-	 * Composes an Item instance from the result set but leaves out the
-	 * description field.
-	 * 
-	 * @param rs
-	 * @return
-	 * @throws SQLException
-	 */
-	private InternalArticle composeArticle(AggregatorItemParent parent,
-			ResultSet rs) throws SQLException {
-		InternalArticle item = new InternalArticle(parent, UUID.fromString(rs
-				.getString(1)), UUID.fromString(rs.getString(4)));
-		item.setOrdering(rs.getInt(3));
-		item.setGuid(rs.getString(5));
-		item.setTitle(rs.getString(6).trim());
-		item.setLink(rs.getString(7));
-		item.setMark(Mark.valueOf(rs.getString(8)));
-		item.setFlags(decodeFlags(rs.getString(9)));
-		item.setRead(rs.getInt(10) != 0);
-		item.setPublicationDate(rs.getLong(11));
-		item.setReadDate(rs.getLong(12));
-		item.setAddedDate(rs.getLong(13));
-		item.setCreator(rs.getString(15));
-		item.setMediaPlayerURL(rs.getString(16));
-		return item;
-	}
-
-	private MediaContent composeMediaContent(ResultSet rs) throws SQLException {
-		MediaContent content = new MediaContent();
-		content.setContentURL(rs.getString(3));
-		content.setThumbnailURL(rs.getString(4));
-		content.setContentType(rs.getString(5));
-		content.setMedium(Medium.valueOf(rs.getString(7)));
-		// TODO:FIX THE REST
-		return content;
-	}
-
-	/**
 	 * Creates a new folder instance from the data found in the supplied result
 	 * set.
 	 * 
@@ -178,6 +209,16 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		item.setMark(Mark.valueOf(rs.getString(7)));
 		item.setFlags(decodeFlags(rs.getString(8)));
 		return item;
+	}
+
+	private MediaContent composeMediaContent(ResultSet rs) throws SQLException {
+		MediaContent content = new MediaContent();
+		content.setContentURL(rs.getString(3));
+		content.setThumbnailURL(rs.getString(4));
+		content.setContentType(rs.getString(5));
+		content.setMedium(Medium.valueOf(rs.getString(7)));
+		// TODO:FIX THE REST
+		return content;
 	}
 
 	private IStatus createTables(IProgressMonitor monitor) throws SQLException {
@@ -276,24 +317,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see no.resheim.aggregator.model.AggregatorStorage#getChildren(no.resheim
-	 * .aggregator.model.AggregatorItem)
-	 */
-	public AggregatorItem[] getChildren(AggregatorItemParent item) {
-		Assert.isNotNull(item);
-		ArrayList<AggregatorItem> items = new ArrayList<AggregatorItem>();
-		try {
-			selectFolders(item, items);
-			selectItems(item, items);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return items.toArray(new AggregatorItem[items.size()]);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see
 	 * no.resheim.aggregator.IAggregatorStorage#getChildCount(no.resheim.aggregator
 	 * .data.AggregatorItem)
@@ -332,22 +355,44 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * no.resheim.aggregator.model.IAggregatorStorage#getItem(java.lang.String)
+	 * @see no.resheim.aggregator.model.AggregatorStorage#getChildren(no.resheim
+	 * .aggregator.model.AggregatorItem)
 	 */
-	public boolean hasArticle(String guid) {
-		boolean found = false;
+	public AggregatorItem[] getChildren(AggregatorItemParent item) {
+		Assert.isNotNull(item);
+		ArrayList<AggregatorItem> items = new ArrayList<AggregatorItem>();
+		try {
+			selectFolders(item, items);
+			selectItems(item, items);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return items.toArray(new AggregatorItem[items.size()]);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#selectDescription(no.resheim
+	 * .aggregator.model.Article)
+	 */
+	public String getDescription(Article item) {
+		String description = null;
 		try {
 			Statement s = connection.createStatement();
-			String query = "select * from articles where guid='" //$NON-NLS-1$
-					+ guid + "'"; //$NON-NLS-1$
+			String query = "select description from articles where guid='" //$NON-NLS-1$
+					+ item.getGuid() + "'"; //$NON-NLS-1$
 			ResultSet rs = s.executeQuery(query);
-			found = rs.next();
+			if (rs.next()) {
+				description = rs.getString(1);
+			}
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return found;
+		return description;
+
 	}
 
 	/*
@@ -371,42 +416,222 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		return feeds;
 	}
 
+	public Filter[] getFilters() {
+		ArrayList<Filter> filters = new ArrayList<Filter>();
+		try {
+			Statement s = connection.createStatement();
+			ResultSet rs = s.executeQuery("select * from filters"); //$NON-NLS-1$
+			while (rs.next()) {
+				Filter filter = new Filter(rs.getString("title"), UUID //$NON-NLS-1$
+						.fromString(rs.getString("uuid"))); //$NON-NLS-1$
+				// Add filter actions
+				ResultSet rs2 = s
+						.executeQuery("select * from filter_actions where filter_uuid='" //$NON-NLS-1$
+								+ filter.getUuid().toString() + "'"); //$NON-NLS-1$
+				while (rs2.next()) {
+
+				}
+				filters.add(filter);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return filters.toArray(new Filter[filters.size()]);
+	}
+
+	public AggregatorItem getItem(AggregatorItemParent parent, int index) {
+		Assert.isNotNull(parent);
+		AggregatorItem item = null;
+		try {
+			if (item == null) {
+				item = selectArticle(parent, index);
+			}
+			if (item == null) {
+				item = selectFolder(parent, index);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return item;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * no.resheim.aggregator.model.IAggregatorStorage#add(no.resheim.aggregator
-	 * .model.AggregatorItem)
+	 * no.resheim.aggregator.model.IAggregatorStorage#selectItemCount(no.resheim
+	 * .aggregator.model.Feed)
 	 */
-	public IStatus add(AggregatorItem item) {
-		try {
-			if (item instanceof Article) {
-				// Set the order of the item
-				((InternalArticle) item)
-						.setOrdering(getChildCount(((InternalArticle) item)
-								.getLocation()));
-				insert((InternalArticle) item);
-			}
-			if (item instanceof Folder) {
-				((AggregatorItem) item)
-						.setOrdering(getChildCount(((AggregatorItem) item)
-								.getParent()));
-				insert((Folder) item);
-			}
-			return Status.OK_STATUS;
-		} catch (SQLException e) {
-			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
-					MessageFormat.format(Messages.DerbySQLStorage_StoreError,
-							item), e);
-		}
+	public int getUnreadCount(AggregatorItem parent) {
+		return getUnreadCount(parent.getUUID().toString());
 	}
 
-	public void add(Feed feed) {
+	/**
+	 * Recurses through feeds and folders determining the number of unread
+	 * articles contained within.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private int getUnreadCount(String id) {
+		int count = 0;
 		try {
-			insert(feed);
+			if (connection.isClosed())
+				return 0;
+			Statement s = connection.createStatement();
+			ResultSet rs = s
+					.executeQuery("select count(uuid) from articles where parent_uuid='" //$NON-NLS-1$
+							+ id + "' and is_read=0"); //$NON-NLS-1$
+			if (rs.next())
+				count += rs.getInt(1);
+			rs = s.executeQuery("select uuid from folders where parent_uuid='" //$NON-NLS-1$
+					+ id + "'"); //$NON-NLS-1$
+			while (rs.next()) {
+				count += getUnreadCount(rs.getString(1));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return count;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * no.resheim.aggregator.model.IAggregatorStorage#getItem(java.lang.String)
+	 */
+	public boolean hasArticle(String guid) {
+		boolean found = false;
+		try {
+			Statement s = connection.createStatement();
+			String query = "select * from articles where guid='" //$NON-NLS-1$
+					+ guid + "'"; //$NON-NLS-1$
+			ResultSet rs = s.executeQuery(query);
+			found = rs.next();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return found;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see no.resheim.aggregator.IAggregatorStorage#hasFeed(java.lang.String)
+	 */
+	public boolean hasFeed(String url) {
+		boolean hasFeed = false;
+		try {
+			Statement s = connection.createStatement();
+			ResultSet rs = s.executeQuery("select uuid from feeds where url='" //$NON-NLS-1$
+					+ url + "'"); //$NON-NLS-1$
+			hasFeed = rs.next();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return hasFeed;
+	}
+
+	/**
+	 * Inserts a new feed into the database.
+	 * 
+	 * @param feed
+	 *            The feed to insert
+	 * @throws SQLException
+	 */
+	private void insert(Feed feed) throws SQLException {
+		PreparedStatement ps = connection
+				.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+		ps.setEscapeProcessing(true);
+		ps.setString(1, feed.getUUID().toString());
+		ps.setString(2, feed.getLocation().toString());
+		ps.setString(3, feed.getTitle());
+		ps.setString(4, feed.getURL());
+		ps.setString(5, feed.getArchiving().toString());
+		ps.setInt(6, feed.getArchivingItems());
+		ps.setInt(7, feed.getArchivingDays()); // archiving_days
+		ps.setInt(8, feed.getUpdateInterval()); // update_interval
+		ps.setString(9, feed.getUpdatePeriod().toString()); // update_period
+		ps.setLong(10, feed.getLastUpdate()); // last_update
+		ps.setString(11, feed.getDescription()); // description
+		ps.setString(12, feed.getLink()); // link
+		ps.setString(13, feed.getWebmaster()); // webmaster
+		ps.setString(14, feed.getEditor()); // editor
+		ps.setString(15, feed.getCopyright()); // copyright
+		ps.setString(16, feed.getType()); // feed_type
+		ps.setInt(17, feed.isHidden() ? 1 : 0);
+		ps.setInt(18, feed.isAnonymousAccess() ? 1 : 0);
+		ps.setInt(19, feed.keepUnread() ? 1 : 0);
+		// Make sure we don't attempt to insert null image data or data that we
+		// do not enough space for.
+		if (feed.getImageData() == null) {
+			ps.setNull(20, Types.VARCHAR);
+		} else {
+			String data = EncodingUtils.encodeBase64(feed.getImageData());
+			if (data.length() <= 10240) {
+				ps.setString(20, data);
+			} else {
+				ps.setNull(20, Types.VARCHAR);
+			}
+		}
+		ps.executeUpdate();
+		ps.close();
+	}
+
+	/**
+	 * Creates and executes the SQL code required to insert the filter instance
+	 * into the database.
+	 * 
+	 * @param filter
+	 *            the {@link Filter} to store
+	 * @throws SQLException
+	 */
+	private void insert(Filter filter) throws SQLException {
+		PreparedStatement ps = connection
+				.prepareStatement("insert into filters values (?,?,?)"); //$NON-NLS-1$
+		ps.setString(1, filter.getUuid().toString());
+		ps.setString(2, filter.getTitle());
+		ps.setInt(3, filter.isMatchAllCriteria() ? 1 : 0);
+		ps.executeUpdate();
+		ps.close();
+	}
+
+	/**
+	 * Inserts a folder into the database.
+	 * 
+	 * @param item
+	 *            The item to insert.
+	 * @throws SQLException
+	 */
+	private void insert(Folder folder) throws SQLException {
+		PreparedStatement ps = connection
+				.prepareStatement("insert into folders values(?,?,?,?,?,?,?,?) "); //$NON-NLS-1$
+		ps.setEscapeProcessing(true);
+		ps.setString(1, folder.getUUID().toString());
+		// Folders are used to represent the root aggregator item
+		if (folder.getParent() != null) {
+			ps.setString(2, ((AggregatorItem) folder.getParent()).getUUID()
+					.toString());
+		} else {
+			ps.setNull(2, Types.CHAR);
+		}
+		ps.setLong(3, folder.getOrdering());
+		// Folders are used to represent the root aggregator item
+		if (folder.getFeedUUID() != null) {
+			ps.setString(4, folder.getFeedUUID().toString());
+		} else {
+			ps.setNull(4, Types.CHAR);
+		}
+		ps.setInt(5, folder.isSystem() ? 1 : 0);
+		ps.setString(6, folder.getTitle());
+		ps.setString(7, folder.getMark().toString());
+		ps.setString(8, encodeFlags(folder.getFlags()));
+		ps.executeUpdate();
+		ps.close();
 	}
 
 	/**
@@ -474,86 +699,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 
 	}
 
-	/**
-	 * Inserts a new feed into the database.
-	 * 
-	 * @param feed
-	 *            The feed to insert
-	 * @throws SQLException
-	 */
-	private void insert(Feed feed) throws SQLException {
-		PreparedStatement ps = connection
-				.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
-		ps.setEscapeProcessing(true);
-		ps.setString(1, feed.getUUID().toString());
-		ps.setString(2, feed.getLocation().toString());
-		ps.setString(3, feed.getTitle());
-		ps.setString(4, feed.getURL());
-		ps.setString(5, feed.getArchiving().toString());
-		ps.setInt(6, feed.getArchivingItems());
-		ps.setInt(7, feed.getArchivingDays()); // archiving_days
-		ps.setInt(8, feed.getUpdateInterval()); // update_interval
-		ps.setString(9, feed.getUpdatePeriod().toString()); // update_period
-		ps.setLong(10, feed.getLastUpdate()); // last_update
-		ps.setString(11, feed.getDescription()); // description
-		ps.setString(12, feed.getLink()); // link
-		ps.setString(13, feed.getWebmaster()); // webmaster
-		ps.setString(14, feed.getEditor()); // editor
-		ps.setString(15, feed.getCopyright()); // copyright
-		ps.setString(16, feed.getType()); // feed_type
-		ps.setInt(17, feed.isHidden() ? 1 : 0);
-		ps.setInt(18, feed.isAnonymousAccess() ? 1 : 0);
-		ps.setInt(19, feed.keepUnread() ? 1 : 0);
-		// Make sure we don't attempt to insert null image data or data that we
-		// do not enough space for.
-		if (feed.getImageData() == null) {
-			ps.setNull(20, Types.VARCHAR);
-		} else {
-			String data = EncodingUtils.encodeBase64(feed.getImageData());
-			if (data.length() <= 10240) {
-				ps.setString(20, data);
-			} else {
-				ps.setNull(20, Types.VARCHAR);
-			}
-		}
-		ps.executeUpdate();
-		ps.close();
-	}
-
-	/**
-	 * Inserts a folder into the database.
-	 * 
-	 * @param item
-	 *            The item to insert.
-	 * @throws SQLException
-	 */
-	private void insert(Folder folder) throws SQLException {
-		PreparedStatement ps = connection
-				.prepareStatement("insert into folders values(?,?,?,?,?,?,?,?) "); //$NON-NLS-1$
-		ps.setEscapeProcessing(true);
-		ps.setString(1, folder.getUUID().toString());
-		// Folders are used to represent the root aggregator item
-		if (folder.getParent() != null) {
-			ps.setString(2, ((AggregatorItem) folder.getParent()).getUUID()
-					.toString());
-		} else {
-			ps.setNull(2, Types.CHAR);
-		}
-		ps.setLong(3, folder.getOrdering());
-		// Folders are used to represent the root aggregator item
-		if (folder.getFeedUUID() != null) {
-			ps.setString(4, folder.getFeedUUID().toString());
-		} else {
-			ps.setNull(4, Types.CHAR);
-		}
-		ps.setInt(5, folder.isSystem() ? 1 : 0);
-		ps.setString(6, folder.getTitle());
-		ps.setString(7, folder.getMark().toString());
-		ps.setString(8, encodeFlags(folder.getFlags()));
-		ps.executeUpdate();
-		ps.close();
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -585,32 +730,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * no.resheim.aggregator.internal.IRegistryExternalizer#open(java.lang.String
-	 * )
-	 */
-	public IStatus startup(IProgressMonitor monitor) {
-		try {
-			monitor.subTask(Messages.DerbySQLStorage_Creating_Storage);
-			Class.forName(DB_DRIVER).newInstance();
-			connection = DriverManager.getConnection(JDBC_DERBY
-					+ path.toOSString() + CONNECT_OPTIONS);
-			connection.setAutoCommit(true);
-			DatabaseMetaData metadata = connection.getMetaData();
-			ResultSet rs = metadata.getTables(null, "APP", "FEEDS", null); //$NON-NLS-1$ //$NON-NLS-2$
-			if (!rs.next()) {
-				return createTables(monitor);
-			}
-		} catch (Exception e) {
-			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
-					"Could not create feeds", e); //$NON-NLS-1$
-		}
-		return Status.OK_STATUS;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * no.resheim.aggregator.model.IAggregatorStorage#rename(no.resheim.aggregator
 	 * .model.AggregatorItem)
 	 */
@@ -631,27 +750,29 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		}
 	}
 
-	/**
-	 * Finds all folders with the given parent item and adds the instance to the
-	 * list.
-	 * 
-	 * @param parent
-	 *            the parent item
-	 * @param feeds
-	 *            the list of aggregator articles to append to
-	 * @throws SQLException
-	 */
-	private void selectFolders(AggregatorItemParent parent,
-			ArrayList<AggregatorItem> feeds) throws SQLException {
+	private AggregatorItem selectArticle(AggregatorItemParent parent, int index)
+			throws SQLException {
 		Statement s = connection.createStatement();
-		String query = null;
-		query = "select * from folders where parent_uuid='" //$NON-NLS-1$
-				+ parent.getUUID().toString() + "' order by ordering"; //$NON-NLS-1$
-		ResultSet rs = s.executeQuery(query);
+		InternalArticle article = null;
+		ResultSet rs = s
+				.executeQuery("select * from articles where parent_uuid='" //$NON-NLS-1$
+						+ ((AggregatorItem) parent).getUUID().toString()
+						+ "' and ordering=" + index); //$NON-NLS-1$
 		while (rs.next()) {
-			feeds.add(composeFolder(parent, rs));
+			article = composeArticle(parent, rs);
 		}
 		rs.close();
+		if (article != null) {
+			ResultSet rs2 = s
+					.executeQuery("select * from media_content where article_uuid='" //$NON-NLS-1$
+							+ article.getUUID().toString()
+							+ "' order by ordering"); //$NON-NLS-1$
+			while (rs2.next()) {
+				article.addMediaContent(composeMediaContent(rs2));
+			}
+			rs2.close();
+		}
+		return article;
 	}
 
 	private AggregatorItem selectFolder(AggregatorItemParent parent, int index)
@@ -675,69 +796,27 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		return folder;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * no.resheim.aggregator.model.IAggregatorStorage#selectDescription(no.resheim
-	 * .aggregator.model.Article)
-	 */
-	public String getDescription(Article item) {
-		String description = null;
-		try {
-			Statement s = connection.createStatement();
-			String query = "select description from articles where guid='" //$NON-NLS-1$
-					+ item.getGuid() + "'"; //$NON-NLS-1$
-			ResultSet rs = s.executeQuery(query);
-			if (rs.next()) {
-				description = rs.getString(1);
-			}
-			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return description;
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * no.resheim.aggregator.model.IAggregatorStorage#selectItemCount(no.resheim
-	 * .aggregator.model.Feed)
-	 */
-	public int getUnreadCount(AggregatorItem parent) {
-		return getUnreadCount(parent.getUUID().toString());
-	}
-
 	/**
-	 * Recurses through feeds and folders determining the number of unread
-	 * articles contained within.
+	 * Finds all folders with the given parent item and adds the instance to the
+	 * list.
 	 * 
-	 * @param id
-	 * @return
+	 * @param parent
+	 *            the parent item
+	 * @param feeds
+	 *            the list of aggregator articles to append to
+	 * @throws SQLException
 	 */
-	private int getUnreadCount(String id) {
-		int count = 0;
-		try {
-			if (connection.isClosed())
-				return 0;
-			Statement s = connection.createStatement();
-			ResultSet rs = s
-					.executeQuery("select count(uuid) from articles where parent_uuid='" //$NON-NLS-1$
-							+ id + "' and is_read=0"); //$NON-NLS-1$
-			if (rs.next())
-				count += rs.getInt(1);
-			rs = s.executeQuery("select uuid from folders where parent_uuid='" //$NON-NLS-1$
-					+ id + "'"); //$NON-NLS-1$
-			while (rs.next()) {
-				count += getUnreadCount(rs.getString(1));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+	private void selectFolders(AggregatorItemParent parent,
+			ArrayList<AggregatorItem> feeds) throws SQLException {
+		Statement s = connection.createStatement();
+		String query = null;
+		query = "select * from folders where parent_uuid='" //$NON-NLS-1$
+				+ parent.getUUID().toString() + "' order by ordering"; //$NON-NLS-1$
+		ResultSet rs = s.executeQuery(query);
+		while (rs.next()) {
+			feeds.add(composeFolder(parent, rs));
 		}
-		return count;
+		rs.close();
 	}
 
 	/**
@@ -765,29 +844,70 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		}
 	}
 
-	private AggregatorItem selectArticle(AggregatorItemParent parent, int index)
-			throws SQLException {
-		Statement s = connection.createStatement();
-		InternalArticle article = null;
-		ResultSet rs = s
-				.executeQuery("select * from articles where parent_uuid='" //$NON-NLS-1$
-						+ ((AggregatorItem) parent).getUUID().toString()
-						+ "' and ordering=" + index); //$NON-NLS-1$
-		while (rs.next()) {
-			article = composeArticle(parent, rs);
+	public void setFilters(Filter[] filters) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see no.resheim.aggregator.IAggregatorStorage#shutdown()
+	 */
+	public IStatus shutdown() {
+		try {
+			connection = DriverManager.getConnection(JDBC_DERBY
+					+ path.toOSString() + DISCONNECT_OPTIONS);
+			connection.close();
+		} catch (SQLException e) {
+			// Should throw ERROR 08006 which we will ignore.
 		}
-		rs.close();
-		if (article != null) {
-			ResultSet rs2 = s
-					.executeQuery("select * from media_content where article_uuid='" //$NON-NLS-1$
-							+ article.getUUID().toString()
-							+ "' order by ordering"); //$NON-NLS-1$
-			while (rs2.next()) {
-				article.addMediaContent(composeMediaContent(rs2));
+		return Status.OK_STATUS;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * no.resheim.aggregator.internal.IRegistryExternalizer#open(java.lang.String
+	 * )
+	 */
+	public IStatus startup(IProgressMonitor monitor) {
+		try {
+			monitor.subTask(Messages.DerbySQLStorage_Creating_Storage);
+			Class.forName(DB_DRIVER).newInstance();
+			connection = DriverManager.getConnection(JDBC_DERBY
+					+ path.toOSString() + CONNECT_OPTIONS);
+			connection.setAutoCommit(true);
+			DatabaseMetaData metadata = connection.getMetaData();
+			ResultSet rs = metadata.getTables(null, "APP", "FEEDS", null); //$NON-NLS-1$ //$NON-NLS-2$
+			if (!rs.next()) {
+				return createTables(monitor);
 			}
-			rs2.close();
+		} catch (Exception e) {
+			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
+					"Could not create feeds", e); //$NON-NLS-1$
 		}
-		return article;
+		return Status.OK_STATUS;
+	}
+
+	public void update(AggregatorItem item) {
+		try {
+			Statement s = connection.createStatement();
+			s.setEscapeProcessing(true);
+			if (item instanceof Article) {
+				s.executeUpdate("update articles set marking='" //$NON-NLS-1$
+						+ item.getMark().toString() + "' where uuid='" //$NON-NLS-1$
+						+ item.getUUID() + "'"); //$NON-NLS-1$
+			}
+			if (item instanceof Folder) {
+				s.executeUpdate("update folders set marking='" //$NON-NLS-1$
+						+ item.getMark().toString() + "' where uuid='" //$NON-NLS-1$
+						+ item.getUUID() + "'"); //$NON-NLS-1$
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/*
@@ -825,83 +945,5 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see no.resheim.aggregator.IAggregatorStorage#hasFeed(java.lang.String)
-	 */
-	public boolean hasFeed(String url) {
-		boolean hasFeed = false;
-		try {
-			Statement s = connection.createStatement();
-			ResultSet rs = s.executeQuery("select uuid from feeds where url='" //$NON-NLS-1$
-					+ url + "'"); //$NON-NLS-1$
-			hasFeed = rs.next();
-			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return hasFeed;
-	}
-
-	public AggregatorItem getItem(AggregatorItemParent parent, int index) {
-		Assert.isNotNull(parent);
-		AggregatorItem item = null;
-		try {
-			if (item == null) {
-				item = selectArticle(parent, index);
-			}
-			if (item == null) {
-				item = selectFolder(parent, index);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return item;
-	}
-
-	public void update(AggregatorItem item) {
-		try {
-			Statement s = connection.createStatement();
-			s.setEscapeProcessing(true);
-			if (item instanceof Article) {
-				s.executeUpdate("update articles set marking='" //$NON-NLS-1$
-						+ item.getMark().toString() + "' where uuid='" //$NON-NLS-1$
-						+ item.getUUID() + "'"); //$NON-NLS-1$
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public Filter[] getFilters() {
-		ArrayList<Filter> filters = new ArrayList<Filter>();
-		try {
-			Statement s = connection.createStatement();
-			ResultSet rs = s.executeQuery("select * from filters"); //$NON-NLS-1$
-			while (rs.next()) {
-				Filter filter = new Filter(rs.getString("title"), UUID //$NON-NLS-1$
-						.fromString(rs.getString("uuid"))); //$NON-NLS-1$
-				// Add filter actions
-				ResultSet rs2 = s
-						.executeQuery("select * from filter_actions where filter_uuid='" //$NON-NLS-1$
-								+ filter.getUuid().toString() + "'"); //$NON-NLS-1$
-				while (rs2.next()) {
-
-				}
-				filters.add(filter);
-			}
-			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return filters.toArray(new Filter[filters.size()]);
-	}
-
-	public void setFilters(Filter[] filters) {
-		// TODO Auto-generated method stub
-
 	}
 }
