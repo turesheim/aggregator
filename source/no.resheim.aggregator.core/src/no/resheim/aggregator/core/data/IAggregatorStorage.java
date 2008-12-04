@@ -190,6 +190,13 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 */
 	public abstract void updateFeed(Feed feed);
 
+	/**
+	 * Writes back the aggregator item data so that the database is in sync with
+	 * the live object.
+	 * 
+	 * @param item
+	 *            the aggregator item
+	 */
 	public abstract void update(AggregatorItem item);
 
 	/**

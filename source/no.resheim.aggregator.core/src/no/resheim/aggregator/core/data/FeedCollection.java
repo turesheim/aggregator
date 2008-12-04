@@ -674,7 +674,7 @@ public class FeedCollection extends AggregatorItemParent {
 		return events;
 	}
 
-	public void update(Article item) throws CoreException {
+	public void update(AggregatorItem item) throws CoreException {
 		try {
 			fDatabase.writeLock().lock();
 			fDatabase.update((AggregatorItem) item);
