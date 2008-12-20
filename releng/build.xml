@@ -1,0 +1,74 @@
+<project name="build-vdftools" default="build">
+
+	<property file="build.properties" />
+
+	<property name="tag" value="HEAD" />	
+		
+	<path id="project.classpath">
+    <fileset dir="libs">
+        <include name="**/*.jar"/>
+      </fileset>
+  </path>
+  	
+	<target name="clean">
+		<echo message="Cleaning directory ${buildDirectory}"/>
+		<delete dir="${buildDirectory}"/>
+		<mkdir dir="${buildDirectory}"/>
+	</target>
+
+	<target name="build">
+		<delete failonerror="no">
+			<fileset dir="${buildDirectory}/plugins"/>
+			<fileset dir="${buildDirectory}/features"/>
+		</delete>
+		<mkdir dir="${buildDirectory}/plugins"/>
+		<mkdir dir="${buildDirectory}/features"/>
+		<antcall target="createBuildDirectory"/>
+		<antcall target="updateBuildDirectory"/>
+		<antcall target="antRunner"/>
+	</target>
+
+	<target name="antRunner">
+		<tstamp>
+			<format property="timestamp" pattern="yyyyMMddhhmm"/>
+		</tstamp>
+		<java classname="org.eclipse.core.launcher.Main" fork="true" failonerror="true">
+			<arg value="-application" />
+			<arg value="org.eclipse.ant.core.antRunner" />
+			<arg value="-buildfile" />
+			<arg value="${buildfile}" />
+			<arg value="${buildTarget}" />
+			<arg value="-Dlibdir=${basedir}/libs" />
+			<arg value="-Dtimestamp=${timestamp}" />
+			<arg value="-DupdateSiteCategory=${updateSiteCategory}" />
+			<arg value="-DjavacDebugInfo=true" />
+			<classpath>
+				<pathelement location="${baseLocation}/plugins/org.eclipse.equinox.launcher_1.0.1.R33x_v20080118.jar" />
+				<pathelement location="libs/antlr.jar" />
+			</classpath>
+		</java>
+	</target>
+	
+	<!-- Creates the build directory and checks out from the version control system. -->
+	<target name="createBuildDirectory">
+		<cvs command="checkout -d no.resheim.vdftools.parser" tag="${tag}" cvsRoot="${cvsRepository}" package="vdftools_r1/no.resheim.vdftools.parser/" dest="${buildDirectory}/plugins" />
+		<cvs command="checkout -d no.resheim.vdftools.debug" tag="${tag}" cvsRoot="${cvsRepository}" package="vdftools_r1/no.resheim.vdftools.debug/" dest="${buildDirectory}/plugins" />
+		<cvs command="checkout -d no.resheim.eclipse.license" tag="${tag}" cvsRoot="${cvsRepository}" package="resheim-license/" dest="${buildDirectory}/plugins" />
+		<cvs command="checkout -d no.resheim.vdfplugin.core" tag="${tag}" cvsRoot="${cvsRepository}" package="vdftools_r1/resheim-vdfplugin/" dest="${buildDirectory}/plugins" />
+		<cvs command="checkout -d no.resheim.vdfplugin.doc" tag="${tag}" cvsRoot="${cvsRepository}" package="vdftools_r1/no.resheim.vdftools.doc/" dest="${buildDirectory}/plugins" />
+		<cvs command="checkout -d no.resheim.vdfplugin" tag="${tag}" cvsRoot="${cvsRepository}" package="vdftools_r1/resheim-vdfplugin-feature/" dest="${buildDirectory}/features" />
+		<cvs command="checkout -d no.resheim.vdfplugin" tag="${tag}" cvsRoot="${cvsRepository}" package="vdftools_r1/resheim-vdfplugin-main/" dest="${buildDirectory}/plugins" />
+	</target>
+	
+	<target name="updateBuildDirectory" if="buildpath.complete">
+		<echo message="Updating build directory ${buildDirectory} ..." />
+		<cvs command="update" tag="${tag}" cvsRsh="ssh" cvsRoot="${cvsRepository}" dest="${buildDirectory}/plugins/no.resheim.vdftools.parser" />
+		<cvs command="update" tag="${tag}" cvsRsh="ssh" cvsRoot="${cvsRepository}" dest="${buildDirectory}/plugins/no.resheim.vdftools.debug" />
+		<cvs command="update" tag="${tag}" cvsRsh="ssh" cvsRoot="${cvsRepository}" dest="${buildDirectory}/plugins/no.resheim.eclipse.license" />
+		<cvs command="update" tag="${tag}" cvsRsh="ssh" cvsRoot="${cvsRepository}" dest="${buildDirectory}/plugins/no.resheim.vdfplugin.core" />
+		<cvs command="update" tag="${tag}" cvsRsh="ssh" cvsRoot="${cvsRepository}" dest="${buildDirectory}/features/no.resheim.vdfplugin" />
+		<cvs command="update" tag="${tag}" cvsRsh="ssh" cvsRoot="${cvsRepository}" dest="${buildDirectory}/plugins/no.resheim.vdfplugin" />
+		<cvs command="update" tag="${tag}" cvsRsh="ssh" cvsRoot="${cvsRepository}" dest="${buildDirectory}/plugins/no.resheim.vdftools.doc" />
+	</target>
+	
+</project>
