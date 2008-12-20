@@ -1,0 +1,7 @@
+feature@no.resheim.aggregator.core=HEAD,pserver:builder@amon:/data/cvs/resheim,,feature_no.resheim.aggregator.core
+feature@no.resheim.aggregator.sdk=HEAD,pserver:builder@amon:/data/cvs/resheim,,feature_no.resheim.aggregator.sdk
+feature@no.resheim.aggregator.ui=HEAD,pserver:builder@amon:/data/cvs/resheim,,feature_no.resheim.aggregator.ui
+plugin@no.resheim.aggregator.core=HEAD,pserver:builder@amon:/data/cvs/resheim,,no.resheim.aggregator.core
+plugin@no.resheim.aggregator.core.ui=HEAD,pserver:builder@amon:/data/cvs/resheim,,no.resheim.aggregator.core.ui
+plugin@no.resheim.aggregator.sdk=HEAD,pserver:builder@amon:/data/cvs/resheim,,no.resheim.aggregator.sdk
+plugin@no.resheim.aggregator.ui=HEAD,pserver:builder@amon:/data/cvs/resheim,,no.resheim.aggregator.ui
