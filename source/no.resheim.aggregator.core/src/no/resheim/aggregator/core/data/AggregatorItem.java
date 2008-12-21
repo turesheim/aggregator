@@ -51,7 +51,9 @@ public abstract class AggregatorItem {
 		/** The item is a trash folder item */
 		TRASH,
 		/** The item has been prepared for deletion */
-		TRASHED
+		TRASHED,
+		/** The item is protected from deletion */
+		PROTECTED
 	}
 
 	private Mark fMark = Mark.NONE;

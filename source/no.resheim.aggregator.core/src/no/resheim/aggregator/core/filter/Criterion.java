@@ -17,6 +17,30 @@ package no.resheim.aggregator.core.filter;
  */
 public class Criterion {
 
+	public Field getField() {
+		return field;
+	}
+
+	public void setField(Field field) {
+		this.field = field;
+	}
+
+	public Operator getOperator() {
+		return operator;
+	}
+
+	public void setOperator(Operator operator) {
+		this.operator = operator;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
 	public enum Field {
 		/** The title of the article */
 		TITLE,
@@ -47,4 +71,20 @@ public class Criterion {
 
 	/** The value to verify against */
 	protected String value;
+
+	public Criterion() {
+		field = Field.TITLE;
+		operator = Operator.CONTAINS;
+		value = ""; //$NON-NLS-1$
+	}
+
+	private Criterion(Criterion criterion) {
+		this.field = criterion.field;
+		this.operator = criterion.operator;
+		this.value = criterion.value;
+	}
+
+	public Criterion getWorkingCopy() {
+		return new Criterion(this);
+	}
 }

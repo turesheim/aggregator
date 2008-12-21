@@ -34,10 +34,10 @@
          </separator>
          <command
                commandId="no.resheim.aggregator.ui.test.addArticles"
-               label="Add 1000 articles">
+               label="Add 100 articles">
             <parameter
                   name="count"
-                  value="1000">
+                  value="100">
             </parameter>
          </command>
          <command

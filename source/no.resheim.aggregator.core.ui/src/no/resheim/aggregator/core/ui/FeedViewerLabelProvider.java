@@ -114,7 +114,7 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 			Feed feed = collection.getFeeds().get(
 					((Folder) element).getFeedUUID());
 			if (feed != null) {
-				return getImage(feed, feed.getLastStatus());
+				return getImage(feed, feed.getLastStatus(), (Folder) element);
 			} else {
 				return null;
 			}
@@ -225,12 +225,13 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		return baseId;
 	}
 
-	private Image getImage(Feed feed, IStatus status) {
+	private Image getImage(Feed feed, IStatus status, Folder folder) {
 		String id = AggregatorUIPlugin.IMG_FEED_OBJ;
 		// The feed has a custom image
 		if (feed.getImageData() != null) {
 			id = feed.getUUID().toString();
 		}
+		id += "_" + folder.getMark(); //$NON-NLS-1$
 		// Add status overlays
 		ImageDescriptor si = null;
 		if (status != null) {
@@ -254,7 +255,7 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		Point size = new Point(16, 16);
 		DecorationOverlayIcon icon = new DecorationOverlayIcon(baseImage,
 				new ImageDescriptor[] {
-						null, null, null, si, null
+						null, getMarkingOverlay(folder), null, si, null
 				}, size) {
 		};
 		// Store the image for the next time

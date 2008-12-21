@@ -11,6 +11,7 @@
 package no.resheim.aggregator.core.filter;
 
 /**
+ * Type to describe a filter action.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -45,10 +46,19 @@ public class Action {
 		DELETE,
 	}
 
+	private Action(Action action) {
+		this.operation = action.operation;
+		this.operator = action.operator;
+	}
+
 	/** The operation to perform */
 	protected Operation operation;
 
 	/** Folder to move to or mark to apply */
 	protected String operator;
+
+	public Action getWorkingCopy() {
+		return new Action(this);
+	}
 
 }
