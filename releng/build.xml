@@ -10,7 +10,10 @@
   	
 	<target name="build">
 		<delete failonerror="false">
-			<fileset dir="${buildDirectory}">
+			<fileset dir="${buildDirectory}/plugins">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="${buildDirectory}/features">
 				<include name="**/*"/>
 			</fileset>
 		</delete>
