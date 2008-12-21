@@ -1,5 +1,6 @@
 <project name="build-vdftools" default="build">
-
+	
+	<property name="buildDirectory" value="${basedir}/../build" />
 	<property file="build.properties" />
 		
 	<path id="project.classpath">
@@ -25,6 +26,7 @@
 			<arg value="-application" />
 			<arg value="org.eclipse.ant.core.antRunner" />
 			<arg value="-Dbuilder=${basedir}" />
+			<arg value="-DbuildDirectory=${buildDirectory}" />
 			<arg value="-buildfile" />
 			<arg value="${baseLocation}/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
 			<arg value="-DjavacDebugInfo=true" />
