@@ -9,7 +9,7 @@
   </path>
   	
 	<target name="build">
-		<delete>
+		<delete failonerror="false">
 			<fileset dir="${buildDirectory}">
 				<include name="**/*"/>
 			</fileset>
