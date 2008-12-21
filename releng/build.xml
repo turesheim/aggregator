@@ -9,6 +9,16 @@
   </path>
   	
 	<target name="build">
+		<delete>
+			<fileset dir="plugins">
+				<include name="**/*"/>
+			</fileset>
+		</delete>
+		<delete>
+			<fileset dir="features">
+				<include name="**/*"/>
+			</fileset>
+		</delete>
 		<antcall target="antRunner"/>
 	</target>
 
