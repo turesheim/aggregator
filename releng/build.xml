@@ -23,10 +23,10 @@
 			<arg value="-DbuildDirectory=${basedir}" />
 			<arg value="-Dbuilder=${basedir}" />
 			<arg value="-buildfile" />
-			<arg value="/opt/eclipse_3.4/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
+			<arg value="~/eclipse_3.4/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
 			<arg value="-DjavacDebugInfo=true" />
 			<classpath>
-				<pathelement location="/opt/eclipse_3.4/plugins/org.eclipse.equinox.launcher_1.0.101.R34x_v20080819.jar" />
+				<pathelement location="~/eclipse_3.4/plugins/org.eclipse.equinox.launcher_1.0.101.R34x_v20080819.jar" />
 			</classpath>
 		</java>
 	</target>
