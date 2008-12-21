@@ -1,6 +1,7 @@
 <project name="build-vdftools" default="build">
 
 	<property file="build.properties" />
+	<property name="buildDirectory" value="${basedir}/../build" />
 		
 	<path id="project.classpath">
     <fileset dir="libs">
@@ -14,11 +15,6 @@
 				<include name="**/*"/>
 			</fileset>
 		</delete>
-		<delete>
-			<fileset dir="features">
-				<include name="**/*"/>
-			</fileset>
-		</delete>
 		<antcall target="antRunner"/>
 	</target>
 
@@ -29,7 +25,7 @@
 		<java classname="org.eclipse.core.launcher.Main" fork="true" failonerror="true">
 			<arg value="-application" />
 			<arg value="org.eclipse.ant.core.antRunner" />
-			<arg value="-DbuildDirectory=${basedir}../builder" />
+			<arg value="-DbuildDirectory=${buildDirectory}" />
 			<arg value="-Dbuilder=${basedir}" />
 			<arg value="-buildfile" />
 			<arg value="${baseLocation}/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
