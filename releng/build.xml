@@ -19,14 +19,13 @@
 		<java classname="org.eclipse.core.launcher.Main" fork="true" failonerror="true">
 			<arg value="-application" />
 			<arg value="org.eclipse.ant.core.antRunner" />
-			<arg value="-verbose" />
 			<arg value="-DbuildDirectory=${basedir}" />
 			<arg value="-Dbuilder=${basedir}" />
 			<arg value="-buildfile" />
-			<arg value="/home/builder/eclipse_3.4/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
+			<arg value="${baseLocation}/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
 			<arg value="-DjavacDebugInfo=true" />
 			<classpath>
-				<pathelement location="/home/builder/eclipse_3.4/plugins/org.eclipse.equinox.launcher_1.0.101.R34x_v20080819.jar" />
+				<pathelement location="${baseLocation}/plugins/org.eclipse.equinox.launcher_1.0.101.R34x_v20080819.jar" />
 			</classpath>
 		</java>
 	</target>
