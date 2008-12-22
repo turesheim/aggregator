@@ -8,10 +8,10 @@
   	
 	<target name="build">
 		<delete failonerror="false">
-			<fileset dir="${buildroot}/plugins">
+			<fileset dir="${buildRoot}/plugins">
 				<include name="**/*"/>
 			</fileset>
-			<fileset dir="${buildroot}/features">
+			<fileset dir="${buildRoot}/features">
 				<include name="**/*"/>
 			</fileset>
 		</delete>
@@ -27,7 +27,7 @@
 			<arg value="-application" />
 			<arg value="org.eclipse.ant.core.antRunner" />
 			<arg value="-Dbuilder=${basedir}/releng/" />
-			<arg value="-DbuildDirectory=${buildroot}/build" />
+			<arg value="-DbuildDirectory=${buildRoot}/build" />
 			<arg value="-DbaseLocation=${eclipseRoot}" />
 			<arg value="-buildfile" />
 			<arg value="${eclipseRoot}/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
