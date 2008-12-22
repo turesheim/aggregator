@@ -1,7 +1,5 @@
-<project name="build-vdftools" default="build">
-	
-	<property file="build.properties" />
-		
+<project name="Aggregator" default="build">
+			
 	<path id="project.classpath">
     <fileset dir="libs">
         <include name="**/*.jar"/>
