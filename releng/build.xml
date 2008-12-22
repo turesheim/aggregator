@@ -8,14 +8,14 @@
   	
 	<target name="build">
 		<delete failonerror="false">
-			<fileset dir="${buildDirectory}/plugins">
+			<fileset dir="${basedir}/plugins">
 				<include name="**/*"/>
 			</fileset>
-			<fileset dir="${buildDirectory}/features">
+			<fileset dir="${basedir}/features">
 				<include name="**/*"/>
 			</fileset>
 		</delete>
-		<mkdir dir="${buildDirectory}" />
+		<mkdir dir="${basedir}" />
 		<antcall target="antRunner"/>
 	</target>
 
@@ -26,8 +26,8 @@
 		<java classname="org.eclipse.core.launcher.Main" fork="true" failonerror="true">
 			<arg value="-application" />
 			<arg value="org.eclipse.ant.core.antRunner" />
-			<arg value="-Dbuilder=${basedir}" />
-			<arg value="-DbuildDirectory=${buildDirectory}" />
+			<arg value="-Dbuilder=${basedir}/releng/" />
+			<arg value="-DbuildDirectory=${basedir}/build" />
 			<arg value="-DbaseLocation=${baseLocation}" />
 			<arg value="-buildfile" />
 			<arg value="${baseLocation}/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
