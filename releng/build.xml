@@ -7,11 +7,8 @@
   </path>
   	
 	<target name="build">
-		<delete failonerror="false">
-			<fileset dir="${buildRoot}/plugins">
-				<include name="**/*"/>
-			</fileset>
-			<fileset dir="${buildRoot}/features">
+		<delete failonerror="no">
+			<fileset dir="${buildRoot}/build">
 				<include name="**/*"/>
 			</fileset>
 		</delete>
