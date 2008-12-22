@@ -26,7 +26,7 @@
 		<java classname="org.eclipse.core.launcher.Main" fork="true" failonerror="true">
 			<arg value="-application" />
 			<arg value="org.eclipse.ant.core.antRunner" />
-			<arg value="-Dbuilder=${basedir}/releng/" />
+			<arg value="-Dbuilder=${basedir}" />
 			<arg value="-DbuildDirectory=${buildRoot}/build" />
 			<arg value="-DbaseLocation=${eclipseRoot}" />
 			<arg value="-buildfile" />
