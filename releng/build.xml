@@ -8,10 +8,10 @@
   	
 	<target name="build">
 		<delete failonerror="false">
-			<fileset dir="${basedir}/plugins">
+			<fileset dir="${buildroot}/plugins">
 				<include name="**/*"/>
 			</fileset>
-			<fileset dir="${basedir}/features">
+			<fileset dir="${buildroot}/features">
 				<include name="**/*"/>
 			</fileset>
 		</delete>
@@ -27,13 +27,13 @@
 			<arg value="-application" />
 			<arg value="org.eclipse.ant.core.antRunner" />
 			<arg value="-Dbuilder=${basedir}/releng/" />
-			<arg value="-DbuildDirectory=${basedir}/build" />
-			<arg value="-DbaseLocation=${baseLocation}" />
+			<arg value="-DbuildDirectory=${buildroot}/build" />
+			<arg value="-DbaseLocation=${eclipseRoot}" />
 			<arg value="-buildfile" />
-			<arg value="${baseLocation}/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
+			<arg value="${eclipseRoot}/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
 			<arg value="-DjavacDebugInfo=true" />
 			<classpath>
-				<pathelement location="${baseLocation}/plugins/org.eclipse.equinox.launcher_1.0.101.R34x_v20080819.jar" />
+				<pathelement location="${eclipseRoot}/plugins/org.eclipse.equinox.launcher_1.0.101.R34x_v20080819.jar" />
 			</classpath>
 		</java>
 	</target>
