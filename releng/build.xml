@@ -15,7 +15,7 @@
 				<include name="**/*"/>
 			</fileset>
 		</delete>
-		<mkdir dir="${basedir}" />
+		<mkdir dir="${buildRoot}/build" />
 		<antcall target="antRunner"/>
 	</target>
 
