@@ -28,7 +28,7 @@
 			<arg value="-application" />
 			<arg value="org.eclipse.ant.core.antRunner" />
 			<arg value="-Dbuilder=${basedir}" />
-			<arg value="-DbuildDirectory=${buildRoot}" />
+			<arg value="-DbuildDirectory=${buildRoot}/build" />
 			<arg value="-DbaseLocation=${eclipseRoot}" />
 			<arg value="-buildfile" />
 			<arg value="${eclipseRoot}/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
