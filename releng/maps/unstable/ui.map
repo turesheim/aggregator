@@ -1,0 +1,2 @@
+feature@no.resheim.aggregator.ui=HEAD,:pserver:builder@amon:/data/cvs/resheim,,aggregator/source/feature_no.resheim.aggregator.ui
+plugin@no.resheim.aggregator.ui=HEAD,:pserver:builder@amon:/data/cvs/resheim,,aggregator/source/no.resheim.aggregator.ui
