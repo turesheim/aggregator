@@ -12,11 +12,7 @@
   </path>
   	
 	<target name="build">
-		<delete failonerror="no">
-			<fileset dir="${buildRoot}/build">
-				<include name="**/*"/>
-			</fileset>
-		</delete>
+		<delete failonerror="no" dir="${buildRoot}/build"/>
 		<mkdir dir="${buildRoot}/build" />
 		<antcall target="antRunner"/>
 	</target>
