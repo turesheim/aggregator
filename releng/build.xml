@@ -28,7 +28,8 @@
 			<arg value="-DbuildDirectory=${buildRoot}/build" />
 			<arg value="-DbaseLocation=${eclipseRoot}" />
 			<arg value="-DbuildType=${buildType}" />
-			<arg value="-buildfile" />
+			<arg value="-Dtimestamp=${timestamp}" />
+		  <arg value="-buildfile" />
 			<arg value="${eclipseRoot}/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
 			<arg value="-DjavacDebugInfo=true" />
 			<classpath>
