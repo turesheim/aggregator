@@ -77,6 +77,7 @@ public class FeedUpdateJob extends Job {
 			feed.setUpdating(true);
 			feed.getTempItems().clear();
 		}
+		System.out.println("Updating feed " + feed.getTitle());
 		boolean debug = AggregatorPlugin.getDefault().isDebugging();
 		// registry.notifyListerners(new AggregatorItemChangedEvent(feed,
 		// FeedChangeEventType.UPDATING));
@@ -90,28 +91,33 @@ public class FeedUpdateJob extends Job {
 						Messages.FeedUpdateJob_StatusTitle, new Object[] {
 							feed.getTitle()
 						}), null);
-		if (!feed.getURL().startsWith("test://")) { //$NON-NLS-1$
-			ms.add(download(feed, debug));
+		try {
+			if (!feed.getURL().startsWith("test://")) { //$NON-NLS-1$
+				ms.add(download(feed, debug));
+			}
+			if (ms.isOK()) {
+				setName(MessageFormat.format(Messages.FeedUpdateJob_CleaningUp,
+						new Object[] {
+							feed.getTitle()
+						}));
+				cleanUp(feed);
+			}
+			synchronized (feed) {
+				feed.setUpdating(false);
+			}
+			Collections.sort(feed.getTempItems());
+			if (feed.getTempItems().size() > 0) {
+				ms.addAll(collection.addNew(feed.getTempItems().toArray(
+						new AggregatorItem[feed.getTempItems().size()])));
+			}
+			feed.setLastUpdate(System.currentTimeMillis());
+			feed.setLastStatus(ms);
+			// Store changes to the feed
+			collection.feedUpdated(feed);
+			System.out.println(ms);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		if (ms.isOK()) {
-			setName(MessageFormat.format(Messages.FeedUpdateJob_CleaningUp,
-					new Object[] {
-						feed.getTitle()
-					}));
-			cleanUp(feed);
-		}
-		synchronized (feed) {
-			feed.setUpdating(false);
-		}
-		Collections.sort(feed.getTempItems());
-		if (feed.getTempItems().size() > 0) {
-			ms.addAll(collection.addNew(feed.getTempItems().toArray(
-					new AggregatorItem[feed.getTempItems().size()])));
-		}
-		feed.setLastUpdate(System.currentTimeMillis());
-		feed.setLastStatus(ms);
-		// Store changes to the feed
-		collection.feedUpdated(feed);
 		return ms;
 
 	}
@@ -146,7 +152,7 @@ public class FeedUpdateJob extends Job {
 			if (feedURL == null) {
 				return Status.CANCEL_STATUS;
 			}
-
+			System.out.println("Downloading from " + feedURL);
 			// Download the feed
 			URLConnection yc = getConnection(feed, feedURL);
 			FeedParser handler = new FeedParser(collection, feed);
