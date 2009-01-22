@@ -182,6 +182,10 @@ public class FeedUpdateJob extends Job {
 		} catch (SAXException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID, 0,
 					Messages.FeedUpdateJob_Error_Title, e);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID, 0,
+					Messages.FeedUpdateJob_Error_Title, e);
 		}
 	}
 

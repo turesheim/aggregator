@@ -9,7 +9,7 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.ui.views;
+package no.resheim.aggregator.core.ui.views;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;

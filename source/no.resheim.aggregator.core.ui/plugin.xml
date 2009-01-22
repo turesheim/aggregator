@@ -144,6 +144,357 @@
       </startup>
    </extension>
    <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.eclipse.ui"
+            allowMultiple="false"
+            class="no.resheim.aggregator.core.ui.views.RSSView"
+            icon="icons/clcl16/view.gif"
+            id="no.resheim.aggregator.core.ui.RSSView"
+            name="Feeds">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.eclipse.ui.category.views"
+            defaultHandler="no.resheim.aggregator.ui.views.NextUnreadItemCommandHandler"
+            id="no.resheim.aggregator.ui.nextUnread"
+            name="Next Unread">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.contexts">
+      <context
+            id="no.resheim.aggregator.ui.context"
+            name="Aggregator View"
+            parentId="org.eclipse.ui.contexts.window">
+      </context>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="no.resheim.aggregator.ui.nextUnread"
+            contextId="no.resheim.aggregator.ui.context"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="Ctrl+.">
+      </key>
+      <key
+            commandId="no.resheim.aggregator.core.ui.delete"
+            contextId="no.resheim.aggregator.ui.context"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="DEL">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:no.resheim.aggregator.core.ui.RSSView?after=navigation">
+         <command
+               commandId="no.resheim.aggregator.ui.nextUnread"
+               label="Next Unread">
+         </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="popup:no.resheim.aggregator.core.ui.RSSView?after=modify">
+         <command
+               commandId="no.resheim.aggregator.core.ui.newFolder"
+               label="New Folder">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.renameFolder"
+               label="Rename">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.delete"
+               label="Delete">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.emptyTrash"
+               label="Empty Trash">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.update"
+               label="Update">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.setRead"
+               label="Mark As Read">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+         <menu
+               label="Mark As">
+            <dynamic
+                  class="no.resheim.aggregator.core.ui.commands.MarkItemMenu"
+                  id="no.resheim.aggregator.ui.markAsMenu">
+            </dynamic>
+         </menu>
+         <command
+               commandId="no.resheim.aggregator.core.ui.copyLinkCommand"
+               label="Copy Link Location"
+               style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+         <separator
+               name="properties"
+               visible="true">
+         </separator>
+         <command
+               commandId="no.resheim.aggregator.core.ui.properties"
+               label="Properties">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="no.resheim.aggregator.core.feeds">
+      <collection
+            default="true"
+            id="no.resheim.aggregator.ui.defaultFeedCollection"
+            name="Default"
+            public="true"
+            persistent="true">
+      </collection>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="Linux Journal"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://www.linuxjournal.com/node/feed">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="AVR Freaks Forums"
+            updateInterval="10"
+            updatePeriod="MINUTES"
+            url="http://www.avrfreaks.net/forumrss.php">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="Resheim Software News"
+            updateInterval="1"
+            updatePeriod="DAYS"
+            url="http://resheim.no/news/RSS">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="Planet Eclipse Blogs"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://planeteclipse.org/planet/rss20.xml">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="SlashDot"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://rss.slashdot.org/Slashdot/slashdot">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="ECF Developer Mailing List"
+            updateInterval="5"
+            updatePeriod="MINUTES"
+            url="http://dev.eclipse.org/mhonarc/lists/ecf-dev/maillist.rss">
+      </feed>
+      <!-- GENERAL COMPUTER SCIENCE -->
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="Photran Developer Mailing List"
+            updateInterval="5"
+            updatePeriod="MINUTES"
+            url="http://dev.eclipse.org/mhonarc/lists/photran-dev/maillist.rss">
+      </feed>
+      <!-- NEWS -->
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="BBC News World Edition"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml">
+      </feed>
+      <!-- ECLIPSE -->
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="EclipseZone News"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://www.eclipsezone.com/forumRSS/18112.xml">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="EclipseZone Tips"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://www.eclipsezone.com/forumRSS/18111.xml">
+      </feed>
+      <!-- ENTERTAINMENT -->
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="Dilbert Blog"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://feedproxy.google.com/typepad/ihdT?format=xml">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="iTunes 25 Just Added Albums"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://phobos.apple.com/WebObjects/MZStore.woa/wpa/MRSS/justadded/limit=25/rss.xml">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NONE"
+            create="false"
+            title="GMail RSS Feed"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="https://gmail.google.com/gmail/feed/atom">
+      </feed>
+      <feed
+            archivingDays="0"
+            archivingItems="0"
+            archivingMethod="KEEP_ALL"
+            title="AVR Television"
+            updateInterval="1"
+            updatePeriod="DAYS"
+            url="http://www.avrtv.com/wp-rss2-astudio.php">
+      </feed>
+      <feed
+            archivingDays="0"
+            archivingItems="0"
+            archivingMethod="KEEP_ALL"
+            title="Torkild&apos;s Blog"
+            updateInterval="1"
+            updatePeriod="DAYS"
+            url="http://torkildr.blogspot.com/feeds/posts/default">
+      </feed>
+      <feed
+            archivingDays="30"
+            archivingItems="0"
+            archivingMethod="KEEP_NEWEST"
+            create="false"
+            title="Atmel Finance News"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://finance.google.com/finance?morenews=10&amp;rating=1&amp;q=NASDAQ:ATML&amp;output=rss">
+      </feed>
+      <feed
+            archivingDays="1"
+            archivingItems="1"
+            archivingMethod="KEEP_ALL"
+            title="JW Player Example Media RSS"
+            updateInterval="60"
+            updatePeriod="DAYS"
+            url="http://www.jeroenwijering.com/upload/mrss.xml">
+      </feed>
+      <feed
+            archivingDays="1"
+            archivingItems="1"
+            archivingMethod="KEEP_NONE"
+            title="YouTube Most Recent"
+            updateInterval="1"
+            updatePeriod="HOURS"
+            url="http://gdata.youtube.com/feeds/base/standardfeeds/most_recent?alt=rss">
+      </feed>
+      <feed
+            archivingDays="1"
+            archivingItems="0"
+            archivingMethod="KEEP_ALL"
+            title="YouTube, user &quot;avrtvtube&quot;"
+            updateInterval="1"
+            updatePeriod="DAYS"
+            url="http://www.youtube.com/rss/user/avrtvtube/videos.rss">
+      </feed>
+      <feed
+            archivingDays="1"
+            archivingItems="25"
+            archivingMethod="KEEP_NEWEST"
+            title="ESA Top Multimedia"
+            updateInterval="1"
+            updatePeriod="DAYS"
+            url="http://www.esa.int/rss/TopMultimedia.xml">
+      </feed>
+      <feed
+            archivingDays="1"
+            archivingItems="30"
+            archivingMethod="KEEP_NEWEST"
+            title="NASA's Jet Propulsion Laboratory Podcasts"
+            updateInterval="1"
+            updatePeriod="DAYS"
+            url="http://www.jpl.nasa.gov/multimedia/podcast/podfeed.xml">
+						<description>High-definition (HD) videos from NASA's Jet Propulsion Laboratory feature the latest news on space and science findings from JPL and NASA. Topics include discoveries made by spacecraft studying planets in our solar system, including Mars, Saturn and our home planet, Earth. Missions also study stars and galaxies in our universe.</description>      
+						</feed>
+      <feed
+            archivingDays="1"
+            archivingItems="1"
+            archivingMethod="KEEP_NONE"
+            title="Monty Python (YouTube)"
+            updateInterval="1"
+            updatePeriod="DAYS"
+            url="http://www.youtube.com/rss/user/montypython/videos.rss">
+      </feed>
+   </extension>
+   <extension
          point="no.resheim.aggregator.core.ui.contentHandlers">
       <handler
             name="Document" type="text/html">
@@ -234,4 +585,5 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
          </code>
       </handler>
    </extension>
+   
 </plugin>

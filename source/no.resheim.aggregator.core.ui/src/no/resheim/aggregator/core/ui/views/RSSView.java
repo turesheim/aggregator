@@ -9,7 +9,7 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.ui.views;
+package no.resheim.aggregator.core.ui.views;
 
 import java.net.URL;
 
@@ -60,7 +60,6 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.contexts.IContextService;
-import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -144,8 +143,6 @@ public class RSSView extends ViewPart implements IFeedView,
 			"selection"); //$NON-NLS-1$
 
 	private Action doubleClickAction;
-
-	private DrillDownAdapter drillDownAdapter;
 
 	boolean fHorizontalLayout;
 
@@ -247,7 +244,6 @@ public class RSSView extends ViewPart implements IFeedView,
 		sashForm = new SashForm(parent, SWT.SMOOTH);
 		treeView = new FeedTreeViewer(sashForm, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL);
-		drillDownAdapter = new DrillDownAdapter(treeView);
 		treeView.setContentProvider(new FeedViewerContentProvider());
 		treeView
 				.setLabelProvider(labelProvider = new FeedViewerLabelProvider());
@@ -312,7 +308,6 @@ public class RSSView extends ViewPart implements IFeedView,
 	 */
 	private void fillContextMenu(IMenuManager manager) {
 		manager.add(navigation_separator);
-		drillDownAdapter.addNavigationActions(manager);
 		manager.add(modify_separator);
 		manager.add(selection_separator);
 	}
@@ -324,7 +319,6 @@ public class RSSView extends ViewPart implements IFeedView,
 	 *            The menu manager
 	 */
 	private void fillLocalToolBar(IToolBarManager manager) {
-		drillDownAdapter.addNavigationActions(manager);
 	}
 
 	public FeedCollection getFeedCollection() {
