@@ -16,6 +16,7 @@
 		<delete failonerror="no" dir="${buildRoot}/build"/>
 		<mkdir dir="${buildRoot}/build" />
 -->		
+		<echoproperties></echoproperties>
 		<antcall target="antRunner"/>
 	</target>
 
