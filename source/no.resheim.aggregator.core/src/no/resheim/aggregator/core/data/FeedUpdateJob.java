@@ -30,6 +30,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
+import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.data.Feed.Archiving;
 import no.resheim.aggregator.core.rss.internal.FeedParser;
 
@@ -79,8 +80,9 @@ public class FeedUpdateJob extends Job {
 			feed.getTempItems().clear();
 		}
 		boolean debug = AggregatorPlugin.getDefault().isDebugging();
-		// registry.notifyListerners(new AggregatorItemChangedEvent(feed,
-		// FeedChangeEventType.UPDATING));
+		collection.notifyListerners(new Feed[] {
+			feed
+		}, EventType.CHANGED);
 		// If the feed does not use archiving it's better to remove all items
 		// before downloading new ones.
 		if (feed.getArchiving() == Archiving.KEEP_NONE) {
@@ -114,7 +116,9 @@ public class FeedUpdateJob extends Job {
 			feed.setLastStatus(ms);
 			// Store changes to the feed
 			collection.feedUpdated(feed);
-			System.out.println(ms);
+			collection.notifyListerners(new Feed[] {
+				feed
+			}, EventType.CHANGED);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

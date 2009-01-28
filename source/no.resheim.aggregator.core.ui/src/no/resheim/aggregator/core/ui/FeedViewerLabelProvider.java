@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2008-2009 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,8 +22,10 @@ import no.resheim.aggregator.core.data.AggregatorItem.Flag;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -32,6 +34,7 @@ import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
@@ -46,40 +49,16 @@ import org.eclipse.swt.widgets.Display;
  */
 public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		ILabelProvider, IColorProvider, IPropertyChangeListener {
-
-	/** Preference: show unread items in header */
-	private boolean pShowUnreadCount = true;
+	private static ImageRegistry registry = AggregatorUIPlugin.getDefault()
+			.getImageRegistry();
 
 	private FeedCollection collection;
 
-	private static ImageRegistry registry = AggregatorUIPlugin.getDefault()
-			.getImageRegistry();;
+	/** Font to use when indicating that a feed is being updated */
+	private Font italic;
 
-	public FeedCollection getCollection() {
-		return collection;
-	}
-
-	@Override
-	public String getToolTipText(Object element) {
-		// Fix for bug 561
-		if (element == null)
-			return null;
-		Feed f = getFeed(element);
-		if (f != null) {
-			IStatus s = f.getLastStatus();
-			if (s != null && !s.isOK()) {
-				if (s.getException() != null) {
-					return s.getException().getLocalizedMessage();
-				} else
-					return s.getMessage();
-			}
-		}
-		return null;
-	}
-
-	public void setCollection(FeedCollection collection) {
-		this.collection = collection;
-	}
+	/** Preference: show unread items in header */
+	private boolean pShowUnreadCount = true;
 
 	/**
 	 * 
@@ -87,40 +66,22 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 	public FeedViewerLabelProvider() {
 		super();
 		initialize();
-	}
+	};
 
-	private void initialize() {
-		IPreferenceStore store = AggregatorUIPlugin.getDefault()
-				.getPreferenceStore();
-		store.addPropertyChangeListener(this);
-	}
-
-	private Feed getFeed(Object element) {
-		if (element instanceof Folder) {
-			return ((Folder) element).getFeed();
-		}
-		return null;
-
+	@Override
+	public void dispose() {
+		AggregatorUIPlugin.getDefault().getPreferenceStore()
+				.removePropertyChangeListener(this);
+		super.dispose();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
+	 * @see
+	 * org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
 	 */
-	public Image getImage(Object element) {
-		if (element instanceof Folder
-				&& ((Folder) element).getFeedUUID() != null) {
-			Feed feed = collection.getFeeds().get(
-					((Folder) element).getFeedUUID());
-			if (feed != null) {
-				return getImage(feed, feed.getLastStatus(), (Folder) element);
-			} else {
-				return null;
-			}
-		} else if (element instanceof AggregatorItem) {
-			return getImage((AggregatorItem) element);
-		}
+	public Color getBackground(Object element) {
 		return null;
 	}
 
@@ -144,8 +105,65 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		}
 	}
 
+	private String getBaseId(AggregatorItem item) {
+		String baseId = null;
+		if (item instanceof Folder) {
+			baseId = AggregatorUIPlugin.IMG_FOLDER_OBJ;
+			if (item.getFlags().contains(Flag.TRASH)) {
+				baseId = AggregatorUIPlugin.IMG_TRASH_OBJ;
+			}
+		}
+		if (item instanceof Article) {
+			baseId = AggregatorUIPlugin.IMG_ARTICLE_OBJ;
+		}
+		return baseId;
+	}
+
+	public FeedCollection getCollection() {
+		return collection;
+	}
+
 	private Display getDisplay() {
 		return Display.getCurrent();
+	}
+
+	private Feed getFeed(Object element) {
+		if (element instanceof Folder) {
+			return ((Folder) element).getFeed();
+		}
+		return null;
+
+	}
+
+	@Override
+	public Font getFont(Object element) {
+		Font font = JFaceResources.getDialogFont();
+		if (element instanceof Folder) {
+			Feed feed = ((Folder) element).getFeed();
+			if (feed != null && feed.isUpdating()) {
+				return italic;
+			}
+		}
+		return font;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
+	 */
+	public Color getForeground(Object element) {
+		if (element instanceof Article) {
+			if (((Article) element).isRead()) {
+				return Display.getDefault().getSystemColor(
+						SWT.COLOR_LIST_FOREGROUND);
+			} else {
+				return Display.getDefault().getSystemColor(SWT.COLOR_RED);
+
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -186,45 +204,6 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		return registry.get(id);
 	}
 
-	private ImageDescriptor getMarkingOverlay(AggregatorItem item) {
-		ImageDescriptor mark = null;
-		switch (item.getMark()) {
-		case IMPORTANT:
-			mark = registry
-					.getDescriptor(AggregatorUIPlugin.IMG_MARK_IMPORTANT);
-			break;
-		case TODO:
-			mark = registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_TODO);
-			break;
-		case FIRST_PRIORITY:
-			mark = registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_1PRI);
-			break;
-		case SECOND_PRIORITY:
-			mark = registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_2PRI);
-			break;
-		case THIRD_PRIORITY:
-			mark = registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_3PRI);
-			break;
-		default:
-			break;
-		}
-		return mark;
-	}
-
-	private String getBaseId(AggregatorItem item) {
-		String baseId = null;
-		if (item instanceof Folder) {
-			baseId = AggregatorUIPlugin.IMG_FOLDER_OBJ;
-			if (item.getFlags().contains(Flag.TRASH)) {
-				baseId = AggregatorUIPlugin.IMG_TRASH_OBJ;
-			}
-		}
-		if (item instanceof Article) {
-			baseId = AggregatorUIPlugin.IMG_ARTICLE_OBJ;
-		}
-		return baseId;
-	}
-
 	private Image getImage(Feed feed, IStatus status, Folder folder) {
 		String id = AggregatorUIPlugin.IMG_FEED_OBJ;
 		// The feed has a custom image
@@ -263,6 +242,52 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		return registry.get(id);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
+	 */
+	public Image getImage(Object element) {
+		if (element instanceof Folder
+				&& ((Folder) element).getFeedUUID() != null) {
+			Feed feed = collection.getFeeds().get(
+					((Folder) element).getFeedUUID());
+			if (feed != null) {
+				return getImage(feed, feed.getLastStatus(), (Folder) element);
+			} else {
+				return null;
+			}
+		} else if (element instanceof AggregatorItem) {
+			return getImage((AggregatorItem) element);
+		}
+		return null;
+	}
+
+	private ImageDescriptor getMarkingOverlay(AggregatorItem item) {
+		ImageDescriptor mark = null;
+		switch (item.getMark()) {
+		case IMPORTANT:
+			mark = registry
+					.getDescriptor(AggregatorUIPlugin.IMG_MARK_IMPORTANT);
+			break;
+		case TODO:
+			mark = registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_TODO);
+			break;
+		case FIRST_PRIORITY:
+			mark = registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_1PRI);
+			break;
+		case SECOND_PRIORITY:
+			mark = registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_2PRI);
+			break;
+		case THIRD_PRIORITY:
+			mark = registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_3PRI);
+			break;
+		default:
+			break;
+		}
+		return mark;
+	}
+
 	public String getText(Object element) {
 		if (element instanceof AggregatorItem) {
 			AggregatorItem item = (AggregatorItem) element;
@@ -285,40 +310,31 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		return element.toString();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
-	 */
-	public Color getBackground(Object element) {
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
-	 */
-	public Color getForeground(Object element) {
-		if (element instanceof Article) {
-			if (((Article) element).isRead()) {
-				return Display.getDefault().getSystemColor(
-						SWT.COLOR_LIST_FOREGROUND);
-			} else {
-				return Display.getDefault().getSystemColor(SWT.COLOR_RED);
-
+	@Override
+	public String getToolTipText(Object element) {
+		// Fix for bug 561
+		if (element == null)
+			return null;
+		Feed f = getFeed(element);
+		if (f != null) {
+			IStatus s = f.getLastStatus();
+			if (s != null && !s.isOK()) {
+				if (s.getException() != null) {
+					return s.getException().getLocalizedMessage();
+				} else
+					return s.getMessage();
 			}
 		}
 		return null;
 	}
 
-	@Override
-	public void dispose() {
-		AggregatorUIPlugin.getDefault().getPreferenceStore()
-				.removePropertyChangeListener(this);
-		super.dispose();
+	private void initialize() {
+		IPreferenceStore store = AggregatorUIPlugin.getDefault()
+				.getPreferenceStore();
+		store.addPropertyChangeListener(this);
+		FontDescriptor fd = JFaceResources.getDialogFontDescriptor().setStyle(
+				SWT.ITALIC);
+		italic = fd.createFont(getDisplay());
 	}
 
 	/*
@@ -334,6 +350,10 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		pShowUnreadCount = store
 				.getBoolean(PreferenceConstants.P_SHOW_UNREAD_COUNT);
 
+	}
+
+	public void setCollection(FeedCollection collection) {
+		this.collection = collection;
 	}
 
 }
