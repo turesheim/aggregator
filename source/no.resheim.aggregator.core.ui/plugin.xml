@@ -114,6 +114,16 @@
             id="no.resheim.aggregator.core.ui.markItemCommandParameterType"
             type="no.resheim.aggregator.core.data.AggregatorItem.Mark">
       </commandParameterType>
+      <command
+            defaultHandler="no.resheim.aggregator.core.ui.views.SetLayoutCommandHandler"
+            id="no.resheim.aggregator.core.ui.setLayoutCommand"
+            name="Set Layout">
+         <commandParameter
+               id="no.resheim.aggregator.core.ui.layoutCommandParameter"
+               name="layout"
+               optional="false">
+         </commandParameter>
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">

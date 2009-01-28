@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
+   <extension-point id="splashExtension" name="Splash Extensions" schema="schema/splashExtension.exsd"/>
 
    <extension
          id="application"
@@ -63,12 +64,73 @@
          <menu
                id="window"
                label="Window">
+            <menu
+                  label="Layout">
+               <command
+                     commandId="no.resheim.aggregator.core.ui.setLayoutCommand"
+                     label="Vertical"
+                     style="radio">
+                  <parameter
+                        name="no.resheim.aggregator.core.ui.layoutCommandParameter"
+                        value="vertical">
+                  </parameter>
+               </command>
+               <command
+                     commandId="no.resheim.aggregator.core.ui.setLayoutCommand"
+                     label="Horizontal"
+                     style="radio">
+                  <parameter
+                        name="no.resheim.aggregator.core.ui.layoutCommandParameter"
+                        value="horizontal">
+                  </parameter>
+               </command>
+            </menu>
             <command
                   commandId="org.eclipse.ui.window.preferences"
+                  label="Preferences"
                   style="push">
             </command>
          </menu>
       </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.splashHandlers">
+      <splashHandler
+            class="no.resheim.aggregator.rcp.splashHandlers.ExtensibleSplashHandler"
+            id="no.resheim.aggregator.rcp.splashHandlers.extensible">
+      </splashHandler>
+      <splashHandlerProductBinding
+            productId="no.resheim.aggregator.rcp.product"
+            splashId="no.resheim.aggregator.rcp.splashHandlers.extensible">
+      </splashHandlerProductBinding>
+   </extension>
+   <extension
+         point="no.resheim.aggregator.rcp.splashExtension">
+      <splashExtension
+            icon="icons/af.png"
+            id="af"
+            tooltip="Application Framework">
+      </splashExtension>
+      <splashExtension
+            icon="icons/embedded.png"
+            id="embedded"
+            tooltip="Embedded">
+      </splashExtension>
+      <splashExtension
+            icon="icons/enterprise.png"
+            id="enterprise"
+            tooltip="Enterprise">
+      </splashExtension>
+      <splashExtension
+            icon="icons/languages.png"
+            id="languages"
+            tooltip="Languages">
+      </splashExtension>
+      <splashExtension
+            icon="icons/rcp.png"
+            id="rcp"
+            tooltip="RCP">
+      </splashExtension>
    </extension>
 
 </plugin>

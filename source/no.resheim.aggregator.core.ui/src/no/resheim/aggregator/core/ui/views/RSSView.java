@@ -33,7 +33,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -54,7 +53,6 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
@@ -149,8 +147,6 @@ public class RSSView extends ViewPart implements IFeedView,
 	/** The item that was last selected by the user */
 	private Article fLastSelectionItem;
 
-	private Action horizontalLayoutAction;
-
 	private FeedViewerLabelProvider labelProvider;
 
 	/**
@@ -181,9 +177,6 @@ public class RSSView extends ViewPart implements IFeedView,
 	/** Tree viewer to show all the feeds and articles */
 	private FeedTreeViewer treeView;
 
-	/** Action to change the layout of the view */
-	private Action verticalLayoutAction;
-
 	/**
 	 * The constructor.
 	 */
@@ -206,22 +199,6 @@ public class RSSView extends ViewPart implements IFeedView,
 				labelProvider.setCollection(fCollection);
 			}
 		});
-	}
-
-	private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
-		fillLocalToolBar(bars.getToolBarManager());
-	}
-
-	/**
-	 * Contributes to the local view menu.
-	 */
-	private void contributeToMenu() {
-		MenuManager mgr = new MenuManager(Messages.RSSView_LayoutMenuTitle,
-				"layout"); //$NON-NLS-1$
-		getViewSite().getActionBars().getMenuManager().add(mgr);
-		mgr.add(verticalLayoutAction);
-		mgr.add(horizontalLayoutAction);
 	}
 
 	@Override
@@ -264,8 +241,6 @@ public class RSSView extends ViewPart implements IFeedView,
 		makeActions();
 		hookContextMenu();
 		hookDoubleClickAction();
-		contributeToActionBars();
-		contributeToMenu();
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()
 				.getPreferenceStore();
 		store.addPropertyChangeListener(new IPropertyChangeListener() {
@@ -310,15 +285,6 @@ public class RSSView extends ViewPart implements IFeedView,
 		manager.add(navigation_separator);
 		manager.add(modify_separator);
 		manager.add(selection_separator);
-	}
-
-	/**
-	 * Fills the local tool bar with actions.
-	 * 
-	 * @param manager
-	 *            The menu manager
-	 */
-	private void fillLocalToolBar(IToolBarManager manager) {
 	}
 
 	public FeedCollection getFeedCollection() {
@@ -398,38 +364,6 @@ public class RSSView extends ViewPart implements IFeedView,
 			}
 		};
 
-		verticalLayoutAction = new Action(Messages.RSSView_VerticalActionTitle,
-				Action.AS_RADIO_BUTTON) {
-			public void run() {
-				sashForm.setOrientation(SWT.VERTICAL);
-				setChecked(true);
-				horizontalLayoutAction.setChecked(false);
-				fHorizontalLayout = false;
-			}
-		};
-		verticalLayoutAction.setImageDescriptor(AggregatorUIPlugin
-				.getImageDescriptor("icons/etool16/vertical.gif")); //$NON-NLS-1$
-
-		horizontalLayoutAction = new Action(
-				Messages.RSSView_HorizontalActionTitle, Action.AS_RADIO_BUTTON) {
-			public void run() {
-				sashForm.setOrientation(SWT.HORIZONTAL);
-				setChecked(true);
-				verticalLayoutAction.setChecked(false);
-				fHorizontalLayout = true;
-			}
-		};
-		horizontalLayoutAction.setImageDescriptor(AggregatorUIPlugin
-				.getImageDescriptor("icons/etool16/horizontal.gif")); //$NON-NLS-1$
-		if (fHorizontalLayout) {
-			horizontalLayoutAction.setChecked(true);
-			verticalLayoutAction.setChecked(false);
-			sashForm.setOrientation(SWT.HORIZONTAL);
-		} else {
-			horizontalLayoutAction.setChecked(false);
-			verticalLayoutAction.setChecked(true);
-			sashForm.setOrientation(SWT.VERTICAL);
-		}
 	}
 
 	private void refreshView() {
@@ -470,5 +404,24 @@ public class RSSView extends ViewPart implements IFeedView,
 				.getPreferenceStore();
 		pPreviewIsRead = store
 				.getBoolean(PreferenceConstants.P_PREVIEW_IS_READ);
+	}
+
+	public Layout getLayout() {
+		return null;
+	}
+
+	public void setLayout(Layout layout) {
+		switch (layout) {
+		case HORIZONTAL:
+			sashForm.setOrientation(SWT.HORIZONTAL);
+			fHorizontalLayout = true;
+			break;
+		case VERTICAL:
+			sashForm.setOrientation(SWT.VERTICAL);
+			fHorizontalLayout = false;
+			break;
+		default:
+			break;
+		}
 	}
 }

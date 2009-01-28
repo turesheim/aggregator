@@ -3,7 +3,6 @@
 
 <product name="Aggregator" id="no.resheim.aggregator.rcp.product" application="no.resheim.aggregator.rcp.application" version="1.0.0" useFeatures="false">
 
-
    <configIni use="default">
    </configIni>
 
@@ -21,7 +20,6 @@
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>

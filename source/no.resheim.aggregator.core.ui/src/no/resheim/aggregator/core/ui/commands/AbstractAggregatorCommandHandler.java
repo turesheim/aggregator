@@ -29,6 +29,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 /**
+ * Command handler that uses the current
+ * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
