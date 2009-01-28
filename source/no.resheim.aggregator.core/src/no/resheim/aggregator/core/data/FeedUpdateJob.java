@@ -47,6 +47,7 @@ import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.xml.sax.SAXException;
 
@@ -77,7 +78,6 @@ public class FeedUpdateJob extends Job {
 			feed.setUpdating(true);
 			feed.getTempItems().clear();
 		}
-		System.out.println("Updating feed " + feed.getTitle());
 		boolean debug = AggregatorPlugin.getDefault().isDebugging();
 		// registry.notifyListerners(new AggregatorItemChangedEvent(feed,
 		// FeedChangeEventType.UPDATING));
@@ -152,13 +152,15 @@ public class FeedUpdateJob extends Job {
 			if (feedURL == null) {
 				return Status.CANCEL_STATUS;
 			}
-			System.out.println("Downloading from " + feedURL);
 			// Download the feed
 			URLConnection yc = getConnection(feed, feedURL);
+			System.out.println(yc);
 			FeedParser handler = new FeedParser(collection, feed);
+			System.out.println(handler);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser parser = factory.newSAXParser();
 			InputStream is = yc.getInputStream();
+			System.out.println(is);
 			parser.parse(is, handler);
 			is.close();
 			// Download the favicon
@@ -171,15 +173,19 @@ public class FeedUpdateJob extends Job {
 								e.getMessage()
 							}));
 		} catch (StorageException e) {
+			e.printStackTrace();
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
 					Messages.FeedUpdateJob_CredentialsError, e);
 		} catch (IOException e) {
+			e.printStackTrace();
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID, 0,
 					Messages.FeedUpdateJob_Error_Title, e);
 		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID, 0,
 					Messages.FeedUpdateJob_Error_Title, e);
 		} catch (SAXException e) {
+			e.printStackTrace();
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID, 0,
 					Messages.FeedUpdateJob_Error_Title, e);
 		} catch (Exception e) {
@@ -217,9 +223,18 @@ public class FeedUpdateJob extends Job {
 	 * 
 	 * @return The proxy service
 	 */
-	public IProxyService getProxyService() {
+	private IProxyService getProxyService() {
 		Bundle bundle = Platform.getBundle(CORE_NET_BUNDLE);
-		// The bundle may not be active yet and hence the service we're looking
+		if (bundle.getState() == Bundle.UNINSTALLED) {
+			return null;
+		}
+		try {
+			bundle.start();
+		} catch (BundleException e1) {
+			e1.printStackTrace();
+		}
+		// The bundle may not be active yet and hence the service we're
+		// looking
 		// for is unavailable. We must wait until everything is ready.
 		while (bundle.getState() != Bundle.ACTIVE) {
 			try {
