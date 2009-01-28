@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="no.resheim.aggregator.rcp.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="no.resheim.aggregator.rcp.Perspective"
+            fixed="true"
+            id="no.resheim.aggregator.application.perspective"
+            name="Perspective">
+      </perspective>
+   </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="no.resheim.aggregator.rcp.application"
+            name="Aggregator">
+         <property
+               name="windowImages"
+               value="icons/alt_window_16.gif,icons/alt_window_32.gif">
+         </property>
+         <property
+               name="appName"
+               value="Aggregator">
+         </property>
+      </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:file?after=additions">
+         <command
+               commandId="no.resheim.aggregator.core.ui.addFeed"
+               label="New Feed"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+
+</plugin>
