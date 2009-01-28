@@ -3,6 +3,7 @@ package no.resheim.aggregator.core.data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.locks.ReentrantLock;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
@@ -22,6 +23,12 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 * manipulated the item. TODO: Can we make totally sure using a comparator?
 	 */
 	private ArrayList<AggregatorItem> children;
+
+	/**
+	 * Lock to prevent that the cache is being read/modified by different
+	 * threads at the same time.
+	 */
+	private final ReentrantLock cacheLock = new ReentrantLock();
 
 	/** The number of milliseconds in a day */
 	private static final long DAY = 86400000;
@@ -48,8 +55,11 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 *            the item to remove
 	 */
 	void internalRemove(AggregatorItem item) {
-		synchronized (children) {
+		cacheLock.lock();
+		try {
 			children.remove(item);
+		} finally {
+			cacheLock.unlock();
 		}
 	}
 
@@ -61,8 +71,11 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 *            the item to add
 	 */
 	void internalAdd(AggregatorItem item) {
-		synchronized (children) {
+		cacheLock.lock();
+		try {
 			children.add(item);
+		} finally {
+			cacheLock.unlock();
 		}
 	}
 
@@ -90,11 +103,14 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 */
 	public AggregatorItem getChildAt(int index) throws CoreException {
 		// Check the cache first
-		synchronized (children) {
+		cacheLock.lock();
+		try {
 			for (AggregatorItem child : children) {
 				if (child.getOrdering() == index)
 					return child;
 			}
+		} finally {
+			cacheLock.unlock();
 		}
 		// If nothing is found we must check the storage
 		IAggregatorStorage storage = getCollection().getStorage();
@@ -102,7 +118,12 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 			storage.readLock().lock();
 			AggregatorItem child = storage.getItem(this, index);
 			if (child != null) {
-				children.add(child);
+				cacheLock.lock();
+				try {
+					children.add(child);
+				} finally {
+					cacheLock.unlock();
+				}
 			}
 			return child;
 		} finally {
@@ -278,8 +299,11 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	public IStatus deleteChild(AggregatorItem item, boolean shift)
 			throws CoreException {
 		// Remove the item from the cache (if it's there).
-		synchronized (children) {
+		cacheLock.lock();
+		try {
 			children.remove(item);
+		} finally {
+			cacheLock.unlock();
 		}
 		IAggregatorStorage storage = getCollection().getStorage();
 		try {
