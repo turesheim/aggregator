@@ -25,7 +25,9 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 
 /**
  * This type is responsible for handling the feed registries that contains the
@@ -97,6 +99,8 @@ public class AggregatorPlugin extends Plugin {
 		}
 	}
 
+	private static final String CORE_NET_BUNDLE = "org.eclipse.core.net"; //$NON-NLS-1$
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -108,6 +112,14 @@ public class AggregatorPlugin extends Plugin {
 		super.start(context);
 		fDebugging = super.isDebugging();
 		System.out.println("Starting aggregator core"); //$NON-NLS-1$
+		Bundle bundle = Platform.getBundle(CORE_NET_BUNDLE);
+		if (bundle.getState() != Bundle.UNINSTALLED) {
+			try {
+				bundle.start();
+			} catch (BundleException e1) {
+				e1.printStackTrace();
+			}
+		}
 		initialize();
 	}
 
