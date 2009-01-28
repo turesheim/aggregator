@@ -39,12 +39,35 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:file?after=additions">
-         <command
-               commandId="no.resheim.aggregator.core.ui.addFeed"
-               label="New Feed"
-               style="push">
-         </command>
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="file"
+               label="File">
+            <command
+                  commandId="no.resheim.aggregator.core.ui.addFeed"
+                  label="New Feed"
+                  style="push">
+            </command>
+            <separator
+                  name="no.resheim.aggregator.rcp.separator"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="org.eclipse.ui.file.exit"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="window"
+               label="Window">
+            <command
+                  commandId="org.eclipse.ui.window.preferences"
+                  style="push">
+            </command>
+         </menu>
       </menuContribution>
    </extension>
 

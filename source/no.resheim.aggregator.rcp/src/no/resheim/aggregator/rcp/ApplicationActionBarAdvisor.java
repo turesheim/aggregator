@@ -1,8 +1,6 @@
 package no.resheim.aggregator.rcp;
 
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
@@ -39,10 +37,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	protected void fillMenuBar(IMenuManager menuBar) {
-		MenuManager fileMenu = new MenuManager("&File",
-				IWorkbenchActionConstants.M_FILE);
-		menuBar.add(fileMenu);
-		fileMenu.add(exitAction);
+		// MenuManager fileMenu = new MenuManager("&File",
+		// IWorkbenchActionConstants.M_FILE);
+		// menuBar.add(fileMenu);
+		// fileMenu.add(exitAction);
 	}
 
 }
