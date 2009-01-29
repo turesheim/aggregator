@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.Assert;
  * @since 1.0
  */
 public class InternalArticle extends Article {
+
 	/**
 	 * @param the
 	 *            parent item (folder)
@@ -44,6 +45,7 @@ public class InternalArticle extends Article {
 	public InternalArticle(Feed feed, UUID uuid) {
 		super(null, uuid);
 		Assert.isNotNull(feed);
+		fFeed = feed;
 		location = feed.getLocation();
 		feed_uuid = feed.getUUID();
 	}

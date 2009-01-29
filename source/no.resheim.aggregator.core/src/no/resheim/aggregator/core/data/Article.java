@@ -55,6 +55,9 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	/** The description or content */
 	protected String text = null;
 
+	/** The feed that this article comes from. Note that this value */
+	protected Feed fFeed;
+
 	protected Article(AggregatorItemParent parent, UUID uuid) {
 		super(parent, uuid);
 		mediaContent = new ArrayList<MediaContent>();
@@ -62,6 +65,22 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 
 	public int compareTo(Article arg0) {
 		return (int) (arg0.addedDate - addedDate);
+	}
+
+	/**
+	 * Returns the feed that the article belongs to.
+	 * 
+	 * @return the feed instance
+	 */
+	public Feed getFeed() {
+		if (fFeed == null) {
+			try {
+				fFeed = getCollection().getFeeds().get(feed_uuid);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+		return fFeed;
 	}
 
 	/**
