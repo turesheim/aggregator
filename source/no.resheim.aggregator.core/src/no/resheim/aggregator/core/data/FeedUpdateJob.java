@@ -158,13 +158,10 @@ public class FeedUpdateJob extends Job {
 			}
 			// Download the feed
 			URLConnection yc = getConnection(feed, feedURL);
-			System.out.println(yc);
 			FeedParser handler = new FeedParser(collection, feed);
-			System.out.println(handler);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser parser = factory.newSAXParser();
 			InputStream is = yc.getInputStream();
-			System.out.println(is);
 			parser.parse(is, handler);
 			is.close();
 			// Download the favicon
