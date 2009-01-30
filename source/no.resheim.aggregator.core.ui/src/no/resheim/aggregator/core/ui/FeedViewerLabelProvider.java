@@ -178,7 +178,7 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 	 * @param status
 	 * @return an image representing the item
 	 */
-	Image getImage(AggregatorItem item) {
+	private Image getImage(AggregatorItem item) {
 		String id = getBaseId(item) + "_" + item.getMark(); //$NON-NLS-1$
 		ImageDescriptor type = null;
 
@@ -210,7 +210,9 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		if (feed.getImageData() != null) {
 			id = feed.getUUID().toString();
 		}
-		id += "_" + folder.getMark(); //$NON-NLS-1$
+		if (folder != null) {
+			id += "_" + folder.getMark(); //$NON-NLS-1$
+		}
 		// Add status overlays
 		ImageDescriptor si = null;
 		if (status != null) {
@@ -248,6 +250,9 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
 	 */
 	public Image getImage(Object element) {
+		if (element instanceof Feed) {
+			return getImage((Feed) element, null, null);
+		}
 		if (element instanceof Folder
 				&& ((Folder) element).getFeedUUID() != null) {
 			Feed feed = collection.getFeeds().get(
@@ -264,6 +269,9 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 	}
 
 	private ImageDescriptor getMarkingOverlay(AggregatorItem item) {
+		if (item == null) {
+			return null;
+		}
 		ImageDescriptor mark = null;
 		switch (item.getMark()) {
 		case IMPORTANT:
