@@ -245,10 +245,6 @@ public class FeedCollection extends AggregatorItemParent {
 		}
 	}
 
-	public String getFeedId() {
-		return null;
-	}
-
 	/**
 	 * Returns the complete list of feeds that this registry is maintaining.
 	 * Note
