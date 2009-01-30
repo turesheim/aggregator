@@ -8,4 +8,12 @@
             </message_arguments>
         </filter>
     </resource>
+    <resource path="src/no/resheim/aggregator/core/ui/NotificationPopup.java" type="no.resheim.aggregator.core.ui.NotificationPopup">
+        <filter id="576720909">
+            <message_arguments>
+                <message_argument value="AbstractNotificationPopup"/>
+                <message_argument value="NotificationPopup"/>
+            </message_arguments>
+        </filter>
+    </resource>
 </component>

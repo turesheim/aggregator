@@ -15,10 +15,13 @@ import java.net.URL;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.IFeedCollectionEventListener;
+import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
+import no.resheim.aggregator.core.data.IAggregatorEventListener;
+import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.ArticleViewer;
 import no.resheim.aggregator.core.ui.FeedTreeViewer;
@@ -26,6 +29,7 @@ import no.resheim.aggregator.core.ui.FeedViewerContentProvider;
 import no.resheim.aggregator.core.ui.FeedViewerLabelProvider;
 import no.resheim.aggregator.core.ui.IArticleViewerListener;
 import no.resheim.aggregator.core.ui.IFeedView;
+import no.resheim.aggregator.core.ui.NotificationPopup;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
 
 import org.eclipse.core.runtime.CoreException;
@@ -199,6 +203,7 @@ public class RSSView extends ViewPart implements IFeedView,
 				labelProvider.setCollection(fCollection);
 			}
 		});
+		registerDesktopNotifications();
 	}
 
 	@Override
@@ -262,12 +267,6 @@ public class RSSView extends ViewPart implements IFeedView,
 						IContextService.class)).activateContext(CONTEXT_ID);
 			}
 		});
-		// Register for collection events
-		// if (Platform.getBundle(CORE_PLUGIN_ID).getState() == Bundle.ACTIVE) {
-		// setDefaultCollection();
-		// } else {
-		// AggregatorPlugin.getDefault().addFeedCollectionListener(this);
-		// }
 		if (AggregatorPlugin.getDefault().isCollectionsInitialized()) {
 			setDefaultCollection();
 		} else {
@@ -333,7 +332,27 @@ public class RSSView extends ViewPart implements IFeedView,
 		} else {
 			fHorizontalLayout = false;
 		}
+	}
 
+	private void registerDesktopNotifications() {
+		FeedCollection collection = AggregatorPlugin.getDefault()
+				.getFeedCollection(null);
+		collection.addFeedListener(new IAggregatorEventListener() {
+
+			public void aggregatorItemChanged(
+					final AggregatorItemChangedEvent event) {
+				if (event.getType().equals(EventType.CREATED)) {
+					final Display display = getViewSite().getShell()
+							.getDisplay();
+					display.asyncExec(new Runnable() {
+						public void run() {
+							new NotificationPopup(RSSView.this, event);
+						}
+					});
+				}
+			}
+
+		});
 	}
 
 	private void makeActions() {

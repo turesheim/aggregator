@@ -25,6 +25,8 @@ public class Messages extends NLS {
 	public static String ArticleViewer_UnknownPublicationDate;
 	public static String ArticleViewer_Updated;
 	public static String NewFeedWizard_Title;
+	public static String NotificationPopup_Link;
+	public static String NotificationPopup_More;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

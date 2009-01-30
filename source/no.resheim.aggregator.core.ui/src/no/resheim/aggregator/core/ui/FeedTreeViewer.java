@@ -38,6 +38,7 @@ import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.swt.widgets.Widget;
 
 /**
  * Virtual tree viewer presenting aggregator items and supporting drag and drop.
@@ -67,6 +68,26 @@ public class FeedTreeViewer extends TreeViewer {
 				return ((AggregatorItem) element).getUUID().hashCode();
 			}
 			return element.hashCode();
+		}
+	}
+
+	/**
+	 * Expands all ancestors of the given element or tree path so that the given
+	 * element becomes visible in this viewer's tree control, and then expands
+	 * the subtree rooted at the given element to the given level.
+	 * 
+	 * @param elementOrTreePath
+	 *            the element
+	 * @param level
+	 *            non-negative level, or <code>ALL_LEVELS</code> to expand all
+	 *            levels of the tree
+	 */
+	public void expandToLevel(Object elementOrTreePath, int level) {
+		// if (checkBusy())
+		// return;
+		Widget w = internalExpand(elementOrTreePath, true);
+		if (w != null) {
+			internalExpandToLevel(w, level);
 		}
 	}
 
