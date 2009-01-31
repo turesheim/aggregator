@@ -19,7 +19,7 @@
 		<echoproperties></echoproperties>
 		<tstamp id=""></tstamp>
 		<antcall target="antRunner"/>
-		<ftp action="send" password="ftpPassword" userid="ftpUser" server="update.resheim.no" remotedir="www/aggregator/development">
+		<ftp action="send" password="${ftpPassword}" userid="${ftpUser}" server="update.resheim.no" remotedir="www/aggregator/development">
 			<fileset dir="${basedir}/../build/repository">
         <include name="**/*"/>
       </fileset>
