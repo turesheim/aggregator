@@ -4,31 +4,33 @@
 <!-- buildType     The type of build (stable/unstable)                       -->
 <!-- ======================================================================= -->
 <project name="Aggregator" default="build">
-			
+
 	<path id="project.classpath">
-    <fileset dir="libs">
-        <include name="**/*.jar"/>
-      </fileset>
-  </path>
-  	
+		<fileset dir="libs">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
 	<target name="build">
-<!--		
+		<!--		
 		<delete failonerror="no" dir="${buildRoot}/build"/>
 		<mkdir dir="${buildRoot}/build" />
--->		
-		<echoproperties></echoproperties>
-		<tstamp id=""></tstamp>
-		<antcall target="antRunner"/>
-		<ftp action="send" password="${ftpPassword}" userid="${ftpUser}" server="update.resheim.no" remotedir="www/aggregator/${quality}">
+-->
+		<echoproperties>
+		</echoproperties>
+		<tstamp id="">
+		</tstamp>
+		<antcall target="antRunner" />
+		<ftp action="send" password="${ftpPassword}" userid="${ftpUser}" server="update.resheim.no" remotedir="www/aggregator/${quality}" binary="true">
 			<fileset dir="${basedir}/../build/repository">
-        <include name="**/*"/>
-      </fileset>
+				<include name="**/*" />
+			</fileset>
 		</ftp>
 	</target>
 
 	<target name="antRunner">
 		<tstamp>
-			<format property="timestamp" pattern="yyyyMMddhhmm"/>
+			<format property="timestamp" pattern="yyyyMMddhhmm" />
 		</tstamp>
 		<java classname="org.eclipse.core.launcher.Main" fork="true" failonerror="true">
 			<arg value="-application" />
@@ -37,12 +39,12 @@
 			<arg value="-DbuildDirectory=${basedir}/../build" />
 			<arg value="-DbaseLocation=${eclipseRoot}" />
 			<arg value="-Dtimestamp=${timestamp}" />
-		  <arg value="-buildfile" />
+			<arg value="-buildfile" />
 			<arg value="${eclipseRoot}/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
 			<arg value="-DjavacDebugInfo=true" />
 			<classpath>
 				<pathelement location="${eclipseRoot}/plugins/org.eclipse.equinox.launcher_1.0.101.R34x_v20080819.jar" />
 			</classpath>
 		</java>
-	</target>	
+	</target>
 </project>
