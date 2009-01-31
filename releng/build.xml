@@ -17,7 +17,13 @@
 		<mkdir dir="${buildRoot}/build" />
 -->		
 		<echoproperties></echoproperties>
+		<tstamp id=""></tstamp>
 		<antcall target="antRunner"/>
+		<ftp action="send" password="ftpPassword" userid="ftpUser" server="update.resheim.no" remotedir="aggregator/development">
+			<fileset dir="${basedir}/../build/repository">
+        <include name="**/*"/>
+      </fileset>
+		</ftp>
 	</target>
 
 	<target name="antRunner">
@@ -38,7 +44,5 @@
 				<pathelement location="${eclipseRoot}/plugins/org.eclipse.equinox.launcher_1.0.101.R34x_v20080819.jar" />
 			</classpath>
 		</java>
-	</target>
-	
-	
+	</target>	
 </project>
