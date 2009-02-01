@@ -29,7 +29,6 @@ import no.resheim.aggregator.core.ui.FeedViewerContentProvider;
 import no.resheim.aggregator.core.ui.FeedViewerLabelProvider;
 import no.resheim.aggregator.core.ui.IArticleViewerListener;
 import no.resheim.aggregator.core.ui.IFeedView;
-import no.resheim.aggregator.core.ui.NotificationPopup;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
 
 import org.eclipse.core.runtime.CoreException;

@@ -8,7 +8,7 @@
  * 
  * Contributors: Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.core.ui;
+package no.resheim.aggregator.core.ui.views;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -16,6 +16,9 @@ import java.util.HashMap;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.core.data.Article;
+import no.resheim.aggregator.core.ui.FeedViewerLabelProvider;
+import no.resheim.aggregator.core.ui.IFeedView;
+import no.resheim.aggregator.core.ui.Messages;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
