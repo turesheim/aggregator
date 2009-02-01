@@ -36,7 +36,7 @@
 			<arg value="-Dbuilder=${basedir}" />
 			<arg value="-DbuildDirectory=${basedir}/../build" />
 			<arg value="-DbaseLocation=${eclipseRoot}" />
-			<arg value="-Dtimestamp=${timestamp}" />
+			<arg value="-DtimeStamp=${DSTAMP}${TSTAMP}" />
 			<arg value="-buildfile" />
 			<arg value="${eclipseRoot}/plugins/org.eclipse.pde.build_3.4.1.R34x_v20080805/scripts/build.xml" />
 			<arg value="-DjavacDebugInfo=true" />
