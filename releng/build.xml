@@ -16,10 +16,8 @@
 		<delete failonerror="no" dir="${buildRoot}/build"/>
 		<mkdir dir="${buildRoot}/build" />
 -->
-		<tstamp id="timeStamp">
-		<echoproperties>
-		</echoproperties>
-		</tstamp>
+		<tstamp id="timeStamp"/>
+		<echoproperties/>
 		<antcall target="antRunner" />
 		<ftp action="send" password="${ftpPassword}" userid="${ftpUser}" server="update.resheim.no" remotedir="www/aggregator/${quality}" binary="true" passive="true">
 			<fileset dir="${basedir}/../build/repository">
