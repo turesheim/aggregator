@@ -12,11 +12,10 @@
 	</path>
 
 	<target name="build">
-		<!--		
-		<delete failonerror="no" dir="${buildRoot}/build"/>
-		<mkdir dir="${buildRoot}/build" />
--->
 		<tstamp id="timeStamp"/>
+		<!-- Clean out the build results directory -->
+		<delete failonerror="no" dir="${basedir}/../build"/>
+		<mkdir dir="${basedir}/../build" />
 		<echoproperties/>
 		<antcall target="antRunner" />
 		<ftp action="send" password="${ftpPassword}" userid="${ftpUser}" server="update.resheim.no" remotedir="www/aggregator/${quality}" binary="true" passive="true">
