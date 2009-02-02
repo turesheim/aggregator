@@ -25,7 +25,8 @@
 				</fileset>
 			</delete>
 		</ftp>
-		<ftp action="send" password="${ftpPassword}" userid="${ftpUser}" server="update.resheim.no" remotedir="www/aggregator/${quality}" binary="true" passive="true">
+		<ftp action="mkdir"  password="${ftpPassword}" userid="${ftpUser}" server="update.resheim.no" remotedir="www/aggregator/${quality}/repository" binary="true" passive="true"/>
+		<ftp action="send" password="${ftpPassword}" userid="${ftpUser}" server="update.resheim.no" remotedir="www/aggregator/${quality}/repository" binary="true" passive="true">
 			<fileset dir="${basedir}/../build/repository">
 				<include name="**/*" />
 			</fileset>
