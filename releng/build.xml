@@ -19,11 +19,9 @@
 		<echoproperties/>
 		<antcall target="antRunner" />
 		<ftp action="del" password="${ftpPassword}" userid="${ftpUser}" server="update.resheim.no" remotedir="www/aggregator/${quality}" binary="true" passive="true">
-			<delete>
-				<fileset dir="repository">
-	    		<include name="**/*"/>
-				</fileset>
-			</delete>
+			<fileset dir="repository">
+    		<include name="**/*"/>
+			</fileset>
 		</ftp>
 		<ftp action="mkdir"  password="${ftpPassword}" userid="${ftpUser}" server="update.resheim.no" remotedir="www/aggregator/${quality}/repository" binary="true" passive="true"/>
 		<ftp action="send" password="${ftpPassword}" userid="${ftpUser}" server="update.resheim.no" remotedir="www/aggregator/${quality}/repository" binary="true" passive="true">
