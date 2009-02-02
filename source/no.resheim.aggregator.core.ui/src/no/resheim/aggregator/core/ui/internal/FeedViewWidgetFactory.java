@@ -18,10 +18,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 /**
- * A FormToolkit customized for use by the aggregator view. Adapted from a
+ * A FormToolkit customised for use by the aggregator view. Adapted from a
  * similar type for the tabbed properties view.
  * 
- * @author Torkild Ulvøy Resheim.
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
  */
 public class FeedViewWidgetFactory extends FormToolkit {
 
@@ -52,7 +53,7 @@ public class FeedViewWidgetFactory extends FormToolkit {
 	public static final int VSPACE = 4;
 
 	/**
-	 * Space to leave between the center of the property tab and the closest
+	 * Space to leave between the centre of the property tab and the closest
 	 * widget to the left or right. I.e. for a property tab whose widgets are
 	 * logically divided into two halves, the total space between the halves
 	 * should be 2*CENTER_SPACE.

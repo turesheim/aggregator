@@ -33,6 +33,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * Wizard page for the general settings of a new feed.
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
+ */
 public class NewFeedWizardGeneralPage extends WizardPage {
 	private Combo combo;
 	private Text urlText;
