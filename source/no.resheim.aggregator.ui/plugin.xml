@@ -31,9 +31,6 @@
                commandId="no.resheim.aggregator.core.ui.addFeed"
                label="New Feed"
                style="push">
-            <visibleWhen
-                  checkEnabled="true">
-            </visibleWhen>
          </command>
          <command
                commandId="no.resheim.aggregator.core.ui.openFilterProperties"
