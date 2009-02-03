@@ -17,61 +17,45 @@ package no.resheim.aggregator.core.filter;
  * @since 1.0
  */
 public class Criterion {
-	/**
-	 * Returns the field that the comparison applies to.
-	 * 
-	 * @return the field
-	 */
-	public Field getField() {
-		return field;
-	}
-
-	/**
-	 * Sets the field that the comparison applies to.
-	 * 
-	 * @param field
-	 *            the field
-	 */
-	public void setField(Field field) {
-		this.field = field;
-	}
-
-	public Operator getOperator() {
-		return operator;
-	}
-
-	public void setOperator(Operator operator) {
-		this.operator = operator;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
 	public enum Field {
-		/** The title of the article */
-		TITLE,
-		/** The text of the article */
-		TEXT,
 		/** The author of the article */
 		AUTHOR,
-		/** The enclosure type of the article */
-		TYPE,
 		/** Whether or not the article has been read */
-		READ
+		READ,
+		/** The text of the article */
+		TEXT,
+		/** The title of the article */
+		TITLE,
+		/** The enclosure type of the article */
+		TYPE
 	}
 
 	public enum Operator {
 		CONTAINS,
 		DOES_NOT_CONTAIN,
-		EQUALS,
 		DOES_NOT_EQUAL,
-		MATCHES_REGEXP,
-		DOES_NOT_MATCH_REGEXP
+		DOES_NOT_MATCH_REGEXP,
+		EQUALS,
+		MATCHES_REGEXP
+	}
+
+	public static String[] getFieldNames() {
+		return new String[] {
+				Messages.Criterion_Field_Title, Messages.Criterion_Field_Text,
+				Messages.Criterion_Field_Author, Messages.Criterion_Field_Type,
+				Messages.Criterion_Field_Read
+		};
+	}
+
+	public static String[] getOperatorNames() {
+		return new String[] {
+				Messages.Criterion_Op_Contains,
+				Messages.Criterion_Op_Does_Not_Contain,
+				Messages.Criterion_Op_Equals,
+				Messages.Criterion_Op_Does_Not_Equal,
+				Messages.Criterion_Op_Matches_Regexp,
+				Messages.Criterion_Op_Does_Not_Match_Regexp
+		};
 	}
 
 	/** The field to test */
@@ -95,7 +79,42 @@ public class Criterion {
 		this.value = criterion.value;
 	}
 
+	/**
+	 * Returns the field that the comparison applies to.
+	 * 
+	 * @return the field
+	 */
+	public Field getField() {
+		return field;
+	}
+
+	public Operator getOperator() {
+		return operator;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
 	public Criterion getWorkingCopy() {
 		return new Criterion(this);
+	}
+
+	/**
+	 * Sets the field that the comparison applies to.
+	 * 
+	 * @param field
+	 *            the field
+	 */
+	public void setField(Field field) {
+		this.field = field;
+	}
+
+	public void setOperator(Operator operator) {
+		this.operator = operator;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }
