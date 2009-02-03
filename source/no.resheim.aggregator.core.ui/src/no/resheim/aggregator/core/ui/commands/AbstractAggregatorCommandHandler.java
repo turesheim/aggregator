@@ -41,7 +41,9 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 
 	/**
 	 * @param disallowSystemItems
+	 *            if <code>true</code> system items may not be selected
 	 * @param disregardSelection
+	 *            if <code>true</code> the selection does not matter
 	 */
 	public AbstractAggregatorCommandHandler(boolean disallowSystemItems,
 			boolean disregardSelection) {
@@ -59,9 +61,6 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 
 	@Override
 	public boolean isEnabled() {
-		if (fDisregardSelection) {
-			return super.isEnabled();
-		}
 		ISelection selection = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getSelectionService()
 				.getSelection();
@@ -173,7 +172,16 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param selection
+	 *            the selection to consider
+	 * @return <code>true</code> if the selection should be handled
+	 */
 	protected boolean handleSelection(ISelection selection) {
+		if (fDisregardSelection)
+			return super.isEnabled();
+
 		if (selection.isEmpty()) {
 			return false;
 		}
