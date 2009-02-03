@@ -29,18 +29,18 @@ public class CriteriaContentProvider implements IContentProvider,
 	public void dispose() {
 	}
 
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		if (newInput instanceof Filter) {
-			fFilter = (Filter) newInput;
-		}
-
-	}
-
 	public Object[] getElements(Object inputElement) {
 		if (fFilter != null) {
 			return fFilter.getCriteria();
 		}
 		return new Object[0];
+	}
+
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		if (newInput instanceof Filter) {
+			fFilter = (Filter) newInput;
+		}
+
 	}
 
 }

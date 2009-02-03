@@ -27,6 +27,14 @@ import org.eclipse.core.runtime.Status;
  */
 public class Filter {
 
+	public boolean isManualOnly() {
+		return manualOnly;
+	}
+
+	public void setManualOnly(boolean manualOnly) {
+		this.manualOnly = manualOnly;
+	}
+
 	/** Actions to perform */
 	protected ArrayList<Action> actions;
 
@@ -38,6 +46,8 @@ public class Filter {
 
 	/** Match one or all criteria for action */
 	private boolean matchAllCriteria;
+
+	private boolean manualOnly;
 
 	/** The title of the filter */
 	private String title;

@@ -80,7 +80,8 @@ CREATE TABLE feeds (
 CREATE TABLE filters (
 		uuid CHAR(36) NOT NULL PRIMARY KEY,
 		title VARCHAR(256) NOT NULL,
-		match_all INT NOT NULL
+		match_all INT NOT NULL,
+		manual INT NOT NULL
 	);
 
 /** A criteria for the filter */  

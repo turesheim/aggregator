@@ -124,6 +124,11 @@
                optional="false">
          </commandParameter>
       </command>
+      <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.FilterPropertiesCommandHandler"
+            id="no.resheim.aggregator.core.ui.openFilterProperties"
+            name="Filters">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.commandImages">

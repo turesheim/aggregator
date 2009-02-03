@@ -49,6 +49,11 @@
                   label="New Feed"
                   style="push">
             </command>
+            <command
+                  commandId="no.resheim.aggregator.core.ui.openFilterProperties"
+                  label="Filters"
+                  style="push">
+            </command>
             <separator
                   name="no.resheim.aggregator.rcp.separator"
                   visible="true">

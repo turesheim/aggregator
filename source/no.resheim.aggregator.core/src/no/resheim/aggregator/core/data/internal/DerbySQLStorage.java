@@ -592,10 +592,11 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private void insert(Filter filter) throws SQLException {
 		PreparedStatement ps = connection
-				.prepareStatement("insert into filters values (?,?,?)"); //$NON-NLS-1$
+				.prepareStatement("insert into filters values (?,?,?,?)"); //$NON-NLS-1$
 		ps.setString(1, filter.getUuid().toString());
 		ps.setString(2, filter.getTitle());
 		ps.setInt(3, filter.isMatchAllCriteria() ? 1 : 0);
+		ps.setInt(4, filter.isManualOnly() ? 1 : 0);
 		ps.executeUpdate();
 		ps.close();
 	}
