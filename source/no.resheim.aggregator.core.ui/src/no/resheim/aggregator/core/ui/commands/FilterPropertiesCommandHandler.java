@@ -11,10 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.commands;
 
-import no.resheim.aggregator.core.data.AggregatorItem;
-import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
-import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.FilterPropertiesDialog;
 import no.resheim.aggregator.core.ui.IFeedView;
@@ -22,7 +19,6 @@ import no.resheim.aggregator.core.ui.IFeedView;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -31,7 +27,7 @@ public class FilterPropertiesCommandHandler extends
 		AbstractAggregatorCommandHandler implements IHandler {
 
 	public FilterPropertiesCommandHandler() {
-		super(true);
+		super(false, true);
 	}
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -41,31 +37,19 @@ public class FilterPropertiesCommandHandler extends
 			if (registry == null) {
 				return null;
 			}
-			AggregatorItem o = getSelection(event);
-			if (o instanceof Folder) {
-				Feed feed = ((Folder) o).getFeed();
-				if (feed != null) {
-					FilterPropertiesDialog dialog = new FilterPropertiesDialog(
-							HandlerUtil.getActiveShell(event),
-							Messages.FeedPropertiesCommand_Title,
-							AggregatorUIPlugin.getDefault().getImageRegistry()
-									.get(AggregatorUIPlugin.IMG_FEED_OBJ),
-							Messages.FeedPropertiesCommand_Description, 0,
-							new String[] {
-									Messages.FeedPropertiesCommand_OK,
-									Messages.FeedPropertiesCommand_CANCEL
-							}, 0);
-					if (dialog.open() == Window.OK) {
-					}
-				}
+			FilterPropertiesDialog dialog = new FilterPropertiesDialog(
+					HandlerUtil.getActiveShell(event),
+					Messages.FeedPropertiesCommand_Title, AggregatorUIPlugin
+							.getDefault().getImageRegistry().get(
+									AggregatorUIPlugin.IMG_FEED_OBJ),
+					Messages.FeedPropertiesCommand_Description, 0,
+					new String[] {
+							Messages.FeedPropertiesCommand_OK,
+							Messages.FeedPropertiesCommand_CANCEL
+					}, 0);
+			if (dialog.open() == Window.OK) {
 			}
 		}
 		return null;
 	}
-
-	@Override
-	protected boolean handleSelection(ISelection selection) {
-		return true;
-	}
-
 }
