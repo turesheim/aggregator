@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2008-2009 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License v1.0 which
@@ -11,16 +11,27 @@
 package no.resheim.aggregator.core.filter;
 
 /**
+ * Criterion for a filter to be applied.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
 public class Criterion {
-
+	/**
+	 * Returns the field that the comparison applies to.
+	 * 
+	 * @return the field
+	 */
 	public Field getField() {
 		return field;
 	}
 
+	/**
+	 * Sets the field that the comparison applies to.
+	 * 
+	 * @param field
+	 *            the field
+	 */
 	public void setField(Field field) {
 		this.field = field;
 	}

@@ -48,11 +48,14 @@ public class Filter {
 	/** Whether or not this instance is a working copy */
 	private boolean workingCopy;
 
+	public void addCriterion(Criterion criterion) {
+		criteria.add(criterion);
+	}
+
 	private Filter() {
 		folders = new ArrayList<Folder>();
 		actions = new ArrayList<Action>();
 		criteria = new ArrayList<Criterion>();
-		criteria.add(new Criterion());
 	}
 
 	public Filter(UUID uuid, String title) {

@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
+ * Jo
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
