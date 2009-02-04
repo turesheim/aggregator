@@ -33,29 +33,10 @@ public class Criterion {
 	public enum Operator {
 		CONTAINS,
 		DOES_NOT_CONTAIN,
-		DOES_NOT_EQUAL,
-		DOES_NOT_MATCH_REGEXP,
 		EQUALS,
-		MATCHES_REGEXP
-	}
-
-	public static String[] getFieldNames() {
-		return new String[] {
-				Messages.Criterion_Field_Title, Messages.Criterion_Field_Text,
-				Messages.Criterion_Field_Author, Messages.Criterion_Field_Type,
-				Messages.Criterion_Field_Read
-		};
-	}
-
-	public static String[] getOperatorNames() {
-		return new String[] {
-				Messages.Criterion_Op_Contains,
-				Messages.Criterion_Op_Does_Not_Contain,
-				Messages.Criterion_Op_Equals,
-				Messages.Criterion_Op_Does_Not_Equal,
-				Messages.Criterion_Op_Matches_Regexp,
-				Messages.Criterion_Op_Does_Not_Match_Regexp
-		};
+		DOES_NOT_EQUAL,
+		MATCHES_REGEXP,
+		DOES_NOT_MATCH_REGEXP
 	}
 
 	/** The field to test */

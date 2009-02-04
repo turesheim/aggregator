@@ -34,9 +34,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.Text;
 
 /**
  * 
@@ -45,20 +46,25 @@ import org.eclipse.swt.widgets.Text;
  */
 public class FilterPropertiesComposite extends Composite {
 
+	private Table filtersTable;
+	private TableViewer tableViewer_1;
+	private Composite composite;
+	private TabItem generalTabItem;
+	private TabFolder tabFolder;
+	private TableColumn newColumnTableColumn_2;
+	private TableColumn newColumnTableColumn_1;
+	private TableColumn newColumnTableColumn;
 	private Button removeButton;
 	private Button addButton;
 	private Label criteriaLabel;
 	private Table table;
 	private TableViewer tableViewer;
-	private Label titleLabel;
-	private Text text;
 	private Filter filter;
 	private CriteriaContentProvider criteriaContentProvider;
 
 	final class CriterionCellModifier implements ICellModifier {
 
 		public boolean canModify(Object element, String property) {
-			System.out.println(property);
 			return true;
 		}
 
@@ -70,11 +76,10 @@ public class FilterPropertiesComposite extends Composite {
 			if (property.equals("Value"))
 				return 2;
 			else
-				return -1;
+				return 2;
 		}
 
 		public Object getValue(Object element, String property) {
-			System.out.println(element);
 			// Find the index of the column
 			int columnIndex = getIndex(property);
 
@@ -83,21 +88,20 @@ public class FilterPropertiesComposite extends Composite {
 
 			switch (columnIndex) {
 			case 0: // COMPLETED_COLUMN
-				result = task.getField();
+				result = new Integer(task.getField().ordinal());
 				break;
 			case 1: // DESCRIPTION_COLUMN
-				result = task.getOperator();
+				result = new Integer(task.getOperator().ordinal());
 				break;
 			case 2: // OWNER_COLUMN
 				result = task.getValue();
 				break;
 			}
+			System.out.println(result);
 			return result;
 		}
 
 		public void modify(Object element, String property, Object value) {
-			// TODO Auto-generated method stub
-
 		}
 
 	}
@@ -158,68 +162,93 @@ public class FilterPropertiesComposite extends Composite {
 		filter = new Filter(UUID.randomUUID(), "New filter");
 
 		final GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 3;
+		gridLayout.numColumns = 2;
 		setLayout(gridLayout);
-
-		titleLabel = new Label(this, SWT.NONE);
-		titleLabel.setText("Title:");
-
-		text = new Text(this, SWT.BORDER);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		new Label(this, SWT.NONE);
-
-		criteriaLabel = new Label(this, SWT.NONE);
-		criteriaLabel.setText("Criteria:");
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-
-		tableViewer = new TableViewer(this, SWT.BORDER);
-		tableViewer.setUseHashlookup(true);
 		criteriaContentProvider = new CriteriaContentProvider();
+		initTableEditing();
+
+		tableViewer_1 = new TableViewer(this, SWT.BORDER);
+		tableViewer_1.setContentProvider(new FilterContentProvider());
+		filtersTable = tableViewer_1.getTable();
+		filtersTable.setLinesVisible(true);
+		filtersTable.setHeaderVisible(true);
+		final GridData gd_filtersTable = new GridData(SWT.FILL, SWT.FILL, true,
+				true);
+		filtersTable.setLayoutData(gd_filtersTable);
+
+		tabFolder = new TabFolder(this, SWT.NONE);
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		generalTabItem = new TabItem(tabFolder, SWT.NONE);
+		generalTabItem.setText("General");
+
+		composite = new Composite(tabFolder, SWT.NONE);
+		final GridLayout gridLayout_1 = new GridLayout();
+		gridLayout_1.numColumns = 2;
+		composite.setLayout(gridLayout_1);
+		generalTabItem.setControl(composite);
+
+		criteriaLabel = new Label(composite, SWT.NONE);
+		criteriaLabel.setLayoutData(new GridData());
+		criteriaLabel.setText("Criteria:");
+		new Label(composite, SWT.NONE);
+
+		tableViewer = new TableViewer(composite, SWT.BORDER);
+		tableViewer.setUseHashlookup(true);
 		tableViewer.setContentProvider(criteriaContentProvider);
 		tableViewer.setLabelProvider(new CriterionLabelProvider());
 		table = tableViewer.getTable();
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		final GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true,
-				2, 2);
-		gd_table.heightHint = 309;
+				1, 2);
+		gd_table.heightHint = 200;
 		table.setLayoutData(gd_table);
-		for (int i = 0; i < 3; i++) {
-			TableColumn column = new TableColumn(table, SWT.NONE);
-			column.setWidth(100);
-		}
-		table.getColumn(0).setText("Field");
-		table.getColumn(1).setText("Operator");
-		table.getColumn(2).setText("Value");
-		tableViewer.setInput(filter);
-		initTableEditing();
 
-		addButton = new Button(this, SWT.NONE);
+		newColumnTableColumn = new TableColumn(table, SWT.NONE);
+		newColumnTableColumn.setWidth(100);
+		newColumnTableColumn.setText("Field");
+
+		newColumnTableColumn_1 = new TableColumn(table, SWT.NONE);
+		newColumnTableColumn_1.setWidth(100);
+		newColumnTableColumn_1.setText("Operator");
+
+		newColumnTableColumn_2 = new TableColumn(table, SWT.NONE);
+		newColumnTableColumn_2.setWidth(100);
+		newColumnTableColumn_2.setText("Value");
+
+		tableViewer.setColumnProperties(new String[] {
+				"Field", "Operator", "Value"
+		});
+		tableViewer.setInput(filter);
+
+		addButton = new Button(composite, SWT.NONE);
+		addButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		addButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(final SelectionEvent e) {
 				filter.addCriterion(new Criterion());
 				tableViewer.refresh();
 			}
 		});
-		final GridData gd_addButton = new GridData(SWT.FILL, SWT.TOP, false,
-				false);
-		addButton.setLayoutData(gd_addButton);
 		addButton.setText("Add");
 
-		removeButton = new Button(this, SWT.NONE);
-		final GridData gd_removeButton = new GridData(SWT.FILL, SWT.TOP, false,
-				false);
-		removeButton.setLayoutData(gd_removeButton);
+		removeButton = new Button(composite, SWT.NONE);
+		removeButton
+				.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		removeButton.setText("Remove");
 	}
 
 	private void initTableEditing() {
 		CellEditor[] editors = new CellEditor[3];
-		editors[0] = new ComboBoxCellEditor(table, new String[] {},
-				SWT.READ_ONLY);
-		editors[1] = new ComboBoxCellEditor(table, new String[] {},
-				SWT.READ_ONLY);
+		String[] fieldNames = new String[] {
+				"Author", "Read", "Text", "Title", "Type"
+		};
+		String[] operatorNames = new String[] {
+				"Contains", "Does not contain", "Equals", "Does not equal",
+				"Matches regexp", "Does not match regexp"
+		};
+		editors[0] = new ComboBoxCellEditor(table, fieldNames, SWT.NONE);
+		editors[1] = new ComboBoxCellEditor(table, operatorNames, SWT.READ_ONLY);
 		editors[2] = new TextCellEditor(table);
 		tableViewer.setCellEditors(editors);
 		tableViewer.setCellModifier(new CriterionCellModifier());
