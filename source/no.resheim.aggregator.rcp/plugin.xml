@@ -26,14 +26,14 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="no.resheim.aggregator.rcp.application"
-            name="Aggregator">
+            name="Resheim Aggregator">
          <property
                name="windowImages"
-               value="icons/alt_window_16.gif,icons/alt_window_32.gif">
+               value="icons/aggregator_window_16.png,icons/aggregator_window_32.png,icons/aggregator_window_48.png,icons/aggregator_window_64.png,icons/aggregator_window_128.png">
          </property>
          <property
                name="appName"
-               value="Aggregator">
+               value="Resheim Aggregator">
          </property>
       </product>
    </extension>
