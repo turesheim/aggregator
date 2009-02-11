@@ -204,6 +204,18 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
+            locationURI="popup:no.resheim.aggregator.core.ui.RSSView?before=navigation">
+         <command
+               commandId="no.resheim.aggregator.core.ui.addFeed"
+               label="New Feed..."
+               style="push">
+         </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.newFolder"
+               label="New Folder">
+         </command>
+      </menuContribution>
+      <menuContribution
             locationURI="popup:no.resheim.aggregator.core.ui.RSSView?after=navigation">
          <command
                commandId="no.resheim.aggregator.ui.nextUnread"
@@ -212,13 +224,6 @@
       </menuContribution>
       <menuContribution
             locationURI="popup:no.resheim.aggregator.core.ui.RSSView?after=modify">
-         <command
-               commandId="no.resheim.aggregator.core.ui.newFolder"
-               label="New Folder">
-            <visibleWhen
-                  checkEnabled="true">
-            </visibleWhen>
-         </command>
          <command
                commandId="no.resheim.aggregator.core.ui.renameFolder"
                label="Rename">

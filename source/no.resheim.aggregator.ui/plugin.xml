@@ -17,28 +17,6 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="toolbar:no.resheim.aggregator.core.ui.RSSView?after=additions">
-         <command
-               commandId="no.resheim.aggregator.core.ui.collapseAll"
-               label="Collapse All"
-               style="push">
-         </command>
-         <separator
-               name="no.resheim.aggregator.ui.separator1"
-               visible="true">
-         </separator>
-         <command
-               commandId="no.resheim.aggregator.core.ui.addFeed"
-               label="New Feed"
-               style="push">
-         </command>
-         <command
-               commandId="no.resheim.aggregator.core.ui.openFilterProperties"
-               label="Filters"
-               style="push">
-         </command>
-      </menuContribution>
-      <menuContribution
             locationURI="menu:no.resheim.aggregator.core.ui.RSSView?after=additions">
          <menu
                label="Layout">
@@ -75,6 +53,16 @@
                   id="no.resheim.aggregator.ui.dynamic">
             </dynamic>
          </menu>
+         <command
+               commandId="no.resheim.aggregator.core.ui.openFilterProperties"
+               label="Filters"
+               style="push">
+         </command>
+         <command
+               commandId="no.resheim.aggregator.core.ui.collapseAll"
+               label="Collapse All"
+               style="push">
+         </command>
       </menuContribution>
    </extension>
 
