@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2008-2009 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License v1.0 which
@@ -27,10 +27,22 @@ import org.eclipse.core.runtime.Status;
  */
 public class Filter {
 
+	/**
+	 * Returns <code>true</code> if the filter shall only be manually executed.
+	 * The default is <code>false</code>.
+	 * 
+	 * @return <code>true</code> if the filter should only be executed manually
+	 */
 	public boolean isManualOnly() {
 		return manualOnly;
 	}
 
+	/**
+	 * Specifies if the filter should only be applied when executed manually.
+	 * 
+	 * @param manualOnly
+	 *            whether the filter shall only be executed manually
+	 */
 	public void setManualOnly(boolean manualOnly) {
 		this.manualOnly = manualOnly;
 	}
@@ -47,6 +59,7 @@ public class Filter {
 	/** Match one or all criteria for action */
 	private boolean matchAllCriteria;
 
+	/** Whether or not to only apply manually */
 	private boolean manualOnly;
 
 	/** The title of the filter */
@@ -58,6 +71,12 @@ public class Filter {
 	/** Whether or not this instance is a working copy */
 	private boolean workingCopy;
 
+	/**
+	 * Adds a new criterion to the filter.
+	 * 
+	 * @param criterion
+	 *            the criterion to add
+	 */
 	public void addCriterion(Criterion criterion) {
 		criteria.add(criterion);
 	}
@@ -79,6 +98,7 @@ public class Filter {
 	 * constructor is only used when creating a new working copy of a filter.
 	 * 
 	 * @param filter
+	 *            the filter to create a copy of
 	 */
 	private Filter(Filter filter) {
 		this();
@@ -106,14 +126,30 @@ public class Filter {
 		this.uuid = uuid;
 	}
 
+	/**
+	 * Applies the filter.
+	 * 
+	 * @return
+	 */
 	public IStatus execute() {
 		return Status.OK_STATUS;
 	}
 
+	/**
+	 * Returns the folders that the filter applies to. If the list is empty, the
+	 * filter applies to all folder.
+	 * 
+	 * @return the
+	 */
 	public Folder[] getFolders() {
 		return folders.toArray(new Folder[folders.size()]);
 	}
 
+	/**
+	 * Returns all the criteria for the filter.
+	 * 
+	 * @return
+	 */
 	public Criterion[] getCriteria() {
 		return criteria.toArray(new Criterion[criteria.size()]);
 	}
