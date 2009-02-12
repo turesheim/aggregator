@@ -430,6 +430,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 				ResultSet rs2 = s
 						.executeQuery("select * from filter_actions where filter_uuid='" //$NON-NLS-1$
 								+ filter.getUuid().toString() + "'"); //$NON-NLS-1$
+				// TODO: Go through all filters and add the details
 				while (rs2.next()) {
 
 				}
