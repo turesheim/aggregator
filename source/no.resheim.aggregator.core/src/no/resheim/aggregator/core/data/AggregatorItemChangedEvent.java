@@ -13,28 +13,54 @@ package no.resheim.aggregator.core.data;
 
 /**
  * This event type is used to add information to feed changed events.
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
  */
 public class AggregatorItemChangedEvent {
 
+	/**
+	 * @author   torkild
+	 */
 	public enum EventType {
-		/** The item has been created */
+		/**
+		 * @uml.property  name="cREATED"
+		 * @uml.associationEnd  
+		 */
 		CREATED,
-		/** Something bad happened */
+		/**
+		 * @uml.property  name="fAILED"
+		 * @uml.associationEnd  
+		 */
 		FAILED,
-		/** The item has been moved */
+		/**
+		 * @uml.property  name="mOVED"
+		 * @uml.associationEnd  
+		 */
 		MOVED,
-		/** The article has been read */
+		/**
+		 * @uml.property  name="rEAD"
+		 * @uml.associationEnd  
+		 */
 		READ,
-		/** The item has been removed */
+		/**
+		 * @uml.property  name="rEMOVED"
+		 * @uml.associationEnd  
+		 */
 		REMOVED,
-		/** The feed has been restored from the database */
+		/**
+		 * @uml.property  name="rESTORED"
+		 * @uml.associationEnd  
+		 */
 		RESTORED,
-		/** The item has been moved as a result of another item being moved */
+		/**
+		 * @uml.property  name="sHIFTED"
+		 * @uml.associationEnd  
+		 */
 		SHIFTED,
-		/** The item has been changed */
+		/**
+		 * @uml.property  name="cHANGED"
+		 * @uml.associationEnd  
+		 */
 		CHANGED
 	}
 
@@ -44,8 +70,15 @@ public class AggregatorItemChangedEvent {
 	 */
 	public static final int NEW_PARENT = 0x1;
 
+	/**
+	 * @uml.property  name="items"
+	 */
 	private Object[] items;
 
+	/**
+	 * @uml.property  name="type"
+	 * @uml.associationEnd  
+	 */
 	private EventType type;
 
 	/**
@@ -60,10 +93,18 @@ public class AggregatorItemChangedEvent {
 		this.type = type;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="items"
+	 */
 	public Object[] getItems() {
 		return items;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="type"
+	 */
 	public EventType getType() {
 		return type;
 	}

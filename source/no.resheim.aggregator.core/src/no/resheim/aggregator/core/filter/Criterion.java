@@ -12,40 +12,95 @@ package no.resheim.aggregator.core.filter;
 
 /**
  * Criterion for a filter to be applied.
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
  */
 public class Criterion {
+	/**
+	 * @author   torkild
+	 */
 	public enum Field {
-		/** The author of the article */
+		/**
+		 * @uml.property  name="aUTHOR"
+		 * @uml.associationEnd  
+		 */
 		AUTHOR,
-		/** Whether or not the article has been read */
+		/**
+		 * @uml.property  name="rEAD"
+		 * @uml.associationEnd  
+		 */
 		READ,
-		/** The text of the article */
+		/**
+		 * @uml.property  name="tEXT"
+		 * @uml.associationEnd  
+		 */
 		TEXT,
-		/** The title of the article */
+		/**
+		 * @uml.property  name="tITLE"
+		 * @uml.associationEnd  
+		 */
 		TITLE,
-		/** The enclosure type of the article */
+		/**
+		 * @uml.property  name="tYPE"
+		 * @uml.associationEnd  
+		 */
 		TYPE
 	}
 
+	/**
+	 * @author   torkild
+	 */
 	public enum Operator {
+		/**
+		 * @uml.property  name="cONTAINS"
+		 * @uml.associationEnd  
+		 */
 		CONTAINS,
+		/**
+		 * @uml.property  name="dOES_NOT_CONTAIN"
+		 * @uml.associationEnd  
+		 */
 		DOES_NOT_CONTAIN,
+		/**
+		 * @uml.property  name="eQUALS"
+		 * @uml.associationEnd  
+		 */
 		EQUALS,
+		/**
+		 * @uml.property  name="dOES_NOT_EQUAL"
+		 * @uml.associationEnd  
+		 */
 		DOES_NOT_EQUAL,
+		/**
+		 * @uml.property  name="mATCHES_REGEXP"
+		 * @uml.associationEnd  
+		 */
 		MATCHES_REGEXP,
+		/**
+		 * @uml.property  name="dOES_NOT_MATCH_REGEXP"
+		 * @uml.associationEnd  
+		 */
 		DOES_NOT_MATCH_REGEXP
 	}
 
-	/** The field to test */
+	/**
+	 * The field to test
+	 * @uml.property  name="field"
+	 * @uml.associationEnd  
+	 */
 	protected Field field;
 
-	/** The comparison operation */
+	/**
+	 * The comparison operation
+	 * @uml.property  name="operator"
+	 * @uml.associationEnd  
+	 */
 	protected Operator operator;
 
-	/** The value to verify against */
+	/**
+	 * The value to verify against
+	 * @uml.property  name="value"
+	 */
 	protected String value;
 
 	public Criterion() {
@@ -62,17 +117,25 @@ public class Criterion {
 
 	/**
 	 * Returns the field that the comparison applies to.
-	 * 
-	 * @return the field
+	 * @return   the field
+	 * @uml.property  name="field"
 	 */
 	public Field getField() {
 		return field;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="operator"
+	 */
 	public Operator getOperator() {
 		return operator;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="value"
+	 */
 	public String getValue() {
 		return value;
 	}
@@ -83,18 +146,25 @@ public class Criterion {
 
 	/**
 	 * Sets the field that the comparison applies to.
-	 * 
-	 * @param field
-	 *            the field
+	 * @param field   the field
+	 * @uml.property  name="field"
 	 */
 	public void setField(Field field) {
 		this.field = field;
 	}
 
+	/**
+	 * @param  operator
+	 * @uml.property  name="operator"
+	 */
 	public void setOperator(Operator operator) {
 		this.operator = operator;
 	}
 
+	/**
+	 * @param  value
+	 * @uml.property  name="value"
+	 */
 	public void setValue(String value) {
 		this.value = value;
 	}

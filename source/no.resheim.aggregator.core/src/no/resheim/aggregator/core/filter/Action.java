@@ -12,28 +12,48 @@ package no.resheim.aggregator.core.filter;
 
 /**
  * Action to execute when filter criteria matches.
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
  */
 public class Action {
 
-	/** Operation to perform */
+	/**
+	 * Operation to perform
+	 */
 	public enum Operation {
-		/** Delete directly */
+		/**
+		 * @uml.property  name="dELETE"
+		 * @uml.associationEnd  
+		 */
 		DELETE,
-		/** Mark as something */
+		/**
+		 * @uml.property  name="mARK"
+		 * @uml.associationEnd  
+		 */
 		MARK,
-		/** Move to a specific folder */
+		/**
+		 * @uml.property  name="mOVE"
+		 * @uml.associationEnd  
+		 */
 		MOVE,
-		/** Move to trash */
+		/**
+		 * @uml.property  name="tRASH"
+		 * @uml.associationEnd  
+		 */
 		TRASH,
 	}
 
-	/** The operation to perform */
+	/**
+	 * The operation to perform
+	 * @uml.property  name="operation"
+	 * @uml.associationEnd  
+	 */
 	protected Operation operation;
 
-	/** Folder to move to or mark to apply */
+	/**
+	 * Folder to move to or mark to apply
+	 * @uml.property  name="operator"
+	 */
 	protected String operator;
 
 	private Action(Action action) {
@@ -41,10 +61,18 @@ public class Action {
 		this.operator = action.operator;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="operation"
+	 */
 	public Operation getOperation() {
 		return operation;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="operator"
+	 */
 	public String getOperator() {
 		return operator;
 	}
@@ -58,10 +86,18 @@ public class Action {
 		return new Action(this);
 	}
 
+	/**
+	 * @param  operation
+	 * @uml.property  name="operation"
+	 */
 	public void setOperation(Operation operation) {
 		this.operation = operation;
 	}
 
+	/**
+	 * @param  operator
+	 * @uml.property  name="operator"
+	 */
 	public void setOperator(String operator) {
 		this.operator = operator;
 	}

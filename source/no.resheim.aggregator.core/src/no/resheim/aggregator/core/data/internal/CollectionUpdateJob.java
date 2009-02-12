@@ -26,16 +26,17 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
- * Job that when run will iterate through all feeds that are held by the
- * registry, determine if the feed needs to be updated and if that's the case
- * create a new job to update the feed.
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
+ * Job that when run will iterate through all feeds that are held by the registry, determine if the feed needs to be updated and if that's the case create a new job to update the feed.
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
  */
 public class CollectionUpdateJob extends Job {
 
-	/** The feed registry that we're updating */
+	/**
+	 * The feed registry that we're updating
+	 * @uml.property  name="registry"
+	 * @uml.associationEnd  
+	 */
 	private FeedCollection registry;
 
 	private static class FeedComparator implements Comparator<Feed>,

@@ -53,14 +53,21 @@ import org.osgi.framework.ServiceReference;
 import org.xml.sax.SAXException;
 
 /**
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
  */
 public class FeedUpdateJob extends Job {
 
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+	/**
+	 * @uml.property  name="feed"
+	 * @uml.associationEnd  
+	 */
 	private Feed feed;
+	/**
+	 * @uml.property  name="collection"
+	 * @uml.associationEnd  
+	 */
 	private FeedCollection collection;
 
 	public FeedUpdateJob(FeedCollection collection, Feed feed) {

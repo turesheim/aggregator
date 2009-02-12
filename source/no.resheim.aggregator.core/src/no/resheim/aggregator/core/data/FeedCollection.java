@@ -35,9 +35,8 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 
 /**
  * TODO: Rename to AggregatorCollection
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
  */
 public class FeedCollection extends AggregatorItemParent {
 
@@ -54,7 +53,11 @@ public class FeedCollection extends AggregatorItemParent {
 
 	int count = 0;
 
-	/** The storage for our data */
+	/**
+	 * The storage for our data
+	 * @uml.property  name="fDatabase"
+	 * @uml.associationEnd  
+	 */
 	private IAggregatorStorage fDatabase;
 
 	private boolean fDefault;
@@ -71,13 +74,21 @@ public class FeedCollection extends AggregatorItemParent {
 
 	private boolean fPublic;
 
+	/**
+	 * @uml.property  name="fRegistryUpdateJob"
+	 * @uml.associationEnd  
+	 */
 	final CollectionUpdateJob fRegistryUpdateJob = new CollectionUpdateJob(this);
 
+	/**
+	 * @uml.property  name="fTrashFolder"
+	 * @uml.associationEnd  
+	 */
 	private Folder fTrashFolder;
 
 	/**
-	 * The identifier of the registry as specified when the registry was
-	 * declared.
+	 * The identifier of the registry as specified when the registry was declared.
+	 * @uml.property  name="id"
 	 */
 	private String id;
 
@@ -260,10 +271,9 @@ public class FeedCollection extends AggregatorItemParent {
 	}
 
 	/**
-	 * Returns the identifier of the feed collection as specified in the
-	 * collection declaration.
-	 * 
-	 * @return the feed identifier string
+	 * Returns the identifier of the feed collection as specified in the collection declaration.
+	 * @return   the feed identifier string
+	 * @uml.property  name="id"
 	 */
 	public String getId() {
 		return id;

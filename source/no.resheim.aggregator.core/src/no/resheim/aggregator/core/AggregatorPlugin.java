@@ -30,16 +30,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
 /**
- * This type is responsible for handling the feed registries that contains the
- * actual feeds while managing the life cycle of the storage backend for these
- * registries.
- * <p>
- * Once a feed registry has been declared, it can be retrieved from this plug-in
- * using the registry's unique identifier.
- * </p>
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
+ * This type is responsible for handling the feed registries that contains the actual feeds while managing the life cycle of the storage backend for these registries. <p> Once a feed registry has been declared, it can be retrieved from this plug-in using the registry's unique identifier. </p>
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
  */
 public class AggregatorPlugin extends Plugin {
 
@@ -48,7 +41,11 @@ public class AggregatorPlugin extends Plugin {
 	/** The plug-in identifier */
 	public static final String PLUGIN_ID = "no.resheim.aggregator"; //$NON-NLS-1$
 
-	/** The shared plug-in instance */
+	/**
+	 * The shared plug-in instance
+	 * @uml.property  name="plugin"
+	 * @uml.associationEnd  
+	 */
 	private static AggregatorPlugin plugin = null;
 
 	/**
@@ -67,6 +64,10 @@ public class AggregatorPlugin extends Plugin {
 	/** Default feeds to add */
 	private ArrayList<Feed> fDefaultFeeds;
 
+	/**
+	 * @uml.property  name="defaultCollection"
+	 * @uml.associationEnd  
+	 */
 	private FeedCollection defaultCollection;
 
 	public ArrayList<Feed> getDefaultFeeds() {

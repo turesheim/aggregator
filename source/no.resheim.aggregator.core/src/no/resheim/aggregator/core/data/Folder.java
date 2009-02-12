@@ -16,17 +16,15 @@ import java.util.UUID;
 import org.eclipse.core.runtime.CoreException;
 
 /**
- * Aggregator item representing a folder. Folders are used to contain other type
- * of aggregator items such as articles and other folders. A folder may also
- * <i>point</i> to a {@link Feed}, meaning that the folder is the default
- * location for the feed articles. In this case the folder can be used to obtain
- * the feed instance.
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
+ * Aggregator item representing a folder. Folders are used to contain other type of aggregator items such as articles and other folders. A folder may also <i>point</i> to a   {@link Feed}  , meaning that the folder is the default location for the feed articles. In this case the folder can be used to obtain the feed instance.
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
  */
 public class Folder extends AggregatorItemParent {
 
+	/**
+	 * @uml.property  name="feed"
+	 */
 	protected UUID feed;
 
 	/**
@@ -47,6 +45,10 @@ public class Folder extends AggregatorItemParent {
 		return feed;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="feed"
+	 */
 	public Feed getFeed() {
 		if (feed == null) {
 			return null;

@@ -31,15 +31,9 @@ import org.xml.sax.SAXException;
  * [W3CDTF]
  */
 /**
- * Handles capturing of XML element text and Dublin Core elements. Dublin Core
- * elements may or may not have been added to the feed being parsed. These are
- * normally used when the feed standard used does not supply required elements,
- * for instance the publication date (dc:date). We don't care if the header of
- * the feed declares that it's offering DC, we'll just parse the elements if
- * they are found.
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
+ * Handles capturing of XML element text and Dublin Core elements. Dublin Core elements may or may not have been added to the feed being parsed. These are normally used when the feed standard used does not supply required elements, for instance the publication date (dc:date). We don't care if the header of the feed declares that it's offering DC, we'll just parse the elements if they are found.
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
  */
 public abstract class AbstractElementHandler implements IElementHandler {
 
@@ -87,24 +81,40 @@ public abstract class AbstractElementHandler implements IElementHandler {
 		return date;
 	}
 
-	/** Temporary text storage */
+	/**
+	 * Temporary text storage
+	 * @uml.property  name="buffer"
+	 */
 	private StringBuffer buffer;
 
 	/** Whether or not to capture text */
 	private boolean capture;
 
-	/** The current feed */
+	/**
+	 * The current feed
+	 * @uml.property  name="feed"
+	 * @uml.associationEnd  
+	 */
 	protected Feed feed;
 
 	/**
-	 * The current article. We use {@link InternalArticle} instead of
-	 * {@link Article} as we need to be able to set certain values.
+	 * The current article. We use   {@link InternalArticle}   instead of  {@link Article}   as we need to be able to set certain values.
+	 * @uml.property  name="item"
+	 * @uml.associationEnd  
 	 */
 	protected InternalArticle item;
 
+	/**
+	 * @uml.property  name="location"
+	 * @uml.associationEnd  
+	 */
 	protected AggregatorItem location;
 
-	/** The feed registry we're working for */
+	/**
+	 * The feed registry we're working for
+	 * @uml.property  name="collection"
+	 * @uml.associationEnd  
+	 */
 	protected FeedCollection collection;
 
 	public AbstractElementHandler() {
@@ -121,9 +131,8 @@ public abstract class AbstractElementHandler implements IElementHandler {
 
 	/**
 	 * This method will also clear the buffer.
-	 * 
-	 * @param capture
-	 *            the capture to set
+	 * @param capture   the capture to set
+	 * @uml.property  name="capture"
 	 */
 	public void setCapture(boolean capture) {
 		this.capture = capture;
@@ -131,7 +140,8 @@ public abstract class AbstractElementHandler implements IElementHandler {
 	}
 
 	/**
-	 * @return the buffer
+	 * @return   the buffer
+	 * @uml.property  name="buffer"
 	 */
 	public StringBuffer getBuffer() {
 		return buffer;

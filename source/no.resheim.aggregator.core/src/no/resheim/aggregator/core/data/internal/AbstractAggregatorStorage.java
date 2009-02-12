@@ -27,10 +27,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
 /**
- * Implementation of {@link IAggregatorStorage} with some common features.
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
+ * Implementation of   {@link IAggregatorStorage}   with some common features.
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
  */
 public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
 
@@ -48,7 +47,11 @@ public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
 	 */
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
-	/** The feed collection that data is being handled for */
+	/**
+	 * The feed collection that data is being handled for
+	 * @uml.property  name="collection"
+	 * @uml.associationEnd  
+	 */
 	protected FeedCollection collection;
 
 	/** The path to a folder where data can be stored */

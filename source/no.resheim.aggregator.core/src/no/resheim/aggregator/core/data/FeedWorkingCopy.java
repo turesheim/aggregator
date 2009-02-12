@@ -6,9 +6,8 @@ package no.resheim.aggregator.core.data;
 import java.util.UUID;
 
 /**
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
  */
 public final class FeedWorkingCopy extends Feed {
 	public static FeedWorkingCopy newInstance(AggregatorItem parent) {
@@ -17,10 +16,20 @@ public final class FeedWorkingCopy extends Feed {
 		return new FeedWorkingCopy(feed);
 	}
 
+	/**
+	 * @uml.property  name="feed"
+	 * @uml.associationEnd  
+	 */
 	Feed feed;
 
+	/**
+	 * @uml.property  name="password"
+	 */
 	protected String password;
 
+	/**
+	 * @uml.property  name="username"
+	 */
 	protected String username;
 
 	public FeedWorkingCopy(Feed feed) {
@@ -43,6 +52,10 @@ public final class FeedWorkingCopy extends Feed {
 		keepUnread = feed.keepUnread;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="feed"
+	 */
 	public Feed getFeed() {
 		if (feed != null) {
 			feed.setTitle(title);
@@ -59,18 +72,34 @@ public final class FeedWorkingCopy extends Feed {
 		return feed;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="password"
+	 */
 	public String getPassword() {
 		return password;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="username"
+	 */
 	public String getUsername() {
 		return username;
 	}
 
+	/**
+	 * @param  password
+	 * @uml.property  name="password"
+	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	/**
+	 * @param  username
+	 * @uml.property  name="username"
+	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}

@@ -12,9 +12,8 @@ import java.util.UUID;
 import org.eclipse.core.runtime.CoreException;
 
 /**
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
  */
 public class Article extends AggregatorItem implements Comparable<Article> {
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
@@ -25,37 +24,68 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	/** The date and time the feed was added to the database */
 	protected long addedDate;
 
-	/** The creator of the feed */
+	/**
+	 * The creator of the feed
+	 * @uml.property  name="creator"
+	 */
 	protected String creator;
 
 	/** The UUID of the feed this article belongs to */
 	protected UUID feed_uuid;
 
-	/** The globally unique identifier (should never be null) */
+	/**
+	 * The globally unique identifier (should never be null)
+	 * @uml.property  name="guid"
+	 */
 	protected String guid = null;
 
-	/** Link of the item */
+	/**
+	 * Link of the item
+	 * @uml.property  name="link"
+	 */
 	protected String link = EMPTY_STRING;
 
 	protected UUID location;
 
+	/**
+	 * @uml.property  name="mediaContent"
+	 */
 	protected ArrayList<MediaContent> mediaContent;
 
+	/**
+	 * @uml.property  name="mediaPlayerURL"
+	 */
 	protected String mediaPlayerURL = EMPTY_STRING;
 
-	/** The publication date */
+	/**
+	 * The publication date
+	 * @uml.property  name="publicationDate"
+	 */
 	protected long publicationDate;
 
-	/** Read flag */
+	/**
+	 * Read flag
+	 * @uml.property  name="read"
+	 */
 	protected boolean read = false;
 
-	/** The read date */
+	/**
+	 * The read date
+	 * @uml.property  name="readDate"
+	 */
 	protected long readDate;
 
-	/** The description or content */
+	/**
+	 * The description or content
+	 * @uml.property  name="text"
+	 */
 	protected String text = null;
 
-	/** The feed that this article comes from. Note that this value */
+	/**
+	 * The feed that this article comes from. Note that this value
+	 * @uml.property  name="fFeed"
+	 * @uml.associationEnd  
+	 */
 	protected Feed fFeed;
 
 	protected Article(AggregatorItemParent parent, UUID uuid) {
@@ -93,6 +123,10 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 		return addedDate;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="creator"
+	 */
 	public String getCreator() {
 		return creator;
 	}
@@ -139,48 +173,59 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 
 	/**
 	 * Returns the unique identifier for the feed item.
-	 * 
-	 * @return The identifier
+	 * @return   The identifier
+	 * @uml.property  name="guid"
 	 */
 	public String getGuid() {
 		return guid;
 	}
 
 	/**
-	 * @return the link
+	 * @return   the link
+	 * @uml.property  name="link"
 	 */
 	public String getLink() {
 		return link;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="mediaContent"
+	 */
 	public MediaContent[] getMediaContent() {
 		return mediaContent.toArray(new MediaContent[mediaContent.size()]);
 	}
 
 	/**
-	 * Returns the URL to the media player. There may be only one media player
-	 * per feed.
-	 * 
+	 * Returns the URL to the media player. There may be only one media player per feed.
 	 * @return
+	 * @uml.property  name="mediaPlayerURL"
 	 */
 	public String getMediaPlayerURL() {
 		return mediaPlayerURL;
 	}
 
 	/**
-	 * Returns the publication date of the feed item. For some feeds, such as
-	 * RSS 1.0 this value is most likely zero.
-	 * 
-	 * @return The publication date
+	 * Returns the publication date of the feed item. For some feeds, such as RSS 1.0 this value is most likely zero.
+	 * @return   The publication date
+	 * @uml.property  name="publicationDate"
 	 */
 	public long getPublicationDate() {
 		return publicationDate;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="readDate"
+	 */
 	public long getReadDate() {
 		return readDate;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="text"
+	 */
 	public String getText() {
 		try {
 			return getCollection().getDescription(this);
@@ -189,6 +234,10 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 		}
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="read"
+	 */
 	public boolean isRead() {
 		return read;
 	}

@@ -29,25 +29,24 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 /**
- * An implementation of the aggregator storage that only keeps the items in
- * memory. The data is not persisted in any way.
- * 
- * FIXME: Implement missing methods
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
+ * An implementation of the aggregator storage that only keeps the items in memory. The data is not persisted in any way. FIXME: Implement missing methods
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
  */
 public class MemoryStorage extends AbstractAggregatorStorage {
 
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
 	/**
-	 * Simple holder of aggregator items. The main purpose of the type is to
-	 * maintain the relations between the items.
+	 * Simple holder of aggregator items. The main purpose of the type is to maintain the relations between the items.
 	 */
 	protected static class ItemHolder {
 		ArrayList<AggregatorItem> children;
 
+		/**
+		 * @uml.property  name="item"
+		 * @uml.associationEnd  
+		 */
 		AggregatorItem item;
 
 		/**
@@ -60,6 +59,9 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		}
 	}
 
+	/**
+	 * @uml.property  name="feeds"
+	 */
 	HashMap<UUID, Feed> feeds;
 
 	HashMap<UUID, ItemHolder> items;
@@ -120,6 +122,10 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		return EMPTY_STRING;
 	}
 
+	/**
+	 * @return
+	 * @uml.property  name="feeds"
+	 */
 	public HashMap<UUID, Feed> getFeeds() {
 		return feeds;
 	}

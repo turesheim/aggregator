@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="AggregatorItem" size="1490,1270" id="no.resheim.aggregator.core.data" metadata="uml2-1.0" initialized="true" tag="1000" key="32303037303533312D31303030206E6F2E7265736865696D2E61676772656761746F722E636F72652F746F726B696C64">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.3/@sourceConnections.0" name="AggregatorItemParent" location="50,712" size="275,234" id="no.resheim.aggregator.core.data/AggregatorItemParent" runTimeClassModel="trash(Lno.resheim.aggregator.core.data.AggregatorItem;),internalRemove(Lno.resheim.aggregator.core.data.AggregatorItem;),getChildAt(I),getChildCount(),children,internalAdd(Lno.resheim.aggregator.core.data.AggregatorItem;),add(Lno.resheim.aggregator.core.data.AggregatorItem;),cleanUp(Lno.resheim.aggregator.core.data.Feed;),deleteChild(Lno.resheim.aggregator.core.data.AggregatorItem;Z)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="252,20">
+      <children xsi:type="editmodel:AttributeEditModel" name="children" id="no.resheim.aggregator.core.data/AggregatorItemParent#children"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="135,160">
+      <children xsi:type="editmodel:MethodEditModel" name="add" id="no.resheim.aggregator.core.data/AggregatorItemParent#add(Lno.resheim.aggregator.core.data.AggregatorItem;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="cleanUp" id="no.resheim.aggregator.core.data/AggregatorItemParent#cleanUp(Lno.resheim.aggregator.core.data.Feed;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="deleteChild" id="no.resheim.aggregator.core.data/AggregatorItemParent#deleteChild(Lno.resheim.aggregator.core.data.AggregatorItem;Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getChildAt" id="no.resheim.aggregator.core.data/AggregatorItemParent#getChildAt(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getChildCount" id="no.resheim.aggregator.core.data/AggregatorItemParent#getChildCount()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="internalAdd" id="no.resheim.aggregator.core.data/AggregatorItemParent#internalAdd(Lno.resheim.aggregator.core.data.AggregatorItem;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="internalRemove" id="no.resheim.aggregator.core.data/AggregatorItemParent#internalRemove(Lno.resheim.aggregator.core.data.AggregatorItem;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="trash" id="no.resheim.aggregator.core.data/AggregatorItemParent#trash(Lno.resheim.aggregator.core.data.AggregatorItem;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="no.resheim.aggregator.core.data/AggregatorItem&lt;-no.resheim.aggregator.core.data/AggregatorItemParent" source="//@children.0" target="//@children.2/@sourceConnections.0" targetEnd="//@children.0/@sourceConnections.0/@children.1" sourceEnd="//@children.0/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="137,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.0" name="AggregatorItem" location="245,50" size="205,612" id="no.resheim.aggregator.core.data/AggregatorItem" runTimeClassModel="setFlag(Lno.resheim.aggregator.core.data.AggregatorItem.Flag;),getMark(),getUUID(),no.resheim.aggregator.core.data.AggregatorItem.Mark,getFlags(),getNotes(),no.resheim.aggregator.core.data.AggregatorItem.Flag,title,setMark(Lno.resheim.aggregator.core.data.AggregatorItem.Mark;),ordering,setFlags(Ljava.util.EnumSet;),setSystem(Z),setNotes(Ljava.lang.String;),isSystem()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="95,40">
+      <children xsi:type="editmodel:AttributeEditModel" name="ordering" id="no.resheim.aggregator.core.data/AggregatorItem#ordering"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="title" id="no.resheim.aggregator.core.data/AggregatorItem#title"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="103,200">
+      <children xsi:type="editmodel:MethodEditModel" name="getFlags" id="no.resheim.aggregator.core.data/AggregatorItem#getFlags()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMark" id="no.resheim.aggregator.core.data/AggregatorItem#getMark()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getNotes" id="no.resheim.aggregator.core.data/AggregatorItem#getNotes()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getUUID" id="no.resheim.aggregator.core.data/AggregatorItem#getUUID()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isSystem" id="no.resheim.aggregator.core.data/AggregatorItem#isSystem()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFlag" id="no.resheim.aggregator.core.data/AggregatorItem#setFlag(Lno.resheim.aggregator.core.data.AggregatorItem.Flag;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setFlags" id="no.resheim.aggregator.core.data/AggregatorItem#setFlags(Ljava.util.EnumSet;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setMark" id="no.resheim.aggregator.core.data/AggregatorItem#setMark(Lno.resheim.aggregator.core.data.AggregatorItem.Mark;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setNotes" id="no.resheim.aggregator.core.data/AggregatorItem#setNotes(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSystem" id="no.resheim.aggregator.core.data/AggregatorItem#setSystem(Z)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="182,308">
+      <children xsi:type="editmodel:EnumerationEditModel" name="Flag" size="135,122" id="no.resheim.aggregator.core.data/AggregatorItem$Flag" runTimeClassModel="TRASHED%,TRASH%,PROTECTED%">
+        <children xsi:type="editmodel:CompartmentEditModel" size="112,60">
+          <children xsi:type="editmodel:EnumerationLiteralEditModel" name="TRASH" id="no.resheim.aggregator.core.data/AggregatorItem$Flag#TRASH%"/>
+          <children xsi:type="editmodel:EnumerationLiteralEditModel" name="TRASHED" id="no.resheim.aggregator.core.data/AggregatorItem$Flag#TRASHED%"/>
+          <children xsi:type="editmodel:EnumerationLiteralEditModel" name="PROTECTED" id="no.resheim.aggregator.core.data/AggregatorItem$Flag#PROTECTED%"/>
+        </children>
+        <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+      </children>
+      <children xsi:type="editmodel:EnumerationEditModel" name="Mark" size="182,182" id="no.resheim.aggregator.core.data/AggregatorItem$Mark" runTimeClassModel="THIRD_PRIORITY%,NONE%,IMPORTANT%,TODO%,SECOND_PRIORITY%,FIRST_PRIORITY%">
+        <children xsi:type="editmodel:CompartmentEditModel" size="159,120">
+          <children xsi:type="editmodel:EnumerationLiteralEditModel" name="THIRD_PRIORITY" id="no.resheim.aggregator.core.data/AggregatorItem$Mark#THIRD_PRIORITY%"/>
+          <children xsi:type="editmodel:EnumerationLiteralEditModel" name="NONE" id="no.resheim.aggregator.core.data/AggregatorItem$Mark#NONE%"/>
+          <children xsi:type="editmodel:EnumerationLiteralEditModel" name="SECOND_PRIORITY" id="no.resheim.aggregator.core.data/AggregatorItem$Mark#SECOND_PRIORITY%"/>
+          <children xsi:type="editmodel:EnumerationLiteralEditModel" name="IMPORTANT" id="no.resheim.aggregator.core.data/AggregatorItem$Mark#IMPORTANT%"/>
+          <children xsi:type="editmodel:EnumerationLiteralEditModel" name="FIRST_PRIORITY" id="no.resheim.aggregator.core.data/AggregatorItem$Mark#FIRST_PRIORITY%"/>
+          <children xsi:type="editmodel:EnumerationLiteralEditModel" name="TODO" id="no.resheim.aggregator.core.data/AggregatorItem$Mark#TODO%"/>
+        </children>
+        <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+      </children>
+    </children>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Article" location="355,712" size="305,374" id="no.resheim.aggregator.core.data/Article" runTimeClassModel="hasMedia(),text,compareTo(Lno.resheim.aggregator.core.data.Article;),getFeed(),link,mediaContent,readDate,getFeedUUID(),mediaPlayerURL,getDetails(),creator,toString(),guid,read,getAdded(),publicationDate">
+    <children xsi:type="editmodel:CompartmentEditModel" size="282,180">
+      <children xsi:type="editmodel:AttributeEditModel" name="creator" id="no.resheim.aggregator.core.data/Article#creator"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="guid" id="no.resheim.aggregator.core.data/Article#guid"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="link" id="no.resheim.aggregator.core.data/Article#link"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="mediaContent" id="no.resheim.aggregator.core.data/Article#mediaContent"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="mediaPlayerURL" id="no.resheim.aggregator.core.data/Article#mediaPlayerURL"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="publicationDate" id="no.resheim.aggregator.core.data/Article#publicationDate"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="read" id="no.resheim.aggregator.core.data/Article#read"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="readDate" id="no.resheim.aggregator.core.data/Article#readDate"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="text" id="no.resheim.aggregator.core.data/Article#text"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="120,140">
+      <children xsi:type="editmodel:MethodEditModel" name="compareTo" id="no.resheim.aggregator.core.data/Article#compareTo(Lno.resheim.aggregator.core.data.Article;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getAdded" id="no.resheim.aggregator.core.data/Article#getAdded()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getDetails" id="no.resheim.aggregator.core.data/Article#getDetails()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFeed" id="no.resheim.aggregator.core.data/Article#getFeed()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFeedUUID" id="no.resheim.aggregator.core.data/Article#getFeedUUID()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="hasMedia" id="no.resheim.aggregator.core.data/Article#hasMedia()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="toString" id="no.resheim.aggregator.core.data/Article#toString()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.0/@sourceConnections.0" autoLocated="true" id="no.resheim.aggregator.core.data/AggregatorItem&lt;-no.resheim.aggregator.core.data/Article" source="//@children.2" target="//@children.1" targetEnd="//@children.2/@sourceConnections.0/@children.1" sourceEnd="//@children.2/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="152,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="102,612" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Folder" location="116,1136" size="143,114" id="no.resheim.aggregator.core.data/Folder">
+    <children xsi:type="editmodel:CompartmentEditModel" size="89,20">
+      <children xsi:type="editmodel:AttributeEditModel" name="feed" id="no.resheim.aggregator.core.data/Folder#feed"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="120,40">
+      <children xsi:type="editmodel:MethodEditModel" name="getFeedUUID" id="no.resheim.aggregator.core.data/Folder#getFeedUUID()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="toString" id="no.resheim.aggregator.core.data/Folder#toString()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="no.resheim.aggregator.core.data/AggregatorItemParent&lt;-no.resheim.aggregator.core.data/Folder" source="//@children.3" target="//@children.0" targetEnd="//@children.3/@sourceConnections.0/@children.1" sourceEnd="//@children.3/@sourceConnections.0/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="71,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="137,234"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" interactive="false" properties="open=no.resheim.aggregator.core.data/AggregatorItem;wireOptions=1;Product=eUML2"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>

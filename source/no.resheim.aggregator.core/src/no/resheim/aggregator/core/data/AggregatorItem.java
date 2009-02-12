@@ -22,64 +22,102 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 /**
- * This type implements the UI presentable information for aggregator items such
- * as articles and folders
- * 
- * @author Torkild Ulvøy Resheim
- * @since 1.0
- * @noextend This class is not intended to be subclassed by clients.
+ * This type implements the UI presentable information for aggregator items such as articles and folders
+ * @author   Torkild Ulvøy Resheim
+ * @since   1.0
+ * @noextend   This class is not intended to be subclassed by clients.
  */
 public abstract class AggregatorItem {
 
-	public enum Mark {
-		/** No marking */
-		NONE,
-		/** Important marking */
-		IMPORTANT,
-		/** Todo marking */
-		TODO,
-		/** First priority marking */
-		FIRST_PRIORITY,
-		/** Second priority marking */
-		SECOND_PRIORITY,
-		/** Trash folder marking */
-		THIRD_PRIORITY
-	}
-
-	/** Flags are for internal use */
+	/**
+	 * Flags are for internal use
+	 */
 	public enum Flag {
-		/** The item is a trash folder item */
+		/**
+		 * @uml.property  name="pROTECTED"
+		 * @uml.associationEnd  
+		 */
+		PROTECTED,
+		/**
+		 * @uml.property  name="tRASH"
+		 * @uml.associationEnd  
+		 */
 		TRASH,
-		/** The item has been prepared for deletion */
-		TRASHED,
-		/** The item is protected from deletion */
-		PROTECTED
+		/**
+		 * @uml.property  name="tRASHED"
+		 * @uml.associationEnd  
+		 */
+		TRASHED
 	}
 
-	private Mark fMark = Mark.NONE;
+	/**
+	 * @author   torkild
+	 */
+	public enum Mark {
+		/**
+		 * @uml.property  name="fIRST_PRIORITY"
+		 * @uml.associationEnd  
+		 */
+		FIRST_PRIORITY,
+		/**
+		 * @uml.property  name="iMPORTANT"
+		 * @uml.associationEnd  
+		 */
+		IMPORTANT,
+		/**
+		 * @uml.property  name="nONE"
+		 * @uml.associationEnd  
+		 */
+		NONE,
+		/**
+		 * @uml.property  name="sECOND_PRIORITY"
+		 * @uml.associationEnd  
+		 */
+		SECOND_PRIORITY,
+		/**
+		 * @uml.property  name="tHIRD_PRIORITY"
+		 * @uml.associationEnd  
+		 */
+		THIRD_PRIORITY,
+		/**
+		 * @uml.property  name="tODO"
+		 * @uml.associationEnd  
+		 */
+		TODO
+	}
 
 	private EnumSet<Flag> fFlags = EnumSet.noneOf(Flag.class);
 
+	/**
+	 * @uml.property  name="fMark"
+	 * @uml.associationEnd  
+	 */
+	private Mark fMark = Mark.NONE;
+
+	private String fNotes;
+
+	private boolean fSystem = false;
+
+	/**
+	 * @uml.property  name="ordering"
+	 */
 	protected int ordering;
 
+	/**
+	 * @uml.property  name="parent"
+	 * @uml.associationEnd  
+	 */
 	protected AggregatorItemParent parent;
 
 	protected boolean serialized;
 
-	protected UUID uuid = null;
-
-	private boolean fSystem = false;
-
-	/** The folder title */
+	/**
+	 * The folder title
+	 * @uml.property  name="title"
+	 */
 	protected String title = ""; //$NON-NLS-1$
 
-	public boolean isSystem() {
-		return fSystem;
-	}
-
-	public void setSystem(boolean hidden) {
-		this.fSystem = hidden;
-	}
+	protected UUID uuid = null;
 
 	/**
 	 * @param parent
@@ -87,70 +125,6 @@ public abstract class AggregatorItem {
 	protected AggregatorItem(AggregatorItemParent parent, UUID uuid) {
 		this.parent = parent;
 		this.uuid = uuid;
-	}
-
-	/**
-	 * Returns the user marks of this aggregator item.
-	 * 
-	 * @return the marks
-	 */
-	public Mark getMark() {
-		return fMark;
-	}
-
-	/**
-	 * Returns the system flags of this aggregator item.
-	 * 
-	 * @return the flags
-	 */
-	public EnumSet<Flag> getFlags() {
-		return fFlags;
-	}
-
-	public int getOrdering() {
-		return ordering;
-	};
-
-	public AggregatorItemParent getParent() {
-		return parent;
-	}
-
-	/**
-	 * Returns the identifier of this feed item.
-	 * 
-	 * @return
-	 */
-	public UUID getUUID() {
-		return uuid;
-	}
-
-	public void setMark(Mark mark) {
-		this.fMark = mark;
-	}
-
-	public void setFlags(EnumSet<Flag> flags) {
-		this.fFlags = flags;
-	}
-
-	public void setFlag(Flag flag) {
-		fFlags.add(flag);
-	}
-
-	/**
-	 * <b>Must only be called when inside a collection lock</b>
-	 * 
-	 * @param ordering
-	 */
-	public void setOrdering(int ordering) {
-		this.ordering = ordering;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	protected FeedCollection getCollection() throws CoreException {
@@ -170,6 +144,113 @@ public abstract class AggregatorItem {
 			o = p;
 		}
 		return (FeedCollection) p;
+	}
+
+	/**
+	 * Returns the system flags of this aggregator item.
+	 * 
+	 * @return the flags
+	 */
+	public EnumSet<Flag> getFlags() {
+		return fFlags;
+	}
+
+	/**
+	 * Returns the user marks of this aggregator item.
+	 * 
+	 * @return the marks
+	 */
+	public Mark getMark() {
+		return fMark;
+	}
+
+	/**
+	 * Returns the notes assigned to this aggregator item.
+	 * 
+	 * @return
+	 */
+	public String getNotes() {
+		return fNotes;
+	}
+
+	/**
+	 * @return
+	 * @uml.property  name="ordering"
+	 */
+	public int getOrdering() {
+		return ordering;
+	}
+
+	/**
+	 * @return
+	 * @uml.property  name="parent"
+	 */
+	public AggregatorItemParent getParent() {
+		return parent;
+	}
+
+	/**
+	 * @return
+	 * @uml.property  name="title"
+	 */
+	public String getTitle() {
+		return title;
+	};
+
+	/**
+	 * Returns the identifier of this feed item.
+	 * 
+	 * @return
+	 */
+	public UUID getUUID() {
+		return uuid;
+	}
+
+	public boolean isSystem() {
+		return fSystem;
+	}
+
+	public void setFlag(Flag flag) {
+		fFlags.add(flag);
+	}
+
+	public void setFlags(EnumSet<Flag> flags) {
+		this.fFlags = flags;
+	}
+
+	public void setMark(Mark mark) {
+		this.fMark = mark;
+	}
+
+	/**
+	 * Sets the notes for this aggregator item.
+	 * 
+	 * @param notes
+	 *            the notes to set
+	 */
+	public void setNotes(String notes) {
+		fNotes = notes;
+	}
+
+	/**
+	 * <b>Must only be called when inside a collection lock</b>
+	 * @param  ordering
+	 * @uml.property  name="ordering"
+	 */
+	public void setOrdering(int ordering) {
+		this.ordering = ordering;
+	}
+
+	public void setSystem(boolean hidden) {
+		this.fSystem = hidden;
+	}
+
+	/**
+	 * @param  title
+	 * @uml.property  name="title"
+	 */
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }
