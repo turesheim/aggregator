@@ -47,6 +47,7 @@ import org.eclipse.swt.widgets.Display;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
+// TODO: Rename to CollectionViewerLabelProvider
 public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		ILabelProvider, IColorProvider, IPropertyChangeListener {
 	private static ImageRegistry registry = AggregatorUIPlugin.getDefault()
@@ -56,6 +57,15 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 
 	/** Font to use when indicating that a feed is being updated */
 	private Font italic;
+
+	/** Font to use when indicating that a feed has unread items */
+	private Font bold;
+
+	/**
+	 * Font to use when indicating that a feed has unread items and is being
+	 * updated
+	 */
+	private Font boldItalic;
 
 	/** Preference: show unread items in header */
 	private boolean pShowUnreadCount = true;
@@ -139,9 +149,18 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 	public Font getFont(Object element) {
 		Font font = JFaceResources.getDialogFont();
 		if (element instanceof Folder) {
+			Folder folder = ((Folder) element);
+			int unread = collection.getItemCount(folder);
 			Feed feed = ((Folder) element).getFeed();
 			if (feed != null && feed.isUpdating()) {
-				return italic;
+				if (unread > 0) {
+					return boldItalic;
+				} else {
+					return italic;
+				}
+			}
+			if (unread > 0) {
+				return bold;
 			}
 		}
 		return font;
@@ -340,9 +359,15 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()
 				.getPreferenceStore();
 		store.addPropertyChangeListener(this);
-		FontDescriptor fd = JFaceResources.getDialogFontDescriptor().setStyle(
-				SWT.ITALIC);
-		italic = fd.createFont(getDisplay());
+		FontDescriptor fdItalic = JFaceResources.getDialogFontDescriptor()
+				.setStyle(SWT.ITALIC);
+		italic = fdItalic.createFont(getDisplay());
+		FontDescriptor fdBold = JFaceResources.getDialogFontDescriptor()
+				.setStyle(SWT.BOLD);
+		bold = fdBold.createFont(getDisplay());
+		FontDescriptor fdBoldItalic = JFaceResources.getDialogFontDescriptor()
+				.setStyle(SWT.BOLD | SWT.ITALIC);
+		boldItalic = fdBoldItalic.createFont(getDisplay());
 	}
 
 	/*
