@@ -16,6 +16,8 @@ import no.resheim.aggregator.core.data.FeedWorkingCopy;
 import no.resheim.aggregator.core.data.Feed.Archiving;
 import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
@@ -25,18 +27,29 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 public class FeedPropertiesComposite extends Composite {
 
+	private static final String LINE_SEPARATOR = System
+			.getProperty("line.separator"); //$NON-NLS-1$
+	private Text logMessageText;
+	private Composite composite;
+	private TabItem logTabItem;
+	private TabItem updatingTabItem;
+	private TabItem archivingTabItem;
+	private TabItem authenticationTabItem;
+	private TabFolder tabFolder;
 	private Button keepUnreadItemsButton;
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
@@ -50,9 +63,9 @@ public class FeedPropertiesComposite extends Composite {
 
 	private Text urlText = null;
 
-	private Group archiveGroup = null;
+	private Composite archiveGroup = null;
 
-	private Group loginGroup = null;
+	private Composite loginGroup = null;
 
 	private Button radioKeepAll = null;
 
@@ -70,7 +83,7 @@ public class FeedPropertiesComposite extends Composite {
 
 	private Button radioNoArchiving = null;
 
-	private Group updateGroup = null;
+	private Composite updateGroup = null;
 
 	private Label label2 = null;
 
@@ -96,18 +109,12 @@ public class FeedPropertiesComposite extends Composite {
 	}
 
 	private void initialize() {
-		GridData gridData1 = new GridData();
+		GridData gridData1 = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		gridData1.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
-		gridData1.horizontalSpan = 2;
-		gridData1.grabExcessHorizontalSpace = true;
-		gridData1.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
-		GridData gridData = new GridData();
-		gridData.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
-		gridData.horizontalSpan = 2;
-		gridData.grabExcessHorizontalSpace = true;
+		GridData gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		gridData.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 3;
+		gridLayout.numColumns = 2;
 		gridLayout.makeColumnsEqualWidth = false;
 		titleLabel = new Label(this, SWT.NONE);
 		titleLabel.setText(Messages.FeedPropertiesComposite_0);
@@ -144,21 +151,25 @@ public class FeedPropertiesComposite extends Composite {
 		updateRefreshWidgets();
 		updateArchivingWidgets();
 		updateLoginWidgets();
-
+		updateStatusWidgets();
 	}
 
 	private void createLoginGroup() {
+
+		tabFolder = new TabFolder(this, SWT.NONE);
+		final GridData gd_tabFolder = new GridData(SWT.FILL, SWT.FILL, false,
+				false, 2, 1);
+		gd_tabFolder.widthHint = 400;
+		gd_tabFolder.heightHint = 290;
+		tabFolder.setLayoutData(gd_tabFolder);
+
+		authenticationTabItem = new TabItem(tabFolder, SWT.NONE);
+		authenticationTabItem.setText(Messages.FeedPropertiesComposite_29);
 		GridLayout groupLayout = new GridLayout();
 		groupLayout.numColumns = 2;
-		GridData groupLayoutData = new GridData();
-		groupLayoutData.horizontalSpan = 3;
-		groupLayoutData.grabExcessHorizontalSpace = true;
-		groupLayoutData.horizontalAlignment = GridData.FILL;
 
-		loginGroup = new Group(this, SWT.NONE);
-		loginGroup.setText(Messages.FeedPropertiesComposite_29);
+		loginGroup = new Composite(authenticationTabItem.getParent(), SWT.NONE);
 		loginGroup.setLayout(groupLayout);
-		loginGroup.setLayoutData(groupLayoutData);
 
 		loginButton = new Button(loginGroup, SWT.CHECK);
 		loginButton.setText(Messages.FeedPropertiesComposite_30);
@@ -196,35 +207,45 @@ public class FeedPropertiesComposite extends Composite {
 			}
 		});
 		loginButton.setSelection(true);
-		updateCredentialsFields(false);
+		authenticationTabItem.setControl(loginGroup);
 
-	}
-
-	private void updateCredentialsFields(boolean state) {
-		userLabel.setEnabled(state);
-		userText.setEnabled(state);
-		passwordLabel.setEnabled(state);
-		passwordText.setEnabled(state);
-	}
-
-	/**
-	 * This method initializes archiveGroup
-	 * 
-	 */
-	private void createArchiveGroup() {
+		archivingTabItem = new TabItem(tabFolder, SWT.NONE);
+		archivingTabItem.setText(Messages.FeedPropertiesComposite_4);
 		GridData gridData4 = new GridData();
 		gridData4.widthHint = 20;
 		GridData gridData3 = new GridData();
 		gridData3.widthHint = 20;
 		GridLayout gridLayout1 = new GridLayout();
 		gridLayout1.numColumns = 3;
-		GridData gridData2 = new GridData();
-		gridData2.horizontalSpan = 2;
-		gridData2.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
-		archiveGroup = new Group(this, SWT.NONE);
-		archiveGroup.setText(Messages.FeedPropertiesComposite_4);
+
+		updatingTabItem = new TabItem(tabFolder, SWT.NONE);
+		updatingTabItem.setText(Messages.FeedPropertiesComposite_19);
+		GridData gridData7 = new GridData();
+		gridData7.widthHint = 30;
+		GridLayout gridLayout2 = new GridLayout();
+		gridLayout2.numColumns = 3;
+		updateGroup = new Composite(updatingTabItem.getParent(), SWT.NONE);
+		updateGroup.setLayout(gridLayout2);
+		label2 = new Label(updateGroup, SWT.NONE);
+		label2.setText(Messages.FeedPropertiesComposite_22);
+		intervalField = new Spinner(updateGroup, SWT.BORDER);
+		intervalField.setToolTipText(Messages.FeedPropertiesComposite_23);
+		intervalField.setLayoutData(gridData7);
+		intervalField
+				.addModifyListener(new org.eclipse.swt.events.ModifyListener() {
+					public void modifyText(org.eclipse.swt.events.ModifyEvent e) {
+						try {
+							feed
+									.setUpdateInterval(intervalField
+											.getSelection());
+						} catch (NumberFormatException err) {
+						}
+					}
+				});
+		updatingTabItem.setControl(updateGroup);
+		archiveGroup = new Composite(archivingTabItem.getParent(), SWT.NONE);
+		// 
 		archiveGroup.setLayout(gridLayout1);
-		archiveGroup.setLayoutData(gridData2);
 		radioKeepAll = new Button(archiveGroup, SWT.RADIO);
 		radioKeepAll.setText(Messages.FeedPropertiesComposite_7);
 		radioKeepAll.setToolTipText(Messages.FeedPropertiesComposite_8);
@@ -314,9 +335,56 @@ public class FeedPropertiesComposite extends Composite {
 		final GridData gd_onlyDeleteReadButton = new GridData(SWT.LEFT,
 				SWT.CENTER, false, false, 3, 1);
 		keepUnreadItemsButton.setLayoutData(gd_onlyDeleteReadButton);
-		keepUnreadItemsButton.setText(Messages.FeedPropertiesComposite_KeepUnreadLabel);
+		keepUnreadItemsButton
+				.setText(Messages.FeedPropertiesComposite_KeepUnreadLabel);
 		keepUnreadItemsButton
 				.setToolTipText(Messages.FeedPropertiesComposite_KeepUnreadTooltip);
+		archivingTabItem.setControl(archiveGroup);
+
+		logTabItem = new TabItem(tabFolder, SWT.NONE);
+		logTabItem.setText(Messages.FeedPropertiesComposite_StatusTabTitle);
+
+		composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new FillLayout());
+		logTabItem.setControl(composite);
+
+		logMessageText = new Text(composite, SWT.WRAP | SWT.V_SCROLL
+				| SWT.READ_ONLY | SWT.MULTI);
+		updateCredentialsFields(false);
+
+	}
+
+	private void updateStatusWidgets() {
+		IStatus status = feed.getLastStatus();
+		StringBuilder sb = new StringBuilder();
+		sb.append(status.getMessage());
+		sb.append(LINE_SEPARATOR);
+		if (status instanceof MultiStatus) {
+			IStatus[] stati = ((MultiStatus) status).getChildren();
+			for (IStatus status2 : stati) {
+				sb.append(status2.getMessage());
+				sb.append(LINE_SEPARATOR);
+				if (status2.getException() != null) {
+					sb.append(status2.getException().getMessage());
+					sb.append(LINE_SEPARATOR);
+				}
+			}
+		}
+		logMessageText.setText(sb.toString());
+	}
+
+	private void updateCredentialsFields(boolean state) {
+		userLabel.setEnabled(state);
+		userText.setEnabled(state);
+		passwordLabel.setEnabled(state);
+		passwordText.setEnabled(state);
+	}
+
+	/**
+	 * This method initializes archiveGroup
+	 * 
+	 */
+	private void createArchiveGroup() {
 	}
 
 	private void updateArchivingWidgets() {
@@ -391,37 +459,10 @@ public class FeedPropertiesComposite extends Composite {
 	 * 
 	 */
 	private void createUpdateGroup() {
-		GridData gridData7 = new GridData();
-		gridData7.widthHint = 30;
 		GridData gridData6 = new GridData();
 		gridData6.horizontalSpan = 3;
 		gridData6.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
 		gridData6.grabExcessHorizontalSpace = true;
-		GridLayout gridLayout2 = new GridLayout();
-		gridLayout2.numColumns = 3;
-		GridData gridData5 = new GridData();
-		gridData5.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;
-		gridData5.verticalAlignment = org.eclipse.swt.layout.GridData.FILL;
-		updateGroup = new Group(this, SWT.NONE);
-		updateGroup.setText(Messages.FeedPropertiesComposite_19);
-		updateGroup.setLayout(gridLayout2);
-		updateGroup.setLayoutData(gridData5);
-		label2 = new Label(updateGroup, SWT.NONE);
-		label2.setText(Messages.FeedPropertiesComposite_22);
-		intervalField = new Spinner(updateGroup, SWT.BORDER);
-		intervalField.setToolTipText(Messages.FeedPropertiesComposite_23);
-		intervalField.setLayoutData(gridData7);
-		intervalField
-				.addModifyListener(new org.eclipse.swt.events.ModifyListener() {
-					public void modifyText(org.eclipse.swt.events.ModifyEvent e) {
-						try {
-							feed
-									.setUpdateInterval(intervalField
-											.getSelection());
-						} catch (NumberFormatException err) {
-						}
-					}
-				});
 		createPeriodCombo();
 	}
 
