@@ -6,8 +6,8 @@ package no.resheim.aggregator.core.data;
 import java.util.UUID;
 
 /**
- * @author   Torkild Ulvøy Resheim
- * @since   1.0
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
  */
 public final class FeedWorkingCopy extends Feed {
 	public static FeedWorkingCopy newInstance(AggregatorItem parent) {
@@ -17,18 +17,18 @@ public final class FeedWorkingCopy extends Feed {
 	}
 
 	/**
-	 * @uml.property  name="feed"
-	 * @uml.associationEnd  
+	 * @uml.property name="feed"
+	 * @uml.associationEnd
 	 */
 	Feed feed;
 
 	/**
-	 * @uml.property  name="password"
+	 * @uml.property name="password"
 	 */
 	protected String password;
 
 	/**
-	 * @uml.property  name="username"
+	 * @uml.property name="username"
 	 */
 	protected String username;
 
@@ -50,11 +50,12 @@ public final class FeedWorkingCopy extends Feed {
 		hidden = feed.hidden;
 		anonymousAccess = feed.anonymousAccess;
 		keepUnread = feed.keepUnread;
+		setLastStatus(feed.getLastStatus());
 	}
 
 	/**
 	 * @return
-	 * @uml.property  name="feed"
+	 * @uml.property name="feed"
 	 */
 	public Feed getFeed() {
 		if (feed != null) {
@@ -68,13 +69,14 @@ public final class FeedWorkingCopy extends Feed {
 			feed.hidden = hidden;
 			feed.anonymousAccess = anonymousAccess;
 			feed.keepUnread = keepUnread;
+			feed.setLastStatus(getLastStatus());
 		}
 		return feed;
 	}
 
 	/**
 	 * @return
-	 * @uml.property  name="password"
+	 * @uml.property name="password"
 	 */
 	public String getPassword() {
 		return password;
@@ -82,23 +84,23 @@ public final class FeedWorkingCopy extends Feed {
 
 	/**
 	 * @return
-	 * @uml.property  name="username"
+	 * @uml.property name="username"
 	 */
 	public String getUsername() {
 		return username;
 	}
 
 	/**
-	 * @param  password
-	 * @uml.property  name="password"
+	 * @param password
+	 * @uml.property name="password"
 	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
 	/**
-	 * @param  username
-	 * @uml.property  name="username"
+	 * @param username
+	 * @uml.property name="username"
 	 */
 	public void setUsername(String username) {
 		this.username = username;
