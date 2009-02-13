@@ -22,10 +22,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 /**
- * This type implements the UI presentable information for aggregator items such as articles and folders
- * @author   Torkild Ulvøy Resheim
- * @since   1.0
- * @noextend   This class is not intended to be subclassed by clients.
+ * This type implements the UI presentable information for aggregator items such
+ * as articles and folders
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
+ * @noextend This class is not intended to be subclassed by clients.
  */
 public abstract class AggregatorItem {
 
@@ -34,54 +36,54 @@ public abstract class AggregatorItem {
 	 */
 	public enum Flag {
 		/**
-		 * @uml.property  name="pROTECTED"
-		 * @uml.associationEnd  
+		 * @uml.property name="protected"
+		 * @uml.associationEnd
 		 */
 		PROTECTED,
 		/**
-		 * @uml.property  name="tRASH"
-		 * @uml.associationEnd  
+		 * @uml.property name="trash"
+		 * @uml.associationEnd
 		 */
 		TRASH,
 		/**
-		 * @uml.property  name="tRASHED"
-		 * @uml.associationEnd  
+		 * @uml.property name="trashed"
+		 * @uml.associationEnd
 		 */
 		TRASHED
 	}
 
 	/**
-	 * @author   torkild
+	 * @author torkild
 	 */
 	public enum Mark {
 		/**
-		 * @uml.property  name="fIRST_PRIORITY"
-		 * @uml.associationEnd  
+		 * @uml.property name="first_priority"
+		 * @uml.associationEnd
 		 */
 		FIRST_PRIORITY,
 		/**
-		 * @uml.property  name="iMPORTANT"
-		 * @uml.associationEnd  
+		 * @uml.property name="important"
+		 * @uml.associationEnd
 		 */
 		IMPORTANT,
 		/**
-		 * @uml.property  name="nONE"
-		 * @uml.associationEnd  
+		 * @uml.property name="none"
+		 * @uml.associationEnd
 		 */
 		NONE,
 		/**
-		 * @uml.property  name="sECOND_PRIORITY"
-		 * @uml.associationEnd  
+		 * @uml.property name="second_proiority"
+		 * @uml.associationEnd
 		 */
 		SECOND_PRIORITY,
 		/**
-		 * @uml.property  name="tHIRD_PRIORITY"
-		 * @uml.associationEnd  
+		 * @uml.property name="third_priority"
+		 * @uml.associationEnd
 		 */
 		THIRD_PRIORITY,
 		/**
-		 * @uml.property  name="tODO"
-		 * @uml.associationEnd  
+		 * @uml.property name="todo"
+		 * @uml.associationEnd
 		 */
 		TODO
 	}
@@ -89,34 +91,34 @@ public abstract class AggregatorItem {
 	private EnumSet<Flag> fFlags = EnumSet.noneOf(Flag.class);
 
 	/**
-	 * @uml.property  name="fMark"
-	 * @uml.associationEnd  
+	 * @uml.property name="fMark"
+	 * @uml.associationEnd
 	 */
 	private Mark fMark = Mark.NONE;
-
-	private String fNotes;
 
 	private boolean fSystem = false;
 
 	/**
-	 * @uml.property  name="ordering"
+	 * @uml.property name="ordering"
 	 */
 	protected int ordering;
 
 	/**
-	 * @uml.property  name="parent"
-	 * @uml.associationEnd  
+	 * @uml.property name="parent"
+	 * @uml.associationEnd
 	 */
 	protected AggregatorItemParent parent;
 
-	protected boolean serialized;
-
 	/**
 	 * The folder title
-	 * @uml.property  name="title"
+	 * 
+	 * @uml.property name="title"
 	 */
 	protected String title = ""; //$NON-NLS-1$
 
+	/**
+	 * The unique identifier of the item.
+	 */
 	protected UUID uuid = null;
 
 	/**
@@ -165,17 +167,8 @@ public abstract class AggregatorItem {
 	}
 
 	/**
-	 * Returns the notes assigned to this aggregator item.
-	 * 
 	 * @return
-	 */
-	public String getNotes() {
-		return fNotes;
-	}
-
-	/**
-	 * @return
-	 * @uml.property  name="ordering"
+	 * @uml.property name="ordering"
 	 */
 	public int getOrdering() {
 		return ordering;
@@ -183,7 +176,7 @@ public abstract class AggregatorItem {
 
 	/**
 	 * @return
-	 * @uml.property  name="parent"
+	 * @uml.property name="parent"
 	 */
 	public AggregatorItemParent getParent() {
 		return parent;
@@ -191,7 +184,7 @@ public abstract class AggregatorItem {
 
 	/**
 	 * @return
-	 * @uml.property  name="title"
+	 * @uml.property name="title"
 	 */
 	public String getTitle() {
 		return title;
@@ -223,19 +216,10 @@ public abstract class AggregatorItem {
 	}
 
 	/**
-	 * Sets the notes for this aggregator item.
-	 * 
-	 * @param notes
-	 *            the notes to set
-	 */
-	public void setNotes(String notes) {
-		fNotes = notes;
-	}
-
-	/**
 	 * <b>Must only be called when inside a collection lock</b>
-	 * @param  ordering
-	 * @uml.property  name="ordering"
+	 * 
+	 * @param ordering
+	 * @uml.property name="ordering"
 	 */
 	public void setOrdering(int ordering) {
 		this.ordering = ordering;
@@ -246,8 +230,8 @@ public abstract class AggregatorItem {
 	}
 
 	/**
-	 * @param  title
-	 * @uml.property  name="title"
+	 * @param title
+	 * @uml.property name="title"
 	 */
 	public void setTitle(String title) {
 		this.title = title;

@@ -155,7 +155,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		item.setAddedDate(rs.getLong(13));
 		item.setCreator(rs.getString(15));
 		item.setMediaPlayerURL(rs.getString(16));
-		item.setNotes(rs.getString(17));
 		return item;
 	}
 
@@ -209,7 +208,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		item.setTitle(rs.getString(6).trim());
 		item.setMark(Mark.valueOf(rs.getString(7)));
 		item.setFlags(decodeFlags(rs.getString(8)));
-		item.setNotes(rs.getString(9));
 		return item;
 	}
 
@@ -613,7 +611,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private void insert(Folder folder) throws SQLException {
 		PreparedStatement ps = connection
-				.prepareStatement("insert into folders values(?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+				.prepareStatement("insert into folders values(?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
 		ps.setString(1, folder.getUUID().toString());
 		// Folders are used to represent the root aggregator item
@@ -634,7 +632,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		ps.setString(6, folder.getTitle());
 		ps.setString(7, folder.getMark().toString());
 		ps.setString(8, encodeFlags(folder.getFlags()));
-		ps.setString(9, folder.getNotes());
 		ps.executeUpdate();
 		ps.close();
 	}
@@ -648,7 +645,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private void insert(InternalArticle item) throws SQLException {
 		PreparedStatement ps = connection
-				.prepareStatement("insert into articles values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+				.prepareStatement("insert into articles values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
 		ps.setString(1, item.getUUID().toString());
 		ps.setString(2, item.getLocation().toString());
@@ -666,7 +663,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		ps.setString(14, item.internalGetText());
 		ps.setString(15, item.getCreator());
 		ps.setString(16, item.getMediaPlayerURL());
-		ps.setString(17, item.getNotes());
 		ps.executeUpdate();
 		ps.close();
 		int count = 0;

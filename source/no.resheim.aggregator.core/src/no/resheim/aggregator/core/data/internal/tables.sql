@@ -7,7 +7,6 @@ CREATE TABLE folders (
         title VARCHAR(256) NOT NULL,
 		marking VARCHAR(32) NOT NULL,
 		flags VARCHAR(128) NOT NULL,
-		notes VARCHAR(16384),
 		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);
 
@@ -28,7 +27,6 @@ CREATE TABLE articles (
 		description LONG VARCHAR,
 		creator VARCHAR(128),
 		media_player VARCHAR(128),
-		notes VARCHAR(16384),
 		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);
 
@@ -52,6 +50,14 @@ CREATE TABLE media_content (
 		width VARCHAR(32),
 		lang VARCHAR(32),
 		player_url VARCHAR(128),
+		FOREIGN KEY (article_uuid) references articles (uuid) ON DELETE CASCADE
+	);
+
+/* Holds article notes */
+CREATE TABLE notes (
+		uuid CHAR(36) NOT NULL PRIMARY KEY,
+		article_uuid CHAR(36),
+		notes VARCHAR(16384),
 		FOREIGN KEY (article_uuid) references articles (uuid) ON DELETE CASCADE
 	);
 
