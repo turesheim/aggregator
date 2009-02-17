@@ -57,7 +57,7 @@ CREATE TABLE media_content (
 CREATE TABLE notes (
 		uuid CHAR(36) NOT NULL PRIMARY KEY,
 		article_uuid CHAR(36),
-		notes VARCHAR(16384),
+		notes CLOB,
 		FOREIGN KEY (article_uuid) references articles (uuid) ON DELETE CASCADE
 	);
 
