@@ -16,7 +16,7 @@
 		<!-- Clean out the build results directory -->
 		<delete failonerror="no" dir="${basedir}/../build"/>
 		<mkdir dir="${basedir}/../build" />
-		<property file="~/secrets.properties"/>
+		<property file="/home/builder/secrets.properties"/>
 		<echoproperties/>
 		<antcall target="antRunner" />
 		<ftp action="del" password="${ftpPassword}" userid="${ftpUser}" server="update.resheim.no" remotedir="www/aggregator/${quality}" binary="true" passive="true">
