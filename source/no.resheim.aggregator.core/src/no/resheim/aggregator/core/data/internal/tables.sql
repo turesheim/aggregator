@@ -24,7 +24,7 @@ CREATE TABLE articles (
 	    publication_date BIGINT NOT NULL,
 		read_date BIGINT NOT NULL,
 		added_date BIGINT NOT NULL,
-		description LONG VARCHAR,
+		description CLOB,
 		creator VARCHAR(128),
 		media_player VARCHAR(128),
 		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
