@@ -228,6 +228,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		Statement s = connection.createStatement();
 		StringBuffer create = new StringBuffer();
 		String in = null;
+		IStatus status = Status.OK_STATUS;
 		try {
 			monitor.subTask(Messages.DerbySQLStorage_Creating_Tables);
 			while ((in = br.readLine()) != null) {
@@ -242,9 +243,14 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 					try {
 						s.executeUpdate(create.toString());
 					} catch (SQLException sqle) {
-						System.err.println(sqle.getMessage());
-						System.err.println(create.toString());
-						// In case the table already exists
+						status = new Status(IStatus.ERROR,
+								AggregatorPlugin.PLUGIN_ID,
+								MessageFormat.format(
+										"Problem creating tables:\n{0}\n{1}", //$NON-NLS-1$
+										new Object[] {
+												sqle.getMessage(),
+												create.toString()
+										}));
 					}
 					create.setLength(0);
 				} else {
@@ -259,8 +265,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			root.setTitle("ROOT"); //$NON-NLS-1$
 			root.setSystem(true);
 			insert(root);
-
-			return Status.OK_STATUS;
+			return status;
 		} catch (IOException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
 					"Could not create tables", e); //$NON-NLS-1$
@@ -881,6 +886,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			connection = DriverManager.getConnection(JDBC_DERBY
 					+ path.toOSString() + CONNECT_OPTIONS);
 			connection.setAutoCommit(true);
+			// See if the database already exists. If not we must create it.
 			DatabaseMetaData metadata = connection.getMetaData();
 			ResultSet rs = metadata.getTables(null, "APP", "FEEDS", null); //$NON-NLS-1$ //$NON-NLS-2$
 			if (!rs.next()) {
