@@ -604,10 +604,7 @@ public class FeedCollection extends AggregatorItemParent {
 			AggregatorItem[] children = ((AggregatorItemParent) item)
 					.getChildren();
 			for (AggregatorItem child : children) {
-				if (child instanceof Article)
-					notifyListerners(new Object[] {
-						child
-					}, EventType.READ);
+				setRead(child);
 			}
 		}
 	}
