@@ -11,11 +11,9 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.data;
 
-import java.text.MessageFormat;
 import java.util.EnumSet;
 import java.util.UUID;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 
 /**
@@ -163,18 +161,14 @@ public abstract class AggregatorItem {
 	}
 
 	/**
-	 * @return
+	 * The parent item may be <code>null</code> if the item has just been
+	 * created and is not assigned a parent instance yet, or if the item is a
+	 * collection. Collections do not have parent items.
+	 * 
+	 * @return the parent item or <code>null</code>
 	 * @uml.property name="parent"
 	 */
 	public AggregatorItemParent getParent() {
-		// Not a nice fix. Maybe FeedCollection should not subclass
-		// AggregatorItem
-		if (!(this instanceof FeedCollection)) {
-			Assert.isNotNull(parent, MessageFormat.format(
-					"Item {0} has NULL parent", new Object[] { //$NON-NLS-1$
-						this.toString()
-					}));
-		}
 		return parent;
 	}
 

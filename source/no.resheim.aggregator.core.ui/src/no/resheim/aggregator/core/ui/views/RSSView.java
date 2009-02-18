@@ -78,11 +78,30 @@ import org.eclipse.ui.part.ViewPart;
 public class RSSView extends ViewPart implements IFeedView,
 		IFeedCollectionEventListener {
 
+	private static final int NOTIFICATION_TIMER_INTERVAL = 10000;
 	private static final String CONTEXT_ID = "no.resheim.aggregator.ui.context"; //$NON-NLS-1$
 
 	class BrowserTitleListener implements TitleListener {
 
 		public void changed(TitleEvent event) {
+		}
+	}
+
+	private static ArrayList<AggregatorItem> notificationItems;
+
+	class NotificationTimer implements Runnable {
+
+		public void run() {
+			synchronized (notificationItems) {
+				if (notificationItems.size() > 0) {
+					new NotificationPopup(RSSView.this, notificationItems
+							.toArray(new AggregatorItem[notificationItems
+									.size()]));
+					notificationItems.clear();
+				}
+				Display display = getViewSite().getShell().getDisplay();
+				display.timerExec(NOTIFICATION_TIMER_INTERVAL, this);
+			}
 		}
 	}
 
@@ -186,6 +205,9 @@ public class RSSView extends ViewPart implements IFeedView,
 	 * The constructor.
 	 */
 	public RSSView() {
+		if (notificationItems == null) {
+			notificationItems = new ArrayList<AggregatorItem>();
+		}
 	}
 
 	public void collectionInitialized(FeedCollection collection) {
@@ -343,26 +365,21 @@ public class RSSView extends ViewPart implements IFeedView,
 			public void aggregatorItemChanged(
 					final AggregatorItemChangedEvent event) {
 				if (event.getType().equals(EventType.CREATED)) {
-					ArrayList<AggregatorItem> list = new ArrayList<AggregatorItem>();
 					Object[] items = event.getItems();
 					for (Object object : items) {
 						if (object instanceof Article) {
-							list.add((AggregatorItem) object);
+							notificationItems.add((AggregatorItem) object);
 						}
-					}
-					if (list.size() > 0) {
-						final Display display = getViewSite().getShell()
-								.getDisplay();
-						display.asyncExec(new Runnable() {
-							public void run() {
-								new NotificationPopup(RSSView.this, event);
-							}
-						});
 					}
 				}
 			}
 
 		});
+		// Create the timer that will pop up a notification if we have any items
+		// in the notificationItems list.
+		NotificationTimer timer = new NotificationTimer();
+		Display display = getViewSite().getShell().getDisplay();
+		display.asyncExec(timer);
 	}
 
 	private void makeActions() {

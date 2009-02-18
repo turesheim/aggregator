@@ -14,7 +14,6 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
-import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.ui.FeedViewerLabelProvider;
 import no.resheim.aggregator.core.ui.IFeedView;
@@ -47,14 +46,14 @@ public class NotificationPopup extends AbstractNotificationPopup {
 	private IFeedView fView;
 	private HashMap<String, AggregatorItem> map;
 
-	public NotificationPopup(IFeedView view, AggregatorItemChangedEvent event) {
+	public NotificationPopup(IFeedView view, AggregatorItem[] items) {
 		super(view.getFeedViewer().getControl().getDisplay());
 		labelProvider = new FeedViewerLabelProvider();
 		setDelayClose(5000);
 		setBlockOnOpen(true);
 		setFadingEnabled(true);
 		fView = view;
-		open(event);
+		open(items);
 	}
 
 	private void createArticleLabel(Composite parent, Article item) {
@@ -107,14 +106,11 @@ public class NotificationPopup extends AbstractNotificationPopup {
 		}
 	}
 
-	private void open(AggregatorItemChangedEvent event) {
-		if (event.getItems() instanceof AggregatorItem[]) {
-			map = new HashMap<String, AggregatorItem>();
-			for (AggregatorItem item : (AggregatorItem[]) event.getItems()) {
-				map.put(item.getUUID().toString(), item);
-			}
-			open();
+	private void open(AggregatorItem[] items) {
+		map = new HashMap<String, AggregatorItem>();
+		for (AggregatorItem item : items) {
+			map.put(item.getUUID().toString(), item);
 		}
+		open();
 	}
-
 }
