@@ -15,11 +15,8 @@ import java.text.MessageFormat;
 import java.util.EnumSet;
 import java.util.UUID;
 
-import no.resheim.aggregator.core.AggregatorPlugin;
-
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 
 /**
  * This type implements the UI presentable information for aggregator items such
@@ -134,15 +131,6 @@ public abstract class AggregatorItem {
 		AggregatorItem o = p;
 		while (!(p instanceof FeedCollection)) {
 			p = p.getParent();
-			if (p == null) {
-				throw new CoreException(
-						new Status(
-								IStatus.ERROR,
-								AggregatorPlugin.PLUGIN_ID,
-								MessageFormat
-										.format(
-												"Aggregator item {0} does not have a parent", new Object[] { o}))); //$NON-NLS-1$
-			}
 			o = p;
 		}
 		return (FeedCollection) p;
@@ -179,6 +167,14 @@ public abstract class AggregatorItem {
 	 * @uml.property name="parent"
 	 */
 	public AggregatorItemParent getParent() {
+		// Not a nice fix. Maybe FeedCollection should not subclass
+		// AggregatorItem
+		if (!(this instanceof FeedCollection)) {
+			Assert.isNotNull(parent, MessageFormat.format(
+					"Item {0} has NULL parent", new Object[] { //$NON-NLS-1$
+						this.toString()
+					}));
+		}
 		return parent;
 	}
 
