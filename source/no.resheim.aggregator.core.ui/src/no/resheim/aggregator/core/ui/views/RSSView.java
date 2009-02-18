@@ -12,9 +12,11 @@
 package no.resheim.aggregator.core.ui.views;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.IFeedCollectionEventListener;
+import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
@@ -341,13 +343,22 @@ public class RSSView extends ViewPart implements IFeedView,
 			public void aggregatorItemChanged(
 					final AggregatorItemChangedEvent event) {
 				if (event.getType().equals(EventType.CREATED)) {
-					final Display display = getViewSite().getShell()
-							.getDisplay();
-					display.asyncExec(new Runnable() {
-						public void run() {
-							new NotificationPopup(RSSView.this, event);
+					ArrayList<AggregatorItem> list = new ArrayList<AggregatorItem>();
+					Object[] items = event.getItems();
+					for (Object object : items) {
+						if (object instanceof Article) {
+							list.add((AggregatorItem) object);
 						}
-					});
+					}
+					if (list.size() > 0) {
+						final Display display = getViewSite().getShell()
+								.getDisplay();
+						display.asyncExec(new Runnable() {
+							public void run() {
+								new NotificationPopup(RSSView.this, event);
+							}
+						});
+					}
 				}
 			}
 
