@@ -1,2 +1,3 @@
 feature@no.resheim.aggregator.sdk=HEAD,:pserver:builder@amon:/data/cvs/resheim,,aggregator/source/feature_no.resheim.aggregator.sdk
 plugin@no.resheim.aggregator.sdk=HEAD,:pserver:builder@amon:/data/cvs/resheim,,aggregator/source/no.resheim.aggregator.sdk
+plugin@no.resheim.aggregator.sdk.ui=HEAD,:pserver:builder@amon:/data/cvs/resheim,,aggregator/source/no.resheim.aggregator.sdk.ui
