@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="no.resheim.aggregator.sdk.ui.fixDatabase"
+            name="Fix Database">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:no.resheim.aggregator.core.ui.RSSView?after=additions">
+         <menu
+               label="SDK Utilities">
+            <command
+                  commandId="no.resheim.aggregator.sdk.ui.fixDatabase"
+                  label="Fix Database"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+
+</plugin>

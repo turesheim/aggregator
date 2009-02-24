@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Aggregator SDK UI
+Bundle-SymbolicName: no.resheim.aggregator.sdk.ui;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Vendor: Resheim Software
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.eclipse.ui;bundle-version="3.4.1",
+ no.resheim.aggregator.core;bundle-version="1.0.0",
+ no.resheim.aggregator.core.ui;bundle-version="1.0.0"
