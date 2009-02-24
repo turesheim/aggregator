@@ -4,9 +4,9 @@
 package no.resheim.aggregator.data;
 
 
-import no.resheim.aggregator.TestUtils;
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.test.TestUtils;
 
 import org.junit.After;
 import org.junit.Before;

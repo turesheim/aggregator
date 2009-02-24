@@ -1,4 +1,4 @@
-package no.resheim.aggregator;
+package no.resheim.aggregator.core.test;
 
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.Feed.Archiving;

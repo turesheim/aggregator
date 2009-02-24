@@ -8,7 +8,6 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import junit.framework.TestCase;
-import no.resheim.aggregator.TestUtils;
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
@@ -17,6 +16,7 @@ import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.IAggregatorEventListener;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.rss.internal.FeedParser;
+import no.resheim.aggregator.core.test.TestUtils;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;

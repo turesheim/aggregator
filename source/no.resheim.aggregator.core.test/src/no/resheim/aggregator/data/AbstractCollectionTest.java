@@ -3,7 +3,6 @@ package no.resheim.aggregator.data;
 import java.util.UUID;
 
 import junit.framework.TestCase;
-import no.resheim.aggregator.TestUtils;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
@@ -12,6 +11,7 @@ import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.internal.InternalArticle;
 import no.resheim.aggregator.core.data.internal.InternalFolder;
+import no.resheim.aggregator.core.test.TestUtils;
 
 import org.eclipse.core.runtime.CoreException;
 import org.junit.Test;
