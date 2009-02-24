@@ -136,22 +136,32 @@ public class FeedCollection extends AggregatorItemParent {
 	public IStatus addNew(AggregatorItem[] items) {
 		MultiStatus ms = new MultiStatus(AggregatorPlugin.PLUGIN_ID,
 				IStatus.OK, "Adding new items", null); //$NON-NLS-1$
+		ArrayList<AggregatorItem> newItems = new ArrayList<AggregatorItem>();
 		try {
 			fDatabase.writeLock().lock();
 			for (AggregatorItem item : items) {
 				if (item instanceof Folder) {
 					AggregatorItem folder = (AggregatorItem) item;
-					ms.add(fDatabase.add(folder));
+					IStatus status = fDatabase.add(folder);
+					ms.add(status);
+					if (status.isOK()) {
+						newItems.add(folder);
+					}
 				} else if (item instanceof Article) {
 					Article feedItem = (Article) item;
 					validate(feedItem);
-					ms.add(fDatabase.add(feedItem));
+					IStatus status = fDatabase.add(feedItem);
+					ms.add(status);
+					if (status.isOK()) {
+						newItems.add(feedItem);
+					}
 				}
 			}
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
-		notifyListerners(items, EventType.CREATED);
+		notifyListerners(newItems.toArray(new AggregatorItem[newItems.size()]),
+				EventType.CREATED);
 		return ms;
 	}
 
