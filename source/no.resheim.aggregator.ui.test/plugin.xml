@@ -23,11 +23,16 @@
             id="no.resheim.aggregator.ui.test.printTreeCommand"
             name="Print Tree">
       </command>
+      <command
+            defaultHandler="no.resheim.aggregator.ui.test.regression.Bug636_CreateArticlesHandler"
+            id="no.resheim.aggregator.ui.test.bug_636"
+            name="Bug 636">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:no.resheim.aggregator.ui.RSSView?after=additions">
+            locationURI="menu:no.resheim.aggregator.core.ui.RSSView?after=additions">
          <separator
                name="no.resheim.aggregator.ui.test.separator1"
                visible="true">
@@ -56,6 +61,15 @@
          <command
                commandId="no.resheim.aggregator.ui.test.addYouTumeArticles"
                label="Add YouTube Test Articles">
+         </command>
+         <separator
+               name="separator"
+               visible="true">
+         </separator>
+         <command
+               commandId="no.resheim.aggregator.ui.test.bug_636"
+               label="Bug 636"
+               style="push">
          </command>
       </menuContribution>
    </extension>
