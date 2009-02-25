@@ -21,6 +21,7 @@ import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
+import no.resheim.aggregator.core.data.BrokenItem;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
@@ -285,6 +286,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * .model.AggregatorItem)
 	 */
 	public void delete(AggregatorItem item) {
+		// Note that BrokenItem instances are never deleted
 		if (item instanceof Folder) {
 			try {
 				Statement s = connection.createStatement();
@@ -455,6 +457,12 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			}
 			if (item == null) {
 				item = selectFolder(parent, index);
+			}
+			// We should have something here so we're going to return a
+			// dummy item. See bug 636. In this we're assuming that we're never
+			// requesting an item that should not exist.
+			if (item == null) {
+				item = new BrokenItem(parent, index);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -714,6 +722,10 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * .model.AggregatorItem, no.resheim.aggregator.model.AggregatorItem)
 	 */
 	public void move(AggregatorItem item) {
+		// These instances are never moved. They don't exist in the database
+		if (item instanceof BrokenItem) {
+			return;
+		}
 		try {
 			String table = null;
 			if (item instanceof Article) {
@@ -765,7 +777,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 				.executeQuery("select * from articles where parent_uuid='" //$NON-NLS-1$
 						+ ((AggregatorItem) parent).getUUID().toString()
 						+ "' and ordering=" + index); //$NON-NLS-1$
-		while (rs.next()) {
+		if (rs.next()) {
 			article = composeArticle(parent, rs);
 		}
 		rs.close();

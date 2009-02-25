@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;
+import no.resheim.aggregator.core.data.BrokenItem;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
@@ -126,6 +127,9 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		if (item instanceof Article) {
 			baseId = AggregatorUIPlugin.IMG_ARTICLE_OBJ;
 		}
+		if (item instanceof BrokenItem) {
+			baseId = AggregatorUIPlugin.IMG_ARTICLE_OBJ;
+		}
 		return baseId;
 	}
 
@@ -201,6 +205,12 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 		String id = getBaseId(item) + "_" + item.getMark(); //$NON-NLS-1$
 		ImageDescriptor type = null;
 
+		// Add status overlays
+		ImageDescriptor si = null;
+		if (item instanceof BrokenItem) {
+			si = registry.getDescriptor(AggregatorUIPlugin.IMG_DEC_ERROR);
+			id += "_ERROR"; //$NON-NLS-1$
+		}
 		// Add MIME type overlays
 		if (item instanceof Article) {
 			if (((Article) item).hasMedia()) {
@@ -208,15 +218,16 @@ public class FeedViewerLabelProvider extends ColumnLabelProvider implements
 				id += "_flash"; //$NON-NLS-1$
 			}
 		}
-
+		// If we already have the image in the registry return it.
 		if (registry.get(id) != null) {
 			return registry.get(id);
 		}
+		// Otherwise we have to compose a new instance
 		Image baseImage = registry.get(getBaseId(item));
 		Point size = new Point(16, 16);
 		DecorationOverlayIcon icon = new DecorationOverlayIcon(baseImage,
 				new ImageDescriptor[] {
-						type, getMarkingOverlay(item), null, null, null
+						type, getMarkingOverlay(item), null, si, null
 				}, size) {
 		};
 		registry.put(id, icon);
