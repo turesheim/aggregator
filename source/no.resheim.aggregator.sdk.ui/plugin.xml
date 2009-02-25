@@ -4,6 +4,7 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
+            defaultHandler="no.resheim.aggregator.sdk.ui.FixDatabaseCommandHandler"
             id="no.resheim.aggregator.sdk.ui.fixDatabase"
             name="Fix Database">
       </command>
