@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2007-2009 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -74,6 +74,8 @@ import org.eclipse.ui.part.ViewPart;
  * <li>selection</li>
  * </ul>
  * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
  */
 public class RSSView extends ViewPart implements IFeedView,
 		IFeedCollectionEventListener {
@@ -295,6 +297,8 @@ public class RSSView extends ViewPart implements IFeedView,
 		} else {
 			AggregatorPlugin.getDefault().addFeedCollectionListener(this);
 		}
+		// Make sure we update the layout visibly
+		setLayout(fHorizontalLayout ? Layout.HORIZONTAL : Layout.VERTICAL);
 	}
 
 	/**
@@ -426,10 +430,10 @@ public class RSSView extends ViewPart implements IFeedView,
 
 	@Override
 	public void saveState(IMemento memento) {
-		super.saveState(memento);
 		final String name = this.getClass().getName();
 		memento.putString(name + MEMENTO_ORIENTATION, Boolean
 				.toString(fHorizontalLayout));
+		System.out.println(fHorizontalLayout);
 	}
 
 	public void setFeedCollection(FeedCollection registry) {
