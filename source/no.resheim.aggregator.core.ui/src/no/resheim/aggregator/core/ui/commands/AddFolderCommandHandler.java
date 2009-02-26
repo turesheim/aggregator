@@ -37,7 +37,6 @@ import org.eclipse.ui.handlers.HandlerUtil;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-@SuppressWarnings("restriction")
 public class AddFolderCommandHandler extends RenameFolderCommand implements
 		IHandler {
 
