@@ -15,6 +15,7 @@ public class Messages extends NLS {
 	public static String AggregatorPreferencePage_Reuse_Window;
 	public static String AggregatorPreferencePage_Show_Unread_Count;
 	public static String AggregatorPreferencePage_Title;
+	public static String AggregatorPreferencePage_UnreadItemColor;
 	public static String AggregatorPreferencePage_View;
 	public static String ArchivingPreferencePage_Days;
 	public static String ArchivingPreferencePage_Description;

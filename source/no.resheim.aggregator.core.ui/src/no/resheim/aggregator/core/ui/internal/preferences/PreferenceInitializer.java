@@ -19,6 +19,8 @@ import no.resheim.aggregator.core.ui.PreferenceConstants.LinkOpen;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferenceConverter;
+import org.eclipse.swt.graphics.RGB;
 
 /**
  * Class used to initialize default preference values.
@@ -52,6 +54,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_BROWSER_REUSE_WINDOW, true);
 		store.setDefault(PreferenceConstants.P_OPEN_LINK, LinkOpen.EDITOR
 				.toString());
+		PreferenceConverter.setDefault(store,
+				PreferenceConstants.P_UNREAD_ITEM_COLOR, new RGB(0, 0, 128));
 	}
 
 }

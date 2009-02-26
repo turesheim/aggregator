@@ -15,6 +15,7 @@ import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FontFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
@@ -54,6 +55,12 @@ public class AggregatorPreferencePage extends FieldEditorPreferencePage
 			addField(new FontFieldEditor(PreferenceConstants.P_PREVIEW_FONT,
 					Messages.AggregatorPreferencePage_Preview_Font, null,
 					getFieldEditorParent()));
+		}
+
+		{
+			addField(new ColorFieldEditor(
+					PreferenceConstants.P_UNREAD_ITEM_COLOR,
+					Messages.AggregatorPreferencePage_UnreadItemColor, getFieldEditorParent()));
 		}
 
 		{

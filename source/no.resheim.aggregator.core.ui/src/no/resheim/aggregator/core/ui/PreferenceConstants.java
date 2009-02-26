@@ -31,6 +31,8 @@ public class PreferenceConstants {
 	public static final String P_PREVIEW_IS_READ = "preview_is_read"; //$NON-NLS-1$
 	/** Show the number of unread articles in the feed label */
 	public static final String P_SHOW_UNREAD_COUNT = "show_unread_count"; //$NON-NLS-1$
+	/** The color to use for unread items */
+	public static final String P_UNREAD_ITEM_COLOR = "unread_item_color"; //$NON-NLS-1$
 	/** The font to use when showing the article */
 	public static final String P_PREVIEW_FONT = "preview_font"; //$NON-NLS-1$
 	/** The default archiving method to use */
