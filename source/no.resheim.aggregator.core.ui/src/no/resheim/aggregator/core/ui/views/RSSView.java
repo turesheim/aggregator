@@ -28,7 +28,7 @@ import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.ArticleViewer;
 import no.resheim.aggregator.core.ui.FeedTreeViewer;
 import no.resheim.aggregator.core.ui.FeedViewerContentProvider;
-import no.resheim.aggregator.core.ui.FeedViewerLabelProvider;
+import no.resheim.aggregator.core.ui.CollectionViewerLabelProvider;
 import no.resheim.aggregator.core.ui.IArticleViewerListener;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
@@ -173,7 +173,7 @@ public class RSSView extends ViewPart implements IFeedView,
 	/** The item that was last selected by the user */
 	private Article fLastSelectionItem;
 
-	private FeedViewerLabelProvider labelProvider;
+	private CollectionViewerLabelProvider labelProvider;
 
 	/**
 	 * Marks the last selected item as read and updates it's and the parent's
@@ -253,7 +253,7 @@ public class RSSView extends ViewPart implements IFeedView,
 				| SWT.V_SCROLL);
 		treeView.setContentProvider(new FeedViewerContentProvider());
 		treeView
-				.setLabelProvider(labelProvider = new FeedViewerLabelProvider());
+				.setLabelProvider(labelProvider = new CollectionViewerLabelProvider());
 		fViewSelectionListener = new ViewSelectionListener();
 		treeView.addSelectionChangedListener(fViewSelectionListener);
 

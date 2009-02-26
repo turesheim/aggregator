@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.ui.FeedViewerLabelProvider;
+import no.resheim.aggregator.core.ui.CollectionViewerLabelProvider;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.Messages;
 
@@ -42,13 +42,13 @@ public class NotificationPopup extends AbstractNotificationPopup {
 	private static final int MAX_ITEMS = 5;
 	int count;
 
-	FeedViewerLabelProvider labelProvider;
+	CollectionViewerLabelProvider labelProvider;
 	private IFeedView fView;
 	private HashMap<String, AggregatorItem> map;
 
 	public NotificationPopup(IFeedView view, AggregatorItem[] items) {
 		super(view.getFeedViewer().getControl().getDisplay());
-		labelProvider = new FeedViewerLabelProvider();
+		labelProvider = new CollectionViewerLabelProvider();
 		setDelayClose(5000);
 		setBlockOnOpen(true);
 		setFadingEnabled(true);
