@@ -19,7 +19,6 @@ import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.Feed.Archiving;
 import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
-import no.resheim.aggregator.core.data.internal.InternalArticle;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.commands.AbstractAggregatorCommandHandler;
 
@@ -87,7 +86,7 @@ public class CreateYouTubeArticlesHandler extends
 							"YouTube Support Test"); //$NON-NLS-1$
 					Folder folder = collection.addNew(feed);
 					for (int a = 0; a < ARTICLES.length; a++) {
-						InternalArticle article = new InternalArticle(folder,
+						Article article = new Article(folder,
 								UUID.randomUUID(), feed.getUUID());
 						article.setTitle(ARTICLES[a][1]); //$NON-NLS-1$
 						article.setGuid(article.getUUID().toString());

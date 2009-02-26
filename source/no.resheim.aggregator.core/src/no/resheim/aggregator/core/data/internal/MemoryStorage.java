@@ -117,7 +117,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 	public String getDescription(Article item) {
 		ItemHolder holder = items.get(item.getUUID());
 		if (holder != null) {
-			return ((InternalArticle) holder.item).internalGetText();
+			return ((Article) holder.item).internalGetText();
 		}
 		return EMPTY_STRING;
 	}

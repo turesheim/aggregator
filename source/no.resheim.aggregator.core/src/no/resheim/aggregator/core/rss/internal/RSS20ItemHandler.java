@@ -14,11 +14,11 @@ package no.resheim.aggregator.core.rss.internal;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
+import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.MediaContent;
 import no.resheim.aggregator.core.data.MediaContent.Medium;
-import no.resheim.aggregator.core.data.internal.InternalArticle;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -63,7 +63,7 @@ public class RSS20ItemHandler extends AbstractItemHandler {
 	public RSS20ItemHandler(FeedCollection registry, Feed feed) {
 		this.collection = registry;
 		this.feed = feed;
-		item = new InternalArticle(feed, UUID.randomUUID());
+		item = new Article(feed, UUID.randomUUID());
 		item.setAddedDate(System.currentTimeMillis());
 	}
 

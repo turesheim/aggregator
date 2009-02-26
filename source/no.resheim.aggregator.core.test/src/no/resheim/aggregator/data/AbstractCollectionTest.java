@@ -9,8 +9,6 @@ import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
-import no.resheim.aggregator.core.data.internal.InternalArticle;
-import no.resheim.aggregator.core.data.internal.InternalFolder;
 import no.resheim.aggregator.core.test.TestUtils;
 
 import org.eclipse.core.runtime.CoreException;
@@ -70,8 +68,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 	@Test
 	public final void testAddFolder() throws CoreException {
 		// Create the folder instance
-		InternalFolder folder_a = new InternalFolder(getCollection(), UUID
-				.randomUUID());
+		Folder folder_a = new Folder(getCollection(), UUID.randomUUID());
 		// Add it to the collection
 		getCollection().addNew(new Folder[] {
 			folder_a
@@ -139,9 +136,8 @@ public abstract class AbstractCollectionTest extends TestCase {
 		// the location for the feed.
 		Folder folder = collection.addNew(feed);
 		// Create the article
-		InternalArticle article_a = new InternalArticle(
-				(AggregatorItemParent) folder, UUID.randomUUID(), feed
-						.getUUID());
+		Article article_a = new Article((AggregatorItemParent) folder, UUID
+				.randomUUID(), feed.getUUID());
 		article_a.setGuid("myGUID"); //$NON-NLS-1$
 		// Add it to the collection
 		collection.addNew(new Article[] {
@@ -172,8 +168,8 @@ public abstract class AbstractCollectionTest extends TestCase {
 		Feed feed = TestUtils.createNewFeed("1000 articles"); //$NON-NLS-1$
 		Folder folder = collection.addNew(feed);
 		for (int a = 0; a < 1000; a++) {
-			InternalArticle article = new InternalArticle(folder, UUID
-					.randomUUID(), feed.getUUID());
+			Article article = new Article(folder, UUID.randomUUID(), feed
+					.getUUID());
 			article.setTitle("Article #" + a); //$NON-NLS-1$
 			article.setGuid(article.getUUID().toString());
 			article.internalSetText(""); //$NON-NLS-1$

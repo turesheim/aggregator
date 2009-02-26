@@ -17,7 +17,6 @@ import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
-import no.resheim.aggregator.core.data.internal.InternalArticle;
 import no.resheim.aggregator.core.test.TestUtils;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.commands.AbstractAggregatorCommandHandler;
@@ -67,8 +66,8 @@ public class Bug636_CreateArticlesHandler extends
 					Folder folder = collection.addNew(feed);
 
 					// First insert a good article.
-					InternalArticle article_1 = new InternalArticle(folder,
-							UUID.randomUUID(), feed.getUUID());
+					Article article_1 = new Article(folder, UUID.randomUUID(),
+							feed.getUUID());
 					article_1.setTitle("Article 1 (good)"); //$NON-NLS-1$
 					article_1.setGuid(article_1.getUUID().toString());
 					article_1.internalSetText("description"); //$NON-NLS-1$
@@ -76,15 +75,15 @@ public class Bug636_CreateArticlesHandler extends
 
 					// This article should fail to be inserted into the database
 					// as the URL field is way too long.
-					InternalArticle article_2 = new InternalArticle(folder,
-							UUID.randomUUID(), feed.getUUID());
+					Article article_2 = new Article(folder, UUID.randomUUID(),
+							feed.getUUID());
 					article_2.setTitle("Article 2 (bad)"); //$NON-NLS-1$
 					article_2.setGuid(article_2.getUUID().toString());
 					article_2.internalSetText("description"); //$NON-NLS-1$
 					article_2.setLink(EMPTY_STRING);
 
-					InternalArticle article_3 = new InternalArticle(folder,
-							UUID.randomUUID(), feed.getUUID());
+					Article article_3 = new Article(folder, UUID.randomUUID(),
+							feed.getUUID());
 					article_3.setTitle("Article 3 (good)"); //$NON-NLS-1$
 					article_3.setGuid(article_3.getUUID().toString());
 					article_3.internalSetText("description"); //$NON-NLS-1$
@@ -94,8 +93,8 @@ public class Bug636_CreateArticlesHandler extends
 					});
 					// This article should fail to be inserted into the database
 					// as the URL field is way too long.
-					InternalArticle article_4 = new InternalArticle(folder,
-							UUID.randomUUID(), feed.getUUID());
+					Article article_4 = new Article(folder, UUID.randomUUID(),
+							feed.getUUID());
 					article_4.setTitle("Article 4 (bad)"); //$NON-NLS-1$
 					article_4.setGuid(article_4.getUUID().toString());
 					article_4.internalSetText("description"); //$NON-NLS-1$

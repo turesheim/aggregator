@@ -21,8 +21,6 @@ import java.util.UUID;
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.data.internal.CollectionUpdateJob;
-import no.resheim.aggregator.core.data.internal.InternalArticle;
-import no.resheim.aggregator.core.data.internal.InternalFolder;
 import no.resheim.aggregator.core.filter.Filter;
 
 import org.eclipse.core.runtime.Assert;
@@ -176,13 +174,13 @@ public class FeedCollection extends AggregatorItemParent {
 	public Folder addNew(Feed feed) {
 		Assert.isNotNull(feed.getUUID(),
 				"Cannot add feed with unspecified UUID"); //$NON-NLS-1$
-		InternalFolder folder = null;
+		Folder folder = null;
 		try {
 			fDatabase.writeLock().lock();
 			// No location has been specified for the feed so we must create a
 			// new folder at the collection root and use this.
 			if (feed.getLocation() == null) {
-				folder = new InternalFolder(this, UUID.randomUUID());
+				folder = new Folder(this, UUID.randomUUID());
 				folder.setFeed(feed.getUUID());
 				folder.setTitle(feed.getTitle());
 				fDatabase.add(folder);
@@ -217,7 +215,7 @@ public class FeedCollection extends AggregatorItemParent {
 				}
 			}
 			if (fTrashFolder == null) {
-				InternalFolder trash = new InternalFolder(this, TRASH_ID);
+				Folder trash = new Folder(this, TRASH_ID);
 				trash.setSystem(true);
 				trash.setFlags(EnumSet.of(Flag.TRASH));
 				trash.setTitle(TRASH_FOLDER_NAME);
@@ -612,7 +610,7 @@ public class FeedCollection extends AggregatorItemParent {
 			fDatabase.writeLock().unlock();
 		}
 		if (item instanceof Article) {
-			((InternalArticle) item).setRead(true);
+			((Article) item).setRead(true);
 			notifyListerners(new Object[] {
 				item
 			}, EventType.READ);

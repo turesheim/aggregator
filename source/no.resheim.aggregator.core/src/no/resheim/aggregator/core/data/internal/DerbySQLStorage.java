@@ -86,10 +86,9 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		try {
 			if (item instanceof Article) {
 				// Set the order of the item
-				((InternalArticle) item)
-						.setOrdering(getChildCount(((InternalArticle) item)
-								.getLocation()));
-				insert((InternalArticle) item);
+				((Article) item).setOrdering(getChildCount(((Article) item)
+						.getLocation()));
+				insert((Article) item);
 			}
 			if (item instanceof Folder) {
 				((AggregatorItem) item)
@@ -140,10 +139,10 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * @return
 	 * @throws SQLException
 	 */
-	private InternalArticle composeArticle(AggregatorItemParent parent,
-			ResultSet rs) throws SQLException {
-		InternalArticle item = new InternalArticle(parent, UUID.fromString(rs
-				.getString(1)), UUID.fromString(rs.getString(4)));
+	private Article composeArticle(AggregatorItemParent parent, ResultSet rs)
+			throws SQLException {
+		Article item = new Article(parent, UUID.fromString(rs.getString(1)),
+				UUID.fromString(rs.getString(4)));
 		item.setOrdering(rs.getInt(3));
 		item.setGuid(rs.getString(5));
 		item.setTitle(rs.getString(6).trim());
@@ -199,8 +198,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private AggregatorItem composeFolder(AggregatorItemParent parent,
 			ResultSet rs) throws SQLException {
-		InternalFolder item = new InternalFolder(parent, UUID.fromString(rs
-				.getString(1)));
+		Folder item = new Folder(parent, UUID.fromString(rs.getString(1)));
 		item.setOrdering(rs.getInt(3));
 		if (rs.getString(4) != null) {
 			item.setFeed(UUID.fromString(rs.getString(4)));
@@ -262,7 +260,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			br.close();
 			// Create a folder to represent the collection root. This is
 			// required for maintaining relation integrity.
-			Folder root = new InternalFolder(null, collection.getUUID());
+			Folder root = new Folder(null, collection.getUUID());
 			root.setTitle("ROOT"); //$NON-NLS-1$
 			root.setSystem(true);
 			insert(root);
@@ -656,7 +654,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 *            The item to insert.
 	 * @throws SQLException
 	 */
-	private void insert(InternalArticle item) throws SQLException {
+	private void insert(Article item) throws SQLException {
 		PreparedStatement ps = connection
 				.prepareStatement("insert into articles values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
@@ -772,7 +770,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	private AggregatorItem selectArticle(AggregatorItemParent parent, int index)
 			throws SQLException {
 		Statement s = connection.createStatement();
-		InternalArticle article = null;
+		Article article = null;
 		ResultSet rs = s
 				.executeQuery("select * from articles where parent_uuid='" //$NON-NLS-1$
 						+ ((AggregatorItem) parent).getUUID().toString()
@@ -854,7 +852,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 					+ parent.getUUID() + "' order by ordering"; //$NON-NLS-1$
 			ResultSet rs = s.executeQuery(query);
 			while (rs.next()) {
-				InternalArticle i = composeArticle(parent, rs);
+				Article i = composeArticle(parent, rs);
 				feeds.add(i);
 			}
 			rs.close();

@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.FeedCollection;
-import no.resheim.aggregator.core.data.internal.InternalFolder;
+import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.ui.IFeedView;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -74,8 +74,7 @@ public class AddFolderCommandHandler extends RenameFolderCommand implements
 				items[0].setExpanded(true);
 			}
 			// Create the folder
-			InternalFolder folder = new InternalFolder(parent, UUID
-					.randomUUID());
+			Folder folder = new Folder(parent, UUID.randomUUID());
 			folder.setTitle(Messages.AddFolderCommandHandler_NewFolderName);
 			newItem.setData(folder);
 			try {
