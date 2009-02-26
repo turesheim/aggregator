@@ -519,12 +519,15 @@
       <handler
             name="Document" type="text/html">
          <code>
-            &lt;body style=&quot;margin:4px;font-family:&apos;${font-family}&apos;;font-size:${font-size}pt&quot;&gt;${content}
+            &lt;body style=&quot;margin:4px;font-family:&apos;${font-family}&apos;
+            ;font-size:${font-size}pt&quot;&gt;${content}
 &lt;/body&gt;
          </code>
       </handler>
       <handler
-            name="Flash animation" type="application/x-shockwave-flash">
+            name="Flash animation"
+            suffix="swf"
+            type="application/x-shockwave-flash">
          <code>
             &lt;body style=&quot;margin:0px;&quot;&gt;
 &lt;OBJECT classid=&quot;clsid:D27CDB6E-AE6D-11cf-96B8-444553540000&quot; codebase=&quot;http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0&quot;

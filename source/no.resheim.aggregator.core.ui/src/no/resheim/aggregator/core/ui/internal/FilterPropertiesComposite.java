@@ -10,8 +10,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal;
 
-import java.util.UUID;
-
+import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.filter.Criterion;
 import no.resheim.aggregator.core.filter.Filter;
 
@@ -19,7 +18,11 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -32,6 +35,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -46,9 +50,14 @@ import org.eclipse.swt.widgets.TableColumn;
  */
 public class FilterPropertiesComposite extends Composite {
 
-	private Table filtersTable;
-	private TableViewer tableViewer_1;
+	private Group availableFiltersGroup;
+	private Button deleteFilterButton;
+	private Button copyFilterButton;
+	private Button newFilterButton;
 	private Composite composite;
+	private Table filtersTable;
+	private TableViewer filtersTableViewer;
+	private Composite generalTabComposite;
 	private TabItem generalTabItem;
 	private TabFolder tabFolder;
 	private TableColumn newColumnTableColumn_2;
@@ -149,51 +158,96 @@ public class FilterPropertiesComposite extends Composite {
 
 	}
 
+	private FeedCollection fCollection;
+
 	/**
 	 * Create the composite
 	 * 
 	 * @param parent
 	 * @param style
 	 */
-	public FilterPropertiesComposite(Composite parent, int style) {
-
+	public FilterPropertiesComposite(Composite parent, int style,
+			FeedCollection collection) {
 		super(parent, style);
-
-		filter = new Filter(UUID.randomUUID(), "New filter");
+		fCollection = collection;
 
 		final GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 2;
 		setLayout(gridLayout);
 		criteriaContentProvider = new CriteriaContentProvider();
-		initTableEditing();
 
-		tableViewer_1 = new TableViewer(this, SWT.BORDER);
-		tableViewer_1.setContentProvider(new FilterContentProvider());
-		filtersTable = tableViewer_1.getTable();
+		availableFiltersGroup = new Group(this, SWT.NONE);
+		availableFiltersGroup.setText("Available filters");
+		final GridData gd_availableFiltersGroup = new GridData(SWT.FILL,
+				SWT.FILL, true, true);
+		availableFiltersGroup.setLayoutData(gd_availableFiltersGroup);
+		availableFiltersGroup.setLayout(new GridLayout());
+
+		filtersTableViewer = new TableViewer(availableFiltersGroup, SWT.BORDER);
+		filtersTableViewer
+				.addPostSelectionChangedListener(new ISelectionChangedListener() {
+					public void selectionChanged(
+							final SelectionChangedEvent event) {
+						ISelection selection = event.getSelection();
+						if (selection instanceof IStructuredSelection) {
+							Object o = ((IStructuredSelection) selection)
+									.getFirstElement();
+							if (o instanceof Filter) {
+								tableViewer.setInput(o);
+								addButton.setEnabled(true);
+								removeButton.setEnabled(true);
+							}
+						}
+					}
+				});
+		filtersTableViewer.setContentProvider(new FilterContentProvider());
+		filtersTable = filtersTableViewer.getTable();
 		filtersTable.setLinesVisible(true);
-		filtersTable.setHeaderVisible(true);
 		final GridData gd_filtersTable = new GridData(SWT.FILL, SWT.FILL, true,
 				true);
+		gd_filtersTable.minimumHeight = 200;
+		gd_filtersTable.widthHint = 250;
 		filtersTable.setLayoutData(gd_filtersTable);
+		// Start with dummy input
+		
+
+		composite = new Composite(availableFiltersGroup, SWT.NONE);
+		final GridLayout gridLayout_2 = new GridLayout();
+		gridLayout_2.numColumns = 3;
+		composite.setLayout(gridLayout_2);
+
+		newFilterButton = new Button(composite, SWT.NONE);
+		newFilterButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(final SelectionEvent e) {
+			}
+		});
+		newFilterButton.setText("New");
+
+		copyFilterButton = new Button(composite, SWT.NONE);
+		copyFilterButton.setText("Copy");
+
+		deleteFilterButton = new Button(composite, SWT.NONE);
+		deleteFilterButton.setText("Delete");
 
 		tabFolder = new TabFolder(this, SWT.NONE);
-		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
+				2));
 
 		generalTabItem = new TabItem(tabFolder, SWT.NONE);
 		generalTabItem.setText("General");
 
-		composite = new Composite(tabFolder, SWT.NONE);
+		generalTabComposite = new Composite(tabFolder, SWT.NONE);
 		final GridLayout gridLayout_1 = new GridLayout();
 		gridLayout_1.numColumns = 2;
-		composite.setLayout(gridLayout_1);
-		generalTabItem.setControl(composite);
+		generalTabComposite.setLayout(gridLayout_1);
+		generalTabItem.setControl(generalTabComposite);
 
-		criteriaLabel = new Label(composite, SWT.NONE);
+		criteriaLabel = new Label(generalTabComposite, SWT.NONE);
 		criteriaLabel.setLayoutData(new GridData());
 		criteriaLabel.setText("Criteria:");
-		new Label(composite, SWT.NONE);
+		new Label(generalTabComposite, SWT.NONE);
 
-		tableViewer = new TableViewer(composite, SWT.BORDER);
+		tableViewer = new TableViewer(generalTabComposite, SWT.BORDER);
 		tableViewer.setUseHashlookup(true);
 		tableViewer.setContentProvider(criteriaContentProvider);
 		tableViewer.setLabelProvider(new CriterionLabelProvider());
@@ -220,9 +274,9 @@ public class FilterPropertiesComposite extends Composite {
 		tableViewer.setColumnProperties(new String[] {
 				"Field", "Operator", "Value"
 		});
-		tableViewer.setInput(filter);
 
-		addButton = new Button(composite, SWT.NONE);
+		addButton = new Button(generalTabComposite, SWT.NONE);
+		addButton.setEnabled(false);
 		addButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		addButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(final SelectionEvent e) {
@@ -232,10 +286,13 @@ public class FilterPropertiesComposite extends Composite {
 		});
 		addButton.setText("Add");
 
-		removeButton = new Button(composite, SWT.NONE);
+		removeButton = new Button(generalTabComposite, SWT.NONE);
+		removeButton.setEnabled(false);
 		removeButton
 				.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 		removeButton.setText("Remove");
+		// Enable editing of the table
+		initTableEditing();
 	}
 
 	private void initTableEditing() {
@@ -259,7 +316,7 @@ public class FilterPropertiesComposite extends Composite {
 		Shell shell = new Shell(display);
 		shell.setLayout(new FillLayout());
 		FilterPropertiesComposite props = new FilterPropertiesComposite(shell,
-				SWT.NONE);
+				SWT.NONE, null);
 		shell.pack();
 		shell.open();
 		while (!shell.isDisposed()) {

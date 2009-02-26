@@ -11,6 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.ui.internal.FilterPropertiesComposite;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -28,16 +29,20 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class FilterPropertiesDialog extends MessageDialog {
 
+	FeedCollection fCollection;
+
 	public FilterPropertiesDialog(Shell parentShell, String dialogTitle,
 			Image dialogTitleImage, String dialogMessage, int dialogImageType,
-			String[] dialogButtonLabels, int defaultIndex) {
+			String[] dialogButtonLabels, int defaultIndex,
+			FeedCollection collection) {
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage,
 				dialogImageType, dialogButtonLabels, defaultIndex);
+		fCollection = collection;
 	}
 
 	@Override
 	protected Control createCustomArea(Composite parent) {
-		return new FilterPropertiesComposite(parent, SWT.NONE);
+		return new FilterPropertiesComposite(parent, SWT.NONE, fCollection);
 	}
 
 }

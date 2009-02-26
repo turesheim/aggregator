@@ -10,7 +10,10 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal;
 
+import java.util.UUID;
+
 import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.filter.Filter;
 
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -32,14 +35,21 @@ public class FilterContentProvider implements IContentProvider,
 	public Object[] getElements(Object inputElement) {
 		if (fCollection != null) {
 			return fCollection.getFilters().toArray();
+		} else {
+			return new Filter[] {
+					new Filter(UUID.randomUUID(), "My first filter"),
+					new Filter(UUID.randomUUID(), "My second filter"),
+					new Filter(UUID.randomUUID(), "My third filter")
+			};
 		}
-		return new Object[0];
+		// return new Object[0];
 	}
 
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		if (newInput instanceof FeedCollection) {
 			fCollection = (FeedCollection) newInput;
 		}
+		System.out.println("FilterContentProvider.inputChanged()");
 
 	}
 

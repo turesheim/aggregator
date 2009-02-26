@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2009 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,8 +33,8 @@ public class FilterPropertiesCommandHandler extends
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedCollection registry = ((IFeedView) part).getFeedCollection();
-			if (registry == null) {
+			FeedCollection collection = ((IFeedView) part).getFeedCollection();
+			if (collection == null) {
 				return null;
 			}
 			FilterPropertiesDialog dialog = new FilterPropertiesDialog(
@@ -46,7 +46,7 @@ public class FilterPropertiesCommandHandler extends
 					new String[] {
 							Messages.FeedPropertiesCommand_OK,
 							Messages.FeedPropertiesCommand_CANCEL
-					}, 0);
+					}, 0, collection);
 			if (dialog.open() == Window.OK) {
 			}
 		}
