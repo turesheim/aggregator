@@ -50,8 +50,6 @@ public class FeedCollection extends AggregatorItemParent {
 	private static final UUID TRASH_ID = UUID
 			.fromString("448119fa-609c-4463-89cf-31d41d94ad05"); //$NON-NLS-1$
 
-	int count = 0;
-
 	/**
 	 * The storage for our data
 	 * 
@@ -75,10 +73,13 @@ public class FeedCollection extends AggregatorItemParent {
 	private boolean fPublic;
 
 	/**
+	 * Job that is awaken now and then for updating the collection.
+	 * 
 	 * @uml.property name="fRegistryUpdateJob"
 	 * @uml.associationEnd
 	 */
-	final CollectionUpdateJob fRegistryUpdateJob = new CollectionUpdateJob(this);
+	private final CollectionUpdateJob fCollectionUpdateJob = new CollectionUpdateJob(
+			this);
 
 	/**
 	 * @uml.property name="fTrashFolder"
@@ -389,13 +390,13 @@ public class FeedCollection extends AggregatorItemParent {
 		createTrashFolder();
 		// Start a new update job that will periodically wake up and create
 		// FeedUpdateJobs when a feed is scheduled for an update.
-		fRegistryUpdateJob.addJobChangeListener(new JobChangeAdapter() {
+		fCollectionUpdateJob.addJobChangeListener(new JobChangeAdapter() {
 			@Override
 			public void done(IJobChangeEvent event) {
-				fRegistryUpdateJob.schedule(30000);
+				fCollectionUpdateJob.schedule(30000);
 			}
 		});
-		fRegistryUpdateJob.schedule();
+		fCollectionUpdateJob.schedule();
 	}
 
 	public boolean isDefault() {
