@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2007-2009 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,48 +26,64 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
- * Job that when run will iterate through all feeds that are held by the registry, determine if the feed needs to be updated and if that's the case create a new job to update the feed.
- * @author   Torkild Ulvøy Resheim
- * @since   1.0
+ * Job that when run will iterate through all feeds that are held by the
+ * collection, determine if the feed needs to be updated and if that is the
+ * case; create a new job to update the feed. Multiple feed update jobs may
+ * execute concurrently.
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
  */
 public class CollectionUpdateJob extends Job {
 
 	/**
-	 * The feed registry that we're updating
-	 * @uml.property  name="registry"
-	 * @uml.associationEnd  
+	 * The feed collection that we're updating
+	 * 
 	 */
-	private FeedCollection registry;
+	private FeedCollection fCollection;
 
+	/**
+	 * Compares feeds by next update time.
+	 * 
+	 * @author Torkild Ulvøy Resheim
+	 */
 	private static class FeedComparator implements Comparator<Feed>,
 			Serializable {
 
 		private static final long serialVersionUID = 5298242739294116541L;
 
 		public int compare(Feed o1, Feed o2) {
-			return 0;
+			long val1 = o1.getLastUpdate() + o1.getUpdateTime();
+			long val2 = o2.getLastUpdate() + o2.getUpdateTime();
+			return (int) (val1 - val2);
 		}
 
 	}
 
-	public CollectionUpdateJob(FeedCollection registry) {
+	/**
+	 * Creates a new collection update job that will update the feeds of the
+	 * collection.
+	 * 
+	 * @param collection
+	 */
+	public CollectionUpdateJob(FeedCollection collection) {
 		super(Messages.RegistryUpdateJob_Label);
-		this.registry = registry;
+		this.fCollection = collection;
 	}
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		Stack<Feed> feeds = getSortedFeeds();
 		while (!feeds.empty()) {
-			Feed f = feeds.pop();
+			Feed feed = feeds.pop();
 			// Update if we're not already doing so unless the last update was
 			// bad.
-			if (!f.isUpdating() && f.getLastStatus().isOK()) {
-				long last = f.getLastUpdate();
-				long interval = f.getUpdateTime();
+			if (!feed.isUpdating() && feed.getLastStatus().isOK()) {
+				long last = feed.getLastUpdate();
+				long interval = feed.getUpdateTime();
 				// Schedule the job to run
 				if ((last + interval) <= System.currentTimeMillis()) {
-					FeedUpdateJob j = new FeedUpdateJob(registry, f);
+					FeedUpdateJob j = new FeedUpdateJob(fCollection, feed);
 					j.schedule();
 				}
 			}
@@ -83,7 +99,7 @@ public class CollectionUpdateJob extends Job {
 	 */
 	private Stack<Feed> getSortedFeeds() {
 		Stack<Feed> feeds = new Stack<Feed>();
-		for (Feed feed : registry.getFeeds().values()) {
+		for (Feed feed : fCollection.getFeeds().values()) {
 			feeds.add(feed);
 		}
 		Collections.sort(feeds, new FeedComparator());
