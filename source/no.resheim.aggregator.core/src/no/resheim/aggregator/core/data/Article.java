@@ -103,7 +103,7 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	}
 
 	public Article(Feed feed, UUID uuid) {
-		super(null, uuid);
+		this((AggregatorItemParent) null, uuid);
 		Assert.isNotNull(feed);
 		fFeed = feed;
 		location = feed.getLocation();
