@@ -124,12 +124,17 @@ public abstract class AggregatorItem {
 		this.uuid = uuid;
 	}
 
+	/**
+	 * Iterates upwards in order to find the collection instance for the item
+	 * and returns this.
+	 * 
+	 * @return the collection of the item.
+	 * @throws CoreException
+	 */
 	protected FeedCollection getCollection() throws CoreException {
 		AggregatorItem p = this;
-		AggregatorItem o = p;
 		while (!(p instanceof FeedCollection)) {
 			p = p.getParent();
-			o = p;
 		}
 		return (FeedCollection) p;
 	}
