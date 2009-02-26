@@ -330,6 +330,11 @@ public class FeedCollection extends AggregatorItemParent {
 		return title;
 	}
 
+	/**
+	 * Returns the trash folder instance of the collection.
+	 * 
+	 * @return the trash folder instance
+	 */
 	public Folder getTrashFolder() {
 		return fTrashFolder;
 	}
@@ -345,11 +350,12 @@ public class FeedCollection extends AggregatorItemParent {
 
 	/**
 	 * Tests to see if the item already exists in the database. If this is the
-	 * case <i>true</i> is returned. This method relies on the globally unique
-	 * identifier of the feed item.
+	 * case <code>true</code> is returned. This method relies on the globally
+	 * unique identifier of the feed item.
 	 * 
-	 * @param item
-	 * @return
+	 * @param guid
+	 *            the unique identifier of the item.
+	 * @return <code>true</code> if the item exists
 	 */
 	public boolean hasArticle(String guid) {
 		try {

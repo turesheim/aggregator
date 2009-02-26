@@ -16,12 +16,16 @@ import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 
 /**
- * @author   torkild
+ * @author torkild
  */
 public abstract class AggregatorItemParent extends AggregatorItem {
 	/**
-	 * Note that because of the cache we're guaranteed that the same instance is retrieved when an item is requested. Thus we won't get into trouble because a viewer does not have the same instance as the action that manipulated the item. TODO: Can we make totally sure using a comparator?
-	 * @uml.property  name="children"
+	 * Note that because of the cache we're guaranteed that the same instance is
+	 * retrieved when an item is requested. Thus we won't get into trouble
+	 * because a viewer does not have the same instance as the action that
+	 * manipulated the item. TODO: Can we make totally sure using a comparator?
+	 * 
+	 * @uml.property name="children"
 	 */
 	private ArrayList<AggregatorItem> children;
 
@@ -271,9 +275,11 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	}
 
 	/**
-	 * Moves the item to the trash.
+	 * Moves the item to the trash folder of the associated feed and removes it
+	 * from this parent.
 	 * 
 	 * @param item
+	 *            the item to move to the trash folder.
 	 * @throws CoreException
 	 */
 	public void trash(AggregatorItem item) throws CoreException {
@@ -350,10 +356,12 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 
 	/**
 	 * Returns all child items. This
-	 * @param item   the parent item
-	 * @return   the child items
+	 * 
+	 * @param item
+	 *            the parent item
+	 * @return the child items
 	 * @throws CoreException
-	 * @uml.property  name="children"
+	 * @uml.property name="children"
 	 */
 	public AggregatorItem[] getChildren() throws CoreException {
 		int count = getChildCount();
