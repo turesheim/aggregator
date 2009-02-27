@@ -155,6 +155,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 	@Override
 	public Font getFont(Object element) {
 		Font font = JFaceResources.getDialogFont();
+		if (collection==null) return font;
 		if (element instanceof Folder) {
 			Folder folder = ((Folder) element);
 			int unread = collection.getItemCount(folder);
