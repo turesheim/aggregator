@@ -114,6 +114,10 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 
 			public void changing(LocationEvent event) {
 				if (fInterceptBrowser) {
+					// Handle MSIE problem. Bug 645
+					if (event.location.equals("about:blank")){
+						return;
+					}
 					IPreferenceStore store = AggregatorUIPlugin.getDefault()
 							.getPreferenceStore();
 					String setting = store
@@ -127,6 +131,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 						} catch (PartInitException e1) {
 							e1.printStackTrace();
 						} catch (MalformedURLException e1) {
+							System.err.println("Bad URL :"+event.location);
 							e1.printStackTrace();
 						}
 						break;
