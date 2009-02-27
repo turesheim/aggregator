@@ -284,6 +284,9 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
 	 */
 	public Image getImage(Object element) {
+		if (collection==null){
+			return null;
+		}
 		if (element instanceof Feed) {
 			return getImage((Feed) element, null, null);
 		}
