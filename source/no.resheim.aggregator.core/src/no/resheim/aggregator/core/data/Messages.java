@@ -9,12 +9,6 @@ public class Messages extends NLS {
 	public static String Article_PublishedByAndDownloaded;
 	public static String FeedCollection_NoDelete_Locked;
 	public static String FeedCollection_UpdateInProgress;
-	public static String FeedUpdateJob_CleaningUp;
-	public static String FeedUpdateJob_CredentialsError;
-	public static String FeedUpdateJob_Error_Title;
-	public static String FeedUpdateJob_HostError;
-	public static String FeedUpdateJob_StatusTitle;
-	public static String FeedUpdateJob_Title;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
