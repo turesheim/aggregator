@@ -182,6 +182,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		if (rs.getString(20) != null) {
 			feed.setImageData(EncodingUtils.decodeBase64(rs.getString(20)));
 		}
+		feed.setSynchronizer(rs.getString(21));
 		return feed;
 	}
 
@@ -246,10 +247,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 								AggregatorPlugin.PLUGIN_ID,
 								MessageFormat.format(
 										"Problem creating tables:\n{0}\n{1}", //$NON-NLS-1$
-										new Object[] {
-												sqle.getMessage(),
-												create.toString()
-										}));
+										new Object[] { sqle.getMessage(),
+												create.toString() }));
 					}
 					create.setLength(0);
 				} else {
@@ -557,7 +556,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private void insert(Feed feed) throws SQLException {
 		PreparedStatement ps = connection
-				.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+				.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
 		ps.setString(1, feed.getUUID().toString());
 		ps.setString(2, feed.getLocation().toString());
@@ -590,6 +589,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 				ps.setNull(20, Types.VARCHAR);
 			}
 		}
+		ps.setString(21, feed.getSynchronizer());
 		ps.executeUpdate();
 		ps.close();
 	}

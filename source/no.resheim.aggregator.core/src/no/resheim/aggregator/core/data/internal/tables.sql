@@ -81,7 +81,9 @@ CREATE TABLE feeds (
 		hidden INT NOT NULL,
 		anonymous_access INT NOT NULL,
 		keep_unread INT NOT NULL,
-		image_data VARCHAR(16384)
+		image_data VARCHAR(16384),
+		/* The updater to use (feed|google) */
+		synchronizer VARCHAR(128)
 	);
 
 /** A filter with a title */	

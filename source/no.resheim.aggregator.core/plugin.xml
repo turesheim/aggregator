@@ -2,6 +2,7 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="feeds" name="Aggregator Feeds" schema="schema/feeds.exsd"/>
+   <extension-point id="synchronizers" name="Synchronizers" schema="schema/synchronizers.exsd"/>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
    <propertyTester
@@ -11,5 +12,12 @@
          properties="multipleCollections,systemFolder"
          type="java.util.Collections$EmptyList">
    </propertyTester>
+   </extension>
+   <extension
+         point="no.resheim.aggregator.core.synchronizers">
+      <synchronizer
+            class="no.resheim.aggregator.core.synch.DefaultSynchronizer"
+            id="no.resheim.aggregator.core.defaultSynchronizer">
+      </synchronizer>
    </extension>
 </plugin>

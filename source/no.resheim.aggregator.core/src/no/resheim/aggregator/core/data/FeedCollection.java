@@ -22,6 +22,8 @@ import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.data.internal.CollectionUpdateJob;
 import no.resheim.aggregator.core.filter.Filter;
+import no.resheim.aggregator.core.synch.AbstractSynchronizer;
+import no.resheim.aggregator.core.synch.DefaultSynchronizer;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
@@ -192,17 +194,18 @@ public class FeedCollection extends AggregatorItemParent {
 			}
 			fFeeds.put(feed.getUUID(), feed);
 			fDatabase.add(feed);
-			FeedUpdateJob job = new FeedUpdateJob(this, feed);
-			job.schedule();
+			AbstractSynchronizer synchronizer = AggregatorPlugin
+					.getSynchronizer(feed.getSynchronizer());
+			synchronizer.setCollection(this);
+			synchronizer.setFeed(feed);
+			synchronizer.schedule();
 		} catch (CoreException e) {
 			e.printStackTrace();
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
 		if (folder != null) {
-			notifyListerners(new Object[] {
-				folder
-			}, EventType.CREATED);
+			notifyListerners(new Object[] { folder }, EventType.CREATED);
 		}
 		return folder;
 	}
@@ -220,9 +223,7 @@ public class FeedCollection extends AggregatorItemParent {
 				trash.setSystem(true);
 				trash.setFlags(EnumSet.of(Flag.TRASH));
 				trash.setTitle(TRASH_FOLDER_NAME);
-				addNew(new AggregatorItem[] {
-					trash
-				});
+				addNew(new AggregatorItem[] { trash });
 				fTrashFolder = trash;
 			}
 		} catch (CoreException e) {
@@ -232,12 +233,13 @@ public class FeedCollection extends AggregatorItemParent {
 
 	/**
 	 * Updates the feed data in the persistent storage. Should only be called by
-	 * {@link FeedUpdateJob} after the feed has be updated with new information.
+	 * {@link DefaultSynchronizer} after the feed has be updated with new
+	 * information.
 	 * 
 	 * @param feed
 	 *            the feed to update
 	 */
-	void feedUpdated(Feed feed) {
+	public void feedUpdated(Feed feed) {
 		try {
 			fDatabase.writeLock().lock();
 			fDatabase.updateFeed(feed);
@@ -542,8 +544,11 @@ public class FeedCollection extends AggregatorItemParent {
 				if (feedId != null) {
 					Feed feed = getFeeds().get(feedId);
 					if (!feed.isUpdating()) {
-						FeedUpdateJob job = new FeedUpdateJob(this, feed);
-						job.schedule();
+						AbstractSynchronizer synchronizer = AggregatorPlugin
+								.getSynchronizer(feed.getSynchronizer());
+						synchronizer.setCollection(this);
+						synchronizer.setFeed(feed);
+						synchronizer.schedule();
 					} else {
 						return new Status(
 								IStatus.ERROR,
@@ -612,9 +617,7 @@ public class FeedCollection extends AggregatorItemParent {
 		}
 		if (item instanceof Article) {
 			((Article) item).setRead(true);
-			notifyListerners(new Object[] {
-				item
-			}, EventType.READ);
+			notifyListerners(new Object[] { item }, EventType.READ);
 		} else if (item instanceof AggregatorItemParent) {
 			AggregatorItem[] children = ((AggregatorItemParent) item)
 					.getChildren();
@@ -705,9 +708,7 @@ public class FeedCollection extends AggregatorItemParent {
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
-		notifyListerners(new Object[] {
-			item
-		}, EventType.CHANGED);
+		notifyListerners(new Object[] { item }, EventType.CHANGED);
 	}
 
 	public void updateFeedData(Feed item) {

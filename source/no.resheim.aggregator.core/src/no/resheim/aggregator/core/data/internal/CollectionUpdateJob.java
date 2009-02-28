@@ -16,9 +16,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Stack;
 
+import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
-import no.resheim.aggregator.core.data.FeedUpdateJob;
+import no.resheim.aggregator.core.synch.AbstractSynchronizer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -83,8 +84,11 @@ public class CollectionUpdateJob extends Job {
 				long interval = feed.getUpdateTime();
 				// Schedule the job to run
 				if ((last + interval) <= System.currentTimeMillis()) {
-					FeedUpdateJob j = new FeedUpdateJob(fCollection, feed);
-					j.schedule();
+					AbstractSynchronizer synchronizer = AggregatorPlugin
+							.getSynchronizer(feed.getSynchronizer());
+					synchronizer.setCollection(fCollection);
+					synchronizer.setFeed(feed);
+					synchronizer.schedule();
 				}
 			}
 		}

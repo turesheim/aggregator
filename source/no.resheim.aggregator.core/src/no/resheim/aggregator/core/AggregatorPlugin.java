@@ -12,9 +12,13 @@ import no.resheim.aggregator.core.data.Feed.Archiving;
 import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
 import no.resheim.aggregator.core.data.internal.DerbySQLStorage;
 import no.resheim.aggregator.core.data.internal.MemoryStorage;
+import no.resheim.aggregator.core.synch.AbstractSynchronizer;
 
+import org.eclipse.core.internal.resources.Synchronizer;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -30,23 +34,67 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
 /**
- * This type is responsible for handling the feed registries that contains the actual feeds while managing the life cycle of the storage backend for these registries. <p> Once a feed registry has been declared, it can be retrieved from this plug-in using the registry's unique identifier. </p>
- * @author   Torkild Ulvøy Resheim
- * @since   1.0
+ * This type is responsible for handling the feed registries that contains the
+ * actual feeds while managing the life cycle of the storage backend for these
+ * registries.
+ * <p>
+ * Once a feed registry has been declared, it can be retrieved from this plug-in
+ * using the registry's unique identifier.
+ * </p>
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
  */
 public class AggregatorPlugin extends Plugin {
 
 	public static final String REGISTRY_EXTENSION_ID = "no.resheim.aggregator.core.feeds"; //$NON-NLS-1$
+
+	/**
+	 * The default synchronizer to use.
+	 */
+	public static final String DEFAULT_SYNCHRONIZER_ID = "no.resheim.aggregator.core.defaultSynchronizer";
+	private static final String SYNCHRONIZERS_EXTENSION_POINT = "no.resheim.aggregator.core.synchronizers";
 
 	/** The plug-in identifier */
 	public static final String PLUGIN_ID = "no.resheim.aggregator"; //$NON-NLS-1$
 
 	/**
 	 * The shared plug-in instance
-	 * @uml.property  name="plugin"
-	 * @uml.associationEnd  
+	 * 
+	 * @uml.property name="plugin"
+	 * @uml.associationEnd
 	 */
 	private static AggregatorPlugin plugin = null;
+
+	/**
+	 * Returns the feed synchroniser with the given <i>id</i>. If it could not
+	 * be found <code>null</code> is returned.
+	 * 
+	 * @param id
+	 *            the identifier of the synchroniser
+	 * @return a new {@link Synchronizer} instance
+	 */
+	public static AbstractSynchronizer getSynchronizer(String id) {
+
+		IExtensionPoint ePoint = Platform.getExtensionRegistry()
+				.getExtensionPoint(SYNCHRONIZERS_EXTENSION_POINT);
+		IConfigurationElement[] synchronizers = ePoint
+				.getConfigurationElements();
+		for (IConfigurationElement configurationElement : synchronizers) {
+			if (configurationElement.getAttribute("id").equals(id)) {
+				try {
+					Object object = configurationElement
+							.createExecutableExtension("class");
+					if (object instanceof AbstractSynchronizer) {
+						return ((AbstractSynchronizer) object);
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Collections are declared using a symbolic name, for instance
@@ -65,8 +113,8 @@ public class AggregatorPlugin extends Plugin {
 	private ArrayList<Feed> fDefaultFeeds;
 
 	/**
-	 * @uml.property  name="defaultCollection"
-	 * @uml.associationEnd  
+	 * @uml.property name="defaultCollection"
+	 * @uml.associationEnd
 	 */
 	private FeedCollection defaultCollection;
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2007-2009 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,7 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.core.data;
+package no.resheim.aggregator.core.synch;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,6 +30,9 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
+import no.resheim.aggregator.core.data.AggregatorItem;
+import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.data.Feed.Archiving;
 import no.resheim.aggregator.core.rss.internal.FeedParser;
@@ -42,7 +45,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.security.storage.EncodingUtils;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
@@ -53,32 +55,13 @@ import org.osgi.framework.ServiceReference;
 import org.xml.sax.SAXException;
 
 /**
- * @author   Torkild Ulvøy Resheim
- * @since   1.0
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
  */
-public class FeedUpdateJob extends Job {
+public class DefaultSynchronizer extends AbstractSynchronizer implements
+		IFeedSynchronizer {
 
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
-	/**
-	 * @uml.property  name="feed"
-	 * @uml.associationEnd  
-	 */
-	private Feed feed;
-	/**
-	 * @uml.property  name="collection"
-	 * @uml.associationEnd  
-	 */
-	private FeedCollection collection;
-
-	public FeedUpdateJob(FeedCollection collection, Feed feed) {
-		super(MessageFormat.format(Messages.FeedUpdateJob_Title, new Object[] {
-			feed.getTitle()
-		}));
-		this.feed = feed;
-		this.collection = collection;
-		setPriority(Job.DECORATE);
-		setUser(false);
-	}
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
@@ -87,9 +70,7 @@ public class FeedUpdateJob extends Job {
 			feed.getTempItems().clear();
 		}
 		boolean debug = AggregatorPlugin.getDefault().isDebugging();
-		collection.notifyListerners(new Feed[] {
-			feed
-		}, EventType.CHANGED);
+		collection.notifyListerners(new Feed[] { feed }, EventType.CHANGED);
 		// If the feed does not use archiving it's better to remove all items
 		// before downloading new ones.
 		if (feed.getArchiving() == Archiving.KEEP_NONE) {
@@ -97,18 +78,15 @@ public class FeedUpdateJob extends Job {
 		}
 		MultiStatus ms = new MultiStatus(AggregatorPlugin.PLUGIN_ID,
 				IStatus.OK, MessageFormat.format(
-						Messages.FeedUpdateJob_StatusTitle, new Object[] {
-							feed.getTitle()
-						}), null);
+						Messages.FeedUpdateJob_StatusTitle, new Object[] { feed
+								.getTitle() }), null);
 		try {
 			if (!feed.getURL().startsWith("test://")) { //$NON-NLS-1$
 				ms.add(download(feed, debug));
 			}
 			if (ms.isOK()) {
 				setName(MessageFormat.format(Messages.FeedUpdateJob_CleaningUp,
-						new Object[] {
-							feed.getTitle()
-						}));
+						new Object[] { feed.getTitle() }));
 				cleanUp(feed);
 			}
 			synchronized (feed) {
@@ -123,9 +101,7 @@ public class FeedUpdateJob extends Job {
 			feed.setLastStatus(ms);
 			// Store changes to the feed
 			collection.feedUpdated(feed);
-			collection.notifyListerners(new Feed[] {
-				feed
-			}, EventType.CHANGED);
+			collection.notifyListerners(new Feed[] { feed }, EventType.CHANGED);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -139,7 +115,7 @@ public class FeedUpdateJob extends Job {
 	 * 
 	 * @param site
 	 */
-	void cleanUp(Feed site) {
+	private void cleanUp(Feed site) {
 		// First find the folder
 		try {
 			for (Folder folder : collection.getDescendingFolders()) {
@@ -177,9 +153,7 @@ public class FeedUpdateJob extends Job {
 		} catch (UnknownHostException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
 					MessageFormat.format(Messages.FeedUpdateJob_HostError,
-							new Object[] {
-								e.getMessage()
-							}));
+							new Object[] { e.getMessage() }));
 		} catch (StorageException e) {
 			e.printStackTrace();
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
@@ -206,9 +180,7 @@ public class FeedUpdateJob extends Job {
 	private void dowloadFavicon(Feed feed, URL feedURL)
 			throws MalformedURLException, StorageException {
 		URL favicon = new URL(MessageFormat.format("{0}://{1}/favicon.ico", //$NON-NLS-1$
-				new Object[] {
-						feedURL.getProtocol(), feedURL.getHost()
-				}));
+				new Object[] { feedURL.getProtocol(), feedURL.getHost() }));
 		try {
 			URLConnection ic = getConnection(feed, favicon);
 			InputStream is = ic.getInputStream();
