@@ -421,7 +421,7 @@ public class AggregatorPlugin extends Plugin {
 			yc.setRequestProperty("Proxy-Authorization", "Basic " //$NON-NLS-1$ //$NON-NLS-2$
 					+ EncodingUtils.encodeBase64(proxyLogin.getBytes()));
 		}
-		if (anonymous) {
+		if (!anonymous) {
 			ISecurePreferences root = SecurePreferencesFactory.getDefault()
 					.node(AggregatorPlugin.SECURE_STORAGE_ROOT);
 			ISecurePreferences feedNode = root.node(nodeId);
