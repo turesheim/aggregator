@@ -94,9 +94,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 */
 	public void add(AggregatorItem item) throws CoreException {
 		internalAdd(item);
-		getCollection().addNew(new AggregatorItem[] {
-			item
-		});
+		getCollection().addNew(new AggregatorItem[] { item });
 	}
 
 	/**
@@ -144,7 +142,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 * @param site
 	 * @throws CoreException
 	 */
-	void cleanUp(Feed site) throws CoreException {
+	public void cleanUp(Feed site) throws CoreException {
 		Archiving archiving = site.getArchiving();
 		ArrayList<Article> trashed = new ArrayList<Article>();
 		int days = site.getArchivingDays();
@@ -254,7 +252,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		return false;
 	}
 
-	protected List<Folder> getDescendingFolders() throws CoreException {
+	public List<Folder> getDescendingFolders() throws CoreException {
 		return getDescendingFolders(this);
 	}
 
