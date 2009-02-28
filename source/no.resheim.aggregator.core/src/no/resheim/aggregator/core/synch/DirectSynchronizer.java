@@ -14,14 +14,10 @@ package no.resheim.aggregator.core.synch;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
-import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
-import java.net.Proxy.Type;
 import java.text.MessageFormat;
 import java.util.Collections;
 
@@ -37,31 +33,19 @@ import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.data.Feed.Archiving;
 import no.resheim.aggregator.core.rss.internal.FeedParser;
 
-import org.eclipse.core.net.proxy.IProxyData;
-import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.equinox.security.storage.EncodingUtils;
-import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.ServiceReference;
 import org.xml.sax.SAXException;
 
 /**
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class DefaultSynchronizer extends AbstractSynchronizer implements
-		IFeedSynchronizer {
-
-	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+public class DirectSynchronizer extends AbstractSynchronizer {
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
@@ -140,7 +124,9 @@ public class DefaultSynchronizer extends AbstractSynchronizer implements
 				return Status.CANCEL_STATUS;
 			}
 			// Download the feed
-			URLConnection yc = getConnection(feed, feedURL);
+			URLConnection yc = AggregatorPlugin.getDefault().getConnection(
+					feedURL, feed.isAnonymousAccess(),
+					feed.getUUID().toString());
 			FeedParser handler = new FeedParser(collection, feed);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser parser = factory.newSAXParser();
@@ -182,8 +168,10 @@ public class DefaultSynchronizer extends AbstractSynchronizer implements
 		URL favicon = new URL(MessageFormat.format("{0}://{1}/favicon.ico", //$NON-NLS-1$
 				new Object[] { feedURL.getProtocol(), feedURL.getHost() }));
 		try {
-			URLConnection ic = getConnection(feed, favicon);
-			InputStream is = ic.getInputStream();
+			URLConnection yc = AggregatorPlugin.getDefault().getConnection(
+					favicon, feed.isAnonymousAccess(),
+					feed.getUUID().toString());
+			InputStream is = yc.getInputStream();
 			ByteArrayOutputStream fos = new ByteArrayOutputStream();
 			byte buffer[] = new byte[0xffff];
 			int nbytes;
@@ -194,82 +182,5 @@ public class DefaultSynchronizer extends AbstractSynchronizer implements
 		} catch (IOException e) {
 			// Silently ignore that the image file could not be found
 		}
-	}
-
-	private static final String CORE_NET_BUNDLE = "org.eclipse.core.net"; //$NON-NLS-1$
-
-	/**
-	 * Returns the proxy service for this bundle.
-	 * 
-	 * @return The proxy service
-	 */
-	private IProxyService getProxyService() {
-		Bundle bundle = Platform.getBundle(CORE_NET_BUNDLE);
-		if (bundle.getState() == Bundle.UNINSTALLED) {
-			return null;
-		}
-		try {
-			bundle.start();
-		} catch (BundleException e1) {
-			e1.printStackTrace();
-		}
-		// The bundle may not be active yet and hence the service we're
-		// looking
-		// for is unavailable. We must wait until everything is ready.
-		while (bundle.getState() != Bundle.ACTIVE) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		ServiceReference ref = bundle.getBundleContext().getServiceReference(
-				IProxyService.class.getName());
-		if (ref != null)
-			return (IProxyService) bundle.getBundleContext().getService(ref);
-		return null;
-	}
-
-	private URLConnection getConnection(Feed site, URL feed)
-			throws IOException, StorageException, UnknownHostException {
-		IProxyData proxyData = null;
-		URLConnection yc = null;
-		IProxyService service = getProxyService();
-		// We might be unable to get a proxy service in that we'll try to
-		// connect anyways.
-		if (service != null && service.isProxiesEnabled()) {
-			// Note that we expect the URL protocol to one of HTTP and HTTPS.
-			proxyData = service.getProxyDataForHost(feed.getHost(), feed
-					.getProtocol().toUpperCase());
-		}
-		// If we have no proxy data we'll use a direct connection
-		if (proxyData == null) {
-			yc = feed.openConnection();
-		} else {
-			InetSocketAddress sockAddr = new InetSocketAddress(InetAddress
-					.getByName(proxyData.getHost()), proxyData.getPort());
-			Proxy proxy = new Proxy(Type.HTTP, sockAddr);
-			yc = feed.openConnection(proxy);
-		}
-		if (proxyData != null && proxyData.isRequiresAuthentication()) {
-			String proxyLogin = proxyData.getUserId()
-					+ ":" + proxyData.getPassword(); //$NON-NLS-1$
-			yc.setRequestProperty("Proxy-Authorization", "Basic " //$NON-NLS-1$ //$NON-NLS-2$
-					+ EncodingUtils.encodeBase64(proxyLogin.getBytes()));
-		}
-		if (!site.isAnonymousAccess()) {
-			ISecurePreferences root = SecurePreferencesFactory.getDefault()
-					.node(AggregatorPlugin.SECURE_STORAGE_ROOT);
-			ISecurePreferences feedNode = root.node(site.getUUID().toString());
-			String credentials = feedNode.get(
-					AggregatorPlugin.SECURE_STORAGE_USERNAME, EMPTY_STRING)
-					+ ":" //$NON-NLS-1$
-					+ feedNode.get(AggregatorPlugin.SECURE_STORAGE_PASSWORD,
-							EMPTY_STRING);
-			yc
-					.setRequestProperty(
-							"Authorization", "Basic " + EncodingUtils.encodeBase64(credentials.getBytes())); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		return yc;
 	}
 }

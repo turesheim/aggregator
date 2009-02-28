@@ -2,9 +2,9 @@
 <!-- Schema file written by PDE -->
 <schema targetNamespace="no.resheim.aggregator.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
-      <appinfo>
+      <appInfo>
          <meta.schema plugin="no.resheim.aggregator.core" id="feeds" name="Aggregator Feeds"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          [Enter description of this extension point.]
       </documentation>
@@ -12,14 +12,16 @@
 
    <element name="extension">
       <annotation>
-         <appinfo>
+         <appInfo>
             <meta.element />
-         </appinfo>
+         </appInfo>
       </annotation>
       <complexType>
          <sequence>
             <element ref="collection" minOccurs="0" maxOccurs="unbounded"/>
             <element ref="feed" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="synchronizer" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="catalog" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -40,9 +42,9 @@
                <documentation>
                   
                </documentation>
-               <appinfo>
+               <appInfo>
                   <meta.attribute translatable="true"/>
-               </appinfo>
+               </appInfo>
             </annotation>
          </attribute>
       </complexType>
@@ -62,9 +64,9 @@
                <documentation>
                   
                </documentation>
-               <appinfo>
+               <appInfo>
                   <meta.attribute translatable="true"/>
-               </appinfo>
+               </appInfo>
             </annotation>
          </attribute>
          <attribute name="public" type="boolean" use="required">
@@ -93,9 +95,9 @@
 
    <element name="feed">
       <annotation>
-         <appinfo>
+         <appInfo>
             <meta.element labelAttribute="title"/>
-         </appinfo>
+         </appInfo>
          <documentation>
             Adds the declared feed to the feed collection identified by the &lt;i&gt;collection&lt;/i&gt; if a feed with the same &lt;i&gt;url&lt;/i&gt; does not already exist in the collection. Note that since any UI preference settings are not available when declared feeds are being added one must specify archiving and update options in the declaration.
          </documentation>
@@ -211,48 +213,92 @@
       </annotation>
    </element>
 
+   <element name="catalog">
+      <annotation>
+         <documentation>
+            A feed catalog provides a list of feeds that the user can select and add to his or her&apos;s collection.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The type that provides the list of feeds.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":no.resheim.aggregator.core.synch.IFeedCatalog"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="synchronizer">
+      <annotation>
+         <documentation>
+            A synchronizer is a component that is capable of reading from a feed and update the storage using the feed contents.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  e identifier of the synchroniser. This value is stored in the feed and used to make sure that an instance of the specified class is used to update the feed.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="default" value="Enter default value">
+            <annotation>
+               <documentation>
+                  The implementation of a type that can synchronize feed contents with the storage.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="since"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          1.0
       </documentation>
    </annotation>
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="examples"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          [Enter extension point usage example here.]
       </documentation>
    </annotation>
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="apiInfo"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          [Enter API information here.]
       </documentation>
    </annotation>
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="implementation"/>
-      </appinfo>
+      </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         See &lt;code&gt;DeclaredFeedsCatalog&lt;/code&gt;, &lt;code&gt;DirectSynchronizer&lt;/code&gt;.
       </documentation>
    </annotation>
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="copyright"/>
-      </appinfo>
+      </appInfo>
       <documentation>
-         &amp;copy 2008 Resheim Software.
+         &amp;copy 2008-2009 Resheim Software.
       </documentation>
    </annotation>
 

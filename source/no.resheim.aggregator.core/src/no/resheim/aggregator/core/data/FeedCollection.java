@@ -23,7 +23,7 @@ import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.data.internal.CollectionUpdateJob;
 import no.resheim.aggregator.core.filter.Filter;
 import no.resheim.aggregator.core.synch.AbstractSynchronizer;
-import no.resheim.aggregator.core.synch.DefaultSynchronizer;
+import no.resheim.aggregator.core.synch.DirectSynchronizer;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
@@ -233,7 +233,7 @@ public class FeedCollection extends AggregatorItemParent {
 
 	/**
 	 * Updates the feed data in the persistent storage. Should only be called by
-	 * {@link DefaultSynchronizer} after the feed has be updated with new
+	 * {@link DirectSynchronizer} after the feed has be updated with new
 	 * information.
 	 * 
 	 * @param feed

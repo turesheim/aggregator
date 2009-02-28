@@ -9,11 +9,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
 
-public abstract class AbstractSynchronizer extends Job implements
-		IFeedSynchronizer {
-	private static final String EMPTY_STRING = "";
+public abstract class AbstractSynchronizer extends Job {
 	protected Feed feed;
 	protected FeedCollection collection;
+
+	protected static final String EMPTY_STRING = "";
+
+	protected static final String CORE_NET_BUNDLE = "org.eclipse.core.net";
 
 	public AbstractSynchronizer() {
 		super(EMPTY_STRING);

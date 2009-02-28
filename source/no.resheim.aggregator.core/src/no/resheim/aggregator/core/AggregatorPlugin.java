@@ -1,20 +1,29 @@
 package no.resheim.aggregator.core;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.UnknownHostException;
+import java.net.Proxy.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
+import no.resheim.aggregator.core.catalog.IFeedCatalog;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.IAggregatorStorage;
-import no.resheim.aggregator.core.data.Feed.Archiving;
-import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
 import no.resheim.aggregator.core.data.internal.DerbySQLStorage;
 import no.resheim.aggregator.core.data.internal.MemoryStorage;
 import no.resheim.aggregator.core.synch.AbstractSynchronizer;
 
-import org.eclipse.core.internal.resources.Synchronizer;
+import org.eclipse.core.net.proxy.IProxyData;
+import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -29,9 +38,14 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.equinox.security.storage.EncodingUtils;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceReference;
 
 /**
  * This type is responsible for handling the feed registries that contains the
@@ -47,13 +61,12 @@ import org.osgi.framework.BundleException;
  */
 public class AggregatorPlugin extends Plugin {
 
-	public static final String REGISTRY_EXTENSION_ID = "no.resheim.aggregator.core.feeds"; //$NON-NLS-1$
+	public static final String FEEDS_EXTENSION_ID = "no.resheim.aggregator.core.feeds"; //$NON-NLS-1$
 
 	/**
-	 * The default synchronizer to use.
+	 * The default updater to use.
 	 */
-	public static final String DEFAULT_SYNCHRONIZER_ID = "no.resheim.aggregator.core.defaultSynchronizer";
-	private static final String SYNCHRONIZERS_EXTENSION_POINT = "no.resheim.aggregator.core.synchronizers";
+	public static final String DEFAULT_SYNCHRONIZER_ID = "no.resheim.aggregator.core.directSynchronizer";
 
 	/** The plug-in identifier */
 	public static final String PLUGIN_ID = "no.resheim.aggregator"; //$NON-NLS-1$
@@ -72,16 +85,17 @@ public class AggregatorPlugin extends Plugin {
 	 * 
 	 * @param id
 	 *            the identifier of the synchroniser
-	 * @return a new {@link Synchronizer} instance
+	 * @return a new {@link AbstractSynchronizer} instance
 	 */
 	public static AbstractSynchronizer getSynchronizer(String id) {
 
 		IExtensionPoint ePoint = Platform.getExtensionRegistry()
-				.getExtensionPoint(SYNCHRONIZERS_EXTENSION_POINT);
+				.getExtensionPoint(FEEDS_EXTENSION_ID);
 		IConfigurationElement[] synchronizers = ePoint
 				.getConfigurationElements();
 		for (IConfigurationElement configurationElement : synchronizers) {
-			if (configurationElement.getAttribute("id").equals(id)) {
+			if (configurationElement.getName().equals("synchronizer")
+					&& configurationElement.getAttribute("id").equals(id)) {
 				try {
 					Object object = configurationElement
 							.createExecutableExtension("class");
@@ -264,7 +278,27 @@ public class AggregatorPlugin extends Plugin {
 				synchronized (collectionMap) {
 					IStatus status = addCollections(ereg, monitor);
 					if (status.isOK()) {
-						addFeeds(ereg);
+						IConfigurationElement[] elements = ereg
+								.getConfigurationElementsFor(AggregatorPlugin.FEEDS_EXTENSION_ID);
+						for (IConfigurationElement configurationElement : elements) {
+							if (configurationElement.getName()
+									.equals("catalog")) {
+
+								try {
+									Object object = configurationElement
+											.createExecutableExtension("class");
+									if (object instanceof IFeedCatalog) {
+										List<Feed> feeds = ((IFeedCatalog) object)
+												.getFeeds();
+										fDefaultFeeds.addAll(feeds);
+									}
+								} catch (CoreException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+
+							}
+						}
 						Collections.sort(fDefaultFeeds);
 					}
 					fDoneInitializing = true;
@@ -284,7 +318,7 @@ public class AggregatorPlugin extends Plugin {
 	private IStatus addCollections(IExtensionRegistry ereg,
 			IProgressMonitor monitor) {
 		IConfigurationElement[] elements = ereg
-				.getConfigurationElementsFor(REGISTRY_EXTENSION_ID);
+				.getConfigurationElementsFor(FEEDS_EXTENSION_ID);
 		for (IConfigurationElement element : elements) {
 			// We're not going to allow an exception here to disrupt.
 			try {
@@ -348,57 +382,90 @@ public class AggregatorPlugin extends Plugin {
 	}
 
 	/**
-	 * Reads all feed declarations from the extension registry and adds these to
-	 * the list of default feeds and optionally adds the feed to the
-	 * collection(s).
 	 * 
-	 * @param ereg
+	 * @param url
+	 *            the URL to connect to
+	 * @param whether
+	 *            or not to connect anonymously
+	 * @param the
+	 *            node to use in the secure storage
+	 * @return the URL connection
+	 * @throws IOException
+	 * @throws StorageException
+	 * @throws UnknownHostException
 	 */
-	private void addFeeds(IExtensionRegistry ereg) {
-		IConfigurationElement[] elements = ereg
-				.getConfigurationElementsFor(REGISTRY_EXTENSION_ID);
-		for (IConfigurationElement element : elements) {
-			// We're not going to allow an exception here to disrupt.
+	public URLConnection getConnection(URL url, boolean anonymous, String nodeId)
+			throws IOException, StorageException, UnknownHostException {
+		IProxyData proxyData = null;
+		URLConnection yc = null;
+		IProxyService service = getProxyService();
+		// We might be unable to get a proxy service in that we'll try to
+		// connect anyways.
+		if (service != null && service.isProxiesEnabled()) {
+			// Note that we expect the URL protocol to one of HTTP and HTTPS.
+			proxyData = service.getProxyDataForHost(url.getHost(), url
+					.getProtocol().toUpperCase());
+		}
+		// If we have no proxy data we'll use a direct connection
+		if (proxyData == null) {
+			yc = url.openConnection();
+		} else {
+			InetSocketAddress sockAddr = new InetSocketAddress(InetAddress
+					.getByName(proxyData.getHost()), proxyData.getPort());
+			Proxy proxy = new Proxy(Type.HTTP, sockAddr);
+			yc = url.openConnection(proxy);
+		}
+		if (proxyData != null && proxyData.isRequiresAuthentication()) {
+			String proxyLogin = proxyData.getUserId()
+					+ ":" + proxyData.getPassword(); //$NON-NLS-1$
+			yc.setRequestProperty("Proxy-Authorization", "Basic " //$NON-NLS-1$ //$NON-NLS-2$
+					+ EncodingUtils.encodeBase64(proxyLogin.getBytes()));
+		}
+		if (anonymous) {
+			ISecurePreferences root = SecurePreferencesFactory.getDefault()
+					.node(AggregatorPlugin.SECURE_STORAGE_ROOT);
+			ISecurePreferences feedNode = root.node(nodeId);
+			String credentials = feedNode.get(
+					AggregatorPlugin.SECURE_STORAGE_USERNAME, "")
+					+ ":" //$NON-NLS-1$
+					+ feedNode
+							.get(AggregatorPlugin.SECURE_STORAGE_PASSWORD, "");
+			yc
+					.setRequestProperty(
+							"Authorization", "Basic " + EncodingUtils.encodeBase64(credentials.getBytes())); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		return yc;
+	}
+
+	/**
+	 * Returns the proxy service for this bundle.
+	 * 
+	 * @return The proxy service
+	 */
+	private IProxyService getProxyService() {
+		Bundle bundle = Platform.getBundle(CORE_NET_BUNDLE);
+		if (bundle.getState() == Bundle.UNINSTALLED) {
+			return null;
+		}
+		try {
+			bundle.start();
+		} catch (BundleException e1) {
+			e1.printStackTrace();
+		}
+		// The bundle may not be active yet and hence the service we're
+		// looking
+		// for is unavailable. We must wait until everything is ready.
+		while (bundle.getState() != Bundle.ACTIVE) {
 			try {
-				if (element.getName().equals("feed")) { //$NON-NLS-1$
-					String url = element.getAttribute("url"); //$NON-NLS-1$
-					String collectionId = element.getAttribute("collection"); //$NON-NLS-1$
-					boolean add = Boolean.parseBoolean(element
-							.getAttribute("create")); //$NON-NLS-1$
-					// Will use the default collection if the collectionId is
-					// null.
-					FeedCollection collection = getFeedCollection(collectionId);
-					if (collection != null) {
-						Feed feed = createNewFeed(collection, element);
-						if (add && !collection.hasFeed(url)) {
-							collection.addNew(feed);
-						}
-						fDefaultFeeds.add(feed);
-					}
-				}
-			} catch (Exception e) {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	private Feed createNewFeed(FeedCollection parent,
-			IConfigurationElement element) {
-		Feed feed = new Feed();
-		// Initialise with default values from the preference store.
-		// This is done here as the preference system is a UI component.
-		feed.setTitle(element.getAttribute("title")); //$NON-NLS-1$
-		feed.setURL(element.getAttribute("url")); //$NON-NLS-1$
-		feed.setArchiving(Archiving.valueOf(element
-				.getAttribute("archivingMethod"))); //$NON-NLS-1$
-		feed.setArchivingDays(Integer.parseInt(element
-				.getAttribute("archivingDays"))); //$NON-NLS-1$
-		feed.setArchivingItems(Integer.parseInt(element
-				.getAttribute("archivingItems"))); //$NON-NLS-1$
-		feed.setUpdateInterval(Integer.parseInt(element
-				.getAttribute("updateInterval"))); //$NON-NLS-1$
-		feed.setUpdatePeriod(UpdatePeriod.valueOf(element
-				.getAttribute("updatePeriod"))); //$NON-NLS-1$
-		return feed;
+		ServiceReference ref = bundle.getBundleContext().getServiceReference(
+				IProxyService.class.getName());
+		if (ref != null)
+			return (IProxyService) bundle.getBundleContext().getService(ref);
+		return null;
 	}
 }

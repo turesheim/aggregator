@@ -14,6 +14,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.4.0,4.0.0)",
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: no.resheim.aggregator.core,
+ no.resheim.aggregator.core.catalog,
  no.resheim.aggregator.core.data,
  no.resheim.aggregator.core.data.internal;x-friends:="no.resheim.aggregator.core.test",
  no.resheim.aggregator.core.filter,

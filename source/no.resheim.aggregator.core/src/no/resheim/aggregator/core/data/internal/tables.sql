@@ -82,7 +82,7 @@ CREATE TABLE feeds (
 		anonymous_access INT NOT NULL,
 		keep_unread INT NOT NULL,
 		image_data VARCHAR(16384),
-		/* The updater to use (feed|google) */
+		/* The synchronizer to use (extension) */
 		synchronizer VARCHAR(128)
 	);
 
