@@ -17,5 +17,6 @@ Export-Package: no.resheim.aggregator.core,
  no.resheim.aggregator.core.data,
  no.resheim.aggregator.core.data.internal;x-friends:="no.resheim.aggregator.core.test",
  no.resheim.aggregator.core.filter,
- no.resheim.aggregator.core.rss.internal;x-friends:="no.resheim.aggregator.core.test"
+ no.resheim.aggregator.core.rss.internal;x-friends:="no.resheim.aggregator.core.test",
+ no.resheim.aggregator.core.synch
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
