@@ -30,65 +30,24 @@ public abstract class AggregatorItem {
 	 * Flags are for internal use
 	 */
 	public enum Flag {
-		/**
-		 * @uml.property name="protected"
-		 * @uml.associationEnd
-		 */
+		/** The item is protected from deletion */
 		PROTECTED,
-		/**
-		 * @uml.property name="trash"
-		 * @uml.associationEnd
-		 */
+		/** The item is a trash folder */
 		TRASH,
-		/**
-		 * @uml.property name="trashed"
-		 * @uml.associationEnd
-		 */
+		/** The item has been trashed */
 		TRASHED
 	}
 
 	/**
-	 * @author torkild
+	 * "Marks" can be used by the user to mark the aggregator item in question.
+	 * <code>Flags</code> are used to for system marking.
 	 */
 	public enum Mark {
-		/**
-		 * @uml.property name="first_priority"
-		 * @uml.associationEnd
-		 */
-		FIRST_PRIORITY,
-		/**
-		 * @uml.property name="important"
-		 * @uml.associationEnd
-		 */
-		IMPORTANT,
-		/**
-		 * @uml.property name="none"
-		 * @uml.associationEnd
-		 */
-		NONE,
-		/**
-		 * @uml.property name="second_proiority"
-		 * @uml.associationEnd
-		 */
-		SECOND_PRIORITY,
-		/**
-		 * @uml.property name="third_priority"
-		 * @uml.associationEnd
-		 */
-		THIRD_PRIORITY,
-		/**
-		 * @uml.property name="todo"
-		 * @uml.associationEnd
-		 */
-		TODO
+		FIRST_PRIORITY, IMPORTANT, NONE, SECOND_PRIORITY, THIRD_PRIORITY, TODO
 	}
 
 	private EnumSet<Flag> fFlags = EnumSet.noneOf(Flag.class);
 
-	/**
-	 * @uml.property name="fMark"
-	 * @uml.associationEnd
-	 */
 	private Mark fMark = Mark.NONE;
 
 	private boolean fSystem = false;
