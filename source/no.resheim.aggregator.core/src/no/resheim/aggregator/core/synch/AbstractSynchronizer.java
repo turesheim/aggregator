@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2009 Torkild Ulvøy Resheim.
+ * 
+ * All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License v1.0 which
+ * accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors: Torkild Ulvøy Resheim - initial API and implementation
+ *******************************************************************************/
 package no.resheim.aggregator.core.synch;
 
 import java.text.MessageFormat;
@@ -9,6 +19,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
 
+/**
+ * Abstract implementation of a subscription synchroniser. Subclasses of this
+ * type are responsible for using information from the supplied subscription for
+ * obtaining data and populate the collection.
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
+ */
 public abstract class AbstractSynchronizer extends Job {
 	protected Feed feed;
 	protected FeedCollection collection;
@@ -30,7 +48,7 @@ public abstract class AbstractSynchronizer extends Job {
 		this.collection = collection;
 	}
 
-	public void setFeed(Feed feed) {
+	public void setSubscription(Feed feed) {
 		this.feed = feed;
 		setName(MessageFormat.format(Messages.FeedUpdateJob_Title,
 				new Object[] { feed.getTitle() }));

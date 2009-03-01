@@ -87,7 +87,7 @@ public class CollectionUpdateJob extends Job {
 					AbstractSynchronizer synchronizer = AggregatorPlugin
 							.getSynchronizer(feed.getSynchronizer());
 					synchronizer.setCollection(fCollection);
-					synchronizer.setFeed(feed);
+					synchronizer.setSubscription(feed);
 					synchronizer.schedule();
 				}
 			}

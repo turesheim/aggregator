@@ -18,8 +18,5 @@
       		id="no.resheim.aggregator.core.directSynchronizer"
             class="no.resheim.aggregator.core.synch.DirectSynchronizer">
       </synchronizer>
-      <catalog
-            class="no.resheim.aggregator.core.catalog.DeclaredFeedsCatalog">
-      </catalog>
    </extension>
 </plugin>

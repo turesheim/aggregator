@@ -75,6 +75,7 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 		wizard.setDialogSettings(wizardSettings);
 		WizardDialog dialog = new WizardDialog(HandlerUtil
 				.getActiveShell(event), wizard);
+		dialog.setMinimumPageSize(550, 300);
 		dialog.create();
 		dialog.open();
 		return null;

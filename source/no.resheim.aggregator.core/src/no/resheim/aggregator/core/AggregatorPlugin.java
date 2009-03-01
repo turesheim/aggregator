@@ -10,10 +10,10 @@ import java.net.UnknownHostException;
 import java.net.Proxy.Type;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import no.resheim.aggregator.core.catalog.Catalog;
 import no.resheim.aggregator.core.catalog.IFeedCatalog;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
@@ -123,18 +123,11 @@ public class AggregatorPlugin extends Plugin {
 
 	private final ArrayList<IFeedCollectionEventListener> fCollectionListeners = new ArrayList<IFeedCollectionEventListener>();
 
-	/** Default feeds to add */
-	private ArrayList<Feed> fDefaultFeeds;
-
 	/**
 	 * @uml.property name="defaultCollection"
 	 * @uml.associationEnd
 	 */
 	private FeedCollection defaultCollection;
-
-	public ArrayList<Feed> getDefaultFeeds() {
-		return fDefaultFeeds;
-	}
 
 	/**
 	 * Name of the default feed collection.
@@ -145,8 +138,6 @@ public class AggregatorPlugin extends Plugin {
 	 */
 	public AggregatorPlugin() {
 		plugin = this;
-		// DEFAULT_FEEDS = new ArrayList<String[]>();
-		fDefaultFeeds = new ArrayList<Feed>();
 	}
 
 	public void addFeedCollectionListener(IFeedCollectionEventListener listener) {
@@ -270,6 +261,33 @@ public class AggregatorPlugin extends Plugin {
 
 	private boolean fDoneInitializing = false;
 
+	public Catalog[] getCatalogs() {
+		ArrayList<Catalog> catalogs = new ArrayList<Catalog>();
+		final IExtensionRegistry ereg = Platform.getExtensionRegistry();
+		IConfigurationElement[] elements = ereg
+				.getConfigurationElementsFor(AggregatorPlugin.FEEDS_EXTENSION_ID);
+		for (IConfigurationElement configurationElement : elements) {
+			if (configurationElement.getName().equals("catalog")) {
+				try {
+					Object object = configurationElement
+							.createExecutableExtension("class");
+					if (object instanceof IFeedCatalog) {
+						List<Feed> feeds = ((IFeedCatalog) object).getFeeds();
+						Catalog catalog = new Catalog(configurationElement
+								.getAttribute("name"), feeds,
+								configurationElement.getAttribute("icon"),
+								configurationElement.getContributor().getName());
+						catalogs.add(catalog);
+					}
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+		return catalogs.toArray(new Catalog[catalogs.size()]);
+	}
+
 	private void initialize() {
 		final IExtensionRegistry ereg = Platform.getExtensionRegistry();
 		final Job job = new Job(Messages.AggregatorPlugin_Initializing) {
@@ -278,34 +296,14 @@ public class AggregatorPlugin extends Plugin {
 				synchronized (collectionMap) {
 					IStatus status = addCollections(ereg, monitor);
 					if (status.isOK()) {
-						IConfigurationElement[] elements = ereg
-								.getConfigurationElementsFor(AggregatorPlugin.FEEDS_EXTENSION_ID);
-						for (IConfigurationElement configurationElement : elements) {
-							if (configurationElement.getName()
-									.equals("catalog")) {
-
-								try {
-									Object object = configurationElement
-											.createExecutableExtension("class");
-									if (object instanceof IFeedCatalog) {
-										List<Feed> feeds = ((IFeedCatalog) object)
-												.getFeeds();
-										fDefaultFeeds.addAll(feeds);
-									}
-								} catch (CoreException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-
-							}
-						}
-						Collections.sort(fDefaultFeeds);
+						// getFeeds();
 					}
 					fDoneInitializing = true;
 					System.out.println("Aggregator core initialized"); //$NON-NLS-1$
 					return status;
 				}
 			}
+
 		};
 		job.schedule();
 

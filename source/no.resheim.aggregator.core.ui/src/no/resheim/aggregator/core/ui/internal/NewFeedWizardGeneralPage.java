@@ -14,24 +14,41 @@ package no.resheim.aggregator.core.ui.internal;
 import java.util.ArrayList;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
+import no.resheim.aggregator.core.catalog.Catalog;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedWorkingCopy;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.NewFeedWizard;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Tree;
 
 /**
  * Wizard page for the general settings of a new feed.
@@ -40,7 +57,7 @@ import org.eclipse.swt.widgets.Text;
  * @since 1.0
  */
 public class NewFeedWizardGeneralPage extends WizardPage {
-	private Combo combo;
+	private Text combo;
 	private Text urlText;
 	private Label urlLabel;
 	private Label titleLabel;
@@ -74,74 +91,179 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
 		final GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 2;
 		container.setLayout(gridLayout);
 		setControl(container);
 
 		final FeedWorkingCopy workingCopy = wizard.getWorkingCopy();
 
-		titleLabel = new Label(container, SWT.NONE);
-		titleLabel.setText(Messages.NewFeedWizardGeneralPage_Label_Title);
+		final SashForm sashForm = new SashForm(container, SWT.NONE);
+		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		combo = new Combo(container, SWT.NONE);
-		final ArrayList<Feed> feeds = AggregatorPlugin.getDefault()
-				.getDefaultFeeds();
-		combo.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				if (combo.getSelectionIndex() >= 0) {
-					workingCopy.copy(defaults.get(combo.getSelectionIndex()));
-					urlText.setText(workingCopy.getURL());
-
+		final TreeViewer treeViewer = new TreeViewer(sashForm, SWT.BORDER);
+		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			public void selectionChanged(final SelectionChangedEvent event) {
+				ISelection selection = event.getSelection();
+				if (selection instanceof IStructuredSelection) {
+					Object selected = ((IStructuredSelection) selection)
+							.getFirstElement();
+					if (selected instanceof Feed) {
+						workingCopy.copy((Feed) selected);
+						urlText.setText(workingCopy.getURL());
+						combo.setText(workingCopy.getTitle());
+					}
 				}
-				validate();
 			}
 		});
-		for (Feed feed : feeds) {
-			if (!wizard.getCollection().hasFeed(feed.getURL())) {
-				combo.add(feed.getTitle());
-				defaults.add(feed);
+		final Tree tree = treeViewer.getTree();
+		final GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, false, false,
+				1, 5);
+		treeViewer.setContentProvider(new ITreeContentProvider() {
+
+			private Catalog[] catalogs;
+
+			public Object[] getElements(Object inputElement) {
+				return catalogs;
 			}
 
-		}
+			public void dispose() {
+			}
+
+			public void inputChanged(Viewer viewer, Object oldInput,
+					Object newInput) {
+				catalogs = AggregatorPlugin.getDefault().getCatalogs();
+			}
+
+			public Object[] getChildren(Object parentElement) {
+				if (parentElement instanceof Catalog) {
+					return ((Catalog) parentElement).getFeeds();
+				}
+				if (parentElement instanceof Catalog[]) {
+					return catalogs;
+				}
+				return new Object[0];
+			}
+
+			public Object getParent(Object element) {
+				return null;
+			}
+
+			public boolean hasChildren(Object element) {
+				if (element instanceof Feed) {
+					return false;
+				}
+				return true;
+			}
+		});
+		treeViewer.setInput(this);
+		treeViewer.setLabelProvider(new LabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+				if (element instanceof Catalog) {
+					return ((Catalog) element).getName();
+				}
+				if (element instanceof Feed) {
+					return ((Feed) element).getTitle();
+				}
+				return super.getText(element);
+			}
+
+			@Override
+			public Image getImage(Object element) {
+				if (element instanceof Catalog) {
+					Catalog catalog = (Catalog) element;
+					ImageRegistry registry = AggregatorUIPlugin.getDefault()
+							.getImageRegistry();
+					String id = "catalog." + catalog.getBundle() + "."
+							+ catalog.getIcon();
+					if (registry.get(id) == null) {
+						ImageDescriptor img = ImageDescriptor
+								.createFromURL(FileLocator.find(Platform
+										.getBundle(catalog.getBundle()),
+										new Path(catalog.getIcon()), null));
+						registry.put(id, img);
+					}
+					return registry.get(id);
+				}
+				if (element instanceof Feed) {
+					ImageRegistry registry = AggregatorUIPlugin.getDefault()
+							.getImageRegistry();
+					return registry.get(AggregatorUIPlugin.IMG_FEED_OBJ);
+				}
+				return null;
+			}
+
+		});
+		gd_tree.heightHint = 50;
+		tree.setLayoutData(gd_tree);
+
+		final Group group = new Group(sashForm, SWT.NONE);
+		final GridLayout gridLayout_1 = new GridLayout();
+		gridLayout_1.numColumns = 2;
+		group.setLayout(gridLayout_1);
+
+		titleLabel = new Label(group, SWT.NONE);
+		titleLabel.setText(Messages.NewFeedWizardGeneralPage_Label_Title);
+
+		combo = new Text(group, SWT.BORDER);
+		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		// final ArrayList<Feed> feeds = AggregatorPlugin.getDefault()
+		// .getDefaultFeeds();
+		// combo.addSelectionListener(new SelectionAdapter() {
+		// public void widgetSelected(SelectionEvent e) {
+		// if (combo.getSelectionIndex() >= 0) {
+		// workingCopy.copy(defaults.get(combo.getSelectionIndex()));
+		// urlText.setText(workingCopy.getURL());
+		//
+		// }
+		// validate();
+		// }
+		// });
+		// for (Feed feed : feeds) {
+		// if (!wizard.getCollection().hasFeed(feed.getURL())) {
+		// combo.add(feed.getTitle());
+		// defaults.add(feed);
+		// }
+		//
+		// }
 		combo.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				workingCopy.setTitle(combo.getText());
 				validate();
 			}
 		});
-		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		urlLabel = new Label(container, SWT.NONE);
+		urlLabel = new Label(group, SWT.NONE);
 		urlLabel.setText(Messages.NewFeedWizardGeneralPage_Label_URL);
 
-		urlText = new Text(container, SWT.BORDER);
+		urlText = new Text(group, SWT.BORDER);
+		urlText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		urlText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				workingCopy.setURL(urlText.getText());
 				validate();
 			}
 		});
-		urlText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		final Button loginButton = new Button(container, SWT.CHECK);
-		loginButton.setText(Messages.NewFeedWizardGeneralPage_Anonymous);
-		GridData gd2 = new GridData(SWT.FILL, SWT.CENTER, true, false);
-		gd2.horizontalSpan = 2;
-		loginButton.setLayoutData(gd2);
-		loginButton.addSelectionListener(new SelectionAdapter() {
+		final Button button = new Button(group, SWT.CHECK);
+		button.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2,
+				1));
+		button.setText(Messages.NewFeedWizardGeneralPage_Anonymous);
+		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				boolean state = !(loginButton.getSelection());
-				workingCopy.setAnonymousAccess(loginButton.getSelection());
+				boolean state = !(button.getSelection());
+				workingCopy.setAnonymousAccess(button.getSelection());
 				updateCredentialsFields(state);
 			}
 
 		});
+		button.setSelection(true);
 
-		userLabel = new Label(container, SWT.NONE);
+		userLabel = new Label(group, SWT.NONE);
 		userLabel.setText(Messages.NewFeedWizardGeneralPage_Login);
-		userText = new Text(container, SWT.BORDER);
+		userText = new Text(group, SWT.BORDER);
 		userText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		userText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -149,9 +271,9 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 				validate();
 			}
 		});
-		passwordLabel = new Label(container, SWT.NONE);
+		passwordLabel = new Label(group, SWT.NONE);
 		passwordLabel.setText(Messages.NewFeedWizardGeneralPage_Password);
-		passwordText = new Text(container, SWT.BORDER | SWT.PASSWORD);
+		passwordText = new Text(group, SWT.BORDER | SWT.PASSWORD);
 		passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false));
 		passwordText.addModifyListener(new ModifyListener() {
@@ -160,7 +282,7 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 				validate();
 			}
 		});
-		loginButton.setSelection(true);
+		sashForm.setWeights(new int[] { 1, 1 });
 		updateCredentialsFields(false);
 	}
 

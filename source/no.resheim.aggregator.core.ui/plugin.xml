@@ -608,5 +608,14 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
          </code>
       </handler>
    </extension>
+   <extension
+         point="no.resheim.aggregator.core.feeds">
+
+      <catalog
+            class="no.resheim.aggregator.core.ui.catalog.DeclaredFeedsCatalog"
+            icon="icons/obj16/catalog.gif"
+            interactive="false"
+            name="Built-in">
+      </catalog>   </extension>
    
 </plugin>

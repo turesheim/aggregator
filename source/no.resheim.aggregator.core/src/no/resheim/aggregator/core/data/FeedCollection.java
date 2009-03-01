@@ -197,7 +197,7 @@ public class FeedCollection extends AggregatorItemParent {
 			AbstractSynchronizer synchronizer = AggregatorPlugin
 					.getSynchronizer(feed.getSynchronizer());
 			synchronizer.setCollection(this);
-			synchronizer.setFeed(feed);
+			synchronizer.setSubscription(feed);
 			synchronizer.schedule();
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -547,7 +547,7 @@ public class FeedCollection extends AggregatorItemParent {
 						AbstractSynchronizer synchronizer = AggregatorPlugin
 								.getSynchronizer(feed.getSynchronizer());
 						synchronizer.setCollection(this);
-						synchronizer.setFeed(feed);
+						synchronizer.setSubscription(feed);
 						synchronizer.schedule();
 					} else {
 						return new Status(
