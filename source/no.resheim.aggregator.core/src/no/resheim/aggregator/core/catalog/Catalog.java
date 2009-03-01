@@ -5,6 +5,12 @@ import java.util.List;
 
 import no.resheim.aggregator.core.data.Feed;
 
+/**
+ * FIXME: Use the declared instance instance instead.
+ * 
+ * @author turesheim
+ * @deprecated
+ */
 public class Catalog {
 	private String name;
 	private String icon;

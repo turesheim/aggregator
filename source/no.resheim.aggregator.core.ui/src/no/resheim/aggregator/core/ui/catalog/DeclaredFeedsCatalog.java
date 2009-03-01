@@ -81,4 +81,8 @@ public class DeclaredFeedsCatalog implements IFeedCatalog {
 				.getAttribute("updatePeriod"))); //$NON-NLS-1$
 		return feed;
 	}
+
+	public boolean isEnabled() {
+		return true;
+	}
 }

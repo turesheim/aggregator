@@ -272,12 +272,16 @@ public class AggregatorPlugin extends Plugin {
 					Object object = configurationElement
 							.createExecutableExtension("class");
 					if (object instanceof IFeedCatalog) {
-						List<Feed> feeds = ((IFeedCatalog) object).getFeeds();
-						Catalog catalog = new Catalog(configurationElement
-								.getAttribute("name"), feeds,
-								configurationElement.getAttribute("icon"),
-								configurationElement.getContributor().getName());
-						catalogs.add(catalog);
+						if (((IFeedCatalog) object).isEnabled()) {
+							List<Feed> feeds = ((IFeedCatalog) object)
+									.getFeeds();
+							Catalog catalog = new Catalog(configurationElement
+									.getAttribute("name"), feeds,
+									configurationElement.getAttribute("icon"),
+									configurationElement.getContributor()
+											.getName());
+							catalogs.add(catalog);
+						}
 					}
 				} catch (CoreException e) {
 					e.printStackTrace();

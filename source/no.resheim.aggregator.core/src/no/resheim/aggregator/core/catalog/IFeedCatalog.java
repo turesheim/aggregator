@@ -20,4 +20,6 @@ import no.resheim.aggregator.core.data.Feed;
  */
 public interface IFeedCatalog {
 	public List<Feed> getFeeds();
+
+	public boolean isEnabled();
 }
