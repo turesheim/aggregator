@@ -310,7 +310,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	public void delete(Feed feed) {
 		try {
 			Statement s = connection.createStatement();
-			s.executeUpdate("delete from feeds where uuid='" //$NON-NLS-1$
+			s.executeUpdate("delete from subscriptions where uuid='" //$NON-NLS-1$
 					+ feed.getUUID().toString() + "'"); //$NON-NLS-1$
 			s.close();
 		} catch (SQLException e) {
@@ -408,7 +408,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		HashMap<UUID, Feed> feeds = new HashMap<UUID, Feed>();
 		try {
 			Statement s = connection.createStatement();
-			ResultSet rs = s.executeQuery("select * from feeds"); //$NON-NLS-1$
+			ResultSet rs = s.executeQuery("select * from subscriptions"); //$NON-NLS-1$
 			while (rs.next()) {
 				Feed f = composeFeed(rs);
 				feeds.put(f.getUUID(), f);
@@ -537,8 +537,9 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		boolean hasFeed = false;
 		try {
 			Statement s = connection.createStatement();
-			ResultSet rs = s.executeQuery("select uuid from feeds where url='" //$NON-NLS-1$
-					+ url + "'"); //$NON-NLS-1$
+			ResultSet rs = s
+					.executeQuery("select uuid from subscriptions where url='" //$NON-NLS-1$
+							+ url + "'"); //$NON-NLS-1$
 			hasFeed = rs.next();
 			rs.close();
 		} catch (SQLException e) {
@@ -556,7 +557,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private void insert(Feed feed) throws SQLException {
 		PreparedStatement ps = connection
-				.prepareStatement("insert into feeds values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
+				.prepareStatement("insert into subscriptions values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
 		ps.setString(1, feed.getUUID().toString());
 		ps.setString(2, feed.getLocation().toString());
@@ -898,7 +899,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			connection.setAutoCommit(true);
 			// See if the database already exists. If not we must create it.
 			DatabaseMetaData metadata = connection.getMetaData();
-			ResultSet rs = metadata.getTables(null, "APP", "FEEDS", null); //$NON-NLS-1$ //$NON-NLS-2$
+			ResultSet rs = metadata.getTables(null,
+					"APP", "SUBSCRIPTIONS", null); //$NON-NLS-1$ //$NON-NLS-2$
 			if (!rs.next()) {
 				return createTables(monitor);
 			}

@@ -2,7 +2,7 @@ CREATE TABLE folders (
 		uuid CHAR(36) NOT NULL PRIMARY KEY,
 		parent_uuid CHAR(36),
 		ordering INTEGER NOT NULL,
-		feed_uuid CHAR(36),
+		subscription_uuid CHAR(36),
 		hidden INT NOT NULL,
         title VARCHAR(256) NOT NULL,
 		marking VARCHAR(32) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE articles (
         uuid CHAR(36) NOT NULL PRIMARY KEY,
 		parent_uuid CHAR(36) NOT NULL,
 		ordering INTEGER NOT NULL,
-		feed_uuid CHAR(36) NOT NULL,
+		subscription_uuid CHAR(36) NOT NULL,
 		guid VARCHAR(256) NOT NULL,
 		title VARCHAR(256) NOT NULL,
 		url VARCHAR(256) NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE notes (
 		FOREIGN KEY (article_uuid) references articles (uuid) ON DELETE CASCADE
 	);
 
-CREATE TABLE feeds (
+CREATE TABLE subscriptions (
         uuid CHAR(36) NOT NULL PRIMARY KEY,
 		location CHAR(36) NOT NULL,
 		title VARCHAR(256) NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE filter_action (
 
 /* Selection*/
 CREATE INDEX folders_parent ON folders (parent_uuid,uuid);
-CREATE INDEX feeds_url ON feeds (url,uuid);
+CREATE INDEX feeds_url ON subscriptions (url,uuid);
 CREATE INDEX articles_parent ON articles (parent_uuid,uuid);
 CREATE INDEX articles_guid ON articles (guid,uuid);
 
@@ -132,6 +132,6 @@ CREATE INDEX folders_tree ON folders (parent_uuid,ordering,uuid);
 CREATE INDEX articles_tree ON articles (parent_uuid,ordering,uuid);
 
 /* Finding read articles */
-CREATE INDEX articles_old ON articles (feed_uuid,is_read);
+CREATE INDEX articles_old ON articles (subscription_uuid,is_read);
 
 CREATE UNIQUE INDEX media_content ON media_content (ordering, article_uuid);
