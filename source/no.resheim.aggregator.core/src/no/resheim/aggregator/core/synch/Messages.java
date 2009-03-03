@@ -3,7 +3,7 @@ package no.resheim.aggregator.core.synch;
 import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "no.resheim.aggregator.core.synchronization.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "no.resheim.aggregator.core.synch.messages"; //$NON-NLS-1$
 	public static String FeedUpdateJob_CleaningUp;
 	public static String FeedUpdateJob_CredentialsError;
 	public static String FeedUpdateJob_Error_Title;
