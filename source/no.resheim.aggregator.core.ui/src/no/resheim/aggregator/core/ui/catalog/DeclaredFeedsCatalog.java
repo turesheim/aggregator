@@ -11,10 +11,9 @@
 package no.resheim.aggregator.core.ui.catalog;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
-import no.resheim.aggregator.core.catalog.IFeedCatalog;
+import no.resheim.aggregator.core.catalog.AbstractFeedCatalog;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Feed.Archiving;
@@ -28,9 +27,9 @@ import org.eclipse.core.runtime.Platform;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class DeclaredFeedsCatalog implements IFeedCatalog {
+public class DeclaredFeedsCatalog extends AbstractFeedCatalog {
 
-	public List<Feed> getFeeds() {
+	public Feed[] getFeeds() {
 		ArrayList<Feed> feeds = new ArrayList<Feed>();
 		IExtensionRegistry ereg = Platform.getExtensionRegistry();
 		IConfigurationElement[] elements = ereg
@@ -59,7 +58,7 @@ public class DeclaredFeedsCatalog implements IFeedCatalog {
 				e.printStackTrace();
 			}
 		}
-		return feeds;
+		return feeds.toArray(new Feed[feeds.size()]);
 	}
 
 	private Feed createNewFeed(FeedCollection parent,

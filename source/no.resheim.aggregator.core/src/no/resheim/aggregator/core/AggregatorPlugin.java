@@ -11,11 +11,8 @@ import java.net.Proxy.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
-import no.resheim.aggregator.core.catalog.Catalog;
 import no.resheim.aggregator.core.catalog.IFeedCatalog;
-import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.IAggregatorStorage;
 import no.resheim.aggregator.core.data.internal.DerbySQLStorage;
@@ -261,8 +258,8 @@ public class AggregatorPlugin extends Plugin {
 
 	private boolean fDoneInitializing = false;
 
-	public Catalog[] getCatalogs() {
-		ArrayList<Catalog> catalogs = new ArrayList<Catalog>();
+	public IFeedCatalog[] getCatalogs() {
+		ArrayList<IFeedCatalog> catalogs = new ArrayList<IFeedCatalog>();
 		final IExtensionRegistry ereg = Platform.getExtensionRegistry();
 		IConfigurationElement[] elements = ereg
 				.getConfigurationElementsFor(AggregatorPlugin.FEEDS_EXTENSION_ID);
@@ -272,14 +269,8 @@ public class AggregatorPlugin extends Plugin {
 					Object object = configurationElement
 							.createExecutableExtension("class");
 					if (object instanceof IFeedCatalog) {
-						if (((IFeedCatalog) object).isEnabled()) {
-							List<Feed> feeds = ((IFeedCatalog) object)
-									.getFeeds();
-							Catalog catalog = new Catalog(configurationElement
-									.getAttribute("name"), feeds,
-									configurationElement.getAttribute("icon"),
-									configurationElement.getContributor()
-											.getName());
+						IFeedCatalog catalog = (IFeedCatalog) object;
+						if (catalog.isEnabled()) {
 							catalogs.add(catalog);
 						}
 					}
@@ -289,7 +280,7 @@ public class AggregatorPlugin extends Plugin {
 
 			}
 		}
-		return catalogs.toArray(new Catalog[catalogs.size()]);
+		return catalogs.toArray(new IFeedCatalog[catalogs.size()]);
 	}
 
 	private void initialize() {

@@ -10,16 +10,50 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.catalog;
 
-import java.util.List;
+import java.net.URL;
 
 import no.resheim.aggregator.core.data.Feed;
 
 /**
+ * Describes a feed catalog.
+ * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
 public interface IFeedCatalog {
-	public List<Feed> getFeeds();
 
+	/**
+	 * Returns the feeds that this catalogue is aware of.
+	 * 
+	 * @return the feeds list
+	 */
+	public Feed[] getFeeds();
+
+	/**
+	 * Returns the enabled state of the catalogue.
+	 * 
+	 * @return the enabled state
+	 */
 	public boolean isEnabled();
+
+	/**
+	 * Returns the bundle relative path to the catalog's icon.
+	 * 
+	 * @return the icon path
+	 */
+	public URL getIcon();
+
+	/**
+	 * Returns the name of the catalogue.
+	 * 
+	 * @return the catalogue name
+	 */
+	public String getName();
+
+	/**
+	 * Returns the identifier of the catalogue.
+	 * 
+	 * @return the catalogue identifier
+	 */
+	public String getId();
 }

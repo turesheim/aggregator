@@ -614,6 +614,7 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
       <catalog
             class="no.resheim.aggregator.core.ui.catalog.DeclaredFeedsCatalog"
             icon="icons/obj16/catalog.gif"
+            id="no.resheim.aggregator.declaredFeedsCatalog"
             interactive="false"
             name="Built-in">
       </catalog>   </extension>

@@ -257,6 +257,13 @@
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  the unique identifier of the catalog.
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

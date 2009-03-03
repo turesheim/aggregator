@@ -14,15 +14,12 @@ package no.resheim.aggregator.core.ui.internal;
 import java.util.ArrayList;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
-import no.resheim.aggregator.core.catalog.Catalog;
+import no.resheim.aggregator.core.catalog.IFeedCatalog;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedWorkingCopy;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.NewFeedWizard;
 
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ISelection;
@@ -119,7 +116,7 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 				1, 5);
 		treeViewer.setContentProvider(new ITreeContentProvider() {
 
-			private Catalog[] catalogs;
+			private IFeedCatalog[] catalogs;
 
 			public Object[] getElements(Object inputElement) {
 				return catalogs;
@@ -134,10 +131,10 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 			}
 
 			public Object[] getChildren(Object parentElement) {
-				if (parentElement instanceof Catalog) {
-					return ((Catalog) parentElement).getFeeds();
+				if (parentElement instanceof IFeedCatalog) {
+					return ((IFeedCatalog) parentElement).getFeeds();
 				}
-				if (parentElement instanceof Catalog[]) {
+				if (parentElement instanceof IFeedCatalog[]) {
 					return catalogs;
 				}
 				return new Object[0];
@@ -159,8 +156,8 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 
 			@Override
 			public String getText(Object element) {
-				if (element instanceof Catalog) {
-					return ((Catalog) element).getName();
+				if (element instanceof IFeedCatalog) {
+					return ((IFeedCatalog) element).getName();
 				}
 				if (element instanceof Feed) {
 					return ((Feed) element).getTitle();
@@ -170,17 +167,15 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 
 			@Override
 			public Image getImage(Object element) {
-				if (element instanceof Catalog) {
-					Catalog catalog = (Catalog) element;
+				if (element instanceof IFeedCatalog) {
+					IFeedCatalog catalog = (IFeedCatalog) element;
 					ImageRegistry registry = AggregatorUIPlugin.getDefault()
 							.getImageRegistry();
-					String id = "catalog." + catalog.getBundle() + "."
+					String id = "catalog." + catalog.getId() + "."
 							+ catalog.getIcon();
 					if (registry.get(id) == null) {
 						ImageDescriptor img = ImageDescriptor
-								.createFromURL(FileLocator.find(Platform
-										.getBundle(catalog.getBundle()),
-										new Path(catalog.getIcon()), null));
+								.createFromURL(catalog.getIcon());
 						registry.put(id, img);
 					}
 					return registry.get(id);
