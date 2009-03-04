@@ -45,12 +45,12 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 
 /**
- * This type is responsible for handling the feed registries that contains the
+ * This type is responsible for handling the feed collections that contains the
  * actual feeds while managing the life cycle of the storage backend for these
- * registries.
+ * collection.
  * <p>
- * Once a feed registry has been declared, it can be retrieved from this plug-in
- * using the registry's unique identifier.
+ * Once a feed collection has been declared, it can be retrieved from this
+ * plug-in using the registry's unique identifier.
  * </p>
  * 
  * @author Torkild Ulvøy Resheim
@@ -70,9 +70,6 @@ public class AggregatorPlugin extends Plugin {
 
 	/**
 	 * The shared plug-in instance
-	 * 
-	 * @uml.property name="plugin"
-	 * @uml.associationEnd
 	 */
 	private static AggregatorPlugin plugin = null;
 
@@ -112,7 +109,7 @@ public class AggregatorPlugin extends Plugin {
 	 * "com.foo.bar.registry". This member is used to map between the symbolic
 	 * name and the universally unique identifier that is required internally.
 	 * It's contents may be manipulated by different threads so it has been made
-	 * thread safe using synchronized blocks.
+	 * thread safe using synchronised blocks.
 	 */
 	private final HashMap<String, FeedCollection> collectionMap = new HashMap<String, FeedCollection>();
 
@@ -162,7 +159,6 @@ public class AggregatorPlugin extends Plugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		fDebugging = super.isDebugging();
-		System.out.println("Starting aggregator core"); //$NON-NLS-1$
 		Bundle bundle = Platform.getBundle(CORE_NET_BUNDLE);
 		if (bundle.getState() != Bundle.UNINSTALLED) {
 			try {
@@ -294,7 +290,6 @@ public class AggregatorPlugin extends Plugin {
 						// getFeeds();
 					}
 					fDoneInitializing = true;
-					System.out.println("Aggregator core initialized"); //$NON-NLS-1$
 					return status;
 				}
 			}

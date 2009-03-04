@@ -2,6 +2,7 @@ package no.resheim.aggregator.data.rss.internal;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.EnumSet;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -14,6 +15,7 @@ import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.IAggregatorEventListener;
+import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.rss.internal.FeedParser;
 import no.resheim.aggregator.core.test.TestUtils;
@@ -65,7 +67,8 @@ public class FeedParserTest extends TestCase {
 					try {
 						AggregatorItemParent folder = (AggregatorItemParent) getCollection()
 								.getChildAt(0);
-						int count = folder.getChildCount();
+						int count = folder.getChildCount(EnumSet
+								.allOf(ItemType.class));
 						if (count != 20) {
 							fail("The associated folder should contain 20 items, not " //$NON-NLS-1$
 									+ count);

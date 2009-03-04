@@ -1,6 +1,7 @@
 package no.resheim.aggregator.core.data;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
@@ -119,7 +120,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		IAggregatorStorage storage = getCollection().getStorage();
 		try {
 			storage.readLock().lock();
-			AggregatorItem child = storage.getItem(this, index);
+			AggregatorItem child = storage.getChildAt(this, index);
 			if (child != null) {
 				cacheLock.lock();
 				try {
@@ -157,17 +158,15 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		// TODO: Optimise
 		case KEEP_NEWEST:
 			long lim = System.currentTimeMillis() - ((long) days * DAY);
-			for (AggregatorItem item : getChildren()) {
+			for (AggregatorItem item : getChildren(EnumSet.of(ItemType.ARTICLE))) {
 				doTrash = false;
-				if (item instanceof Article) {
-					Article article = (Article) item;
-					if (site.keepUnread()) {
-						if (((Article) item).isRead()) {
-							doTrash = considerDate(lim, article);
-						}
-					} else {
+				Article article = (Article) item;
+				if (site.keepUnread()) {
+					if (((Article) item).isRead()) {
 						doTrash = considerDate(lim, article);
 					}
+				} else {
+					doTrash = considerDate(lim, article);
 				}
 				if (doTrash) {
 					trashed.add((Article) item);
@@ -178,7 +177,9 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		// Remove the oldest items so that only a specified number of items is
 		// kept. Does not consider the read state.
 		case KEEP_SOME:
-			int children = getChildCount();
+			// FIXME: This method is broken, it does not consider folders
+			// properly
+			int children = getChildCount(EnumSet.allOf(ItemType.class));
 			// Make sure we're not disturbed
 			synchronized (this) {
 				int position = 0;
@@ -260,13 +261,11 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 			throws CoreException {
 		ArrayList<Folder> descendants = new ArrayList<Folder>();
 		if (item instanceof AggregatorItemParent) {
-			AggregatorItem[] children = ((AggregatorItemParent) item)
-					.getChildren();
-			for (AggregatorItem aggregatorItem : children) {
-				if (aggregatorItem instanceof Folder) {
-					descendants.add((Folder) aggregatorItem);
-					descendants.addAll(getDescendingFolders(aggregatorItem));
-				}
+			AggregatorItem[] folders = ((AggregatorItemParent) item)
+					.getChildren(EnumSet.of(ItemType.FOLDER));
+			for (AggregatorItem aggregatorItem : folders) {
+				descendants.add((Folder) aggregatorItem);
+				descendants.addAll(getDescendingFolders(aggregatorItem));
 			}
 		}
 		return descendants;
@@ -283,7 +282,8 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	public void trash(AggregatorItem item) throws CoreException {
 		FeedCollection c = getCollection();
 		Folder trashFolder = c.getTrashFolder();
-		int newPosition = trashFolder.getChildCount();
+		int newPosition = trashFolder.getChildCount(EnumSet
+				.allOf(ItemType.class));
 		item.setFlag(Flag.TRASHED);
 		c.move(item, item.getParent(), item.getOrdering(), trashFolder,
 				newPosition);
@@ -337,32 +337,32 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	/**
 	 * Returns the number of items contained within the given parent item.
 	 * 
-	 * @param parent
-	 *            the parent item
+	 * @param types
+	 *            the item types to count
 	 * @return the number of child items
 	 * @throws CoreException
 	 */
-	public int getChildCount() throws CoreException {
+	public int getChildCount(EnumSet<ItemType> types) throws CoreException {
 		IAggregatorStorage storage = getCollection().getStorage();
 		try {
 			storage.readLock().lock();
-			return storage.getChildCount(this);
+			return storage.getChildCount(this, types);
 		} finally {
 			storage.readLock().unlock();
 		}
 	}
 
 	/**
-	 * Returns all child items. This
+	 * Returns all child items or the specified item types.
 	 * 
-	 * @param item
-	 *            the parent item
+	 * @param types
+	 *            the item types to retrieve
 	 * @return the child items
 	 * @throws CoreException
-	 * @uml.property name="children"
 	 */
-	public AggregatorItem[] getChildren() throws CoreException {
-		int count = getChildCount();
+	public AggregatorItem[] getChildren(EnumSet<ItemType> types)
+			throws CoreException {
+		int count = getChildCount(types);
 		AggregatorItem[] items = new AggregatorItem[count];
 		for (int p = 0; p < count; p++) {
 			items[p] = getChildAt(p);

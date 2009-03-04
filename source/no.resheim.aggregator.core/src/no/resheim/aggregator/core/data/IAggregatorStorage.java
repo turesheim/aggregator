@@ -12,10 +12,12 @@
 
 package no.resheim.aggregator.core.data;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 
+import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.filter.Filter;
 
 import org.eclipse.core.resources.ISaveParticipant;
@@ -23,10 +25,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
 /**
- * This interface is internal and is not intended to be implemented by clients. Standard implementations of the various storage methods are already supplied so there should be no real need to add another. <p> A few methods are not typical for a simple storage type. This is because it's desirable to optimise on the database level instead of having to instantiate aggregator items. </p>
- * @author   Torkild Ulvøy Resheim
- * @since   1.0
- * @noimplement   This interface is not intended to be implemented by clients.
+ * This interface is internal and is not intended to be implemented by clients.
+ * Standard implementations of the various storage methods are already supplied
+ * so there should be no real need to add another.
+ * <p>
+ * A few methods are not typical for a simple storage type. This is because it's
+ * desirable to optimise on the database level instead of having to instantiate
+ * aggregator items.
+ * </p>
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
+ * @noimplement This interface is not intended to be implemented by clients.
  */
 public interface IAggregatorStorage extends ISaveParticipant {
 
@@ -66,21 +76,12 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * 
 	 * @param parent
 	 *            the parent item
+	 * @param types
+	 *            the types of children to count
 	 * @return the number of children
 	 */
-	public abstract int getChildCount(AggregatorItem parent);
-
-	/**
-	 * Retrieves all the child articles of the given parent node. If the node is
-	 * <i>null</i>; all registries are returned. if it's a registry; categories
-	 * and feeds are returned, if it's a category; categories and feeds are
-	 * returned. And if it's a feed; feed articles are returned.
-	 * 
-	 * @param parent
-	 *            The parent item
-	 * @return An array of aggregator articles
-	 */
-	public abstract AggregatorItem[] getChildren(AggregatorItemParent item);
+	public abstract int getChildCount(AggregatorItem parent,
+			EnumSet<ItemType> types);
 
 	/**
 	 * Returns the description string of the aggregator item if such a
@@ -116,7 +117,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param index
 	 * @return
 	 */
-	public abstract AggregatorItem getItem(AggregatorItemParent parent,
+	public abstract AggregatorItem getChildAt(AggregatorItemParent parent,
 			int index);
 
 	/**
@@ -193,16 +194,20 @@ public interface IAggregatorStorage extends ISaveParticipant {
 
 	/**
 	 * Updates the storage with the given filters.
-	 * @param filters   the new filter set
-	 * @uml.property  name="filters"
+	 * 
+	 * @param filters
+	 *            the new filter set
+	 * @uml.property name="filters"
 	 */
 	public abstract void setFilters(Filter[] filters);
 
 	/**
 	 * Retrieves the filter set from the storage.
-	 * @return   the filter set
-	 * @uml.property  name="filters"
-	 * @uml.associationEnd  multiplicity="(0 -1)" container="no.resheim.aggregator.core.filter.Filter"
+	 * 
+	 * @return the filter set
+	 * @uml.property name="filters"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 *                     container="no.resheim.aggregator.core.filter.Filter"
 	 */
 	public abstract Filter[] getFilters();
 

@@ -1,8 +1,11 @@
 package no.resheim.aggregator.ui.test;
 
+import java.util.EnumSet;
+
 import junit.framework.TestCase;
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.ui.FeedTreeViewer;
 import no.resheim.aggregator.core.ui.FeedViewerContentProvider;
 
@@ -16,7 +19,8 @@ public class TestDragAndDrop extends TestCase {
 		System.out.println(collection);
 		Shell shell = new Shell();
 		FeedTreeViewer viewer = new FeedTreeViewer(shell);
-		viewer.setContentProvider(new FeedViewerContentProvider());
+		viewer.setContentProvider(new FeedViewerContentProvider(EnumSet
+				.allOf(ItemType.class)));
 		viewer.setInput(collection);
 		System.out.println("done");
 	}

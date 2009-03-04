@@ -76,6 +76,16 @@ public class Feed implements Comparable<Feed> {
 
 	private String editor;
 
+	private boolean createFolder;
+
+	public boolean isCreateFolder() {
+		return createFolder;
+	}
+
+	public void setCreateFolder(boolean createFolder) {
+		this.createFolder = createFolder;
+	}
+
 	boolean hidden;
 
 	byte[] imageData;
@@ -600,5 +610,7 @@ public class Feed implements Comparable<Feed> {
 		hidden = wc.hidden;
 		anonymousAccess = wc.anonymousAccess;
 		keepUnread = wc.keepUnread;
+		createFolder = wc.isCreateFolder();
+		System.out.println(wc.isCreateFolder());
 	}
 }

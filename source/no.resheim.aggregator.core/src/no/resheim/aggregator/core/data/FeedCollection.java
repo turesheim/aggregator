@@ -89,6 +89,7 @@ public class FeedCollection extends AggregatorItemParent {
 	 */
 	private Folder fTrashFolder;
 
+	private Folder fInboxFolder;
 	/**
 	 * The identifier of the registry as specified when the registry was
 	 * declared.
@@ -212,7 +213,7 @@ public class FeedCollection extends AggregatorItemParent {
 
 	private void createTrashFolder() {
 		try {
-			for (AggregatorItem item : getChildren()) {
+			for (AggregatorItem item : getChildren(EnumSet.of(ItemType.FOLDER))) {
 				if (item.getUUID().equals(TRASH_ID)) {
 					fTrashFolder = (Folder) item;
 					break;
@@ -253,7 +254,7 @@ public class FeedCollection extends AggregatorItemParent {
 		ArrayList<AggregatorItem> descendants = new ArrayList<AggregatorItem>();
 		if (item instanceof AggregatorItemParent) {
 			AggregatorItem[] children = ((AggregatorItemParent) item)
-					.getChildren();
+					.getChildren(EnumSet.allOf(ItemType.class));
 			for (AggregatorItem aggregatorItem : children) {
 				descendants.add(aggregatorItem);
 				descendants.addAll(getDescendants(aggregatorItem));
@@ -340,6 +341,10 @@ public class FeedCollection extends AggregatorItemParent {
 		return fTrashFolder;
 	}
 
+	public Folder getInboxFolder() {
+		return fInboxFolder;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -382,7 +387,7 @@ public class FeedCollection extends AggregatorItemParent {
 	}
 
 	/**
-	 * Loads all feeds from the given backend storage and initializes.
+	 * Loads all feeds from the given backend storage and initialises.
 	 * 
 	 * @param storage
 	 */
@@ -485,7 +490,7 @@ public class FeedCollection extends AggregatorItemParent {
 			// The number of items moved
 			int length = items.length;
 			// The old number of children
-			int count = oldParent.getChildCount();
+			int count = oldParent.getChildCount(EnumSet.allOf(ItemType.class));
 			if (!oldParent.equals(newParent)) {
 				// The item is moved into a new parent
 				details |= AggregatorItemChangedEvent.NEW_PARENT;
@@ -502,7 +507,8 @@ public class FeedCollection extends AggregatorItemParent {
 					item.parent = newParent;
 					item.getParent().internalAdd(item);
 					// Change the order
-					item.setOrdering(newParent.getChildCount());
+					item.setOrdering(newParent.getChildCount(EnumSet
+							.allOf(ItemType.class)));
 					// Update the database
 					fDatabase.move(item);
 				}
@@ -620,7 +626,7 @@ public class FeedCollection extends AggregatorItemParent {
 			notifyListerners(new Object[] { item }, EventType.READ);
 		} else if (item instanceof AggregatorItemParent) {
 			AggregatorItem[] children = ((AggregatorItemParent) item)
-					.getChildren();
+					.getChildren(EnumSet.allOf(ItemType.class));
 			for (AggregatorItem child : children) {
 				setRead(child);
 			}
@@ -665,7 +671,7 @@ public class FeedCollection extends AggregatorItemParent {
 	List<AggregatorItemChangedEvent> shiftUp(AggregatorItem item)
 			throws CoreException {
 		AggregatorItemParent parent = item.getParent();
-		int count = parent.getChildCount();
+		int count = parent.getChildCount(EnumSet.allOf(ItemType.class));
 		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
 		for (int i = item.getOrdering() + 1; i < count; i++) {
 			AggregatorItem sibling = parent.getChildAt(i);

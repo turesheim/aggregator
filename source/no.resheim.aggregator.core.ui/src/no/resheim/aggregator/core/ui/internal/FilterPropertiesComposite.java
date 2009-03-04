@@ -106,7 +106,6 @@ public class FilterPropertiesComposite extends Composite {
 				result = task.getValue();
 				break;
 			}
-			System.out.println(result);
 			return result;
 		}
 
@@ -146,14 +145,10 @@ public class FilterPropertiesComposite extends Composite {
 		}
 
 		public boolean isLabelProperty(Object element, String property) {
-			System.out.println(property);
-			// TODO Auto-generated method stub
 			return false;
 		}
 
 		public void removeListener(ILabelProviderListener listener) {
-			// TODO Auto-generated method stub
-
 		}
 
 	}
@@ -209,7 +204,6 @@ public class FilterPropertiesComposite extends Composite {
 		gd_filtersTable.widthHint = 250;
 		filtersTable.setLayoutData(gd_filtersTable);
 		// Start with dummy input
-		
 
 		composite = new Composite(availableFiltersGroup, SWT.NONE);
 		final GridLayout gridLayout_2 = new GridLayout();
@@ -271,9 +265,8 @@ public class FilterPropertiesComposite extends Composite {
 		newColumnTableColumn_2.setWidth(100);
 		newColumnTableColumn_2.setText("Value");
 
-		tableViewer.setColumnProperties(new String[] {
-				"Field", "Operator", "Value"
-		});
+		tableViewer.setColumnProperties(new String[] { "Field", "Operator",
+				"Value" });
 
 		addButton = new Button(generalTabComposite, SWT.NONE);
 		addButton.setEnabled(false);
@@ -297,13 +290,11 @@ public class FilterPropertiesComposite extends Composite {
 
 	private void initTableEditing() {
 		CellEditor[] editors = new CellEditor[3];
-		String[] fieldNames = new String[] {
-				"Author", "Read", "Text", "Title", "Type"
-		};
-		String[] operatorNames = new String[] {
-				"Contains", "Does not contain", "Equals", "Does not equal",
-				"Matches regexp", "Does not match regexp"
-		};
+		String[] fieldNames = new String[] { "Author", "Read", "Text", "Title",
+				"Type" };
+		String[] operatorNames = new String[] { "Contains", "Does not contain",
+				"Equals", "Does not equal", "Matches regexp",
+				"Does not match regexp" };
 		editors[0] = new ComboBoxCellEditor(table, fieldNames, SWT.NONE);
 		editors[1] = new ComboBoxCellEditor(table, operatorNames, SWT.READ_ONLY);
 		editors[2] = new TextCellEditor(table);

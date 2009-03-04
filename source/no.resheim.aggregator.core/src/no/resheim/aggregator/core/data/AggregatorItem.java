@@ -25,6 +25,14 @@ import org.eclipse.core.runtime.CoreException;
  * @noextend This class is not intended to be subclassed by clients.
  */
 public abstract class AggregatorItem {
+	/**
+	 * The type of aggregator item. This enumeration is normally used when
+	 * wanting to define a set of item types to handle. In some situations only
+	 * folders are wanted, in others all types are wanted.
+	 */
+	public enum ItemType {
+		FOLDER, ARTICLE
+	};
 
 	/**
 	 * Flags are for internal use
@@ -35,7 +43,7 @@ public abstract class AggregatorItem {
 		/** The item is a trash folder */
 		TRASH,
 		/** The item has been trashed */
-		TRASHED
+		TRASHED,
 	}
 
 	/**
@@ -90,7 +98,7 @@ public abstract class AggregatorItem {
 	 * @return the collection of the item.
 	 * @throws CoreException
 	 */
-	protected FeedCollection getCollection() throws CoreException {
+	public FeedCollection getCollection() throws CoreException {
 		AggregatorItem p = this;
 		while (!(p instanceof FeedCollection)) {
 			p = p.getParent();

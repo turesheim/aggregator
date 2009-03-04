@@ -12,6 +12,9 @@
                relative="org.eclipse.ui.navigator.ProjectExplorer"
                visible="true">
          </view>
+         <viewShortcut
+               id="no.resheim.aggregator.core.ui.RSSView">
+         </viewShortcut>
       </perspectiveExtension>
    </extension>
    <extension

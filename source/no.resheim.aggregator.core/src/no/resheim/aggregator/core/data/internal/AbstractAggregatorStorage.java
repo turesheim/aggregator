@@ -20,16 +20,19 @@ import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.IAggregatorStorage;
 import no.resheim.aggregator.core.data.AggregatorItem.Flag;
+import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 
 import org.eclipse.core.resources.ISaveContext;
+import org.eclipse.core.resources.ISaveParticipant;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
 /**
- * Implementation of   {@link IAggregatorStorage}   with some common features.
- * @author   Torkild Ulvøy Resheim
- * @since   1.0
+ * Implementation of {@link IAggregatorStorage} with some common features.
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
  */
 public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
 
@@ -49,8 +52,9 @@ public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
 
 	/**
 	 * The feed collection that data is being handled for
-	 * @uml.property  name="collection"
-	 * @uml.associationEnd  
+	 * 
+	 * @uml.property name="collection"
+	 * @uml.associationEnd
 	 */
 	protected FeedCollection collection;
 
@@ -74,10 +78,14 @@ public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
 		// Does nothing per default. It is up to subclasses to implement.
 	}
 
+	/**
+	 * Called when the workbench want's the {@link ISaveParticipant} to store
+	 * it's state. We use this method to clear the trash folder.
+	 */
 	public void saving(ISaveContext context) throws CoreException {
 		if (context.getKind() == ISaveContext.FULL_SAVE) {
 			AggregatorItem[] children = collection.getTrashFolder()
-					.getChildren();
+					.getChildren(EnumSet.allOf(ItemType.class));
 			for (AggregatorItem aggregatorItem : children) {
 				collection.deleteChild(aggregatorItem, false);
 			}

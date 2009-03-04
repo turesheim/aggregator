@@ -21,6 +21,7 @@ import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.AggregatorItem.Flag;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
@@ -53,8 +54,6 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		implements ILabelProvider, IColorProvider, IPropertyChangeListener {
 	private static ImageRegistry registry = AggregatorUIPlugin.getDefault()
 			.getImageRegistry();
-
-	private FeedCollection collection;
 
 	/** Font to use when indicating that a feed is being updated */
 	private Font italic;
@@ -136,8 +135,13 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		return baseId;
 	}
 
-	public FeedCollection getCollection() {
-		return collection;
+	private FeedCollection getCollection(AggregatorItem item) {
+		try {
+			return item.getCollection();
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	private Display getDisplay() {
@@ -155,10 +159,11 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 	@Override
 	public Font getFont(Object element) {
 		Font font = JFaceResources.getDialogFont();
-		if (collection==null) return font;
+		if (element == null)
+			return font;
 		if (element instanceof Folder) {
 			Folder folder = ((Folder) element);
-			int unread = collection.getItemCount(folder);
+			int unread = getCollection(folder).getItemCount(folder);
 			Feed feed = ((Folder) element).getFeed();
 			if (feed != null && feed.isUpdating()) {
 				if (unread > 0) {
@@ -230,9 +235,8 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		Image baseImage = registry.get(getBaseId(item));
 		Point size = new Point(16, 16);
 		DecorationOverlayIcon icon = new DecorationOverlayIcon(baseImage,
-				new ImageDescriptor[] {
-						type, getMarkingOverlay(item), null, si, null
-				}, size) {
+				new ImageDescriptor[] { type, getMarkingOverlay(item), null,
+						si, null }, size) {
 		};
 		registry.put(id, icon);
 		return registry.get(id);
@@ -269,9 +273,8 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		Image baseImage = getBaseFeedImageDescriptor(feed);
 		Point size = new Point(16, 16);
 		DecorationOverlayIcon icon = new DecorationOverlayIcon(baseImage,
-				new ImageDescriptor[] {
-						null, getMarkingOverlay(folder), null, si, null
-				}, size) {
+				new ImageDescriptor[] { null, getMarkingOverlay(folder), null,
+						si, null }, size) {
 		};
 		// Store the image for the next time
 		registry.put(id, icon);
@@ -284,7 +287,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
 	 */
 	public Image getImage(Object element) {
-		if (collection==null){
+		if (element == null) {
 			return null;
 		}
 		if (element instanceof Feed) {
@@ -292,7 +295,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		}
 		if (element instanceof Folder
 				&& ((Folder) element).getFeedUUID() != null) {
-			Feed feed = collection.getFeeds().get(
+			Feed feed = getCollection((Folder) element).getFeeds().get(
 					((Folder) element).getFeedUUID());
 			if (feed != null) {
 				return getImage(feed, feed.getLastStatus(), (Folder) element);
@@ -339,8 +342,8 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 			if (element instanceof Feed || element instanceof Folder) {
 				StringBuffer sb = new StringBuffer();
 				sb.append(item.getTitle());
-				if (pShowUnreadCount && collection != null) {
-					int unread = collection.getItemCount(item);
+				if (pShowUnreadCount && getCollection(item) != null) {
+					int unread = getCollection(item).getItemCount(item);
 					if (unread > 0) {
 						sb.append(" ("); //$NON-NLS-1$
 						sb.append(unread);
@@ -411,10 +414,6 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		pUnreadItemColor = new Color(getDisplay(), PreferenceConverter
 				.getColor(store, PreferenceConstants.P_UNREAD_ITEM_COLOR));
 
-	}
-
-	public void setCollection(FeedCollection collection) {
-		this.collection = collection;
 	}
 
 }

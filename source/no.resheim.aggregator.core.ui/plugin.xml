@@ -161,12 +161,17 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            category="org.eclipse.ui"
             allowMultiple="false"
+            category="org.eclipse.ui"
             class="no.resheim.aggregator.core.ui.views.RSSView"
+            fastViewWidthRatio="0.5"
             icon="icons/clcl16/view.gif"
             id="no.resheim.aggregator.core.ui.RSSView"
-            name="Feeds">
+            name="Feeds"
+            restorable="true">
+         <description>
+            description body text
+         </description>
       </view>
    </extension>
    <extension

@@ -11,11 +11,15 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
+import java.util.EnumSet;
+
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.IAggregatorEventListener;
+import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IBasicPropertyConstants;
@@ -27,7 +31,9 @@ import org.eclipse.swt.widgets.TreeItem;
 
 /**
  * This type provides structured viewers with feeds and feed contents. The given
- * input should be an instance of a {@link FeedCollection}.
+ * input should be an instance of a {@link FeedCollection} or
+ * {@link AggregatorItemParent}. Using the constructor one can determine which
+ * types of items this class will provide.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -35,8 +41,7 @@ import org.eclipse.swt.widgets.TreeItem;
 public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 		IAggregatorEventListener {
 	protected static final String[] STATE_PROPERTIES = new String[] {
-			IBasicPropertyConstants.P_TEXT, IBasicPropertyConstants.P_IMAGE
-	};
+			IBasicPropertyConstants.P_TEXT, IBasicPropertyConstants.P_IMAGE };
 
 	/** The tree viewer we're providing content for */
 	private TreeViewer fViewer;
@@ -44,16 +49,37 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 	/** The input */
 	private FeedCollection fCollection;
 
+	private EnumSet<ItemType> fItemTypes;
+
 	/**
 	 * 
+	 * 
+	 * @param types
+	 *            the item types this feed viewer will show
 	 */
-	public FeedViewerContentProvider() {
+	public FeedViewerContentProvider(EnumSet<ItemType> types) {
 		super();
+		fItemTypes = types;
 	}
 
 	public void inputChanged(Viewer v, Object oldInput, Object newInput) {
 		if (v instanceof TreeViewer) {
 			fViewer = (TreeViewer) v;
+		}
+		if (newInput instanceof Folder) {
+			try {
+				FeedCollection fc = ((Folder) newInput).getCollection();
+				if (!fc.equals(this.fCollection)) {
+					if (fCollection != null) {
+						fCollection.removeFeedListener(this);
+					}
+					fCollection = fc;
+					fCollection.addFeedListener(this);
+					v.refresh();
+				}
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
 		}
 		if (newInput instanceof FeedCollection
 				&& !newInput.equals(this.fCollection)) {
@@ -112,8 +138,12 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ILazyTreeContentProvider#updateChildCount(java.lang.Object, int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ILazyTreeContentProvider#updateChildCount(java
+	 * .lang.Object, int)
 	 */
 	public void updateChildCount(final Object element,
 			final int currentChildCount) {
@@ -121,7 +151,7 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 			int length = 0;
 			AggregatorItemParent node = (AggregatorItemParent) element;
 			try {
-				length = node.getChildCount();
+				length = node.getChildCount(fItemTypes);
 				if (length != currentChildCount) {
 					fViewer.setChildCount(element, length);
 				}
@@ -131,8 +161,12 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ILazyTreeContentProvider#updateElement(java.lang.Object, int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.ILazyTreeContentProvider#updateElement(java
+	 * .lang.Object, int)
 	 */
 	public void updateElement(final Object parent, final int index) {
 		if (parent instanceof AggregatorItemParent) {

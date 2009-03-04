@@ -39,8 +39,7 @@ public class FilterContentProvider implements IContentProvider,
 			return new Filter[] {
 					new Filter(UUID.randomUUID(), "My first filter"),
 					new Filter(UUID.randomUUID(), "My second filter"),
-					new Filter(UUID.randomUUID(), "My third filter")
-			};
+					new Filter(UUID.randomUUID(), "My third filter") };
 		}
 		// return new Object[0];
 	}
@@ -49,8 +48,6 @@ public class FilterContentProvider implements IContentProvider,
 		if (newInput instanceof FeedCollection) {
 			fCollection = (FeedCollection) newInput;
 		}
-		System.out.println("FilterContentProvider.inputChanged()");
-
 	}
 
 }

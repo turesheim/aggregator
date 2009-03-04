@@ -13,22 +13,23 @@ package no.resheim.aggregator.core.ui.views;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.IFeedCollectionEventListener;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.IAggregatorEventListener;
+import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.ArticleViewer;
+import no.resheim.aggregator.core.ui.CollectionViewerLabelProvider;
 import no.resheim.aggregator.core.ui.FeedTreeViewer;
 import no.resheim.aggregator.core.ui.FeedViewerContentProvider;
-import no.resheim.aggregator.core.ui.CollectionViewerLabelProvider;
 import no.resheim.aggregator.core.ui.IArticleViewerListener;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.PreferenceConstants;
@@ -50,6 +51,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.TitleEvent;
@@ -128,8 +130,10 @@ public class RSSView extends ViewPart implements IFeedView,
 						Display.getCurrent().timerExec(5000, markAsRead);
 					}
 				}
-				if (selection.getFirstElement() instanceof Feed) {
-					preview.show((Feed) selection.getFirstElement());
+				if (fSplitBrowsing
+						&& selection.getFirstElement() instanceof Folder) {
+					articleTreeViewer.setInput(selection.getFirstElement());
+					// preview.show((Feed) selection.getFirstElement());
 				}
 			}
 		}
@@ -172,8 +176,6 @@ public class RSSView extends ViewPart implements IFeedView,
 
 	/** The item that was last selected by the user */
 	private Article fLastSelectionItem;
-
-	private CollectionViewerLabelProvider labelProvider;
 
 	/**
 	 * Marks the last selected item as read and updates it's and the parent's
@@ -225,7 +227,6 @@ public class RSSView extends ViewPart implements IFeedView,
 				fCollection = AggregatorPlugin.getDefault().getFeedCollection(
 						DEFAULT_COLLECTION_ID);
 				treeView.setInput(fCollection);
-				labelProvider.setCollection(fCollection);
 			}
 		});
 		registerDesktopNotifications();
@@ -239,9 +240,15 @@ public class RSSView extends ViewPart implements IFeedView,
 
 	private String fLastArticleInfo;
 	private ViewSelectionListener fViewSelectionListener;
+	private TreeViewer articleTreeViewer;
+	/**
+	 * Whether or not to split the navigation pane into two parts. Either we
+	 * have a combined folders and articles view or these are shown separately.
+	 */
+	private boolean fSplitBrowsing = false;
 
 	/**
-	 * This is a callback that will allow us to create the viewer and initialize
+	 * This is a callback that will allow us to create the viewer and initialise
 	 * it.
 	 */
 	public void createPartControl(Composite parent) {
@@ -249,12 +256,29 @@ public class RSSView extends ViewPart implements IFeedView,
 		updateFromPreferences();
 
 		sashForm = new SashForm(parent, SWT.SMOOTH);
-		treeView = new FeedTreeViewer(sashForm, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
-		treeView.setContentProvider(new FeedViewerContentProvider());
-		treeView
-				.setLabelProvider(labelProvider = new CollectionViewerLabelProvider());
 		fViewSelectionListener = new ViewSelectionListener();
+		if (fSplitBrowsing) {
+			SashForm browserPanel = new SashForm(sashForm, SWT.NONE);
+			treeView = new FeedTreeViewer(browserPanel, SWT.MULTI
+					| SWT.H_SCROLL | SWT.V_SCROLL);
+			treeView.setContentProvider(new FeedViewerContentProvider(EnumSet
+					.of(ItemType.FOLDER)));
+			// Create a tree viewer for the articles
+			articleTreeViewer = new TreeViewer(browserPanel, SWT.MULTI
+					| SWT.H_SCROLL | SWT.V_SCROLL | SWT.VIRTUAL);
+			articleTreeViewer.setContentProvider(new FeedViewerContentProvider(
+					EnumSet.of(ItemType.ARTICLE)));
+			articleTreeViewer
+					.setLabelProvider(new CollectionViewerLabelProvider());
+			articleTreeViewer
+					.addSelectionChangedListener(fViewSelectionListener);
+		} else {
+			treeView = new FeedTreeViewer(sashForm, SWT.MULTI | SWT.H_SCROLL
+					| SWT.V_SCROLL);
+			treeView.setContentProvider(new FeedViewerContentProvider(EnumSet
+					.allOf(ItemType.class)));
+		}
+		treeView.setLabelProvider(new CollectionViewerLabelProvider());
 		treeView.addSelectionChangedListener(fViewSelectionListener);
 
 		// Enable tooltips for the tree items
@@ -264,9 +288,7 @@ public class RSSView extends ViewPart implements IFeedView,
 
 		preview = new ArticleViewer(sashForm, SWT.NONE);
 		preview.addListener(new ArticleViewerListener());
-		sashForm.setWeights(new int[] {
-				1, 1
-		});
+		sashForm.setWeights(new int[] { 1, 1 });
 
 		makeActions();
 		hookContextMenu();
@@ -433,13 +455,11 @@ public class RSSView extends ViewPart implements IFeedView,
 		final String name = this.getClass().getName();
 		memento.putString(name + MEMENTO_ORIENTATION, Boolean
 				.toString(fHorizontalLayout));
-		System.out.println(fHorizontalLayout);
 	}
 
 	public void setFeedCollection(FeedCollection registry) {
 		this.fCollection = registry;
 		treeView.setInput(registry);
-		labelProvider.setCollection(registry);
 	}
 
 	/**

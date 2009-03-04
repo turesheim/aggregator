@@ -240,8 +240,22 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 			}
 		});
 
+		final Button createNewFolderButton = new Button(group, SWT.CHECK);
+		createNewFolderButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(final SelectionEvent e) {
+				workingCopy.setCreateFolder(createNewFolderButton
+						.getSelection());
+				System.out.println(createNewFolderButton.getSelection());
+				validate();
+			}
+		});
+		final GridData gd_createNewFolderButton = new GridData(SWT.LEFT,
+				SWT.CENTER, false, false, 2, 1);
+		createNewFolderButton.setLayoutData(gd_createNewFolderButton);
+		createNewFolderButton.setText("Create new folder for feed");
+
 		final Button button = new Button(group, SWT.CHECK);
-		button.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2,
+		button.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2,
 				1));
 		button.setText(Messages.NewFeedWizardGeneralPage_Anonymous);
 		button.addSelectionListener(new SelectionAdapter() {
@@ -256,9 +270,16 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		});
 		button.setSelection(true);
 
-		userLabel = new Label(group, SWT.NONE);
+		final Group group_1 = new Group(group, SWT.NONE);
+		group_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
+				2, 1));
+		final GridLayout gridLayout_2 = new GridLayout();
+		gridLayout_2.numColumns = 2;
+		group_1.setLayout(gridLayout_2);
+
+		userLabel = new Label(group_1, SWT.NONE);
 		userLabel.setText(Messages.NewFeedWizardGeneralPage_Login);
-		userText = new Text(group, SWT.BORDER);
+		userText = new Text(group_1, SWT.BORDER);
 		userText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		userText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -266,9 +287,9 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 				validate();
 			}
 		});
-		passwordLabel = new Label(group, SWT.NONE);
+		passwordLabel = new Label(group_1, SWT.NONE);
 		passwordLabel.setText(Messages.NewFeedWizardGeneralPage_Password);
-		passwordText = new Text(group, SWT.BORDER | SWT.PASSWORD);
+		passwordText = new Text(group_1, SWT.BORDER | SWT.PASSWORD);
 		passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false));
 		passwordText.addModifyListener(new ModifyListener() {

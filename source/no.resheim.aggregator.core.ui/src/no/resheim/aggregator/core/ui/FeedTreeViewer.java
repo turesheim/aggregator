@@ -12,12 +12,14 @@
 package no.resheim.aggregator.core.ui;
 
 import java.text.MessageFormat;
+import java.util.EnumSet;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
+import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 
 import org.eclipse.jface.viewers.IElementComparer;
@@ -116,9 +118,7 @@ public class FeedTreeViewer extends TreeViewer {
 	}
 
 	private void initDND() {
-		Transfer[] types = new Transfer[] {
-			TextTransfer.getInstance()
-		};
+		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
 		int operations = DND.DROP_MOVE;
 		final Tree tree = getTree();
 		final DragSource source = new DragSource(tree, operations);
@@ -212,38 +212,34 @@ public class FeedTreeViewer extends TreeViewer {
 						newOrder = getItemIndex(fItem);
 						newParent = oldParent;
 					} else {
-						newOrder = newParent.getChildCount();
+						newOrder = newParent.getChildCount(EnumSet
+								.allOf(ItemType.class));
 					}
 
 					if (newParent.equals(oldParent)) {
 						if (newOrder > oldOrder) {
 							System.out.println(MessageFormat.format(
 									"Moving {0} downwards to {1}", //$NON-NLS-1$
-									new Object[] {
-											source, newOrder
-									}));
+									new Object[] { source, newOrder }));
 							collection.move(source, oldParent, oldOrder,
 									newParent, newOrder);
 						} else {
 							System.out.println(MessageFormat.format(
 									"Moving {0} upwards to {1}", new Object[] { //$NON-NLS-1$
-											source, newOrder + 1
-									}));
+									source, newOrder + 1 }));
 							collection.move(source, oldParent, oldOrder,
 									newParent, newOrder + 1);
 						}
 					} else {
 						System.out.println(MessageFormat.format(
 								"Dropping {0} into {1} at {2}", new Object[] { //$NON-NLS-1$
-										source, fItem, newOrder
-								}));
+								source, fItem, newOrder }));
 						collection.move(source, oldParent, oldOrder, newParent,
 								newOrder);
 					}
 					// Tell our listeners that the deed is done
-					collection.notifyListerners(new Object[] {
-						source
-					}, EventType.MOVED);
+					collection.notifyListerners(new Object[] { source },
+							EventType.MOVED);
 
 				} catch (Exception e) {
 					e.printStackTrace();

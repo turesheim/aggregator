@@ -12,6 +12,7 @@
 package no.resheim.aggregator.core.data.internal;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.filter.Filter;
 
 import org.eclipse.core.runtime.Assert;
@@ -29,23 +31,27 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 /**
- * An implementation of the aggregator storage that only keeps the items in memory. The data is not persisted in any way. FIXME: Implement missing methods
- * @author   Torkild Ulvøy Resheim
- * @since   1.0
+ * An implementation of the aggregator storage that only keeps the items in
+ * memory. The data is not persisted in any way. FIXME: Implement missing
+ * methods
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
  */
 public class MemoryStorage extends AbstractAggregatorStorage {
 
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
 	/**
-	 * Simple holder of aggregator items. The main purpose of the type is to maintain the relations between the items.
+	 * Simple holder of aggregator items. The main purpose of the type is to
+	 * maintain the relations between the items.
 	 */
 	protected static class ItemHolder {
 		ArrayList<AggregatorItem> children;
 
 		/**
-		 * @uml.property  name="item"
-		 * @uml.associationEnd  
+		 * @uml.property name="item"
+		 * @uml.associationEnd
 		 */
 		AggregatorItem item;
 
@@ -60,7 +66,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 	}
 
 	/**
-	 * @uml.property  name="feeds"
+	 * @uml.property name="feeds"
 	 */
 	HashMap<UUID, Feed> feeds;
 
@@ -97,7 +103,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		feeds.remove(feed.getUUID());
 	}
 
-	public int getChildCount(AggregatorItem parent) {
+	public int getChildCount(AggregatorItem parent, EnumSet<ItemType> types) {
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
 			return holder.children.size();
@@ -105,7 +111,8 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 			return 0;
 	}
 
-	public AggregatorItem[] getChildren(AggregatorItemParent parent) {
+	public AggregatorItem[] getChildren(AggregatorItemParent parent,
+			EnumSet<ItemType> types) {
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
 			return holder.children.toArray(new AggregatorItem[holder.children
@@ -124,13 +131,13 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 
 	/**
 	 * @return
-	 * @uml.property  name="feeds"
+	 * @uml.property name="feeds"
 	 */
 	public HashMap<UUID, Feed> getFeeds() {
 		return feeds;
 	}
 
-	public AggregatorItem getItem(AggregatorItemParent parent, int index) {
+	public AggregatorItem getChildAt(AggregatorItemParent parent, int index) {
 		ItemHolder holder = items.get(parent.getUUID());
 		if (holder != null) {
 			for (AggregatorItem child : holder.children) {

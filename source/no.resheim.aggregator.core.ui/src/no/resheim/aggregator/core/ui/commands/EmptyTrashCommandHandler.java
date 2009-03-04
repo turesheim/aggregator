@@ -11,9 +11,12 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.commands;
 
+import java.util.EnumSet;
+
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.AggregatorItem.Flag;
+import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.ui.IFeedView;
 
@@ -63,7 +66,7 @@ public class EmptyTrashCommandHandler extends AbstractAggregatorCommandHandler {
 				public void run() {
 					try {
 						AggregatorItem[] items = collection.getTrashFolder()
-								.getChildren();
+								.getChildren(EnumSet.allOf(ItemType.class));
 						((IFeedView) part).getFeedViewer().setSelection(null);
 						for (AggregatorItem item : items) {
 							try {
