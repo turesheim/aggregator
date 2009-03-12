@@ -28,12 +28,10 @@ import javax.xml.parsers.SAXParserFactory;
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Feed;
-import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.data.Feed.Archiving;
 import no.resheim.aggregator.core.rss.internal.FeedParser;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -91,25 +89,6 @@ public class DirectSynchronizer extends AbstractSynchronizer {
 		}
 		return ms;
 
-	}
-
-	/**
-	 * Uses the archiving rules of the site to remove articles from the feed.
-	 * Should only be called after a FeedUpdateJob has been executed.
-	 * 
-	 * @param site
-	 */
-	private void cleanUp(Feed site) {
-		// First find the folder
-		try {
-			for (Folder folder : collection.getDescendingFolders()) {
-				if (folder.getUUID().equals(site.getLocation())) {
-					folder.cleanUp(site);
-				}
-			}
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**

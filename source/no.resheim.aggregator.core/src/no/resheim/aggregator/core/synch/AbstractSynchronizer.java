@@ -14,7 +14,9 @@ import java.text.MessageFormat;
 
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.Folder;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
@@ -52,6 +54,25 @@ public abstract class AbstractSynchronizer extends Job {
 		this.feed = feed;
 		setName(MessageFormat.format(Messages.FeedUpdateJob_Title,
 				new Object[] { feed.getTitle() }));
+	}
+
+	/**
+	 * Uses the archiving rules of the site to remove articles from the feed.
+	 * Should only be called after a FeedUpdateJob has been executed.
+	 * 
+	 * @param site
+	 */
+	protected void cleanUp(Feed site) {
+		// First find the folder
+		try {
+			for (Folder folder : collection.getDescendingFolders()) {
+				if (folder.getUUID().equals(site.getLocation())) {
+					folder.cleanUp(site);
+				}
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
