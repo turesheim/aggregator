@@ -60,11 +60,6 @@ public class AggregatorPlugin extends Plugin {
 
 	public static final String FEEDS_EXTENSION_ID = "no.resheim.aggregator.core.feeds"; //$NON-NLS-1$
 
-	/**
-	 * The default updater to use.
-	 */
-	public static final String DEFAULT_SYNCHRONIZER_ID = "no.resheim.aggregator.core.directSynchronizer";
-
 	/** The plug-in identifier */
 	public static final String PLUGIN_ID = "no.resheim.aggregator"; //$NON-NLS-1$
 

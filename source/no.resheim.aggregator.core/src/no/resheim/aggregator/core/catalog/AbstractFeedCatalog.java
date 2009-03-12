@@ -25,6 +25,7 @@ public abstract class AbstractFeedCatalog implements IFeedCatalog,
 	private String id;
 	private String name;
 	private String bundle;
+	private String synchronizer;
 
 	public URL getIcon() {
 		URL url = FileLocator.find(Platform.getBundle(bundle), new Path(icon),
@@ -40,11 +41,20 @@ public abstract class AbstractFeedCatalog implements IFeedCatalog,
 		return name;
 	}
 
+	public String getSynchronizerId() {
+		return (synchronizer == null) ? DEFAULT_SYNCHRONIZER_ID : synchronizer;
+	}
+
 	public void setInitializationData(IConfigurationElement config,
 			String propertyName, Object data) {
 		bundle = config.getContributor().getName();
 		icon = config.getAttribute("icon");
 		id = config.getAttribute("id");
 		name = config.getAttribute("name");
+		synchronizer = config.getAttribute("synchronizer");
+	}
+
+	public String toString() {
+		return name;
 	}
 }

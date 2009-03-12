@@ -21,6 +21,10 @@ import no.resheim.aggregator.core.data.Feed;
  * @since 1.0
  */
 public interface IFeedCatalog {
+	/**
+	 * The default updater to use.
+	 */
+	public static final String DEFAULT_SYNCHRONIZER_ID = "no.resheim.aggregator.core.directSynchronizer";
 
 	/**
 	 * Returns the feeds that this catalogue is aware of.
@@ -35,6 +39,13 @@ public interface IFeedCatalog {
 	 * @return the enabled state
 	 */
 	public boolean isEnabled();
+
+	/**
+	 * Returns the synchroniser identifier for this catalogue.
+	 * 
+	 * @return
+	 */
+	public String getSynchronizerId();
 
 	/**
 	 * Returns the bundle relative path to the catalog's icon.

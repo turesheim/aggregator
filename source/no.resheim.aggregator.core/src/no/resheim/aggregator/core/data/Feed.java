@@ -14,8 +14,9 @@ package no.resheim.aggregator.core.data;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import no.resheim.aggregator.core.AggregatorPlugin;
+import no.resheim.aggregator.core.catalog.IFeedCatalog;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
@@ -26,7 +27,6 @@ import org.eclipse.core.runtime.Status;
  * @since 1.0
  */
 public class Feed implements Comparable<Feed> {
-
 	/**
 	 * @author torkild
 	 */
@@ -58,21 +58,16 @@ public class Feed implements Comparable<Feed> {
 
 	protected int archivingItems = 100;
 
+	/** The catalogue used to create this instance or <code>null</code> */
+	private IFeedCatalog catalog;
+
 	private String copyright;
+
+	private boolean createFolder;
 
 	private String description;
 
 	private String editor;
-
-	private boolean createFolder;
-
-	public boolean isCreateFolder() {
-		return createFolder;
-	}
-
-	public void setCreateFolder(boolean createFolder) {
-		this.createFolder = createFolder;
-	}
 
 	boolean hidden;
 
@@ -102,10 +97,7 @@ public class Feed implements Comparable<Feed> {
 	 */
 	protected UUID location;
 
-	/**
-	 * Specifies the synchronisation mechanism to use.
-	 */
-	private String synchronizer = AggregatorPlugin.DEFAULT_SYNCHRONIZER_ID;
+	private String synchronizer;
 
 	ArrayList<Article> tempItems;
 
@@ -139,6 +131,13 @@ public class Feed implements Comparable<Feed> {
 	public Feed() {
 		uuid = UUID.randomUUID();
 		tempItems = new ArrayList<Article>();
+		// Use the default synchronizer and replace later if required.
+		synchronizer = IFeedCatalog.DEFAULT_SYNCHRONIZER_ID;
+	}
+
+	public Feed(IFeedCatalog catalog) {
+		this();
+		synchronizer = catalog.getSynchronizerId();
 	}
 
 	public int compareTo(Feed arg) {
@@ -167,6 +166,17 @@ public class Feed implements Comparable<Feed> {
 	 */
 	public int getArchivingItems() {
 		return archivingItems;
+	}
+
+	/**
+	 * Returns the catalog used when creating this feed. This member variable is
+	 * not serialized and will only have a value when the feed is created by a
+	 * catalog.
+	 * 
+	 * @return the feed catalogue
+	 */
+	public IFeedCatalog getCatalog() {
+		return catalog;
 	}
 
 	/**
@@ -337,6 +347,10 @@ public class Feed implements Comparable<Feed> {
 		return anonymousAccess;
 	}
 
+	public boolean isCreateFolder() {
+		return createFolder;
+	}
+
 	/**
 	 * @return
 	 * @uml.property name="hidden"
@@ -403,6 +417,10 @@ public class Feed implements Comparable<Feed> {
 	 */
 	public void setCopyright(String copyright) {
 		this.copyright = copyright;
+	}
+
+	public void setCreateFolder(boolean createFolder) {
+		this.createFolder = createFolder;
 	}
 
 	/**
@@ -581,5 +599,10 @@ public class Feed implements Comparable<Feed> {
 		keepUnread = wc.keepUnread;
 		createFolder = wc.isCreateFolder();
 		System.out.println(wc.isCreateFolder());
+	}
+
+	void validate() {
+		Assert.isNotNull(getUUID(), "Unspecified feed UUID"); //$NON-NLS-1$
+
 	}
 }

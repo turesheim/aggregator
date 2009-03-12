@@ -176,8 +176,7 @@ public class FeedCollection extends AggregatorItemParent {
 	 * @return the {@link Folder} where feed items will be put
 	 */
 	public Folder addNew(Feed feed) {
-		Assert.isNotNull(feed.getUUID(),
-				"Cannot add feed with unspecified UUID"); //$NON-NLS-1$
+		feed.validate();
 		Folder folder = null;
 		try {
 			fDatabase.writeLock().lock();

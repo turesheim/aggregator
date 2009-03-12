@@ -63,7 +63,7 @@ public class DeclaredFeedsCatalog extends AbstractFeedCatalog {
 
 	private Feed createNewFeed(FeedCollection parent,
 			IConfigurationElement element) {
-		Feed feed = new Feed();
+		Feed feed = new Feed(this);
 		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.
 		feed.setTitle(element.getAttribute("title")); //$NON-NLS-1$

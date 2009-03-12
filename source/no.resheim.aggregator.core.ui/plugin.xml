@@ -621,7 +621,8 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
             icon="icons/obj16/catalog.gif"
             id="no.resheim.aggregator.declaredFeedsCatalog"
             interactive="false"
-            name="Built-in">
+            name="Built-in"
+            synchronizer="no.resheim.aggregator.core.directSynchronizer">
       </catalog>   </extension>
    
 </plugin>

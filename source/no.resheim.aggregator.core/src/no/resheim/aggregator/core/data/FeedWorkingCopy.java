@@ -39,6 +39,7 @@ public final class FeedWorkingCopy extends Feed {
 		copy(feed);
 	}
 
+	// FIXME: Use clone instead?
 	public void copy(Feed feed) {
 		title = feed.getTitle();
 		url = feed.url;
@@ -51,6 +52,7 @@ public final class FeedWorkingCopy extends Feed {
 		anonymousAccess = feed.anonymousAccess;
 		keepUnread = feed.keepUnread;
 		setLastStatus(feed.getLastStatus());
+		setSynchronizer(feed.getSynchronizer());
 	}
 
 	/**
@@ -70,6 +72,7 @@ public final class FeedWorkingCopy extends Feed {
 			feed.anonymousAccess = anonymousAccess;
 			feed.keepUnread = keepUnread;
 			feed.setLastStatus(getLastStatus());
+			feed.setSynchronizer(getSynchronizer());
 		}
 		return feed;
 	}

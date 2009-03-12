@@ -264,6 +264,16 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="synchronizer" type="string" use="default" value="no.resheim.aggregator.core.directSynchronizer">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="identifier" basedOn="no.resheim.aggregator.core.feeds/synchronizer/@id"/>
+               </appInfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
@@ -286,6 +296,9 @@
                <documentation>
                   The implementation of a type that can synchronize feed contents with the storage.
                </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="no.resheim.aggregator.core.synch.AbstractSynchronizer:"/>
+               </appInfo>
             </annotation>
          </attribute>
       </complexType>
