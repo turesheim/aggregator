@@ -45,19 +45,7 @@ public class Feed implements Comparable<Feed> {
 	 * @author torkild
 	 */
 	public enum UpdatePeriod {
-		/**
-		 * @uml.property name="dAYS"
-		 * @uml.associationEnd
-		 */
-		DAYS, /**
-		 * @uml.property name="hOURS"
-		 * @uml.associationEnd
-		 */
-		HOURS, /**
-		 * @uml.property name="mINUTES"
-		 * @uml.associationEnd
-		 */
-		MINUTES
+		DAYS, HOURS, MINUTES
 	}
 
 	private static final String BLANK_STRING = ""; //$NON-NLS-1$
@@ -119,40 +107,21 @@ public class Feed implements Comparable<Feed> {
 	 */
 	private String synchronizer = AggregatorPlugin.DEFAULT_SYNCHRONIZER_ID;
 
-	/**
-	 * @uml.property name="tempItems"
-	 */
 	ArrayList<Article> tempItems;
 
-	/**
-	 * @uml.property name="threaded"
-	 */
 	protected boolean threaded;
 
-	/**
-	 * @uml.property name="title"
-	 */
 	protected String title;
 
-	/**
-	 * @uml.property name="type"
-	 */
 	private String type;
 
-	/**
-	 * @uml.property name="updateInterval"
-	 */
 	protected int updateInterval = 1;
 
 	/**
-	 * @uml.property name="updatePeriod"
-	 * @uml.associationEnd
+	 * The default is to update every hour.
 	 */
-	protected UpdatePeriod updatePeriod;
+	protected UpdatePeriod updatePeriod = UpdatePeriod.HOURS;
 
-	/**
-	 * @uml.property name="updating"
-	 */
 	boolean updating;
 
 	protected String url = BLANK_STRING;
