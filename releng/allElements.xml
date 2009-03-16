@@ -29,7 +29,12 @@
  		  <property name="id" value="no.resheim.aggregator.ui" />
 		</ant>
  	
- 	</target>
+		<ant antfile="${genericTargets}" target="${target}">
+ 		  <property name="type" value="feature" />
+ 		  <property name="id" value="no.resheim.aggregator.google.reader" />
+		</ant>
+
+</target>
  
 	<!-- ====================================================================== -->
 	<!--  The default assemble target, this will be called to assemble each		-->	 
