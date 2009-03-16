@@ -10,9 +10,10 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
+            category="no.resheim.aggregator.ui.preferences.general"
             class="no.resheim.aggregator.google.reader.ui.GooglePreferencePage"
             id="no.resheim.aggregator.core.google.page"
-            name="Google Integration">
+            name="Google Reader Integration">
       </page>
    </extension>
    <extension
