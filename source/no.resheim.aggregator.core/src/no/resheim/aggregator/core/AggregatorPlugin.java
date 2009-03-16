@@ -285,11 +285,6 @@ public class AggregatorPlugin extends Plugin {
 						// getFeeds();
 					}
 					fDoneInitializing = true;
-					try {
-						Thread.sleep(2000);
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
 					return status;
 				}
 			}
