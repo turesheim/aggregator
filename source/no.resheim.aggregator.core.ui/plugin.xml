@@ -123,6 +123,10 @@
                name="layout"
                optional="false">
          </commandParameter>
+         <state
+               class="org.eclipse.jface.commands.RadioState:vertical"
+               id="no.resheim.aggregator.core.ui.layout">
+         </state>
       </command>
       <command
             defaultHandler="no.resheim.aggregator.core.ui.commands.FilterPropertiesCommandHandler"
@@ -178,7 +182,7 @@
          point="org.eclipse.ui.commands">
       <command
             categoryId="org.eclipse.ui.category.views"
-            defaultHandler="no.resheim.aggregator.core.ui.views.NextUnreadItemCommandHandler"
+            defaultHandler="no.resheim.aggregator.core.ui.commands.NextUnreadItemCommandHandler"
             id="no.resheim.aggregator.ui.nextUnread"
             name="Next Unread">
       </command>

@@ -13,6 +13,7 @@ package no.resheim.aggregator.core.ui.commands;
 
 import java.util.ArrayList;
 
+import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
@@ -61,6 +62,9 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 
 	@Override
 	public boolean isEnabled() {
+		// Do not enable action if the collection has not initialised yet.
+		if (!AggregatorPlugin.isInitialized())
+			return false;
 		ISelection selection = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getSelectionService()
 				.getSelection();

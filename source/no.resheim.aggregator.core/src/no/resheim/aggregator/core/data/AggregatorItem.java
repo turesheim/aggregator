@@ -11,6 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.data;
 
+import java.io.Serializable;
 import java.util.EnumSet;
 import java.util.UUID;
 
@@ -24,7 +25,12 @@ import org.eclipse.core.runtime.CoreException;
  * @since 1.0
  * @noextend This class is not intended to be subclassed by clients.
  */
-public abstract class AggregatorItem {
+public abstract class AggregatorItem implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * The type of aggregator item. This enumeration is normally used when
 	 * wanting to define a set of item types to handle. In some situations only

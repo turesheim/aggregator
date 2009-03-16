@@ -247,7 +247,7 @@ public class AggregatorPlugin extends Plugin {
 		}
 	}
 
-	private boolean fDoneInitializing = false;
+	private static boolean fDoneInitializing = false;
 
 	public IFeedCatalog[] getCatalogs() {
 		ArrayList<IFeedCatalog> catalogs = new ArrayList<IFeedCatalog>();
@@ -285,6 +285,11 @@ public class AggregatorPlugin extends Plugin {
 						// getFeeds();
 					}
 					fDoneInitializing = true;
+					try {
+						Thread.sleep(2000);
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
 					return status;
 				}
 			}
@@ -294,7 +299,7 @@ public class AggregatorPlugin extends Plugin {
 
 	}
 
-	public boolean isCollectionsInitialized() {
+	public static boolean isInitialized() {
 		return fDoneInitializing;
 	}
 

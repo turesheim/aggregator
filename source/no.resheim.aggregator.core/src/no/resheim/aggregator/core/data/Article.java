@@ -25,6 +25,10 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	/** The date and time the feed was added to the database */
 	protected long addedDate;
 
+	public UUID getId() {
+		return uuid;
+	}
+
 	/**
 	 * The creator of the feed
 	 * 
@@ -170,26 +174,21 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 					Messages.Article_PublishedByAndDownloaded, new Object[] {
 							creator,
 							dateFormat.format(new Date(publicationDate)),
-							dateFormat.format(new Date(addedDate))
-					}));
+							dateFormat.format(new Date(addedDate)) }));
 		} else if (creator != null) {
 			sb.append(MessageFormat.format(
 					Messages.Article_PublishedAndDownloaded, new Object[] {
 							dateFormat.format(new Date(publicationDate)),
-							dateFormat.format(new Date(addedDate))
-					}));
+							dateFormat.format(new Date(addedDate)) }));
 		} else if (publicationDate > 0) {
 			sb.append(MessageFormat.format(
 					Messages.Article_PublishedAndDownloaded, new Object[] {
 							dateFormat.format(new Date(publicationDate)),
-							dateFormat.format(new Date(addedDate))
-					}));
+							dateFormat.format(new Date(addedDate)) }));
 
 		} else {
 			sb.append(MessageFormat.format(Messages.Article_Downloaded,
-					new Object[] {
-						dateFormat.format(new Date(addedDate))
-					}));
+					new Object[] { dateFormat.format(new Date(addedDate)) }));
 
 		}
 		return sb.toString();

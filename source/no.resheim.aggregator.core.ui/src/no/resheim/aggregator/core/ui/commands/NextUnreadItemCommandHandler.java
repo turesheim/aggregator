@@ -9,12 +9,12 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.core.ui.views;
+package no.resheim.aggregator.core.ui.commands;
 
+import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.ui.IFeedView;
-import no.resheim.aggregator.core.ui.commands.AbstractAggregatorCommandHandler;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -39,6 +39,9 @@ public class NextUnreadItemCommandHandler extends
 
 	@Override
 	public boolean isEnabled() {
+		// Do not enable action if the collection has not initialised yet.
+		if (!AggregatorPlugin.isInitialized())
+			return false;
 		return true;
 	}
 

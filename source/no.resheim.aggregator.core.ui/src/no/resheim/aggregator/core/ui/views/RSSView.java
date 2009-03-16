@@ -314,7 +314,7 @@ public class RSSView extends ViewPart implements IFeedView,
 						IContextService.class)).activateContext(CONTEXT_ID);
 			}
 		});
-		if (AggregatorPlugin.getDefault().isCollectionsInitialized()) {
+		if (AggregatorPlugin.getDefault().isInitialized()) {
 			setDefaultCollection();
 		} else {
 			AggregatorPlugin.getDefault().addFeedCollectionListener(this);
