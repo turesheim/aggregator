@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="no.resheim.aggregator.google.reader.ui.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="no.resheim.aggregator.google.reader.ui.GooglePreferencePage"
+            id="no.resheim.aggregator.core.google.page"
+            name="Google Integration">
+      </page>
+   </extension>
+   <extension
+         point="no.resheim.aggregator.core.feeds">
+      <catalog
+            class="no.resheim.aggregator.google.reader.GoogleReaderFeedCatalog"
+            icon="icons/reader20x20.gif"
+            id="no.resheim.aggregator.googleReaderCatalog"
+            interactive="true"
+            name="Google Reader"
+            synchronizer="no.resheim.aggregator.google.reader.synchronizer">
+      </catalog>
+      <synchronizer
+            class="no.resheim.aggregator.google.reader.GoogleReaderSynchronizer"
+            id="no.resheim.aggregator.google.reader.synchronizer">
+      </synchronizer>
+   </extension>
+
+</plugin>

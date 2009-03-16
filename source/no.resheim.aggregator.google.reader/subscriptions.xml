@@ -1,0 +1,51 @@
+<object>
+	<list name="subscriptions">
+		<object>
+			<string name="id">
+				feed/http://greekbitches.blogspot.com/feeds/posts/default</string>
+			<string name="title">G(r)eek Bitches' Blog</string>
+			<list name="categories">
+				<object>
+					<string name="id">
+						user/09406790088207339090/state/com.blogger/blogger-following
+					</string>
+					<string name="label">blogger-following</string>
+				</object>
+			</list>
+			<string name="sortid">9FF852B4</string>
+			<number name="firstitemmsec">1229661001771</number>
+		</object>
+		<object>
+			<string name="id">feed/http://planeteclipse.org/planet/rss20.xml
+			</string>
+			<string name="title">Planet Eclipse</string>
+			<list name="categories" />
+			<string name="sortid">F3A46711</string>
+			<number name="firstitemmsec">1205907228619</number>
+		</object>
+		<object>
+			<string name="id">feed/http://slashdot.org/index.rss
+			</string>
+			<string name="title">Slashdot</string>
+			<list name="categories" />
+			<string name="sortid">685B4784</string>
+			<number name="firstitemmsec">1205889247494</number>
+		</object>
+		<object>
+			<string name="id">feed/http://feeds.feedburner.com/Techcrunch
+			</string>
+			<string name="title">TechCrunch</string>
+			<list name="categories" />
+			<string name="sortid">6947B54A</string>
+			<number name="firstitemmsec">1205905683676</number>
+		</object>
+		<object>
+			<string name="id">
+				feed/http://www.wired.com/news/feeds/rss2/0,2610,,00.xml</string>
+			<string name="title">Wired: Top Stories</string>
+			<list name="categories" />
+			<string name="sortid">C2D7982C</string>
+			<number name="firstitemmsec">1205891145383</number>
+		</object>
+	</list>
+</object>

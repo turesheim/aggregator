@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Google Reader Integration
+Bundle-SymbolicName: no.resheim.aggregator.google.reader;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Resheim Software
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.eclipse.ui;bundle-version="3.4.2",
+ no.resheim.aggregator.core.ui;bundle-version="1.0.0",
+ no.resheim.aggregator.core;bundle-version="1.0.0",
+ org.eclipse.equinox.security;bundle-version="1.0.1"
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: no.resheim.aggregator.google.reader.GoogleReaderPlugin
+Export-Package: no.resheim.aggregator.google.reader
