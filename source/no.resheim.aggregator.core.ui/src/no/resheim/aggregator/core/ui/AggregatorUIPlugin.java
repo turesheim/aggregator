@@ -17,14 +17,13 @@ import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
 import java.util.HashMap;
 
-import no.resheim.aggregator.core.AggregatorPlugin;
-
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
@@ -50,6 +49,9 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 
 	/** Identifier for the select feed collection command */
 	public static final String CMD_SELECT_COLLECTION = "no.resheim.aggregator.core.ui.selectCollection"; //$NON-NLS-1$
+
+	/** Browser identifier */
+	public static final String BROWSER_ID = "no.resheim.aggregator.core.ui";
 
 	/** The plug-in ID */
 	public static final String PLUGIN_ID = "no.resheim.aggregator.core.ui"; //$NON-NLS-1$
@@ -104,7 +106,9 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -179,7 +183,9 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+	 * )
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
@@ -245,23 +251,40 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	}
 
 	private static IWebBrowser fEditorBrowser;
+	private static int browserCount = 0;
 
-	public static IWebBrowser getSharedBrowser() {
-		if (fEditorBrowser == null) {
-			try {
-				fEditorBrowser = PlatformUI.getWorkbench().getBrowserSupport()
-						.createBrowser(
-								IWorkbenchBrowserSupport.NAVIGATION_BAR
-										| IWorkbenchBrowserSupport.LOCATION_BAR
-										| IWorkbenchBrowserSupport.AS_EDITOR,
-								AggregatorPlugin.PLUGIN_ID,
+	public static IWebBrowser getBrowser() {
+		try {
+			IPreferenceStore store = AggregatorUIPlugin.getDefault()
+					.getPreferenceStore();
+			int flags = IWorkbenchBrowserSupport.AS_VIEW;
+			if (store.getBoolean(PreferenceConstants.P_BROWSER_LOCATION_BAR)) {
+				flags |= IWorkbenchBrowserSupport.LOCATION_BAR;
+			}
+			if (store.getBoolean(PreferenceConstants.P_BROWSER_NAVIGATION_BAR)) {
+				flags |= IWorkbenchBrowserSupport.NAVIGATION_BAR;
+			}
+			if (store.getBoolean(PreferenceConstants.P_BROWSER_REUSE_WINDOW)) {
+				if (fEditorBrowser == null) {
+					fEditorBrowser = PlatformUI
+							.getWorkbench()
+							.getBrowserSupport()
+							.createBrowser(flags, BROWSER_ID,
+									Messages.AggregatorUIPlugin_Browser_Title,
+									Messages.AggregatorUIPlugin_Browser_Tooltip);
+				}
+				return fEditorBrowser;
+			} else {
+				String id = BROWSER_ID + "." + String.valueOf(browserCount++);
+				return PlatformUI.getWorkbench().getBrowserSupport()
+						.createBrowser(flags, id,
 								Messages.AggregatorUIPlugin_Browser_Title,
 								Messages.AggregatorUIPlugin_Browser_Tooltip);
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return fEditorBrowser;
+		return null;
 	}
 
 	static ImageData convertToSWT(BufferedImage bufferedImage) {

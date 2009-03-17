@@ -126,7 +126,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 					case EDITOR:
 						event.doit = false;
 						try {
-							AggregatorUIPlugin.getSharedBrowser().openURL(
+							AggregatorUIPlugin.getBrowser().openURL(
 									new URL(event.location));
 						} catch (PartInitException e1) {
 							e1.printStackTrace();

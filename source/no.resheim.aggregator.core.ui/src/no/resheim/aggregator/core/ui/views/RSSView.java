@@ -425,7 +425,7 @@ public class RSSView extends ViewPart implements IFeedView,
 				} else
 					return;
 				try {
-					AggregatorUIPlugin.getSharedBrowser().openURL(new URL(url));
+					AggregatorUIPlugin.getBrowser().openURL(new URL(url));
 					// Make the item as read if we were able to open the
 					// browser on it's URL.
 					if (obj instanceof Article) {
