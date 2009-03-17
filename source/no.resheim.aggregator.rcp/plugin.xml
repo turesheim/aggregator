@@ -109,6 +109,7 @@
             splashId="no.resheim.aggregator.rcp.splashHandlers.extensible">
       </splashHandlerProductBinding>
    </extension>
+<!--   
    <extension
          point="no.resheim.aggregator.rcp.splashExtension">
       <splashExtension
@@ -137,5 +138,5 @@
             tooltip="RCP">
       </splashExtension>
    </extension>
-
+-->
 </plugin>
