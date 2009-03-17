@@ -142,6 +142,16 @@ public class AtomItemHandler extends AbstractItemHandler {
 		if (qName.equals("source")) {
 			return new AtomItemSourceHandler(collection, feed);
 		}
+		if (qName.equals("category")) {
+			// FIXME: This should strictly be handled by the reader plug-in
+			String term = atts.getValue("term");
+			String label = atts.getValue("label");
+			if (term != null && term.endsWith("/state/com.google/read")) {
+				if (label != null && label.equals("read")) {
+					item.setRead(true);
+				}
+			}
+		}
 		// Must exist if there is not a "content" element
 		if (qName.equals(LINK)) {
 			item.setLink(atts.getValue("href")); //$NON-NLS-1$
