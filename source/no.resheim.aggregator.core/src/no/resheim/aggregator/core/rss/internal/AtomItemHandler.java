@@ -17,6 +17,7 @@ import java.util.UUID;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorItem.Mark;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -149,6 +150,11 @@ public class AtomItemHandler extends AbstractItemHandler {
 			if (term != null && term.endsWith("/state/com.google/read")) {
 				if (label != null && label.equals("read")) {
 					item.setRead(true);
+				}
+			}
+			if (term != null && term.endsWith("/state/com.google/starred")) {
+				if (label != null && label.equals("starred")) {
+					item.setMark(Mark.IMPORTANT);
 				}
 			}
 		}
