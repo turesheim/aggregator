@@ -127,7 +127,11 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 			}
 		}
 		if (item instanceof Article) {
-			baseId = AggregatorUIPlugin.IMG_ARTICLE_OBJ;
+			if (((Article) item).isStarred()) {
+				baseId = AggregatorUIPlugin.IMG_STARRED;
+			} else {
+				baseId = AggregatorUIPlugin.IMG_ARTICLE_OBJ;
+			}
 		}
 		if (item instanceof BrokenItem) {
 			baseId = AggregatorUIPlugin.IMG_ARTICLE_OBJ;

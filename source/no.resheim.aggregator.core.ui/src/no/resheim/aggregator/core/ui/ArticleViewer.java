@@ -19,10 +19,12 @@ import java.util.HashMap;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.MediaContent;
+import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.ui.internal.FeedDescriptionFormatter;
 import no.resheim.aggregator.core.ui.internal.FeedItemTitle;
 import no.resheim.aggregator.core.ui.internal.FeedViewWidgetFactory;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Platform;
@@ -115,7 +117,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 			public void changing(LocationEvent event) {
 				if (fInterceptBrowser) {
 					// Handle MSIE problem. Bug 645
-					if (event.location.equals("about:blank")){
+					if (event.location.equals("about:blank")) {
 						return;
 					}
 					IPreferenceStore store = AggregatorUIPlugin.getDefault()
@@ -131,7 +133,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 						} catch (PartInitException e1) {
 							e1.printStackTrace();
 						} catch (MalformedURLException e1) {
-							System.err.println("Bad URL :"+event.location);
+							System.err.println("Bad URL :" + event.location);
 							e1.printStackTrace();
 						}
 						break;
@@ -248,9 +250,32 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 				.getImageRegistry().getDescriptor(
 						AggregatorUIPlugin.IMG_PLAY_MEDIA));
 
+		setStarredAction = new Action() {
+			@Override
+			public void run() {
+				selectedArticle.setStarred(!selectedArticle.isStarred());
+				final String key = selectedArticle.isStarred() ? AggregatorUIPlugin.IMG_STARRED
+						: AggregatorUIPlugin.IMG_UNSTARRED;
+				setImageDescriptor(AggregatorUIPlugin.getDefault()
+						.getImageRegistry().getDescriptor(key));
+				// Make sure everyone knows about the change
+				try {
+					selectedArticle.getCollection()
+							.notifyListerners(new Object[] { selectedArticle },
+									EventType.CHANGED);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		setStarredAction.setImageDescriptor(AggregatorUIPlugin.getDefault()
+				.getImageRegistry().getDescriptor(
+						AggregatorUIPlugin.IMG_UNSTARRED));
+
 		playMediaItem = new ActionContributionItem(playMediaAction);
 		playMediaItem.setVisible(false);
 		title.getToolBarManager().add(playMediaItem);
+		title.getToolBarManager().add(setStarredAction);
 		title.getToolBarManager().update(false);
 
 	}
@@ -292,15 +317,18 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 				if (handler != null) {
 					playMediaAction.setToolTipText(MessageFormat.format(
 							Messages.ArticleViewer_PlayActionTitle,
-							new Object[] {
-								handler.getFormattedContentName(content)
-							}));
+							new Object[] { handler
+									.getFormattedContentName(content) }));
 				} else {
 					playMediaAction
 							.setText(Messages.ArticleViewer_UnhandledContent);
 				}
 			}
 			playMediaItem.setVisible(selectedArticle.hasMedia());
+			final String key = selectedArticle.isStarred() ? AggregatorUIPlugin.IMG_STARRED
+					: AggregatorUIPlugin.IMG_UNSTARRED;
+			setStarredAction.setImageDescriptor(AggregatorUIPlugin.getDefault()
+					.getImageRegistry().getDescriptor(key));
 			title.getToolBarManager().update(true);
 		} else if (item instanceof Feed) {
 			showDescription((Feed) item);
@@ -334,13 +362,13 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	final IExtensionRegistry ereg = Platform.getExtensionRegistry();
 
 	HashMap<String, String> contentProperties;
+	private Action setStarredAction;
 
 	private String getContentHandlerHTML(String contentType, String url,
 			String content) {
 		String code = MessageFormat.format(
-				Messages.ArticleViewer_NoContentHandler, new Object[] {
-					contentType
-				});
+				Messages.ArticleViewer_NoContentHandler,
+				new Object[] { contentType });
 		ContentHandler handler = AggregatorUIPlugin.getDefault()
 				.getContentHandler(contentType, url);
 		if (handler == null)

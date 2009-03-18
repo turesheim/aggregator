@@ -100,10 +100,8 @@ public class FeedItemTitle extends Composite {
 		label = factory.createCLabel(this, BLANK);
 		label.setBackground(new Color[] {
 				factory.getColors().getColor(IFormColors.H_GRADIENT_END),
-				factory.getColors().getColor(IFormColors.H_GRADIENT_START)
-		}, new int[] {
-			100
-		}, true);
+				factory.getColors().getColor(IFormColors.H_GRADIENT_START) },
+				new int[] { 100 }, true);
 		label.setFont(font);
 		label.setForeground(factory.getColors().getColor(IFormColors.TITLE));
 		GridData gd = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
@@ -132,7 +130,6 @@ public class FeedItemTitle extends Composite {
 		if (toolBarManager == null) {
 			toolBarManager = new ToolBarManager(SWT.RIGHT | SWT.FLAT);
 			final ToolBar toolbar = toolBarManager.createControl(this);
-			// toolbar.setBackground(getBackground());
 			toolbar.setForeground(getForeground());
 			toolbar.setCursor(FormsResources.getHandCursor());
 			addDisposeListener(new DisposeListener() {

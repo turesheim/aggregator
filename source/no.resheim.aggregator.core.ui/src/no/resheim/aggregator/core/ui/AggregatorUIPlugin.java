@@ -67,6 +67,10 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 
 	public static final String IMG_PLAY_MEDIA = "play_media"; //$NON-NLS-1$
 
+	public static final String IMG_STARRED = "starred";
+
+	public static final String IMG_UNSTARRED = "unstarred";
+
 	/** Identifier for feed item image descriptor */
 	public static final String IMG_ADD_OBJ = "add_obj"; //$NON-NLS-1$
 
@@ -230,6 +234,10 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 				"icons/ovr16/mark_2.gif")); //$NON-NLS-1$
 		reg.put(IMG_MARK_3PRI, imageDescriptorFromPlugin(PLUGIN_ID,
 				"icons/ovr16/mark_3.gif")); //$NON-NLS-1$
+		reg.put(IMG_STARRED, imageDescriptorFromPlugin(PLUGIN_ID,
+				"icons/obj16/starred.gif")); //$NON-NLS-1$
+		reg.put(IMG_UNSTARRED, imageDescriptorFromPlugin(PLUGIN_ID,
+				"icons/obj16/unstarred.gif")); //$NON-NLS-1$
 		// Copy some stuff from the shared
 		reg.put(IMG_ARTICLE_OBJ, PlatformUI.getWorkbench().getSharedImages()
 				.getImageDescriptor(ISharedImages.IMG_OBJ_FILE));

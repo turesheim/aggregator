@@ -86,6 +86,36 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	 */
 	protected long readDate;
 
+	protected long lastChanged;
+
+	protected boolean starred;
+
+	protected boolean updated;
+
+	public long getLastChanged() {
+		return lastChanged;
+	}
+
+	public void setLastChanged(long lastChanged) {
+		this.lastChanged = lastChanged;
+	}
+
+	public boolean isStarred() {
+		return starred;
+	}
+
+	public void setStarred(boolean starred) {
+		this.starred = starred;
+	}
+
+	public boolean isSynchronized() {
+		return updated;
+	}
+
+	public void setSynchronized(boolean state) {
+		this.updated = state;
+	}
+
 	/**
 	 * The description or content
 	 * 

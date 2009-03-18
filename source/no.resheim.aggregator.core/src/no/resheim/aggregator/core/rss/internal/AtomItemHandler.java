@@ -17,7 +17,6 @@ import java.util.UUID;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
-import no.resheim.aggregator.core.data.AggregatorItem.Mark;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -95,6 +94,8 @@ public class AtomItemHandler extends AbstractItemHandler {
 		this.feed = feed;
 		item = new Article(feed, UUID.randomUUID());
 		item.setAddedDate(System.currentTimeMillis());
+		item.setSynchronized(true);
+		item.setLastChanged(System.currentTimeMillis());
 	}
 
 	public void endElement(String qName) throws SAXException {
@@ -154,7 +155,7 @@ public class AtomItemHandler extends AbstractItemHandler {
 			}
 			if (term != null && term.endsWith("/state/com.google/starred")) {
 				if (label != null && label.equals("starred")) {
-					item.setMark(Mark.IMPORTANT);
+					item.setStarred(true);
 				}
 			}
 		}

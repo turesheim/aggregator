@@ -27,10 +27,15 @@ CREATE TABLE articles (
 		description CLOB,
 		creator VARCHAR(128),
 		media_player VARCHAR(128),
+		last_changed BIGINT NOT NULL,
+		synchronized INT NOT NULL,
+		starred INT NOT NULL,
 		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);
 
-/* Holds media:content and enclosure elements */
+/* Holds media:content and enclosure elements 
+	ordering
+*/
 CREATE TABLE media_content (
 		ordering INT NOT NULL,
 		article_uuid CHAR(36) NOT NULL,
@@ -49,7 +54,7 @@ CREATE TABLE media_content (
 		height VARCHAR(32),
 		width VARCHAR(32),
 		lang VARCHAR(32),
-		player_url VARCHAR(128),
+		player_url VARCHAR(128),		
 		FOREIGN KEY (article_uuid) references articles (uuid) ON DELETE CASCADE
 	);
 
