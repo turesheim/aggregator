@@ -32,11 +32,22 @@ import org.eclipse.jface.preference.IPreferenceStore;
 public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 	private final String URL_PREFIX = "http://www.google.com/reader/atom/feed/";
 
-	public URL getURL(Feed feed) throws MalformedURLException {
+	/**
+	 * Overrides the default implementation by fetching a given number of items
+	 * (from preference settings) if the feed has never been updated and only
+	 * items since last update if the feed has previously been updated.
+	 */
+	protected URL getURL(Feed feed) throws MalformedURLException {
 		IPreferenceStore store = GoogleReaderPlugin.getDefault()
 				.getPreferenceStore();
 		int count = store.getInt(PreferenceConstants.P_AMOUNT);
-		String base = URL_PREFIX + feed.getURL() + "?n=" + count;
+		String base = URL_PREFIX + feed.getURL();
+		if (feed.getLastUpdate() > 0) {
+			base += "?ot=" + feed.getLastUpdate() + "&r=o&ck="
+					+ System.currentTimeMillis();
+		} else {
+			base += "?n=" + count;
+		}
 		return new URL(base);
 	}
 
