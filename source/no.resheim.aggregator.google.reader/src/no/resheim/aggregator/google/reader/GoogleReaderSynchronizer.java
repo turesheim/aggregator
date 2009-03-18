@@ -10,6 +10,8 @@
  *******************************************************************************/
 package no.resheim.aggregator.google.reader;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Collections;
 
@@ -28,6 +30,15 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class GoogleReaderSynchronizer extends AbstractSynchronizer {
+	private final String URL_PREFIX = "http://www.google.com/reader/atom/feed/";
+
+	public URL getURL(Feed feed) throws MalformedURLException {
+		IPreferenceStore store = GoogleReaderPlugin.getDefault()
+				.getPreferenceStore();
+		int count = store.getInt(PreferenceConstants.P_AMOUNT);
+		String base = URL_PREFIX + feed.getURL() + "?n=" + count;
+		return new URL(base);
+	}
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
@@ -49,9 +60,6 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 		try {
 			// First log in.
 			GoogleReaderPlugin.login();
-			IPreferenceStore store = GoogleReaderPlugin.getDefault()
-					.getPreferenceStore();
-			int count = store.getInt(PreferenceConstants.P_AMOUNT);
 			// TODO: Handle the count
 			ms.add(download(feed, true));
 			if (ms.isOK()) {

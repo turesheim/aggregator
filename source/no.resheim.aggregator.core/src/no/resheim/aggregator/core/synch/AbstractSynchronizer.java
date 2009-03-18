@@ -92,13 +92,28 @@ public abstract class AbstractSynchronizer extends Job {
 	}
 
 	/**
+	 * Returns the URL to use when updating the feed. In cases where special
+	 * handling of the feed URL is required, this method should be
+	 * re-implemented in the subclass.
+	 * 
+	 * @param feed
+	 *            the feed to calculate the URL for
+	 * @return the calculated URL
+	 * @throws MalformedURLException
+	 */
+	protected URL getURL(Feed feed) throws MalformedURLException {
+		return new URL(feed.getURL());
+	}
+
+	/**
 	 * 
 	 * @param debug
 	 * @return
 	 */
 	protected IStatus download(Feed feed, boolean debug) {
 		try {
-			URL feedURL = new URL(feed.getURL());
+
+			URL feedURL = getURL(feed);
 			if (feedURL == null) {
 				return Status.CANCEL_STATUS;
 			}

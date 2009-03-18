@@ -24,8 +24,6 @@ import org.xml.sax.SAXException;
  * @since 1.1
  */
 class FeedHandler implements IElementHandler {
-	private static final String URL_PREFIX = "http://www.google.com/reader/atom/";
-	private static final String URL_POSTFIX = "?n=1000";
 	private Feed feed;
 	private ArrayList<Feed> feeds;
 	private StringBuffer buffer = new StringBuffer();
@@ -76,7 +74,7 @@ class FeedHandler implements IElementHandler {
 				feed.setTitle(data);
 				break;
 			case URL:
-				feed.setURL(URL_PREFIX + data + URL_POSTFIX);
+				feed.setURL(data.replaceFirst("feed/", ""));
 				break;
 			default:
 				break;
