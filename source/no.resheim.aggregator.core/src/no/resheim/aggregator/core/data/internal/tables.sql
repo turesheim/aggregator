@@ -28,7 +28,6 @@ CREATE TABLE articles (
 		creator VARCHAR(128),
 		media_player VARCHAR(128),
 		last_changed BIGINT NOT NULL,
-		synchronized INT NOT NULL,
 		starred INT NOT NULL,
 		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);

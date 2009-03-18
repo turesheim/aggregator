@@ -90,8 +90,6 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 
 	protected boolean starred;
 
-	protected boolean updated;
-
 	public long getLastChanged() {
 		return lastChanged;
 	}
@@ -106,14 +104,6 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 
 	public void setStarred(boolean starred) {
 		this.starred = starred;
-	}
-
-	public boolean isSynchronized() {
-		return updated;
-	}
-
-	public void setSynchronized(boolean state) {
-		this.updated = state;
 	}
 
 	/**

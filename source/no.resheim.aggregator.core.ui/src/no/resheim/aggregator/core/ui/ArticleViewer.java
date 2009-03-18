@@ -19,7 +19,6 @@ import java.util.HashMap;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.MediaContent;
-import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.ui.internal.FeedDescriptionFormatter;
 import no.resheim.aggregator.core.ui.internal.FeedItemTitle;
 import no.resheim.aggregator.core.ui.internal.FeedViewWidgetFactory;
@@ -259,10 +258,9 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 				setImageDescriptor(AggregatorUIPlugin.getDefault()
 						.getImageRegistry().getDescriptor(key));
 				// Make sure everyone knows about the change
+
 				try {
-					selectedArticle.getCollection()
-							.notifyListerners(new Object[] { selectedArticle },
-									EventType.CHANGED);
+					selectedArticle.getCollection().write(selectedArticle);
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}

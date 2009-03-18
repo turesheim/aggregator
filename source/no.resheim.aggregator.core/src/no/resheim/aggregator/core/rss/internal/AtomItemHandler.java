@@ -94,7 +94,6 @@ public class AtomItemHandler extends AbstractItemHandler {
 		this.feed = feed;
 		item = new Article(feed, UUID.randomUUID());
 		item.setAddedDate(System.currentTimeMillis());
-		item.setSynchronized(true);
 		item.setLastChanged(System.currentTimeMillis());
 	}
 

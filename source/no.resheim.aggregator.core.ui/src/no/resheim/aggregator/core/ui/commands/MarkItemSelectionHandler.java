@@ -57,7 +57,7 @@ public class MarkItemSelectionHandler extends AbstractAggregatorCommandHandler
 			Mark mark = (Mark) m;
 			items[0].setMark(mark);
 			try {
-				getCollection(event).update(items[0]);
+				getCollection(event).write(items[0]);
 				IWorkbenchWindow window = HandlerUtil
 						.getActiveWorkbenchWindowChecked(event);
 				ICommandService commandService = (ICommandService) window
