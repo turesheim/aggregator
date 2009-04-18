@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.CoreException;
 /**
  * Aggregator item representing a folder. Folders are used to contain other type
  * of aggregator items such as articles and other folders. A folder may also
- * <i>point</i> to a {@link Feed} , meaning that the folder is the default
+ * <i>point</i> to a {@link Subscription} , meaning that the folder is the default
  * location for the feed articles. In this case the folder can be used to obtain
  * the feed instance.
  * 
@@ -54,7 +54,7 @@ public class Folder extends AggregatorItemParent {
 	 * @return
 	 * @uml.property name="feed"
 	 */
-	public Feed getFeed() {
+	public Subscription getFeed() {
 		if (feed == null) {
 			return null;
 		} else {

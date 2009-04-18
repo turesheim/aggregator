@@ -11,23 +11,34 @@ CREATE TABLE folders (
 	);
 
 CREATE TABLE articles (
+		/* Unique identifier */
         uuid CHAR(36) NOT NULL PRIMARY KEY,
+        /* Unique identifier of the parent node */
 		parent_uuid CHAR(36) NOT NULL,
+		/* Presentation order */
 		ordering INTEGER NOT NULL,
+		/** Unique identifier of the feed creating the item */
 		subscription_uuid CHAR(36) NOT NULL,
+		/* Globally unique identifier */
 		guid VARCHAR(256) NOT NULL,
+		/* Title of the item */
 		title VARCHAR(256) NOT NULL,
+		/* URL of the original publication */
 		url VARCHAR(256) NOT NULL,
 		marking VARCHAR(32) NOT NULL,		
 		flags VARCHAR(128) NOT NULL,
 		is_read INT NOT NULL,
+		/* Publication date */
 	    publication_date BIGINT NOT NULL,
 		read_date BIGINT NOT NULL,
+		/* Date when added to the collection */
 		added_date BIGINT NOT NULL,
 		description CLOB,
 		creator VARCHAR(128),
 		media_player VARCHAR(128),
+		/* Date of the last (local) change */
 		last_changed BIGINT NOT NULL,
+		/* Whether or not the item is starred */
 		starred INT NOT NULL,
 		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);

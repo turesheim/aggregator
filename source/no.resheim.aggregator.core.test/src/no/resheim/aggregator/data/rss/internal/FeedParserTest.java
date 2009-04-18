@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.IAggregatorEventListener;
 import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
@@ -55,7 +55,7 @@ public class FeedParserTest extends TestCase {
 	 */
 	public void testIssue_547() throws SAXException,
 			ParserConfigurationException, IOException {
-		Feed feed = TestUtils.createNewFeed(FEED_TITLE);
+		Subscription feed = TestUtils.createNewFeed(FEED_TITLE);
 		// This will also create a new folder to keep the feed items
 		getCollection().addNew(feed);
 		getCollection().addFeedListener(new IAggregatorEventListener() {

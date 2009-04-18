@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
-import no.resheim.aggregator.core.data.Feed.Archiving;
+import no.resheim.aggregator.core.data.Subscription.Archiving;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -143,7 +143,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 * @param site
 	 * @throws CoreException
 	 */
-	public void cleanUp(Feed site) throws CoreException {
+	public void cleanUp(Subscription site) throws CoreException {
 		Archiving archiving = site.getArchiving();
 		ArrayList<Article> trashed = new ArrayList<Article>();
 		int days = site.getArchivingDays();

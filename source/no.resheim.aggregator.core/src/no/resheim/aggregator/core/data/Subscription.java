@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.Status;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class Feed implements Comparable<Feed> {
+public class Subscription implements Comparable<Subscription> {
 	/**
 	 * @author torkild
 	 */
@@ -128,19 +128,19 @@ public class Feed implements Comparable<Feed> {
 	/**
 	 * A unique identifier will be created for the feed as it is instantiated.
 	 */
-	public Feed() {
+	public Subscription() {
 		uuid = UUID.randomUUID();
 		tempItems = new ArrayList<Article>();
 		// Use the default synchronizer and replace later if required.
 		synchronizer = IFeedCatalog.DEFAULT_SYNCHRONIZER_ID;
 	}
 
-	public Feed(IFeedCatalog catalog) {
+	public Subscription(IFeedCatalog catalog) {
 		this();
 		synchronizer = catalog.getSynchronizerId();
 	}
 
-	public int compareTo(Feed arg) {
+	public int compareTo(Subscription arg) {
 		return this.getTitle().compareTo(arg.getTitle());
 	}
 

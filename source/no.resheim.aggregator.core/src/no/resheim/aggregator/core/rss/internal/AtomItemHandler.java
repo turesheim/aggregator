@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 
 import org.xml.sax.Attributes;
@@ -89,7 +89,7 @@ public class AtomItemHandler extends AbstractItemHandler {
 	static final SimpleDateFormat date = new SimpleDateFormat(
 			"yyyy-MM-ddEEE, d MMM yyyy HH:mm:ss Z"); //$NON-NLS-1$
 
-	public AtomItemHandler(FeedCollection registry, Feed feed) {
+	public AtomItemHandler(FeedCollection registry, Subscription feed) {
 		this.collection = registry;
 		this.feed = feed;
 		item = new Article(feed, UUID.randomUUID());

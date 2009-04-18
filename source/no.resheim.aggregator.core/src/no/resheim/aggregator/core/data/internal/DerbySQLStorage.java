@@ -23,14 +23,14 @@ import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.BrokenItem;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.MediaContent;
 import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.data.AggregatorItem.Mark;
-import no.resheim.aggregator.core.data.Feed.Archiving;
-import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
+import no.resheim.aggregator.core.data.Subscription.Archiving;
+import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
 import no.resheim.aggregator.core.data.MediaContent.Medium;
 import no.resheim.aggregator.core.filter.Filter;
 
@@ -106,7 +106,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		}
 	}
 
-	public void add(Feed feed) {
+	public void add(Subscription feed) {
 		try {
 			insert(feed);
 		} catch (SQLException e) {
@@ -162,8 +162,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		return item;
 	}
 
-	private Feed composeFeed(ResultSet rs) throws SQLException {
-		Feed feed = new Feed();
+	private Subscription composeFeed(ResultSet rs) throws SQLException {
+		Subscription feed = new Subscription();
 		feed.setUUID(UUID.fromString(rs.getString(1)));
 		feed.setLocation(UUID.fromString(rs.getString(2)));
 		feed.setTitle(rs.getString(3).trim());
@@ -311,7 +311,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		}
 	}
 
-	public void delete(Feed feed) {
+	public void delete(Subscription feed) {
 		try {
 			Statement s = connection.createStatement();
 			s.executeUpdate("delete from subscriptions where uuid='" //$NON-NLS-1$
@@ -395,13 +395,13 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * 
 	 * @see no.resheim.aggregator.model.IAggregatorStorage#initializeFeeds()
 	 */
-	public HashMap<UUID, Feed> getFeeds() {
-		HashMap<UUID, Feed> feeds = new HashMap<UUID, Feed>();
+	public HashMap<UUID, Subscription> getFeeds() {
+		HashMap<UUID, Subscription> feeds = new HashMap<UUID, Subscription>();
 		try {
 			Statement s = connection.createStatement();
 			ResultSet rs = s.executeQuery("select * from subscriptions"); //$NON-NLS-1$
 			while (rs.next()) {
-				Feed f = composeFeed(rs);
+				Subscription f = composeFeed(rs);
 				feeds.put(f.getUUID(), f);
 			}
 			rs.close();
@@ -546,7 +546,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 *            The feed to insert
 	 * @throws SQLException
 	 */
-	private void insert(Feed feed) throws SQLException {
+	private void insert(Subscription feed) throws SQLException {
 		PreparedStatement ps = connection
 				.prepareStatement("insert into subscriptions values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
@@ -653,7 +653,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		ps.setString(1, item.getUUID().toString());
 		ps.setString(2, item.getLocation().toString());
 		ps.setLong(3, item.getOrdering());
-		ps.setString(4, item.getFeedUUID().toString());
+		ps.setString(4, item.getSubscriptionUUID().toString());
 		ps.setString(5, item.getGuid());
 		ps.setString(6, item.getTitle());
 		ps.setString(7, item.getLink());
@@ -885,7 +885,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 * no.resheim.aggregator.model.IAggregatorStorage#updateFeed(no.resheim.
 	 * aggregator.model.Feed)
 	 */
-	public void updateFeed(Feed feed) {
+	public void updateFeed(Subscription feed) {
 		// XXX: Use SQL "update" instead of "delete" & "insert"
 		delete(feed);
 		add(feed);

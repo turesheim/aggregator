@@ -14,10 +14,10 @@ import java.util.ArrayList;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.catalog.AbstractFeedCatalog;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
-import no.resheim.aggregator.core.data.Feed.Archiving;
-import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
+import no.resheim.aggregator.core.data.Subscription.Archiving;
+import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -29,8 +29,8 @@ import org.eclipse.core.runtime.Platform;
  */
 public class DeclaredFeedsCatalog extends AbstractFeedCatalog {
 
-	public Feed[] getFeeds() {
-		ArrayList<Feed> feeds = new ArrayList<Feed>();
+	public Subscription[] getFeeds() {
+		ArrayList<Subscription> feeds = new ArrayList<Subscription>();
 		IExtensionRegistry ereg = Platform.getExtensionRegistry();
 		IConfigurationElement[] elements = ereg
 				.getConfigurationElementsFor(AggregatorPlugin.FEEDS_EXTENSION_ID);
@@ -47,7 +47,7 @@ public class DeclaredFeedsCatalog extends AbstractFeedCatalog {
 					FeedCollection collection = AggregatorPlugin.getDefault()
 							.getFeedCollection(collectionId);
 					if (collection != null) {
-						Feed feed = createNewFeed(collection, element);
+						Subscription feed = createNewFeed(collection, element);
 						if (add && !collection.hasFeed(url)) {
 							collection.addNew(feed);
 						}
@@ -58,12 +58,12 @@ public class DeclaredFeedsCatalog extends AbstractFeedCatalog {
 				e.printStackTrace();
 			}
 		}
-		return feeds.toArray(new Feed[feeds.size()]);
+		return feeds.toArray(new Subscription[feeds.size()]);
 	}
 
-	private Feed createNewFeed(FeedCollection parent,
+	private Subscription createNewFeed(FeedCollection parent,
 			IConfigurationElement element) {
-		Feed feed = new Feed(this);
+		Subscription feed = new Subscription(this);
 		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.
 		feed.setTitle(element.getAttribute("title")); //$NON-NLS-1$

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import no.resheim.aggregator.core.catalog.IFeedCatalog;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -26,7 +26,7 @@ public class SubscriptionsParser extends DefaultHandler {
 	boolean capture;
 	IFeedCatalog catalog;
 
-	public SubscriptionsParser(IFeedCatalog catalog, ArrayList<Feed> feeds) {
+	public SubscriptionsParser(IFeedCatalog catalog, ArrayList<Subscription> feeds) {
 		handlers = new Stack<IElementHandler>();
 		buffer = new StringBuffer();
 		this.catalog = catalog;

@@ -18,7 +18,7 @@ import java.util.TimeZone;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 
 import org.xml.sax.Attributes;
@@ -102,7 +102,7 @@ public abstract class AbstractElementHandler implements IElementHandler {
 	 * @uml.property name="feed"
 	 * @uml.associationEnd
 	 */
-	protected Feed feed;
+	protected Subscription feed;
 
 	/**
 	 * The current article. We use {@link InternalArticle} instead of

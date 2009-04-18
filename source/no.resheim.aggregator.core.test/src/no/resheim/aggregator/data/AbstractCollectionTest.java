@@ -6,7 +6,7 @@ import junit.framework.TestCase;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.test.TestUtils;
@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public abstract class AbstractCollectionTest extends TestCase {
 
-	private Feed feed;
+	private Subscription feed;
 
 	/**
 	 * Used to obtain a correctly configured feed collection.
@@ -131,7 +131,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 	public final void testAddArticle() throws CoreException {
 		FeedCollection collection = getCollection();
 		// Create the feed
-		Feed feed = TestUtils.createNewFeed("Feed title"); //$NON-NLS-1$
+		Subscription feed = TestUtils.createNewFeed("Feed title"); //$NON-NLS-1$
 		// This should also add a new folder automatically as we did not specify
 		// the location for the feed.
 		Folder folder = collection.addNew(feed);
@@ -165,7 +165,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 	 */
 	public final void testAdd1000Articles() throws CoreException {
 		FeedCollection collection = getCollection();
-		Feed feed = TestUtils.createNewFeed("1000 articles"); //$NON-NLS-1$
+		Subscription feed = TestUtils.createNewFeed("1000 articles"); //$NON-NLS-1$
 		Folder folder = collection.addNew(feed);
 		for (int a = 0; a < 1000; a++) {
 			Article article = new Article(folder, UUID.randomUUID(), feed

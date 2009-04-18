@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.ui.IFeedView;
@@ -129,7 +129,7 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 		AggregatorItem[] items = getSelectedItems(selection);
 		if (items.length == 1) {
 			if (items[0] instanceof Folder) {
-				Feed feed = ((Folder) items[0]).getFeed();
+				Subscription feed = ((Folder) items[0]).getFeed();
 				if (feed != null)
 					return true;
 			}
@@ -150,7 +150,7 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 		AggregatorItem[] items = getSelectedItems(selection);
 		if (items.length == 1) {
 			if (items[0] instanceof Folder) {
-				Feed feed = ((Folder) items[0]).getFeed();
+				Subscription feed = ((Folder) items[0]).getFeed();
 				if (feed == null)
 					return true;
 			}

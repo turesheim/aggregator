@@ -62,14 +62,14 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * 
 	 * @param feed
 	 */
-	public abstract void delete(Feed feed);
+	public abstract void delete(Subscription feed);
 
 	/**
 	 * Adds a new feed to the storage.
 	 * 
 	 * @param feed
 	 */
-	public abstract void add(Feed feed);
+	public abstract void add(Subscription feed);
 
 	/**
 	 * Calculates and returns the number of children the <i>parent</i> item has.
@@ -98,7 +98,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * 
 	 * @return a map of all feeds
 	 */
-	public abstract HashMap<UUID, Feed> getFeeds();
+	public abstract HashMap<UUID, Subscription> getFeeds();
 
 	/**
 	 * Returns the article with the given <i>guid</i>.
@@ -181,7 +181,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * 
 	 * @param feed
 	 */
-	public abstract void updateFeed(Feed feed);
+	public abstract void updateFeed(Subscription feed);
 
 	/**
 	 * Writes back the aggregator item data so that the database is in sync with

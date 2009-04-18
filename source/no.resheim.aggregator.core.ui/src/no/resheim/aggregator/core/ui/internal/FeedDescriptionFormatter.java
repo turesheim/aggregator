@@ -12,10 +12,10 @@
 
 package no.resheim.aggregator.core.ui.internal;
 
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 
 /**
- * This type formats information about a given {@link Feed} as HTML.
+ * This type formats information about a given {@link Subscription} as HTML.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -61,7 +61,7 @@ public class FeedDescriptionFormatter {
 		return sb.toString();
 	}
 
-	public static String format(Feed feed, String font, int size) {
+	public static String format(Subscription feed, String font, int size) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<div>"); //$NON-NLS-1$
 		sb.append("<table width=\"100%\"><tr>"); //$NON-NLS-1$

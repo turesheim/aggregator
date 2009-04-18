@@ -14,11 +14,11 @@ package no.resheim.aggregator.ui.test;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
-import no.resheim.aggregator.core.data.Feed.Archiving;
-import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
+import no.resheim.aggregator.core.data.Subscription.Archiving;
+import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
 import no.resheim.aggregator.core.ui.IFeedView;
 import no.resheim.aggregator.core.ui.commands.AbstractAggregatorCommandHandler;
 
@@ -82,7 +82,7 @@ public class CreateYouTubeArticlesHandler extends
 				@SuppressWarnings("restriction")
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					Feed feed = createNewFeed(collection,
+					Subscription feed = createNewFeed(collection,
 							"YouTube Support Test"); //$NON-NLS-1$
 					Folder folder = collection.addNew(feed);
 					for (int a = 0; a < ARTICLES.length; a++) {
@@ -117,8 +117,8 @@ public class CreateYouTubeArticlesHandler extends
 		return null;
 	}
 
-	private Feed createNewFeed(FeedCollection parent, String title) {
-		Feed feed = new Feed();
+	private Subscription createNewFeed(FeedCollection parent, String title) {
+		Subscription feed = new Subscription();
 		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.
 		feed.setTitle(title);

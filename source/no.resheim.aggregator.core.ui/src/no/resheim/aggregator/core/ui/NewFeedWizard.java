@@ -12,7 +12,7 @@
 package no.resheim.aggregator.core.ui;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.FeedWorkingCopy;
 import no.resheim.aggregator.core.ui.internal.NewFeedWizardGeneralPage;
@@ -60,8 +60,8 @@ public class NewFeedWizard extends Wizard {
 		addPage(archiving);
 	}
 
-	public Feed getFeed() {
-		Feed feed = workingCopy.getFeed();
+	public Subscription getFeed() {
+		Subscription feed = workingCopy.getFeed();
 		return feed;
 	}
 

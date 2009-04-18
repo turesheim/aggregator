@@ -19,7 +19,7 @@ import java.util.UUID;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.filter.Filter;
@@ -68,14 +68,14 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 	/**
 	 * @uml.property name="feeds"
 	 */
-	HashMap<UUID, Feed> feeds;
+	HashMap<UUID, Subscription> feeds;
 
 	HashMap<UUID, ItemHolder> items;
 
 	public MemoryStorage(FeedCollection collection, IPath path) {
 		super(collection, path);
 		items = new HashMap<UUID, ItemHolder>();
-		feeds = new HashMap<UUID, Feed>();
+		feeds = new HashMap<UUID, Subscription>();
 		items.put(collection.getUUID(), new ItemHolder(collection));
 	}
 
@@ -88,7 +88,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		return Status.OK_STATUS;
 	}
 
-	public void add(Feed feed) {
+	public void add(Subscription feed) {
 		feeds.put(feed.getUUID(), feed);
 	}
 
@@ -99,7 +99,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		Assert.isNotNull(items.remove(item.getUUID()));
 	}
 
-	public void delete(Feed feed) {
+	public void delete(Subscription feed) {
 		feeds.remove(feed.getUUID());
 	}
 
@@ -133,7 +133,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 	 * @return
 	 * @uml.property name="feeds"
 	 */
-	public HashMap<UUID, Feed> getFeeds() {
+	public HashMap<UUID, Subscription> getFeeds() {
 		return feeds;
 	}
 
@@ -172,7 +172,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 	}
 
 	public boolean hasFeed(String url) {
-		for (Feed feed : feeds.values()) {
+		for (Subscription feed : feeds.values()) {
 			if (feed.getURL().equals(url)) {
 				return true;
 			}
@@ -208,7 +208,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		return Status.OK_STATUS;
 	}
 
-	public void updateFeed(Feed feed) {
+	public void updateFeed(Subscription feed) {
 		// TODO Auto-generated method stub
 
 	}

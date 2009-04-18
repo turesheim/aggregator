@@ -24,7 +24,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.catalog.AbstractFeedCatalog;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 
 import org.eclipse.equinox.security.storage.StorageException;
 import org.xml.sax.SAXException;
@@ -42,8 +42,8 @@ public class GoogleReaderFeedCatalog extends AbstractFeedCatalog {
 	}
 
 	@Override
-	public Feed[] getFeeds() {
-		ArrayList<Feed> feeds = new ArrayList<Feed>();
+	public Subscription[] getFeeds() {
+		ArrayList<Subscription> feeds = new ArrayList<Subscription>();
 		if (GoogleReaderPlugin.login()) {
 			try {
 				URL url = new URL(SUBSCRIPTIONS_URL);
@@ -70,7 +70,7 @@ public class GoogleReaderFeedCatalog extends AbstractFeedCatalog {
 				e.printStackTrace();
 			}
 		}
-		return feeds.toArray(new Feed[feeds.size()]);
+		return feeds.toArray(new Subscription[feeds.size()]);
 	}
 
 	@Override

@@ -13,8 +13,8 @@ package no.resheim.aggregator.core.ui.internal;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.FeedWorkingCopy;
-import no.resheim.aggregator.core.data.Feed.Archiving;
-import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
+import no.resheim.aggregator.core.data.Subscription.Archiving;
+import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;

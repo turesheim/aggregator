@@ -68,7 +68,7 @@ public class FeedCollection extends AggregatorItemParent {
 	 * being created. This list is populated at startup and maintained
 	 * thereafter.
 	 */
-	private HashMap<UUID, Feed> fFeeds;
+	private HashMap<UUID, Subscription> fFeeds;
 
 	private ArrayList<Filter> fFilters;
 
@@ -132,7 +132,7 @@ public class FeedCollection extends AggregatorItemParent {
 	 * Adds a new feed to the database and immediately stores it's data in the
 	 * persistent storage.
 	 * 
-	 * @param feed
+	 * @param subscription
 	 *            the aggregator item to add
 	 */
 	public IStatus addNew(AggregatorItem[] items) {
@@ -175,7 +175,7 @@ public class FeedCollection extends AggregatorItemParent {
 	 *            the new feed to add
 	 * @return the {@link Folder} where feed items will be put
 	 */
-	public Folder addNew(Feed feed) {
+	public Folder addNew(Subscription feed) {
 		feed.validate();
 		Folder folder = null;
 		try {
@@ -239,7 +239,7 @@ public class FeedCollection extends AggregatorItemParent {
 	 * @param feed
 	 *            the feed to update
 	 */
-	public void feedUpdated(Feed feed) {
+	public void feedUpdated(Subscription feed) {
 		try {
 			fDatabase.writeLock().lock();
 			fDatabase.updateFeed(feed);
@@ -277,7 +277,7 @@ public class FeedCollection extends AggregatorItemParent {
 	 * 
 	 * @return The list of feeds
 	 */
-	public HashMap<UUID, Feed> getFeeds() {
+	public HashMap<UUID, Subscription> getFeeds() {
 		return fFeeds;
 	}
 
@@ -547,7 +547,7 @@ public class FeedCollection extends AggregatorItemParent {
 			if (aggregatorItem instanceof Folder) {
 				UUID feedId = ((Folder) aggregatorItem).getFeedUUID();
 				if (feedId != null) {
-					Feed feed = getFeeds().get(feedId);
+					Subscription feed = getFeeds().get(feedId);
 					if (!feed.isUpdating()) {
 						AbstractSynchronizer synchronizer = AggregatorPlugin
 								.getSynchronizer(feed.getSynchronizer());
@@ -719,12 +719,12 @@ public class FeedCollection extends AggregatorItemParent {
 		notifyListerners(new Object[] { item }, EventType.CHANGED);
 	}
 
-	public void updateFeedData(Feed item) {
+	public void updateFeedData(Subscription item) {
 		try {
 			fDatabase.writeLock().lock();
 			// Ensure that the local list has a copy of the same instance.
 			fFeeds.put(item.getUUID(), item);
-			fDatabase.updateFeed((Feed) item);
+			fDatabase.updateFeed((Subscription) item);
 		} finally {
 			fDatabase.writeLock().unlock();
 		}

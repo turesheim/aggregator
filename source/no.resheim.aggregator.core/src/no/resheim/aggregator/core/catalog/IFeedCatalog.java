@@ -12,7 +12,7 @@ package no.resheim.aggregator.core.catalog;
 
 import java.net.URL;
 
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 
 /**
  * Describes a feed catalog.
@@ -31,7 +31,7 @@ public interface IFeedCatalog {
 	 * 
 	 * @return the feeds list
 	 */
-	public Feed[] getFeeds();
+	public Subscription[] getFeeds();
 
 	/**
 	 * Returns the enabled state of the catalogue.

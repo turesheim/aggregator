@@ -1,8 +1,8 @@
 package no.resheim.aggregator.core.test;
 
-import no.resheim.aggregator.core.data.Feed;
-import no.resheim.aggregator.core.data.Feed.Archiving;
-import no.resheim.aggregator.core.data.Feed.UpdatePeriod;
+import no.resheim.aggregator.core.data.Subscription;
+import no.resheim.aggregator.core.data.Subscription.Archiving;
+import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
 
 import org.eclipse.core.runtime.Plugin;
 
@@ -20,8 +20,8 @@ public class TestUtils extends Plugin {
 		instance = this;
 	}
 
-	public static Feed createNewFeed(String title) {
-		Feed feed = new Feed();
+	public static Subscription createNewFeed(String title) {
+		Subscription feed = new Subscription();
 		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.
 		feed.setTitle(title);

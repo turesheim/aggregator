@@ -14,7 +14,7 @@ package no.resheim.aggregator.ui.test.regression;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.test.TestUtils;
@@ -58,7 +58,7 @@ public class Bug636_CreateArticlesHandler extends
 				@SuppressWarnings("restriction")
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
-					Feed feed = TestUtils.createNewFeed("Bug 636");
+					Subscription feed = TestUtils.createNewFeed("Bug 636");
 					StringBuilder sb = new StringBuilder();
 					for (int a = 0; a < 1024; a++) {
 						sb.append("x"); //$NON-NLS-1$

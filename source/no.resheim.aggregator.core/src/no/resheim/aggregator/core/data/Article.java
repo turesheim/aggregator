@@ -119,14 +119,14 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	 * @uml.property name="fFeed"
 	 * @uml.associationEnd
 	 */
-	protected Feed fFeed;
+	protected Subscription fFeed;
 
 	public Article(AggregatorItemParent parent, UUID uuid) {
 		super(parent, uuid);
 		mediaContent = new ArrayList<MediaContent>();
 	}
 
-	public Article(Feed feed, UUID uuid) {
+	public Article(Subscription feed, UUID uuid) {
 		this((AggregatorItemParent) null, uuid);
 		Assert.isNotNull(feed);
 		fFeed = feed;
@@ -158,7 +158,7 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	 * 
 	 * @return the feed instance
 	 */
-	public Feed getFeed() {
+	public Subscription getFeed() {
 		if (fFeed == null) {
 			try {
 				fFeed = getCollection().getFeeds().get(feed_uuid);
@@ -218,7 +218,7 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	 * 
 	 * @return
 	 */
-	public UUID getFeedUUID() {
+	public UUID getSubscriptionUUID() {
 		return feed_uuid;
 	}
 
@@ -356,14 +356,6 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	 */
 	public String internalGetText() {
 		return text;
-	}
-
-	/**
-	 * 
-	 * @param feed_uuid
-	 */
-	public void setFeedUUID(UUID feed_uuid) {
-		this.feed_uuid = feed_uuid;
 	}
 
 	/**

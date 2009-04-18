@@ -13,7 +13,7 @@ package no.resheim.aggregator.google.reader;
 
 import java.util.ArrayList;
 
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -24,8 +24,8 @@ import org.xml.sax.SAXException;
  * @since 1.1
  */
 class FeedHandler implements IElementHandler {
-	private Feed feed;
-	private ArrayList<Feed> feeds;
+	private Subscription feed;
+	private ArrayList<Subscription> feeds;
 	private StringBuffer buffer = new StringBuffer();
 	private boolean capture;
 
@@ -50,7 +50,7 @@ class FeedHandler implements IElementHandler {
 		buffer.setLength(0);
 	}
 
-	public FeedHandler(Feed feed, ArrayList<Feed> feeds) {
+	public FeedHandler(Subscription feed, ArrayList<Subscription> feeds) {
 		super();
 		this.feed = feed;
 		this.feeds = feeds;

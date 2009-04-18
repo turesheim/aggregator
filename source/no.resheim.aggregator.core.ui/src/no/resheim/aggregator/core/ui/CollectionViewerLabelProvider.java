@@ -16,7 +16,7 @@ import java.io.ByteArrayInputStream;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.BrokenItem;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.AggregatorItem.Flag;
@@ -98,7 +98,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		return null;
 	}
 
-	private Image getBaseFeedImageDescriptor(Feed feed) {
+	private Image getBaseFeedImageDescriptor(Subscription feed) {
 		// The feed has a custom image
 		if (feed.getImageData() != null) {
 			String id = feed.getUUID().toString();
@@ -152,7 +152,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		return Display.getCurrent();
 	}
 
-	private Feed getFeed(Object element) {
+	private Subscription getFeed(Object element) {
 		if (element instanceof Folder) {
 			return ((Folder) element).getFeed();
 		}
@@ -168,7 +168,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		if (element instanceof Folder) {
 			Folder folder = ((Folder) element);
 			int unread = getCollection(folder).getItemCount(folder);
-			Feed feed = ((Folder) element).getFeed();
+			Subscription feed = ((Folder) element).getFeed();
 			if (feed != null && feed.isUpdating()) {
 				if (unread > 0) {
 					return boldItalic;
@@ -246,7 +246,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		return registry.get(id);
 	}
 
-	private Image getImage(Feed feed, IStatus status, Folder folder) {
+	private Image getImage(Subscription feed, IStatus status, Folder folder) {
 		String id = AggregatorUIPlugin.IMG_FEED_OBJ;
 		// The feed has a custom image
 		if (feed.getImageData() != null) {
@@ -294,12 +294,12 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		if (element == null) {
 			return null;
 		}
-		if (element instanceof Feed) {
-			return getImage((Feed) element, null, null);
+		if (element instanceof Subscription) {
+			return getImage((Subscription) element, null, null);
 		}
 		if (element instanceof Folder
 				&& ((Folder) element).getFeedUUID() != null) {
-			Feed feed = getCollection((Folder) element).getFeeds().get(
+			Subscription feed = getCollection((Folder) element).getFeeds().get(
 					((Folder) element).getFeedUUID());
 			if (feed != null) {
 				return getImage(feed, feed.getLastStatus(), (Folder) element);
@@ -343,7 +343,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 	public String getText(Object element) {
 		if (element instanceof AggregatorItem) {
 			AggregatorItem item = (AggregatorItem) element;
-			if (element instanceof Feed || element instanceof Folder) {
+			if (element instanceof Subscription || element instanceof Folder) {
 				StringBuffer sb = new StringBuffer();
 				sb.append(item.getTitle());
 				if (pShowUnreadCount && getCollection(item) != null) {
@@ -367,7 +367,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		// Fix for bug 561
 		if (element == null)
 			return null;
-		Feed f = getFeed(element);
+		Subscription f = getFeed(element);
 		if (f != null) {
 			IStatus s = f.getLastStatus();
 			if (s != null && !s.isOK()) {

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.rss.internal;
 
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 
 import org.xml.sax.Attributes;
@@ -31,7 +31,7 @@ public class RSS20FeedHandler extends AbstractElementHandler {
 	private static final String EDITOR = "managingEditor"; //$NON-NLS-1$
 	private static final String COPYRIGHT = "copyright"; //$NON-NLS-1$
 
-	public RSS20FeedHandler(FeedCollection registry, Feed feed) {
+	public RSS20FeedHandler(FeedCollection registry, Subscription feed) {
 		super();
 		this.collection = registry;
 		this.feed = feed;

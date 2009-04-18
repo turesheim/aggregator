@@ -9,9 +9,9 @@ import java.util.UUID;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public final class FeedWorkingCopy extends Feed {
+public final class FeedWorkingCopy extends Subscription {
 	public static FeedWorkingCopy newInstance(AggregatorItem parent) {
-		Feed feed = new Feed();
+		Subscription feed = new Subscription();
 		feed.setUUID(UUID.randomUUID());
 		return new FeedWorkingCopy(feed);
 	}
@@ -20,7 +20,7 @@ public final class FeedWorkingCopy extends Feed {
 	 * @uml.property name="feed"
 	 * @uml.associationEnd
 	 */
-	Feed feed;
+	Subscription feed;
 
 	/**
 	 * @uml.property name="password"
@@ -32,7 +32,7 @@ public final class FeedWorkingCopy extends Feed {
 	 */
 	protected String username;
 
-	public FeedWorkingCopy(Feed feed) {
+	public FeedWorkingCopy(Subscription feed) {
 		super();
 		this.feed = feed;
 		this.uuid = feed.uuid;
@@ -40,7 +40,7 @@ public final class FeedWorkingCopy extends Feed {
 	}
 
 	// FIXME: Use clone instead?
-	public void copy(Feed feed) {
+	public void copy(Subscription feed) {
 		title = feed.getTitle();
 		url = feed.url;
 		archiving = feed.archiving;
@@ -59,7 +59,7 @@ public final class FeedWorkingCopy extends Feed {
 	 * @return
 	 * @uml.property name="feed"
 	 */
-	public Feed getFeed() {
+	public Subscription getFeed() {
 		if (feed != null) {
 			feed.setTitle(title);
 			feed.url = url;

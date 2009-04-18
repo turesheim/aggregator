@@ -17,7 +17,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.MediaContent;
 import no.resheim.aggregator.core.ui.internal.FeedDescriptionFormatter;
 import no.resheim.aggregator.core.ui.internal.FeedItemTitle;
@@ -328,8 +328,8 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 			setStarredAction.setImageDescriptor(AggregatorUIPlugin.getDefault()
 					.getImageRegistry().getDescriptor(key));
 			title.getToolBarManager().update(true);
-		} else if (item instanceof Feed) {
-			showDescription((Feed) item);
+		} else if (item instanceof Subscription) {
+			showDescription((Subscription) item);
 		}
 	}
 
@@ -350,7 +350,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		fInterceptBrowser = true;
 	}
 
-	private void showDescription(Feed feed) {
+	private void showDescription(Subscription feed) {
 		if (feed == null)
 			return;
 		browser.setText(FeedDescriptionFormatter.format(feed, "verdana", 8)); //$NON-NLS-1$

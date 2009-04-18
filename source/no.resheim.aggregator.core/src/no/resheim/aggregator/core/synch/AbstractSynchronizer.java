@@ -24,9 +24,9 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
-import no.resheim.aggregator.core.data.Feed;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.rss.internal.FeedParser;
 
 import org.eclipse.core.runtime.CoreException;
@@ -46,7 +46,11 @@ import org.xml.sax.SAXException;
  * @since 1.0
  */
 public abstract class AbstractSynchronizer extends Job {
-	protected Feed feed;
+
+	/** The subscription that is being synchronized */
+	protected Subscription subscription;
+
+	/** The collection of the subscription */
 	protected FeedCollection collection;
 
 	protected static final String EMPTY_STRING = "";
@@ -62,12 +66,25 @@ public abstract class AbstractSynchronizer extends Job {
 	@Override
 	protected abstract IStatus run(IProgressMonitor monitor);
 
+	/**
+	 * Sets the collection that is being synchronised.
+	 * 
+	 * @param collection
+	 *            the collection
+	 */
 	public void setCollection(FeedCollection collection) {
 		this.collection = collection;
 	}
 
-	public void setSubscription(Feed feed) {
-		this.feed = feed;
+	/**
+	 * Sets the subscription that we're going to use for synchronise with the
+	 * collection.
+	 * 
+	 * @param feed
+	 *            the subscription
+	 */
+	public void setSubscription(Subscription feed) {
+		this.subscription = feed;
 		setName(MessageFormat.format(Messages.FeedUpdateJob_Title,
 				new Object[] { feed.getTitle() }));
 	}
@@ -77,13 +94,13 @@ public abstract class AbstractSynchronizer extends Job {
 	 * Should only be called after a FeedUpdateJob has been executed.
 	 * 
 	 * @param site
+	 *            the site to clean up
 	 */
-	protected void cleanUp(Feed site) {
-		// First find the folder
+	protected void cleanUp() {
 		try {
 			for (Folder folder : collection.getDescendingFolders()) {
-				if (folder.getUUID().equals(site.getLocation())) {
-					folder.cleanUp(site);
+				if (folder.getUUID().equals(subscription.getLocation())) {
+					folder.cleanUp(subscription);
 				}
 			}
 		} catch (CoreException e) {
@@ -101,8 +118,8 @@ public abstract class AbstractSynchronizer extends Job {
 	 * @return the calculated URL
 	 * @throws MalformedURLException
 	 */
-	protected URL getURL(Feed feed) throws MalformedURLException {
-		return new URL(feed.getURL());
+	protected URL getURL() throws MalformedURLException {
+		return new URL(subscription.getURL());
 	}
 
 	/**
@@ -110,25 +127,25 @@ public abstract class AbstractSynchronizer extends Job {
 	 * @param debug
 	 * @return
 	 */
-	protected IStatus download(Feed feed, boolean debug) {
+	protected IStatus download() {
 		try {
 
-			URL feedURL = getURL(feed);
+			URL feedURL = getURL();
 			if (feedURL == null) {
 				return Status.CANCEL_STATUS;
 			}
 			// Download the feed
 			URLConnection yc = AggregatorPlugin.getDefault().getConnection(
-					feedURL, feed.isAnonymousAccess(),
-					feed.getUUID().toString());
-			FeedParser handler = new FeedParser(collection, feed);
+					feedURL, subscription.isAnonymousAccess(),
+					subscription.getUUID().toString());
+			FeedParser handler = new FeedParser(collection, subscription);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser parser = factory.newSAXParser();
 			InputStream is = yc.getInputStream();
 			parser.parse(is, handler);
 			is.close();
 			// Download the favicon
-			dowloadFavicon(feed, feedURL);
+			dowloadFavicon(subscription, feedURL);
 			return Status.OK_STATUS;
 		} catch (UnknownHostException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
@@ -157,7 +174,7 @@ public abstract class AbstractSynchronizer extends Job {
 		}
 	}
 
-	protected void dowloadFavicon(Feed feed, URL feedURL)
+	protected void dowloadFavicon(Subscription feed, URL feedURL)
 			throws MalformedURLException, StorageException {
 		URL favicon = new URL(MessageFormat.format("{0}://{1}/favicon.ico", //$NON-NLS-1$
 				new Object[] { feedURL.getProtocol(), feedURL.getHost() }));

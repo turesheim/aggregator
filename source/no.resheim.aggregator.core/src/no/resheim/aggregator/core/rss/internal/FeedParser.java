@@ -13,7 +13,7 @@ package no.resheim.aggregator.core.rss.internal;
 
 import java.util.Stack;
 
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 
 import org.eclipse.core.runtime.Assert;
@@ -30,7 +30,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class FeedParser extends DefaultHandler {
 	private Stack<IElementHandler> handlers;
 
-	public FeedParser(FeedCollection collection, Feed feed) {
+	public FeedParser(FeedCollection collection, Subscription feed) {
 		Assert.isNotNull(collection,
 				"Cannot parse feed with a \"null\" collection"); //$NON-NLS-1$
 		Assert.isNotNull(feed, "Cannot parse feed that is \"null\""); //$NON-NLS-1$

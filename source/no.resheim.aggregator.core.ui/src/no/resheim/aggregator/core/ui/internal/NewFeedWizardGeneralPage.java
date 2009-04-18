@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.catalog.IFeedCatalog;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedWorkingCopy;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.NewFeedWizard;
@@ -54,6 +54,7 @@ import org.eclipse.swt.widgets.Tree;
  * @since 1.0
  */
 public class NewFeedWizardGeneralPage extends WizardPage {
+	private static final String WIZARD_BANNER = "icons/wizban/new_feed_wizard.png";
 	private Text combo;
 	private Text urlText;
 	private Label urlLabel;
@@ -71,14 +72,13 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		super(Messages.NewFeedWizardGeneralPage_Title);
 		setTitle(Messages.NewFeedWizardGeneralPage_Title);
 		setDescription(Messages.NewFeedWizardGeneralPage_Description);
-		setImageDescriptor(AggregatorUIPlugin
-				.getImageDescriptor("icons/wizban/new_feed_wizard.png")); //$NON-NLS-1$
+		setImageDescriptor(AggregatorUIPlugin.getImageDescriptor(WIZARD_BANNER)); //$NON-NLS-1$
 		this.wizard = wizard;
 		// The wizard page starts out as incomplete
 		setPageComplete(false);
 	}
 
-	ArrayList<Feed> defaults = new ArrayList<Feed>();
+	ArrayList<Subscription> defaults = new ArrayList<Subscription>();
 
 	/**
 	 * Create contents of the wizard
@@ -103,8 +103,8 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 				if (selection instanceof IStructuredSelection) {
 					Object selected = ((IStructuredSelection) selection)
 							.getFirstElement();
-					if (selected instanceof Feed) {
-						workingCopy.copy((Feed) selected);
+					if (selected instanceof Subscription) {
+						workingCopy.copy((Subscription) selected);
 						urlText.setText(workingCopy.getURL());
 						combo.setText(workingCopy.getTitle());
 					}
@@ -145,7 +145,7 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 			}
 
 			public boolean hasChildren(Object element) {
-				if (element instanceof Feed) {
+				if (element instanceof Subscription) {
 					return false;
 				}
 				return true;
@@ -159,8 +159,8 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 				if (element instanceof IFeedCatalog) {
 					return ((IFeedCatalog) element).getName();
 				}
-				if (element instanceof Feed) {
-					return ((Feed) element).getTitle();
+				if (element instanceof Subscription) {
+					return ((Subscription) element).getTitle();
 				}
 				return super.getText(element);
 			}
@@ -180,7 +180,7 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 					}
 					return registry.get(id);
 				}
-				if (element instanceof Feed) {
+				if (element instanceof Subscription) {
 					ImageRegistry registry = AggregatorUIPlugin.getDefault()
 							.getImageRegistry();
 					return registry.get(AggregatorUIPlugin.IMG_FEED_OBJ);
@@ -202,25 +202,6 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 
 		combo = new Text(group, SWT.BORDER);
 		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		// final ArrayList<Feed> feeds = AggregatorPlugin.getDefault()
-		// .getDefaultFeeds();
-		// combo.addSelectionListener(new SelectionAdapter() {
-		// public void widgetSelected(SelectionEvent e) {
-		// if (combo.getSelectionIndex() >= 0) {
-		// workingCopy.copy(defaults.get(combo.getSelectionIndex()));
-		// urlText.setText(workingCopy.getURL());
-		//
-		// }
-		// validate();
-		// }
-		// });
-		// for (Feed feed : feeds) {
-		// if (!wizard.getCollection().hasFeed(feed.getURL())) {
-		// combo.add(feed.getTitle());
-		// defaults.add(feed);
-		// }
-		//
-		// }
 		combo.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				workingCopy.setTitle(combo.getText());
@@ -245,7 +226,6 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 			public void widgetSelected(final SelectionEvent e) {
 				workingCopy.setCreateFolder(createNewFolderButton
 						.getSelection());
-				System.out.println(createNewFolderButton.getSelection());
 				validate();
 			}
 		});

@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.MediaContent;
 import no.resheim.aggregator.core.data.MediaContent.Medium;
@@ -60,7 +60,7 @@ public class RSS20ItemHandler extends AbstractItemHandler {
 	static final SimpleDateFormat date = new SimpleDateFormat(
 			"EEE, d MMM yyyy HH:mm:ss Z"); //$NON-NLS-1$
 
-	public RSS20ItemHandler(FeedCollection registry, Feed feed) {
+	public RSS20ItemHandler(FeedCollection registry, Subscription feed) {
 		this.collection = registry;
 		this.feed = feed;
 		item = new Article(feed, UUID.randomUUID());

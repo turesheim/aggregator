@@ -52,8 +52,12 @@ public class ExtensibleSplashHandler extends AbstractSplashHandler {
 		fIconPanel = null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.splash.AbstractSplashHandler#init(org.eclipse.swt.widgets.Shell)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.ui.splash.AbstractSplashHandler#init(org.eclipse.swt.widgets
+	 * .Shell)
 	 */
 	public void init(Shell splash) {
 		// Store the shell
@@ -286,7 +290,9 @@ public class ExtensibleSplashHandler extends AbstractSplashHandler {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.splash.AbstractSplashHandler#dispose()
 	 */
 	public void dispose() {

@@ -17,7 +17,7 @@ import java.util.Comparator;
 import java.util.Stack;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.synch.AbstractSynchronizer;
 
@@ -48,12 +48,12 @@ public class CollectionUpdateJob extends Job {
 	 * 
 	 * @author Torkild Ulvøy Resheim
 	 */
-	private static class FeedComparator implements Comparator<Feed>,
+	private static class FeedComparator implements Comparator<Subscription>,
 			Serializable {
 
 		private static final long serialVersionUID = 5298242739294116541L;
 
-		public int compare(Feed o1, Feed o2) {
+		public int compare(Subscription o1, Subscription o2) {
 			long val1 = o1.getLastUpdate() + o1.getUpdateTime();
 			long val2 = o2.getLastUpdate() + o2.getUpdateTime();
 			return (int) (val1 - val2);
@@ -74,9 +74,9 @@ public class CollectionUpdateJob extends Job {
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-		Stack<Feed> feeds = getSortedFeeds();
+		Stack<Subscription> feeds = getSortedFeeds();
 		while (!feeds.empty()) {
-			Feed feed = feeds.pop();
+			Subscription feed = feeds.pop();
 			// Update if we're not already doing so unless the last update was
 			// bad.
 			if (!feed.isUpdating() && feed.getLastStatus().isOK()) {
@@ -101,9 +101,9 @@ public class CollectionUpdateJob extends Job {
 	 * 
 	 * @return a stack of sorted feeds
 	 */
-	private Stack<Feed> getSortedFeeds() {
-		Stack<Feed> feeds = new Stack<Feed>();
-		for (Feed feed : fCollection.getFeeds().values()) {
+	private Stack<Subscription> getSortedFeeds() {
+		Stack<Subscription> feeds = new Stack<Subscription>();
+		for (Subscription feed : fCollection.getFeeds().values()) {
 			feeds.add(feed);
 		}
 		Collections.sort(feeds, new FeedComparator());

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.rss.internal;
 
-import no.resheim.aggregator.core.data.Feed;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 
 import org.xml.sax.Attributes;
@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
  */
 public class RSS092FeedHandler extends AbstractElementHandler {
 
-	public RSS092FeedHandler(FeedCollection registry, Feed feed) {
+	public RSS092FeedHandler(FeedCollection registry, Subscription feed) {
 		super();
 		this.collection = registry;
 		this.feed = feed;
