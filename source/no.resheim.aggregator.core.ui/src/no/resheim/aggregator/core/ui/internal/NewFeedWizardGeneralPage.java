@@ -203,13 +203,17 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 			}
 
 		});
-		// final GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, false,
-		// false,
-		// 1, 5);
-		// gd_tree.heightHint = 50;
-		// tree.setLayoutData(gd_tree);
 
-		final Group group = new Group(sashForm, SWT.NONE);
+		Composite detailsGroup = new Composite(sashForm, SWT.NONE);
+		detailsGroup.setLayout(new FillLayout(SWT.VERTICAL));
+		createConnectionGroup(workingCopy, detailsGroup);
+		createAuthenticationGroup(workingCopy, detailsGroup);
+		sashForm.setWeights(new int[] { 1, 1 });
+	}
+
+	private void createConnectionGroup(final FeedWorkingCopy workingCopy,
+			Composite detailsGroup) {
+		final Group group = new Group(detailsGroup, SWT.NONE);
 		group.setText("Connection");
 		final GridLayout gridLayout_1 = new GridLayout();
 		gridLayout_1.numColumns = 2;
@@ -238,21 +242,18 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 				validate();
 			}
 		});
-
-		createAuthenticationGroup(workingCopy, group);
-		sashForm.setWeights(new int[] { 1, 1 });
 	}
 
 	private void createAuthenticationGroup(final FeedWorkingCopy workingCopy,
-			final Group group) {
+			final Composite group) {
 
 		final Group group_1 = new Group(group, SWT.NONE);
-		group_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
-				2, 1));
+		// group_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
+		// 2, 1));
 		final GridLayout gridLayout_2 = new GridLayout();
 		gridLayout_2.numColumns = 2;
 		group_1.setLayout(gridLayout_2);
-		group_1.setText("Authentication");
+		group_1.setText("Feed Authentication");
 
 		authenticationButton = new Button(group_1, SWT.CHECK);
 		authenticationButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER,
