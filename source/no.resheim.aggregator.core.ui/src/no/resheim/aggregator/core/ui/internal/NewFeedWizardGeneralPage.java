@@ -15,8 +15,8 @@ import java.util.ArrayList;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.catalog.IFeedCatalog;
-import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedWorkingCopy;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.NewFeedWizard;
 
@@ -220,19 +220,6 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 				validate();
 			}
 		});
-
-		final Button createNewFolderButton = new Button(group, SWT.CHECK);
-		createNewFolderButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(final SelectionEvent e) {
-				workingCopy.setCreateFolder(createNewFolderButton
-						.getSelection());
-				validate();
-			}
-		});
-		final GridData gd_createNewFolderButton = new GridData(SWT.LEFT,
-				SWT.CENTER, false, false, 2, 1);
-		createNewFolderButton.setLayoutData(gd_createNewFolderButton);
-		createNewFolderButton.setText("Create new folder for feed");
 
 		final Button button = new Button(group, SWT.CHECK);
 		button.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2,

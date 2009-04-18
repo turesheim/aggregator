@@ -347,10 +347,6 @@ public class Subscription implements Comparable<Subscription> {
 		return anonymousAccess;
 	}
 
-	public boolean isCreateFolder() {
-		return createFolder;
-	}
-
 	/**
 	 * @return
 	 * @uml.property name="hidden"
@@ -417,10 +413,6 @@ public class Subscription implements Comparable<Subscription> {
 	 */
 	public void setCopyright(String copyright) {
 		this.copyright = copyright;
-	}
-
-	public void setCreateFolder(boolean createFolder) {
-		this.createFolder = createFolder;
 	}
 
 	/**
@@ -597,8 +589,6 @@ public class Subscription implements Comparable<Subscription> {
 		hidden = wc.hidden;
 		anonymousAccess = wc.anonymousAccess;
 		keepUnread = wc.keepUnread;
-		createFolder = wc.isCreateFolder();
-		System.out.println(wc.isCreateFolder());
 	}
 
 	void validate() {
