@@ -43,15 +43,18 @@
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
                id="file"
-               label="File">
+               label="File"
+               mnemonic="F">
             <command
-                  commandId="no.resheim.aggregator.core.ui.addFeed"
-                  label="New Feed"
+                  commandId="org.eclipse.ui.newWizard"
+                  label="New..."
+                  mnemonic="N"
                   style="push">
             </command>
             <command
                   commandId="no.resheim.aggregator.core.ui.openFilterProperties"
                   label="Filters"
+                  mnemonic="i"
                   style="push">
             </command>
             <separator
@@ -60,6 +63,8 @@
             </separator>
             <command
                   commandId="org.eclipse.ui.file.exit"
+                  label="Exit"
+                  mnemonic="x"
                   style="push">
             </command>
          </menu>
@@ -93,6 +98,7 @@
             <command
                   commandId="org.eclipse.ui.window.preferences"
                   label="Preferences"
+                  mnemonic="P"
                   style="push">
             </command>
          </menu>

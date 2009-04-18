@@ -72,6 +72,7 @@
       <plugin id="org.eclipse.ui.browser"/>
       <plugin id="org.eclipse.ui.forms"/>
       <plugin id="org.eclipse.ui.net"/>
+      <plugin id="org.eclipse.ui.views.log"/>
       <plugin id="org.eclipse.ui.workbench"/>
    </plugins>
 

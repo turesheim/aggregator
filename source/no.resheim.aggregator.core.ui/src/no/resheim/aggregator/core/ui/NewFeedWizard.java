@@ -12,17 +12,24 @@
 package no.resheim.aggregator.core.ui;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
-import no.resheim.aggregator.core.data.Subscription;
+import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.FeedWorkingCopy;
+import no.resheim.aggregator.core.data.Subscription;
+import no.resheim.aggregator.core.data.Subscription.Archiving;
+import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
 import no.resheim.aggregator.core.ui.internal.NewFeedWizardGeneralPage;
 import no.resheim.aggregator.core.ui.internal.NewFeedWizardOptionsPage;
 
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWizard;
 
 /**
  * Wizard for creating new RSS feed connections.
@@ -30,7 +37,7 @@ import org.eclipse.jface.wizard.Wizard;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class NewFeedWizard extends Wizard {
+public class NewFeedWizard extends Wizard implements IWorkbenchWizard {
 
 	IWizardPage archiving;
 	IWizardPage general;
@@ -41,6 +48,12 @@ public class NewFeedWizard extends Wizard {
 	}
 
 	FeedWorkingCopy workingCopy;
+
+	public NewFeedWizard() {
+		super();
+		this.collection = AggregatorPlugin.getDefault().getFeedCollection(null);
+		setWindowTitle(Messages.NewFeedWizard_Title);
+	}
 
 	/**
 	 * 
@@ -94,4 +107,32 @@ public class NewFeedWizard extends Wizard {
 		this.workingCopy = workingCopy;
 	}
 
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		AggregatorItem parent = collection;
+		if (selection instanceof IStructuredSelection) {
+			if (selection.getFirstElement() instanceof AggregatorItem) {
+				parent = (AggregatorItem) selection.getFirstElement();
+			}
+		}
+		FeedWorkingCopy wc = getNewFeedWorkingCopy(parent);
+		setFeed(wc);
+	}
+
+	private FeedWorkingCopy getNewFeedWorkingCopy(AggregatorItem parent) {
+		FeedWorkingCopy wc = FeedWorkingCopy.newInstance(parent);
+		// Initialise with default values from the preference store.
+		// This is done here as the preference system is a UI component.
+		IPreferenceStore store = AggregatorUIPlugin.getDefault()
+				.getPreferenceStore();
+		wc.setArchiving(Archiving.valueOf(store
+				.getString(PreferenceConstants.P_ARCHIVING_METHOD)));
+		wc.setArchivingDays(store.getInt(PreferenceConstants.P_ARCHIVING_DAYS));
+		wc.setArchivingItems(store
+				.getInt(PreferenceConstants.P_ARCHIVING_ITEMS));
+		wc.setUpdateInterval(store
+				.getInt(PreferenceConstants.P_UPDATING_INTERVAL));
+		wc.setUpdatePeriod(UpdatePeriod.valueOf(store
+				.getString(PreferenceConstants.P_UPDATING_PERIOD)));
+		return wc;
+	}
 }

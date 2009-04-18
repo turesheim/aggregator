@@ -629,5 +629,17 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
             supportsAuthentication="true"
             synchronizer="no.resheim.aggregator.core.directSynchronizer">
       </catalog>   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            class="no.resheim.aggregator.core.ui.NewFeedWizard"
+            icon="icons/clcl16/view.gif"
+            id="no.resheim.aggregator.core.ui.newSubscriptionWizard"
+            name="Feed Subscription">
+      </wizard>
+      <primaryWizard
+            id="no.resheim.aggregator.core.ui.newSubscriptionWizard">
+      </primaryWizard>
+   </extension>
    
 </plugin>

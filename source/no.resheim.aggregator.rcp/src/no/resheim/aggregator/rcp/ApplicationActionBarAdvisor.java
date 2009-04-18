@@ -2,7 +2,6 @@ package no.resheim.aggregator.rcp;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
@@ -19,6 +18,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// in the fill methods. This ensures that the actions aren't recreated
 	// when fillActionBars is called with FILL_PROXY.
 	private IWorkbenchAction exitAction;
+	private IWorkbenchAction newAction;
 
 	public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
 		super(configurer);
@@ -32,8 +32,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// Registering also provides automatic disposal of the actions when
 		// the window is closed.
 
-		exitAction = ActionFactory.QUIT.create(window);
-		register(exitAction);
+		// exitAction = ActionFactory.QUIT.create(window);
+		// register(exitAction);
+		//
+		// newAction = ActionFactory.NEW.create(window);
+		// register(newAction);
 	}
 
 	protected void fillMenuBar(IMenuManager menuBar) {
@@ -41,6 +44,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// IWorkbenchActionConstants.M_FILE);
 		// menuBar.add(fileMenu);
 		// fileMenu.add(exitAction);
+		// fileMenu.add(newAction);
 	}
 
 }

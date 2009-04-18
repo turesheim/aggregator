@@ -127,7 +127,8 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 				}
 			}
 		});
-		final Tree tree = treeViewer.getTree();
+		Tree tree = treeViewer.getTree();
+		tree.setFocus();
 		treeViewer.setContentProvider(new ITreeContentProvider() {
 
 			private IFeedCatalog[] catalogs;
