@@ -38,6 +38,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -79,6 +80,7 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 	}
 
 	ArrayList<Subscription> defaults = new ArrayList<Subscription>();
+	private Button authenticationButton;
 
 	/**
 	 * Create contents of the wizard
@@ -96,7 +98,11 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		final SashForm sashForm = new SashForm(container, SWT.NONE);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final TreeViewer treeViewer = new TreeViewer(sashForm, SWT.BORDER);
+		Group treeGroup = new Group(sashForm, SWT.NONE);
+		treeGroup.setLayout(new FillLayout());
+		treeGroup.setText("Detected feeds");
+
+		final TreeViewer treeViewer = new TreeViewer(treeGroup, SWT.BORDER);
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(final SelectionChangedEvent event) {
 				ISelection selection = event.getSelection();
@@ -107,13 +113,21 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 						workingCopy.copy((Subscription) selected);
 						urlText.setText(workingCopy.getURL());
 						combo.setText(workingCopy.getTitle());
+						if (authenticationButton != null) {
+							IFeedCatalog catalog = ((Subscription) selected)
+									.getCatalog();
+							if (catalog.supportsAuthentication()) {
+								authenticationButton.setEnabled(true);
+							} else {
+								authenticationButton.setSelection(false);
+								authenticationButton.setEnabled(false);
+							}
+						}
 					}
 				}
 			}
 		});
 		final Tree tree = treeViewer.getTree();
-		final GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, false, false,
-				1, 5);
 		treeViewer.setContentProvider(new ITreeContentProvider() {
 
 			private IFeedCatalog[] catalogs;
@@ -189,10 +203,14 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 			}
 
 		});
-		gd_tree.heightHint = 50;
-		tree.setLayoutData(gd_tree);
+		// final GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, false,
+		// false,
+		// 1, 5);
+		// gd_tree.heightHint = 50;
+		// tree.setLayoutData(gd_tree);
 
 		final Group group = new Group(sashForm, SWT.NONE);
+		group.setText("Connection");
 		final GridLayout gridLayout_1 = new GridLayout();
 		gridLayout_1.numColumns = 2;
 		group.setLayout(gridLayout_1);
@@ -221,21 +239,12 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 			}
 		});
 
-		final Button button = new Button(group, SWT.CHECK);
-		button.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2,
-				1));
-		button.setText(Messages.NewFeedWizardGeneralPage_Anonymous);
-		button.addSelectionListener(new SelectionAdapter() {
+		createAuthenticationGroup(workingCopy, group);
+		sashForm.setWeights(new int[] { 1, 1 });
+	}
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				boolean state = !(button.getSelection());
-				workingCopy.setAnonymousAccess(button.getSelection());
-				updateCredentialsFields(state);
-			}
-
-		});
-		button.setSelection(true);
+	private void createAuthenticationGroup(final FeedWorkingCopy workingCopy,
+			final Group group) {
 
 		final Group group_1 = new Group(group, SWT.NONE);
 		group_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,
@@ -243,7 +252,25 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		final GridLayout gridLayout_2 = new GridLayout();
 		gridLayout_2.numColumns = 2;
 		group_1.setLayout(gridLayout_2);
+		group_1.setText("Authentication");
 
+		authenticationButton = new Button(group_1, SWT.CHECK);
+		authenticationButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER,
+				true, false, 2, 1));
+		authenticationButton
+				.setText(Messages.NewFeedWizardGeneralPage_Anonymous);
+		authenticationButton.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				boolean state = !(authenticationButton.getSelection());
+				workingCopy.setAnonymousAccess(authenticationButton
+						.getSelection());
+				updateCredentialsFields(state);
+			}
+
+		});
+		authenticationButton.setSelection(true);
 		userLabel = new Label(group_1, SWT.NONE);
 		userLabel.setText(Messages.NewFeedWizardGeneralPage_Login);
 		userText = new Text(group_1, SWT.BORDER);
@@ -265,7 +292,6 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 				validate();
 			}
 		});
-		sashForm.setWeights(new int[] { 1, 1 });
 		updateCredentialsFields(false);
 	}
 

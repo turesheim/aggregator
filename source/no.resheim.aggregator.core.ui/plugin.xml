@@ -626,6 +626,7 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
             id="no.resheim.aggregator.declaredFeedsCatalog"
             interactive="false"
             name="Built-in"
+            supportsAuthentication="true"
             synchronizer="no.resheim.aggregator.core.directSynchronizer">
       </catalog>   </extension>
    

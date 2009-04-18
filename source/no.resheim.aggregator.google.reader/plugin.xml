@@ -24,6 +24,7 @@
             id="no.resheim.aggregator.googleReaderCatalog"
             interactive="true"
             name="Google Reader"
+            supportsAuthentication="false"
             synchronizer="no.resheim.aggregator.google.reader.synchronizer">
       </catalog>
       <synchronizer

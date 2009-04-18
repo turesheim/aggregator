@@ -145,7 +145,7 @@ public abstract class AbstractSynchronizer extends Job {
 			parser.parse(is, handler);
 			is.close();
 			// Download the favicon
-			dowloadFavicon(subscription, feedURL);
+			dowloadFavicon(feedURL);
 			return Status.OK_STATUS;
 		} catch (UnknownHostException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
@@ -174,21 +174,29 @@ public abstract class AbstractSynchronizer extends Job {
 		}
 	}
 
-	protected void dowloadFavicon(Subscription feed, URL feedURL)
-			throws MalformedURLException, StorageException {
+	/**
+	 * Downloads the
+	 * 
+	 * @param feed
+	 * @param feedURL
+	 * @throws MalformedURLException
+	 * @throws StorageException
+	 */
+	protected void dowloadFavicon(URL feedURL) throws MalformedURLException,
+			StorageException {
 		URL favicon = new URL(MessageFormat.format("{0}://{1}/favicon.ico", //$NON-NLS-1$
 				new Object[] { feedURL.getProtocol(), feedURL.getHost() }));
 		try {
 			URLConnection yc = AggregatorPlugin.getDefault().getConnection(
-					favicon, feed.isAnonymousAccess(),
-					feed.getUUID().toString());
+					favicon, subscription.isAnonymousAccess(),
+					subscription.getUUID().toString());
 			InputStream is = yc.getInputStream();
 			ByteArrayOutputStream fos = new ByteArrayOutputStream();
 			byte buffer[] = new byte[0xffff];
 			int nbytes;
 			while ((nbytes = is.read(buffer)) != -1)
 				fos.write(buffer, 0, nbytes);
-			feed.setImageData(fos.toByteArray());
+			subscription.setImageData(fos.toByteArray());
 			is.close();
 		} catch (IOException e) {
 			// Silently ignore that the image file could not be found

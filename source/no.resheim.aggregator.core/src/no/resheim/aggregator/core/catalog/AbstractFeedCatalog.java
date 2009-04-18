@@ -26,6 +26,17 @@ public abstract class AbstractFeedCatalog implements IFeedCatalog,
 	private String name;
 	private String bundle;
 	private String synchronizer;
+	private boolean supportsAuthentication;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * no.resheim.aggregator.core.catalog.IFeedCatalog#supportsAuthentication()
+	 */
+	public boolean supportsAuthentication() {
+		return supportsAuthentication;
+	}
 
 	public URL getIcon() {
 		URL url = FileLocator.find(Platform.getBundle(bundle), new Path(icon),
@@ -52,6 +63,8 @@ public abstract class AbstractFeedCatalog implements IFeedCatalog,
 		id = config.getAttribute("id");
 		name = config.getAttribute("name");
 		synchronizer = config.getAttribute("synchronizer");
+		supportsAuthentication = Boolean.parseBoolean(config
+				.getAttribute("supportsAuthentication"));
 	}
 
 	public String toString() {

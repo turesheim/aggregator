@@ -37,17 +37,18 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 	 * (from preference settings) if the feed has never been updated and only
 	 * items since last update if the feed has previously been updated.
 	 */
-	protected URL getURL(Subscription feed) throws MalformedURLException {
+	protected URL getURL() throws MalformedURLException {
 		IPreferenceStore store = GoogleReaderPlugin.getDefault()
 				.getPreferenceStore();
 		int count = store.getInt(PreferenceConstants.P_AMOUNT);
-		String base = URL_PREFIX + feed.getURL();
-		if (feed.getLastUpdate() > 0) {
-			base += "?ot=" + feed.getLastUpdate() + "&r=o&ck="
+		String base = URL_PREFIX + subscription.getURL();
+		if (subscription.getLastUpdate() > 0) {
+			base += "?ot=" + subscription.getLastUpdate() + "&r=o&ck="
 					+ System.currentTimeMillis();
 		} else {
 			base += "?n=" + count;
 		}
+		System.out.println(base);
 		return new URL(base);
 	}
 

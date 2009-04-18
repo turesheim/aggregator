@@ -31,6 +31,7 @@ public interface IFeedCatalog {
 	 * 
 	 * @return the feeds list
 	 */
+	// XXX: Return a FEED instead of SUBSCRIPTION
 	public Subscription[] getFeeds();
 
 	/**
@@ -67,4 +68,11 @@ public interface IFeedCatalog {
 	 * @return the catalogue identifier
 	 */
 	public String getId();
+
+	/**
+	 * Whether or not feeds listed by this catalogue supports authentication.
+	 * 
+	 * @return <code>true</code> if authentication is supported
+	 */
+	public boolean supportsAuthentication();
 }

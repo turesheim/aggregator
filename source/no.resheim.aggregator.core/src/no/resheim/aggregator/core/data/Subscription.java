@@ -63,8 +63,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	private String copyright;
 
-	private boolean createFolder;
-
 	private String description;
 
 	private String editor;
@@ -97,7 +95,7 @@ public class Subscription implements Comparable<Subscription> {
 	 */
 	protected UUID location;
 
-	private String synchronizer;
+	private String synchronizerId;
 
 	ArrayList<Article> tempItems;
 
@@ -132,12 +130,13 @@ public class Subscription implements Comparable<Subscription> {
 		uuid = UUID.randomUUID();
 		tempItems = new ArrayList<Article>();
 		// Use the default synchronizer and replace later if required.
-		synchronizer = IFeedCatalog.DEFAULT_SYNCHRONIZER_ID;
+		synchronizerId = IFeedCatalog.DEFAULT_SYNCHRONIZER_ID;
 	}
 
 	public Subscription(IFeedCatalog catalog) {
 		this();
-		synchronizer = catalog.getSynchronizerId();
+		synchronizerId = catalog.getSynchronizerId();
+		this.catalog = catalog;
 	}
 
 	public int compareTo(Subscription arg) {
@@ -169,9 +168,7 @@ public class Subscription implements Comparable<Subscription> {
 	}
 
 	/**
-	 * Returns the catalog used when creating this feed. This member variable is
-	 * not serialized and will only have a value when the feed is created by a
-	 * catalog.
+	 * Returns the catalogue used when creating this feed.
 	 * 
 	 * @return the feed catalogue
 	 */
@@ -255,7 +252,7 @@ public class Subscription implements Comparable<Subscription> {
 	 * @return the identifier of the synchronisation mechanism.
 	 */
 	public String getSynchronizer() {
-		return synchronizer;
+		return synchronizerId;
 	}
 
 	/**
@@ -498,7 +495,7 @@ public class Subscription implements Comparable<Subscription> {
 	 * @param synchronizer
 	 */
 	public void setSynchronizer(String synchronizer) {
-		this.synchronizer = synchronizer;
+		this.synchronizerId = synchronizer;
 	}
 
 	/**

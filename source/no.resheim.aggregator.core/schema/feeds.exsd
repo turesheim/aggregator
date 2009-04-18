@@ -274,13 +274,20 @@
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="supportsAuthentication" type="boolean" use="default" value="true">
+            <annotation>
+               <documentation>
+                  whether or not feeds in the catalog supports authentication.
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
    <element name="synchronizer">
       <annotation>
          <documentation>
-            A synchronizer is a component that is capable of reading from a feed and update the storage using the feed contents.
+            A synchronizer is a component that is capable of reading from a feed using the subscription datax and update the storage using the feed contents.
          </documentation>
       </annotation>
       <complexType>
