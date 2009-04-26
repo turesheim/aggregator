@@ -10,6 +10,9 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
+	private static final int DEFAULT_HEIGHT = 600;
+	private static final int DEFAULT_WIDTH = 400;
+
 	public ApplicationWorkbenchWindowAdvisor(
 			IWorkbenchWindowConfigurer configurer) {
 		super(configurer);
@@ -26,12 +29,12 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
 		Shell sh = configurer.getWindow().getShell();
 		Rectangle r = sh.getDisplay().getBounds();
-		sh.setLocation(r.width - 400, r.height - 600);
+		sh.setLocation(r.width - DEFAULT_WIDTH, r.height - DEFAULT_HEIGHT - 32);
 	}
 
 	public void preWindowOpen() {
 		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-		configurer.setInitialSize(new Point(400, 600));
+		configurer.setInitialSize(new Point(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 		configurer.setShowCoolBar(false);
 		configurer.setShowStatusLine(true);
 		configurer.setShowFastViewBars(true);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2008-2009 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License v1.0 which
@@ -15,6 +15,8 @@ import java.util.regex.Matcher;
 
 import no.resheim.aggregator.core.data.MediaContent;
 
+import org.eclipse.core.runtime.Assert;
+
 /**
  * 
  * 
@@ -22,25 +24,52 @@ import no.resheim.aggregator.core.data.MediaContent;
  * @since 1.0
  */
 public class ContentHandler {
-	public String getSuffix() {
-		return suffix;
-	}
-
-	public String getContentType() {
-		return contentType;
-	}
-
+	/** Code to use in an browser for displaying the content type */
 	private String code;
+	/** The content type MIME string */
 	private String contentType;
+	/** The name of the content type */
 	private String name;
+	/** The suffix associated with the content type */
 	private String suffix;
 
+	/**
+	 * Creates a new content handler instance for the given content type,
+	 * suffix, name and code.
+	 * 
+	 * @param contentType
+	 *            the content type to handle
+	 * @param suffix
+	 *            the suffix associated with the content type
+	 * @param name
+	 *            the name of the content type
+	 * @param code
+	 *            the HTML code to embed in a browser
+	 */
 	public ContentHandler(String contentType, String suffix, String name,
 			String code) {
 		this.contentType = contentType;
 		this.suffix = suffix;
 		this.name = name;
 		this.code = code;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public String getEmbedCode(HashMap<String, String> properties) {
+		String result = code;
+		for (String property : properties.keySet()) {
+			String replacement = properties.get(property);
+			Assert.isNotNull(replacement, "Illegal value in property \""
+					+ property + "\"");
+			String value = Matcher.quoteReplacement(properties.get(property));
+			result = result.replaceAll("\\$\\{" + property + "\\}", value); //$NON-NLS-1$ //$NON-NLS-2$
+
+		}
+		return result;
+
 	}
 
 	/**
@@ -56,42 +85,7 @@ public class ContentHandler {
 		return sb.toString();
 	}
 
-	/**
-	 * FIXME: Use properties and a proper variable replacer.
-	 * 
-	 * @param content
-	 *            the content of the article
-	 * @param fontFace
-	 *            the font face to use
-	 * @param fontFamily
-	 *            the font family to use
-	 * 
-	 * 
-	 * @return
-	 */
-	public String getEmbedCode(HashMap<String, String> properties) {
-		// // There has to be one code element
-		//		code = player.getChildren("code")[0].getValue(); //$NON-NLS-1$
-		// // If a file is specified, we must merge in the location of
-		// // that.
-		//		if (player.getAttribute("file") != null) { //$NON-NLS-1$
-		// Bundle bundle = Platform.getBundle(player.getContributor()
-		// .getName());
-		//			Path path = new Path(player.getAttribute("file")); //$NON-NLS-1$
-		// URL url = FileLocator.find(bundle, path, null);
-		// try {
-		//				code = code.replaceAll("\\$\\{file\\}", FileLocator //$NON-NLS-1$
-		// .resolve(url).toExternalForm());
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
-		// }
-		String result = code;
-		for (String property : properties.keySet()) {
-			String value = Matcher.quoteReplacement(properties.get(property));
-			result = result.replaceAll("\\$\\{" + property + "\\}", value); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		return result;
-
+	public String getSuffix() {
+		return suffix;
 	}
 }

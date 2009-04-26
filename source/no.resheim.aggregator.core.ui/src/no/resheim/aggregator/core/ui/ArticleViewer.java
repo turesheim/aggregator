@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2007-2009 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,16 +17,18 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.MediaContent;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.ui.internal.FeedDescriptionFormatter;
 import no.resheim.aggregator.core.ui.internal.FeedItemTitle;
 import no.resheim.aggregator.core.ui.internal.FeedViewWidgetFactory;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -49,6 +51,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.statushandlers.StatusManager;
 
 /**
  * A control that is used to show aggregator articles. A {@link Browser}
@@ -58,6 +61,8 @@ import org.eclipse.ui.PlatformUI;
  * @since 1.0
  */
 public class ArticleViewer extends Composite implements IPropertyChangeListener {
+	private static final String CONTENT_PROPERTY = "content";
+	/** The default content type */
 	private static final String DEFAULT_CONTENT_TYPE = "text/html"; //$NON-NLS-1$
 	private FeedItemTitle title;
 	private Browser browser;
@@ -99,9 +104,6 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		listeners = new ListenerList();
 		browser = new Browser(this, SWT.NONE);
 		browser.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		// Button playButton = new Button(parent, SWT.NONE);
-		// playButton.setText(">");
 
 		updateFromPreferences();
 		AggregatorUIPlugin.getDefault().getPreferenceStore()
@@ -336,18 +338,22 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	private void viewContent(Article item, boolean showMedia, int mediaIndex) {
 		fInterceptBrowser = false;
 		String text = null;
-		if (showMedia) {
-			if (item.getMediaContent().length >= mediaIndex) {
-				MediaContent media = item.getMediaContent()[mediaIndex];
-				text = getContentHandlerHTML(media.getContentType(), media
-						.getContentURL(), media.getContentURL());
+		try {
+			if (showMedia) {
+				if (item.getMediaContent().length >= mediaIndex) {
+					MediaContent media = item.getMediaContent()[mediaIndex];
+					text = getContentHandlerHTML(media.getContentType(), media
+							.getContentURL(), media.getContentURL());
+				}
+			} else {
+				text = getContentHandlerHTML(DEFAULT_CONTENT_TYPE, null, item
+						.getText());
 			}
-		} else {
-			text = getContentHandlerHTML(DEFAULT_CONTENT_TYPE, null, item
-					.getText());
+			browser.setText(text);
+			fInterceptBrowser = true;
+		} catch (CoreException e) {
+			StatusManager.getManager().handle(e.getStatus());
 		}
-		browser.setText(text);
-		fInterceptBrowser = true;
 	}
 
 	private void showDescription(Subscription feed) {
@@ -363,19 +369,25 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	private Action setStarredAction;
 
 	private String getContentHandlerHTML(String contentType, String url,
-			String content) {
+			String content) throws CoreException {
 		String code = MessageFormat.format(
 				Messages.ArticleViewer_NoContentHandler,
 				new Object[] { contentType });
 		ContentHandler handler = AggregatorUIPlugin.getDefault()
 				.getContentHandler(contentType, url);
-		if (handler == null)
-			return code;
-		contentProperties.put("content", content); //$NON-NLS-1$
+		if (handler == null) {
+			throw new CoreException(new Status(IStatus.ERROR,
+					AggregatorUIPlugin.PLUGIN_ID,
+					"No handler for content type " + contentType));
+		}
+		contentProperties.put(CONTENT_PROPERTY, content); //$NON-NLS-1$
 		code = handler.getEmbedCode(contentProperties);
 		return code;
 	}
 
+	/**
+	 * Updates the content property set with values from preference settings.
+	 */
 	private void updateFromPreferences() {
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()
 				.getPreferenceStore();
