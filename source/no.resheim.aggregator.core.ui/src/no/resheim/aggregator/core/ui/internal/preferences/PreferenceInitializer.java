@@ -33,7 +33,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
+	 * @seeorg.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
+	 * initializeDefaultPreferences()
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()
@@ -55,7 +56,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_OPEN_LINK, LinkOpen.EDITOR
 				.toString());
 		PreferenceConverter.setDefault(store,
-				PreferenceConstants.P_UNREAD_ITEM_COLOR, new RGB(0, 0, 128));
+				PreferenceConstants.P_UNREAD_ITEM_COLOR, new RGB(0, 0, 255));
 	}
 
 }
