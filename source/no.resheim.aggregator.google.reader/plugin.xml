@@ -20,7 +20,7 @@
          point="no.resheim.aggregator.core.feeds">
       <catalog
             class="no.resheim.aggregator.google.reader.GoogleReaderFeedCatalog"
-            icon="icons/reader20x20.gif"
+            icon="icons/google-reader.gif"
             id="no.resheim.aggregator.googleReaderCatalog"
             interactive="true"
             name="Google Reader"
