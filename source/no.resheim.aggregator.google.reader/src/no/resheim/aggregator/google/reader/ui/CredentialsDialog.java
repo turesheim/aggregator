@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2009 Torkild Ulvøy Resheim.
+ * 
+ * All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License v1.0 which
+ * accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors: Torkild Ulvøy Resheim - initial API and implementation
+ *******************************************************************************/
 package no.resheim.aggregator.google.reader.ui;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -14,6 +24,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * Simple dialog for obtaining user name and password to use when logging in to
+ * the Google account.
+ * 
+ * @author Torkild Ulvøy Resheim
+ * 
+ */
 public class CredentialsDialog extends Dialog {
 
 	private String login;
