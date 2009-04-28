@@ -29,6 +29,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = GoogleReaderPlugin.getDefault()
 				.getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_AMOUNT, 2000);
+		store.setDefault(PreferenceConstants.P_AMOUNT, 100);
 	}
 }
