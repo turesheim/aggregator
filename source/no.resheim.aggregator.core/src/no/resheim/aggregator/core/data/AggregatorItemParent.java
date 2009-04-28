@@ -20,11 +20,12 @@ import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
  * @author torkild
  */
 public abstract class AggregatorItemParent extends AggregatorItem {
+
 	/**
 	 * Note that because of the cache we're guaranteed that the same instance is
 	 * retrieved when an item is requested. Thus we won't get into trouble
 	 * because a viewer does not have the same instance as the action that
-	 * manipulated the item. TODO: Can we make totally sure using a comparator?
+	 * manipulated the item.
 	 * 
 	 * @uml.property name="children"
 	 */
