@@ -11,7 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.data;
 
-import java.io.Serializable;
 import java.util.EnumSet;
 import java.util.UUID;
 
@@ -23,9 +22,8 @@ import org.eclipse.core.runtime.CoreException;
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
- * @noextend This class is not intended to be subclassed by clients.
  */
-public abstract class AggregatorItem implements Serializable {
+public abstract class AggregatorItem {
 	/**
 	 * 
 	 */
