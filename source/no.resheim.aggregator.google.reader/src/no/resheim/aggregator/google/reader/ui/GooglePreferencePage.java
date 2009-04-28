@@ -22,7 +22,8 @@ public class GooglePreferencePage extends FieldEditorPreferencePage implements
 
 		{
 			addField(new IntegerFieldEditor(PreferenceConstants.P_AMOUNT,
-					"Number of items to fetch:", getFieldEditorParent()));
+					"Number of items to fetch initially:",
+					getFieldEditorParent()));
 		}
 	}
 
