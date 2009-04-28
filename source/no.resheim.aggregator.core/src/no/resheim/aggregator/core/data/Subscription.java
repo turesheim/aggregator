@@ -220,7 +220,9 @@ public class Subscription implements Comparable<Subscription> {
 	}
 
 	/**
-	 * @return
+	 * Returns the time this subscription was last updated.
+	 * 
+	 * @return last update date
 	 * @uml.property name="lastUpdate"
 	 */
 	public long getLastUpdate() {
