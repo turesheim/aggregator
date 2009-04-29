@@ -365,6 +365,8 @@ public class AggregatorPlugin extends Plugin {
 	}
 
 	/**
+	 * Obtains a connection to the given URL, using HTTP authentication if so
+	 * specified. The Eclipse proxy settings are used.
 	 * 
 	 * @param url
 	 *            the URL to connect to
