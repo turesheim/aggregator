@@ -242,7 +242,7 @@ public class FeedCollection extends AggregatorItemParent {
 	public void feedUpdated(Subscription feed) {
 		try {
 			fDatabase.writeLock().lock();
-			fDatabase.updateFeed(feed);
+			fDatabase.updateSubscription(feed);
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
@@ -379,7 +379,7 @@ public class FeedCollection extends AggregatorItemParent {
 	public boolean hasFeed(String url) {
 		try {
 			fDatabase.readLock().lock();
-			return fDatabase.hasFeed(url);
+			return fDatabase.hasSubscription(url);
 		} finally {
 			fDatabase.readLock().unlock();
 		}
@@ -392,7 +392,7 @@ public class FeedCollection extends AggregatorItemParent {
 	 */
 	public void initialize(IAggregatorStorage storage) {
 		this.fDatabase = storage;
-		fFeeds = storage.getFeeds();
+		fFeeds = storage.getSubscriptions();
 		createTrashFolder();
 		// Start a new update job that will periodically wake up and create
 		// FeedUpdateJobs when a feed is scheduled for an update.
@@ -414,9 +414,9 @@ public class FeedCollection extends AggregatorItemParent {
 	}
 
 	/**
-	 * Moves an aggregator item from one location to another. The given instance
-	 * will be updated with new information and which can be used after the
-	 * storage update.
+	 * Moves an item from one location to another. The given instance will be
+	 * updated with new information and which can be used after the storage
+	 * update.
 	 * 
 	 * TODO: Move to AggregatorItemParent
 	 * 
@@ -447,17 +447,17 @@ public class FeedCollection extends AggregatorItemParent {
 				// Change the order
 				item.setOrdering(newOrder);
 				// Update the database
-				fDatabase.move(item);
+				fDatabase.moved(item);
 			} else if (newOrder > oldOrder) {
 				// The item is moved down (new order is higher)
 				shiftUp(item, oldOrder, newOrder);
 				item.setOrdering(newOrder);
-				fDatabase.move(item);
+				fDatabase.moved(item);
 			} else {
 				// The item is moved up
 				shiftDown(item, oldOrder, newOrder);
 				item.setOrdering(newOrder);
-				fDatabase.move(item);
+				fDatabase.moved(item);
 			}
 		} finally {
 			fDatabase.writeLock().unlock();
@@ -498,7 +498,7 @@ public class FeedCollection extends AggregatorItemParent {
 					AggregatorItem sibling = oldParent.getChildAt(i);
 					Assert.isNotNull(sibling);
 					sibling.setOrdering(sibling.getOrdering() - length);
-					fDatabase.move((AggregatorItem) sibling);
+					fDatabase.moved((AggregatorItem) sibling);
 				}
 				// Switch parent on the moved items
 				for (AggregatorItem item : items) {
@@ -509,7 +509,7 @@ public class FeedCollection extends AggregatorItemParent {
 					item.setOrdering(newParent.getChildCount(EnumSet
 							.allOf(ItemType.class)));
 					// Update the database
-					fDatabase.move(item);
+					fDatabase.moved(item);
 				}
 			}
 		} finally {
@@ -518,10 +518,10 @@ public class FeedCollection extends AggregatorItemParent {
 	}
 
 	/**
-	 * Notify feed listeners about the aggregator item change.
+	 * Notify feed listeners about the item change.
 	 * 
 	 * @param event
-	 *            The change event with details
+	 *            the change event with details
 	 */
 	public void notifyListerners(Object[] items, EventType type) {
 		final AggregatorItemChangedEvent event = new AggregatorItemChangedEvent(
@@ -614,20 +614,20 @@ public class FeedCollection extends AggregatorItemParent {
 	 * @throws CoreException
 	 */
 	public void setRead(AggregatorItem item) throws CoreException {
-		try {
-			fDatabase.writeLock().lock();
-			fDatabase.updateReadFlag((AggregatorItem) item);
-		} finally {
-			fDatabase.writeLock().unlock();
-		}
 		if (item instanceof Article) {
 			((Article) item).setRead(true);
+			if (item instanceof Article) {
+				write(item);
+			}
 			notifyListerners(new Object[] { item }, EventType.READ);
 		} else if (item instanceof AggregatorItemParent) {
 			AggregatorItem[] children = ((AggregatorItemParent) item)
 					.getChildren(EnumSet.allOf(ItemType.class));
 			for (AggregatorItem child : children) {
 				setRead(child);
+				if (child instanceof Article) {
+					write(child);
+				}
 			}
 		}
 	}
@@ -656,7 +656,7 @@ public class FeedCollection extends AggregatorItemParent {
 		for (int i = from - 1; i >= to; i--) {
 			AggregatorItem sibling = parent.getChildAt(i);
 			sibling.setOrdering(sibling.getOrdering() + 1);
-			fDatabase.move((AggregatorItem) sibling);
+			fDatabase.moved((AggregatorItem) sibling);
 		}
 	}
 
@@ -676,7 +676,7 @@ public class FeedCollection extends AggregatorItemParent {
 			AggregatorItem sibling = parent.getChildAt(i);
 			Assert.isNotNull(sibling);
 			sibling.setOrdering(sibling.getOrdering() - 1);
-			fDatabase.move((AggregatorItem) sibling);
+			fDatabase.moved((AggregatorItem) sibling);
 		}
 		return events;
 	}
@@ -701,7 +701,7 @@ public class FeedCollection extends AggregatorItemParent {
 		for (int i = from + 1; i <= to; i++) {
 			AggregatorItem sibling = parent.getChildAt(i);
 			sibling.setOrdering(sibling.getOrdering() - 1);
-			fDatabase.move((AggregatorItem) sibling);
+			fDatabase.moved((AggregatorItem) sibling);
 		}
 		return events;
 	}
@@ -719,15 +719,25 @@ public class FeedCollection extends AggregatorItemParent {
 		notifyListerners(new Object[] { item }, EventType.CHANGED);
 	}
 
-	public void updateFeedData(Subscription item) {
+	public void updateFeedData(Subscription sub) {
 		try {
 			fDatabase.writeLock().lock();
 			// Ensure that the local list has a copy of the same instance.
-			fFeeds.put(item.getUUID(), item);
-			fDatabase.updateFeed((Subscription) item);
+			fFeeds.put(sub.getUUID(), sub);
+			fDatabase.updateSubscription((Subscription) sub);
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
+	}
+
+	/**
+	 * Returns a list of all the articles that was changed (locally) since the
+	 * subscription was last updated.
+	 * 
+	 * @return a list of changed articles
+	 */
+	public List<Article> getChangedArticles(Subscription subscription, long time) {
+		return fDatabase.getChangedArticles(subscription, time);
 	}
 
 	private void validate(Article article) {

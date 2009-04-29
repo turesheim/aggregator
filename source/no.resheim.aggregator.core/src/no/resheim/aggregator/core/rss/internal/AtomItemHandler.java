@@ -15,8 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.Subscription;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -94,7 +94,6 @@ public class AtomItemHandler extends AbstractItemHandler {
 		this.feed = feed;
 		item = new Article(feed, UUID.randomUUID());
 		item.setAddedDate(System.currentTimeMillis());
-		item.setLastChanged(System.currentTimeMillis());
 	}
 
 	public void endElement(String qName) throws SAXException {

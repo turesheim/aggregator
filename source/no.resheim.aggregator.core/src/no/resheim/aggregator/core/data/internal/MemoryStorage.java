@@ -14,13 +14,14 @@ package no.resheim.aggregator.core.data.internal;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.filter.Filter;
 
@@ -133,7 +134,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 	 * @return
 	 * @uml.property name="feeds"
 	 */
-	public HashMap<UUID, Subscription> getFeeds() {
+	public HashMap<UUID, Subscription> getSubscriptions() {
 		return feeds;
 	}
 
@@ -171,7 +172,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		return false;
 	}
 
-	public boolean hasFeed(String url) {
+	public boolean hasSubscription(String url) {
 		for (Subscription feed : feeds.values()) {
 			if (feed.getURL().equals(url)) {
 				return true;
@@ -180,7 +181,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		return false;
 	}
 
-	public void move(AggregatorItem item) {
+	public void moved(AggregatorItem item) {
 		// XXX:Totally broken
 		// ItemHolder oldHolder = items.get(item.getParent().getUUID());
 		// ItemHolder newHolder = items.get(parent.getUUID());
@@ -208,12 +209,7 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 		return Status.OK_STATUS;
 	}
 
-	public void updateFeed(Subscription feed) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void updateReadFlag(AggregatorItem item) {
+	public void updateSubscription(Subscription feed) {
 		// TODO Auto-generated method stub
 
 	}
@@ -231,5 +227,10 @@ public class MemoryStorage extends AbstractAggregatorStorage {
 	public void setFilters(Filter[] filters) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public List<Article> getChangedArticles(Subscription subscription, long time) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

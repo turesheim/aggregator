@@ -14,6 +14,7 @@ package no.resheim.aggregator.core.data;
 
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 
@@ -28,11 +29,6 @@ import org.eclipse.core.runtime.IStatus;
  * This interface is internal and is not intended to be implemented by clients.
  * Standard implementations of the various storage methods are already supplied
  * so there should be no real need to add another.
- * <p>
- * A few methods are not typical for a simple storage type. This is because it's
- * desirable to optimise on the database level instead of having to instantiate
- * aggregator items.
- * </p>
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -41,10 +37,10 @@ import org.eclipse.core.runtime.IStatus;
 public interface IAggregatorStorage extends ISaveParticipant {
 
 	/**
-	 * Adds the given aggregator item to the storage.
+	 * Adds the given item to the storage.
 	 * 
 	 * @param item
-	 *            The item to add
+	 *            the item to add
 	 */
 	public abstract IStatus add(AggregatorItem item);
 
@@ -53,7 +49,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * responsible for also deleting all child items.
 	 * 
 	 * @param item
-	 *            The item to delete
+	 *            the item to delete
 	 */
 	public abstract void delete(AggregatorItem item);
 
@@ -61,15 +57,16 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * Deletes the feed from the storage.
 	 * 
 	 * @param feed
+	 *            the feed to delete
 	 */
-	public abstract void delete(Subscription feed);
+	public abstract void delete(Subscription subscription);
 
 	/**
-	 * Adds a new feed to the storage.
+	 * Adds a new subscription to the storage.
 	 * 
 	 * @param feed
 	 */
-	public abstract void add(Subscription feed);
+	public abstract void add(Subscription subscription);
 
 	/**
 	 * Calculates and returns the number of children the <i>parent</i> item has.
@@ -84,38 +81,41 @@ public interface IAggregatorStorage extends ISaveParticipant {
 			EnumSet<ItemType> types);
 
 	/**
-	 * Returns the description string of the aggregator item if such a
-	 * description does exist.
+	 * Returns the description string of the article if such a description does
+	 * exist.
 	 * 
 	 * @param item
-	 * @return
+	 *            the item to get the description for
+	 * @return the description
 	 */
 	public abstract String getDescription(Article item);
 
 	/**
 	 * Returns a map of all feeds regardless of the placement in the tree
-	 * structure. The map key is the feeds' unique identifier.
+	 * structure. The map key is the subscription's unique identifier.
 	 * 
-	 * @return a map of all feeds
+	 * @return a map of all subscriptions
 	 */
-	public abstract HashMap<UUID, Subscription> getFeeds();
+	public abstract HashMap<UUID, Subscription> getSubscriptions();
 
 	/**
 	 * Returns the article with the given <i>guid</i>.
 	 * 
 	 * @param guid
 	 *            the globally unique identifier
-	 * @return the Article or <i>null</i>
+	 * @return the article or <code>null</code>
 	 */
 	public abstract boolean hasArticle(String guid);
 
 	/**
 	 * Returns the item at the given index in the specified parent item. If no
-	 * item could be found <i>null</i> is returned.
+	 * item could be found <code>null</code> is returned.
 	 * 
 	 * @param parent
+	 *            the parent item
 	 * @param index
-	 * @return
+	 *            the index of the child item
+	 * @return the child item or <code>null</code>
 	 */
 	public abstract AggregatorItem getChildAt(AggregatorItemParent parent,
 			int index);
@@ -130,27 +130,38 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	public abstract int getUnreadCount(AggregatorItem parent);
 
 	/**
+	 * Returns a list of articles belonging to the given subscription that has
+	 * been changed locally since the given time stamp.
+	 * 
+	 * @param subscription
+	 *            the subscription
+	 * @param time
+	 *            the time stamp
+	 * @return a list of changed items
+	 */
+	public abstract List<Article> getChangedArticles(Subscription subscription,
+			long time);
+
+	/**
 	 * Tests to see if the feed with the given URL already exists in the
 	 * database.
 	 * 
 	 * @param url
-	 *            the URL of the feed
-	 * @return <b>true</b> if a feed with the given URL exists in the collection
+	 *            the URL of the subscription
+	 * @return <b>true</b> if a subscription with the given URL exists
 	 */
-	public abstract boolean hasFeed(String url);
+	public abstract boolean hasSubscription(String url);
 
 	/**
-	 * Updates the database to indicate that the aggregator item has a new
-	 * parent.
+	 * Updates the database to indicate that the item has a new parent. This
+	 * method must be called whenever an item has been relocated in order to
+	 * synchronise the back-end.
 	 * 
 	 * @param item
 	 *            the moved item
-	 * @param parent
-	 *            the new parent
-	 * @param order
-	 *            the new order of the item
 	 */
-	public abstract void move(AggregatorItem item);
+	// TODO: Replace with a more generic method
+	public abstract void moved(AggregatorItem item);
 
 	/**
 	 * Renames the given item.
@@ -158,30 +169,33 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param item
 	 *            the item to rename
 	 */
+	// TODO: Replace with a more generic method
 	public abstract void rename(AggregatorItem item);
 
 	/**
 	 * Shuts down the storage.
 	 * 
-	 * @return
+	 * @return the status of the shut-down
 	 */
 	public IStatus shutdown();
 
 	/**
-	 * Starts up the storage
+	 * Starts up the storage. This is the first method called on any storage
+	 * instance.
 	 * 
 	 * @param monitor
-	 *            A monitor for reporting progress
-	 * @return
+	 *            a monitor for reporting progress
+	 * @return the status of the start-up
 	 */
 	public IStatus startup(IProgressMonitor monitor);
 
 	/**
-	 * Updates the database with feed data.
+	 * Updates the database with subscription data.
 	 * 
 	 * @param feed
 	 */
-	public abstract void updateFeed(Subscription feed);
+	// TODO: Replace with a more generic method
+	public abstract void updateSubscription(Subscription subscription);
 
 	/**
 	 * Writes back the aggregator item data so that the database is in sync with
@@ -210,14 +224,6 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 *                     container="no.resheim.aggregator.core.filter.Filter"
 	 */
 	public abstract Filter[] getFilters();
-
-	/**
-	 * Indicates that the feed item has been read.
-	 * 
-	 * @param item
-	 *            The item to update
-	 */
-	public abstract void updateReadFlag(AggregatorItem item);
 
 	public abstract Lock writeLock();
 

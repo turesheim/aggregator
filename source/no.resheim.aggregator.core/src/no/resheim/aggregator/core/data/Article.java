@@ -37,7 +37,7 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	protected String creator;
 
 	/** The UUID of the feed this article belongs to */
-	protected UUID feed_uuid;
+	protected UUID subscriptionUuid;
 
 	/**
 	 * The globally unique identifier (should never be null)
@@ -53,7 +53,7 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	 */
 	protected String link = EMPTY_STRING;
 
-	protected UUID location;
+	protected UUID fLocation;
 
 	/**
 	 * @uml.property name="mediaContent"
@@ -119,22 +119,34 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	 * @uml.property name="fFeed"
 	 * @uml.associationEnd
 	 */
-	protected Subscription fFeed;
+	protected Subscription fSubscription;
 
 	public Article(AggregatorItemParent parent, UUID uuid) {
 		super(parent, uuid);
 		mediaContent = new ArrayList<MediaContent>();
 	}
 
-	public Article(Subscription feed, UUID uuid) {
+	/**
+	 * Creates a new article using the subscription the article comes from and
+	 * the unique identifier of the article.
+	 * 
+	 * @param subscription
+	 *            the subscription
+	 * @param uuid
+	 *            the unique identifier
+	 */
+	public Article(Subscription subscription, UUID uuid) {
 		this((AggregatorItemParent) null, uuid);
-		Assert.isNotNull(feed);
-		fFeed = feed;
-		location = feed.getLocation();
-		feed_uuid = feed.getUUID();
+		Assert.isNotNull(subscription);
+		fSubscription = subscription;
+		fLocation = subscription.getLocation();
+		subscriptionUuid = subscription.getUUID();
 	}
 
 	/**
+	 * Used to compose an article instance when the parent item has been
+	 * instantiated.
+	 * 
 	 * @param the
 	 *            parent item (folder)
 	 * @param the
@@ -142,11 +154,11 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	 * @param the
 	 *            identifier of the feed
 	 */
-	public Article(AggregatorItemParent parent, UUID uuid, UUID feedId) {
+	public Article(AggregatorItemParent parent, UUID uuid, UUID subscriptionId) {
 		this(parent, uuid);
 		Assert.isNotNull(parent);
-		location = parent.getUUID();
-		feed_uuid = feedId;
+		fLocation = parent.getUUID();
+		subscriptionUuid = subscriptionId;
 	}
 
 	public int compareTo(Article arg0) {
@@ -159,14 +171,14 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	 * @return the feed instance
 	 */
 	public Subscription getFeed() {
-		if (fFeed == null) {
+		if (fSubscription == null) {
 			try {
-				fFeed = getCollection().getFeeds().get(feed_uuid);
+				fSubscription = getCollection().getFeeds().get(subscriptionUuid);
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
 		}
-		return fFeed;
+		return fSubscription;
 	}
 
 	/**
@@ -219,7 +231,7 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	 * @return
 	 */
 	public UUID getSubscriptionUUID() {
-		return feed_uuid;
+		return subscriptionUuid;
 	}
 
 	/**
@@ -408,7 +420,7 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	 * @return the UUID of the parent item
 	 */
 	public UUID getLocation() {
-		return location;
+		return fLocation;
 	}
 
 	public void setMediaPlayerURL(String mediaPlayerURL) {
