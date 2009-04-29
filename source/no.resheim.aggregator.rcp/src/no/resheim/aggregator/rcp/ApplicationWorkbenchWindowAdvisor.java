@@ -11,7 +11,7 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 	private static final int DEFAULT_HEIGHT = 600;
-	private static final int DEFAULT_WIDTH = 400;
+	private static final int DEFAULT_WIDTH = 600;
 
 	public ApplicationWorkbenchWindowAdvisor(
 			IWorkbenchWindowConfigurer configurer) {
