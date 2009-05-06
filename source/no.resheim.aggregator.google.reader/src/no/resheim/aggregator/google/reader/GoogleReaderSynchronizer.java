@@ -183,8 +183,4 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 
 	}
 
-	private void setRead(Article article) {
-
-	}
-
 }
