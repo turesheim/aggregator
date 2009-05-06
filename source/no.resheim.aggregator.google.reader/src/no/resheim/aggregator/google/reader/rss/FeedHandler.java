@@ -9,7 +9,7 @@
  * Contributors: Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
 
-package no.resheim.aggregator.google.reader;
+package no.resheim.aggregator.google.reader.rss;
 
 import java.util.ArrayList;
 
@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
  * @author Torkild Ulvøy Resheim
  * @since 1.1
  */
-class FeedHandler implements IElementHandler {
+class FeedHandler implements IGoogleElementHandler {
 	private Subscription feed;
 	private ArrayList<Subscription> feeds;
 	private StringBuffer buffer = new StringBuffer();
@@ -91,7 +91,7 @@ class FeedHandler implements IElementHandler {
 		}
 	}
 
-	public IElementHandler startElement(String qName, Attributes atts)
+	public IGoogleElementHandler startElement(String qName, Attributes atts)
 			throws SAXException {
 		if (qName.equals("string") && fObjectLevel == 1) {
 			String id = atts.getValue("name");

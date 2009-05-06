@@ -8,7 +8,7 @@
  * 
  * Contributors: Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.google.reader;
+package no.resheim.aggregator.google.reader.rss;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -21,13 +21,13 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class SubscriptionsParser extends DefaultHandler {
-	protected final Stack<IElementHandler> handlers;
+	protected final Stack<IGoogleElementHandler> handlers;
 	StringBuffer buffer;
 	boolean capture;
 	IFeedCatalog catalog;
 
 	public SubscriptionsParser(IFeedCatalog catalog, ArrayList<Subscription> feeds) {
-		handlers = new Stack<IElementHandler>();
+		handlers = new Stack<IGoogleElementHandler>();
 		buffer = new StringBuffer();
 		this.catalog = catalog;
 		// Root element is "object"
@@ -46,7 +46,7 @@ public class SubscriptionsParser extends DefaultHandler {
 
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
-		IElementHandler nextHandler;
+		IGoogleElementHandler nextHandler;
 		nextHandler = handlers.lastElement().startElement(qName, atts);
 		handlers.push(nextHandler);
 	}

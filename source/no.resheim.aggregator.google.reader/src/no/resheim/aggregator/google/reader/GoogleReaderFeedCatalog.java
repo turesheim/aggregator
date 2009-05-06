@@ -25,6 +25,7 @@ import javax.xml.parsers.SAXParserFactory;
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.catalog.AbstractFeedCatalog;
 import no.resheim.aggregator.core.data.Subscription;
+import no.resheim.aggregator.google.reader.rss.SubscriptionsParser;
 
 import org.eclipse.equinox.security.storage.StorageException;
 import org.xml.sax.SAXException;

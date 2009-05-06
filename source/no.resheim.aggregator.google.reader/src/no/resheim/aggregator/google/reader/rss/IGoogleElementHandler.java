@@ -1,14 +1,14 @@
 /**
  * 
  */
-package no.resheim.aggregator.google.reader;
+package no.resheim.aggregator.google.reader.rss;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-interface IElementHandler {
+interface IGoogleElementHandler {
 
-	public IElementHandler startElement(String qName, Attributes atts)
+	public IGoogleElementHandler startElement(String qName, Attributes atts)
 			throws SAXException;
 
 	public void endElement(String qName) throws SAXException;
