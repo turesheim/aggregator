@@ -93,7 +93,6 @@ public class GoogleReaderPlugin extends AbstractUIPlugin {
 		final Credentials c = new Credentials();
 		final Display display = getDefault().getWorkbench().getDisplay();
 		display.syncExec(new Runnable() {
-			@Override
 			public void run() {
 				try {
 					CredentialsDialog dg = new CredentialsDialog(display
