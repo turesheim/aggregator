@@ -42,7 +42,6 @@ public class GoogleReaderFeedCatalog extends AbstractFeedCatalog {
 	public GoogleReaderFeedCatalog() {
 	}
 
-	@Override
 	public Subscription[] getFeeds() {
 		ArrayList<Subscription> feeds = new ArrayList<Subscription>();
 		if (GoogleReaderPlugin.login()) {
@@ -74,7 +73,6 @@ public class GoogleReaderFeedCatalog extends AbstractFeedCatalog {
 		return feeds.toArray(new Subscription[feeds.size()]);
 	}
 
-	@Override
 	public boolean isEnabled() {
 		return true;
 	}
