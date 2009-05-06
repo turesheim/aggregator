@@ -1,0 +1,1 @@
+SUN Java 1.6 is required because of java.net.CookieManager which does not exist in earlier versions of Java.
