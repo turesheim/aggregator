@@ -17,7 +17,6 @@ public class GooglePreferencePage extends FieldEditorPreferencePage implements
 		setTitle("Google Reader Integration");
 	}
 
-	@Override
 	protected void createFieldEditors() {
 
 		{
@@ -27,7 +26,6 @@ public class GooglePreferencePage extends FieldEditorPreferencePage implements
 		}
 	}
 
-	@Override
 	public void init(IWorkbench workbench) {
 	}
 
