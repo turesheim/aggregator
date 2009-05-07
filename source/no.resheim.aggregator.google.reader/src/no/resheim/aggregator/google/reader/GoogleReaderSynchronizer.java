@@ -168,7 +168,7 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 					.getInputStream()));
 			String line;
 			while ((line = rd.readLine()) != null) {
-				System.out.println(line);
+				// TODO: Handle OK here
 			}
 			rd.close();
 		} catch (MalformedURLException e) {
