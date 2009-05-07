@@ -21,7 +21,6 @@ import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
@@ -56,8 +55,15 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 		int count = store.getInt(PreferenceConstants.P_AMOUNT);
 		String base = FEED_URL_PREFIX + subscription.getURL();
 		if (subscription.getLastUpdate() > 0) {
-			base += "?ot=" + subscription.getLastUpdate() + "&r=o&ck="
-					+ System.currentTimeMillis();
+			// ot = The time (Unix time, number of seconds from January 1st,
+			// 1970 00:00 UTC) from which to start to get items. Only works for
+			// order r=o mode. If the time is older than one month ago, one
+			// month ago will be used instead.
+			// ck = current time stamp, probably used as a quick hack to be sure
+			// that
+			// cache won't be triggered.
+			base += "?ot=" + subscription.getLastUpdate() / 1000 + "&r=o&ck="
+					+ System.currentTimeMillis() / 1000;
 		} else {
 			base += "?n=" + count;
 		}
@@ -97,12 +103,8 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 				// Upload changes
 				List<Article> changed = collection.getChangedArticles(
 						subscription, subscription.getLastUpdate());
-				System.out.println("Articles changed since "
-						+ new Date(subscription.getLastUpdate()));
+				setName("Uploading changes");
 				for (Article article : changed) {
-
-					System.out.println(article.toString() + " "
-							+ article.getGuid());
 					setStarredState(article);
 				}
 			}
@@ -140,6 +142,8 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 	 */
 	private void setStarredState(Article article) throws CoreException {
 		try {
+			// We need this or we'll get a 401
+			GoogleReaderPlugin.login();
 			String token = GoogleReaderPlugin.getToken();
 			URL url = new URL("http://www.google.com/reader/api/0/edit-tag");
 			URLConnection yc = AggregatorPlugin.getDefault().getConnection(url,
