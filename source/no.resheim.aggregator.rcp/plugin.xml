@@ -26,7 +26,7 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="no.resheim.aggregator.rcp.application"
-            name="Resheim Aggregator">
+            name="Muninn">
          <property
                name="windowImages"
                value="icons/aggregator_window_16.png,icons/aggregator_window_32.png,icons/aggregator_window_48.png,icons/aggregator_window_64.png,icons/aggregator_window_128.png">
