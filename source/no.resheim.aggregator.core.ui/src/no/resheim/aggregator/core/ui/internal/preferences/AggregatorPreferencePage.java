@@ -101,7 +101,7 @@ public class AggregatorPreferencePage extends FieldEditorPreferencePage
 
 		{
 			addField(new BooleanFieldEditor(
-					PreferenceConstants.P_BROWSER_REUSE_WINDOW,
+					PreferenceConstants.P_BROWSER_CREATE_NEW_WINDOW,
 					Messages.AggregatorPreferencePage_Reuse_Window,
 					getFieldEditorParent()));
 		}

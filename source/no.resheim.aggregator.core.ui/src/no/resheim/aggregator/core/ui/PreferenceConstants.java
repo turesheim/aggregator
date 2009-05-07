@@ -50,5 +50,5 @@ public class PreferenceConstants {
 	/** Show the browser navigation bar or not */
 	public static final String P_BROWSER_NAVIGATION_BAR = "browser_navigation_bar"; //$NON-NLS-1$
 	/** Open each article in a new frame or reuse the preview window */
-	public static final String P_BROWSER_REUSE_WINDOW = "browser_reuse_window"; //$NON-NLS-1$
+	public static final String P_BROWSER_CREATE_NEW_WINDOW = "browser_create_new_window"; //$NON-NLS-1$
 }

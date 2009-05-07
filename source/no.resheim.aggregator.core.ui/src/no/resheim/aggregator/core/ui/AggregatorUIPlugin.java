@@ -261,10 +261,18 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 	private static IWebBrowser fEditorBrowser;
 	private static int browserCount = 0;
 
+	/**
+	 * Returns a browser for showing pages that are linked to in article
+	 * contents.
+	 * 
+	 * @return
+	 */
 	public static IWebBrowser getBrowser() {
 		try {
 			IPreferenceStore store = AggregatorUIPlugin.getDefault()
 					.getPreferenceStore();
+			// AS_VIEW works better (layout-wise) than AS_EDITOR but still opens
+			// in the editor area.
 			int flags = IWorkbenchBrowserSupport.AS_VIEW;
 			if (store.getBoolean(PreferenceConstants.P_BROWSER_LOCATION_BAR)) {
 				flags |= IWorkbenchBrowserSupport.LOCATION_BAR;
@@ -272,7 +280,8 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 			if (store.getBoolean(PreferenceConstants.P_BROWSER_NAVIGATION_BAR)) {
 				flags |= IWorkbenchBrowserSupport.NAVIGATION_BAR;
 			}
-			if (store.getBoolean(PreferenceConstants.P_BROWSER_REUSE_WINDOW)) {
+			if (!store
+					.getBoolean(PreferenceConstants.P_BROWSER_CREATE_NEW_WINDOW)) {
 				if (fEditorBrowser == null) {
 					fEditorBrowser = PlatformUI
 							.getWorkbench()
@@ -295,6 +304,12 @@ public class AggregatorUIPlugin extends AbstractUIPlugin {
 		return null;
 	}
 
+	/**
+	 * Converts the given image data to SWT. Howcome it's not used anywhere?
+	 * 
+	 * @param bufferedImage
+	 * @return
+	 */
 	static ImageData convertToSWT(BufferedImage bufferedImage) {
 		if (bufferedImage.getColorModel() instanceof DirectColorModel) {
 			DirectColorModel colorModel = (DirectColorModel) bufferedImage

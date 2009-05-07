@@ -113,6 +113,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		browser.addLocationListener(new LocationListener() {
 
 			public void changed(LocationEvent event) {
+				System.out.println(event.data);
 			}
 
 			public void changing(LocationEvent event) {

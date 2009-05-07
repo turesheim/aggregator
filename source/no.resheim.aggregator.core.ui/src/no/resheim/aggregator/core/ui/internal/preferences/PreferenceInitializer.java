@@ -52,7 +52,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_ARCHIVING_DAYS, 30);
 		store.setDefault(PreferenceConstants.P_BROWSER_LOCATION_BAR, false);
 		store.setDefault(PreferenceConstants.P_BROWSER_NAVIGATION_BAR, false);
-		store.setDefault(PreferenceConstants.P_BROWSER_REUSE_WINDOW, true);
+		store
+				.setDefault(PreferenceConstants.P_BROWSER_CREATE_NEW_WINDOW,
+						false);
 		store.setDefault(PreferenceConstants.P_OPEN_LINK, LinkOpen.EDITOR
 				.toString());
 		PreferenceConverter.setDefault(store,
