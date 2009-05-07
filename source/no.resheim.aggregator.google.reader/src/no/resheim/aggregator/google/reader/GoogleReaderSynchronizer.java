@@ -34,6 +34,7 @@ import no.resheim.aggregator.core.synch.AbstractSynchronizer;
 import no.resheim.aggregator.core.synch.Messages;
 import no.resheim.aggregator.google.reader.ui.PreferenceConstants;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -65,11 +66,8 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-		synchronized (subscription) {
-			subscription.setUpdating(true);
-			subscription.getTempItems().clear();
-		}
-		// Why this?
+		subscription.setUpdating(true);
+		subscription.getTempItems().clear();
 		collection.notifyListerners(new Subscription[] { subscription },
 				EventType.CHANGED);
 		// If the feed does not use archiving it's better to remove all items
@@ -113,9 +111,6 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 						new Object[] { subscription.getTitle() }));
 				cleanUp();
 			}
-			synchronized (subscription) {
-				subscription.setUpdating(false);
-			}
 			Collections.sort(subscription.getTempItems());
 			if (subscription.getTempItems().size() > 0) {
 				ms.addAll(collection.addNew(subscription.getTempItems()
@@ -128,11 +123,13 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 			subscription.setLastStatus(ms);
 			// Store changes to the feed
 			collection.feedUpdated(subscription);
-			collection.notifyListerners(new Subscription[] { subscription },
-					EventType.CHANGED);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (CoreException e) {
+			// Log the status from the exception
+			ms.add(e.getStatus());
 		}
+		subscription.setUpdating(false);
+		collection.notifyListerners(new Subscription[] { subscription },
+				EventType.CHANGED);
 		return ms;
 	}
 
@@ -141,9 +138,8 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 	 * 
 	 * @param article
 	 */
-	private void setStarredState(Article article) {
+	private void setStarredState(Article article) throws CoreException {
 		try {
-			// GoogleReaderPlugin.login();
 			String token = GoogleReaderPlugin.getToken();
 			URL url = new URL("http://www.google.com/reader/api/0/edit-tag");
 			URLConnection yc = AggregatorPlugin.getDefault().getConnection(url,
@@ -172,15 +168,20 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 			}
 			rd.close();
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			throwException("Could not synchronize Google Reader item", e);
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			throwException("Could not synchronize Google Reader item", e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throwException("Could not synchronize Google Reader item", e);
 		} catch (StorageException e) {
-			e.printStackTrace();
+			throwException("Could not synchronize Google Reader item", e);
 		}
+	}
 
+	private void throwException(String message, Exception e)
+			throws CoreException {
+		throw new CoreException(new Status(IStatus.ERROR,
+				GoogleReaderPlugin.PLUGIN_ID, message, e));
 	}
 
 }

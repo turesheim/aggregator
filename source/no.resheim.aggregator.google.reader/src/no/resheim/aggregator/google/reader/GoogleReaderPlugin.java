@@ -164,7 +164,7 @@ public class GoogleReaderPlugin extends AbstractUIPlugin {
 		return false;
 	}
 
-	public static String getToken() {
+	public static String getToken() throws CoreException {
 		String token = null;
 		try {
 			URL url = new URL("http://www.google.com/reader/api/0/token");
@@ -178,13 +178,17 @@ public class GoogleReaderPlugin extends AbstractUIPlugin {
 			}
 			rd.close();
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			throw new CoreException(new Status(IStatus.ERROR, PLUGIN_ID,
+					"Could not get authentication token from Google Reader", e));
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			throw new CoreException(new Status(IStatus.ERROR, PLUGIN_ID,
+					"Could not get authentication token from Google Reader", e));
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new CoreException(new Status(IStatus.ERROR, PLUGIN_ID,
+					"Could not get authentication token from Google Reader", e));
 		} catch (StorageException e) {
-			e.printStackTrace();
+			throw new CoreException(new Status(IStatus.ERROR, PLUGIN_ID,
+					"Could not get authentication token from Google Reader", e));
 		}
 		return token;
 
