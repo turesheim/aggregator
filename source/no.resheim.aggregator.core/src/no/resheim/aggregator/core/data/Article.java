@@ -173,7 +173,8 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	public Subscription getFeed() {
 		if (fSubscription == null) {
 			try {
-				fSubscription = getCollection().getFeeds().get(subscriptionUuid);
+				fSubscription = getCollection().getFeeds()
+						.get(subscriptionUuid);
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
@@ -199,29 +200,20 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 		return creator;
 	}
 
-	public String getDetails() {
+	public String getStatusString() {
 		StringBuilder sb = new StringBuilder();
-		if (creator != null && publicationDate > 0) {
-			sb.append(MessageFormat.format(
-					Messages.Article_PublishedByAndDownloaded, new Object[] {
-							creator,
+		if (publicationDate > 0 && creator != null) {
+			sb.append(MessageFormat.format("Published on {0} by {1}",
+					new Object[] {
 							dateFormat.format(new Date(publicationDate)),
-							dateFormat.format(new Date(addedDate)) }));
-		} else if (creator != null) {
-			sb.append(MessageFormat.format(
-					Messages.Article_PublishedAndDownloaded, new Object[] {
-							dateFormat.format(new Date(publicationDate)),
-							dateFormat.format(new Date(addedDate)) }));
+							creator }));
 		} else if (publicationDate > 0) {
-			sb.append(MessageFormat.format(
-					Messages.Article_PublishedAndDownloaded, new Object[] {
-							dateFormat.format(new Date(publicationDate)),
-							dateFormat.format(new Date(addedDate)) }));
-
+			sb.append(MessageFormat
+					.format("Published on {0}", new Object[] { dateFormat
+							.format(new Date(publicationDate)) }));
 		} else {
-			sb.append(MessageFormat.format(Messages.Article_Downloaded,
+			sb.append(MessageFormat.format("Downloaded on {0}",
 					new Object[] { dateFormat.format(new Date(addedDate)) }));
-
 		}
 		return sb.toString();
 	}

@@ -32,9 +32,9 @@
          point="org.eclipse.ui.commands">
       <command
             defaultHandler="no.resheim.aggregator.core.ui.commands.AddFeedCommandHandler"
-            description="Adds a new feed to the aggregator."
+            description="Subscribe to a new feed."
             id="no.resheim.aggregator.core.ui.addFeed"
-            name="Add Feed">
+            name="New Subscription">
       </command>
       <command
             defaultHandler="no.resheim.aggregator.core.ui.commands.DeleteItemCommandHandler"
@@ -216,7 +216,7 @@
             locationURI="popup:no.resheim.aggregator.core.ui.RSSView?before=navigation">
          <command
                commandId="no.resheim.aggregator.core.ui.addFeed"
-               label="New Feed..."
+               label="New Subscription..."
                style="push">
          </command>
          <command

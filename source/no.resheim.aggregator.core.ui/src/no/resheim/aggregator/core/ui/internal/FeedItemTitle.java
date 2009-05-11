@@ -10,6 +10,8 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal;
 
+import no.resheim.aggregator.core.data.Article;
+
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.JFaceResources;
@@ -55,7 +57,7 @@ public class FeedItemTitle extends Composite {
 		backgroundImage.dispose();
 	}
 
-	private CLabel label;
+	private CLabel titleLabel;
 
 	private static final String BLANK = ""; //$NON-NLS-1$
 
@@ -97,15 +99,16 @@ public class FeedItemTitle extends Composite {
 		}
 		font = JFaceResources.getFont(TITLE_FONT);
 
-		label = factory.createCLabel(this, BLANK);
-		label.setBackground(new Color[] {
+		titleLabel = factory.createCLabel(this, BLANK);
+		titleLabel.setBackground(new Color[] {
 				factory.getColors().getColor(IFormColors.H_GRADIENT_END),
 				factory.getColors().getColor(IFormColors.H_GRADIENT_START) },
 				new int[] { 100 }, true);
-		label.setFont(font);
-		label.setForeground(factory.getColors().getColor(IFormColors.TITLE));
+		titleLabel.setFont(font);
+		titleLabel.setForeground(factory.getColors()
+				.getColor(IFormColors.TITLE));
 		GridData gd = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
-		label.setLayoutData(gd);
+		titleLabel.setLayoutData(gd);
 
 		addListener(SWT.Resize, new Listener() {
 
@@ -185,13 +188,14 @@ public class FeedItemTitle extends Composite {
 	 * @param image
 	 *            the image for the label.
 	 */
-	public void setTitle(String text, Image image) {
-		if (text != null) {
-			label.setText(text);
+	public void setItem(Article article) {
+		String titleText = article.getTitle();
+		if (titleText != null) {
+			titleLabel.setText(titleText);
 		} else {
-			label.setText(BLANK);
+			titleLabel.setText(BLANK);
 		}
-		label.setImage(image);
+		titleLabel.setImage(null);
 		redraw();
 	}
 }

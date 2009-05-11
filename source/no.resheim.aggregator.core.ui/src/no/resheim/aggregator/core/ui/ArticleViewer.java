@@ -18,8 +18,6 @@ import java.util.HashMap;
 
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.MediaContent;
-import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.core.ui.internal.FeedDescriptionFormatter;
 import no.resheim.aggregator.core.ui.internal.FeedItemTitle;
 import no.resheim.aggregator.core.ui.internal.FeedViewWidgetFactory;
 
@@ -113,7 +111,6 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		browser.addLocationListener(new LocationListener() {
 
 			public void changed(LocationEvent event) {
-				System.out.println(event.data);
 			}
 
 			public void changing(LocationEvent event) {
@@ -285,9 +282,13 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 
 	private class BrowserStatusTextListener implements StatusTextListener {
 		public void changed(StatusTextEvent event) {
+			String text = event.text;
+			// BAD HACK
+			if (text.equals("Done")) {
+				text = "";
+			}
 			for (Object listener : listeners.getListeners()) {
-				((IArticleViewerListener) listener)
-						.statusTextChanged(event.text);
+				((IArticleViewerListener) listener).statusTextChanged(text);
 			}
 		}
 	}
@@ -308,7 +309,8 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	public void show(Object item) {
 		if (item instanceof Article) {
 			selectedArticle = (Article) item;
-			title.setTitle(selectedArticle.getTitle(), null);
+
+			title.setItem(selectedArticle);
 			viewContent(selectedArticle, false, 0);
 			if (selectedArticle.hasMedia()) {
 				MediaContent content = selectedArticle.getMediaContent()[0];
@@ -331,8 +333,6 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 			setStarredAction.setImageDescriptor(AggregatorUIPlugin.getDefault()
 					.getImageRegistry().getDescriptor(key));
 			title.getToolBarManager().update(true);
-		} else if (item instanceof Subscription) {
-			showDescription((Subscription) item);
 		}
 	}
 
@@ -355,13 +355,6 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		} catch (CoreException e) {
 			StatusManager.getManager().handle(e.getStatus());
 		}
-	}
-
-	private void showDescription(Subscription feed) {
-		if (feed == null)
-			return;
-		browser.setText(FeedDescriptionFormatter.format(feed, "verdana", 8)); //$NON-NLS-1$
-		title.setTitle(feed.getTitle(), null);
 	}
 
 	final IExtensionRegistry ereg = Platform.getExtensionRegistry();

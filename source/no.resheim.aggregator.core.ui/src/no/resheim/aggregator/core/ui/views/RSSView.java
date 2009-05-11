@@ -122,8 +122,8 @@ public class RSSView extends ViewPart implements IFeedView,
 						.getSelection();
 				if (selection.getFirstElement() instanceof Article) {
 					Article item = (Article) selection.getFirstElement();
-					fLastArticleInfo = item.getDetails();
-					setStatusText(item.getDetails());
+					fLastArticleInfo = item.getStatusString();
+					setStatusText(item.getStatusString());
 					preview.show(item);
 					if (pPreviewIsRead && !item.isRead()) {
 						fLastSelectionItem = item;
