@@ -62,6 +62,8 @@ import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
@@ -177,7 +179,7 @@ public class RSSView extends ViewPart implements IFeedView,
 
 	private Action doubleClickAction;
 
-	boolean fHorizontalLayout;
+	boolean fHorizontalLayout = false;
 
 	/** The item that was last selected by the user */
 	private Article fLastSelectionItem;
@@ -267,27 +269,14 @@ public class RSSView extends ViewPart implements IFeedView,
 				SWT.CURSOR_WAIT);
 		sashForm = new SashForm(parent, SWT.SMOOTH);
 		fViewSelectionListener = new ViewSelectionListener();
-		// If split browsing is enabled.
+		treeView = new FeedTreeViewer(sashForm, SWT.MULTI | SWT.H_SCROLL
+				| SWT.V_SCROLL);
+		// If split browsing is enabled we'll only show folders in this tree
+		// view
 		if (fSplitBrowsing) {
-			SashForm browserPanel = new SashForm(sashForm, SWT.NONE);
-			treeView = new FeedTreeViewer(browserPanel, SWT.MULTI
-					| SWT.H_SCROLL | SWT.V_SCROLL);
 			treeView.setContentProvider(new FeedViewerContentProvider(EnumSet
 					.of(ItemType.FOLDER)));
-			// Create a tree viewer for the articles
-			articleTreeViewer = new TreeViewer(browserPanel, SWT.MULTI
-					| SWT.H_SCROLL | SWT.V_SCROLL | SWT.VIRTUAL);
-			articleTreeViewer.setUseHashlookup(true);
-			articleTreeViewer.setComparer(new AggregatorItemComparer());
-			articleTreeViewer.setContentProvider(new FeedViewerContentProvider(
-					EnumSet.of(ItemType.ARTICLE)));
-			articleTreeViewer
-					.setLabelProvider(new CollectionViewerLabelProvider());
-			articleTreeViewer
-					.addSelectionChangedListener(fViewSelectionListener);
 		} else {
-			treeView = new FeedTreeViewer(sashForm, SWT.MULTI | SWT.H_SCROLL
-					| SWT.V_SCROLL);
 			treeView.setContentProvider(new FeedViewerContentProvider(EnumSet
 					.allOf(ItemType.class)));
 		}
@@ -298,8 +287,34 @@ public class RSSView extends ViewPart implements IFeedView,
 		ColumnViewerToolTipSupport.enableFor(treeView);
 
 		getSite().setSelectionProvider(treeView);
+		if (fSplitBrowsing) {
+			SashForm browserPanel = new SashForm(sashForm, SWT.SMOOTH);
+			browserPanel.setOrientation(SWT.VERTICAL);
+			// Create a tree viewer for the articles
 
-		preview = new ArticleViewer(sashForm, SWT.NONE);
+			articleTreeViewer = new TreeViewer(browserPanel, SWT.MULTI
+					| SWT.H_SCROLL | SWT.V_SCROLL | SWT.VIRTUAL);
+			Tree tree = articleTreeViewer.getTree();
+			tree.setHeaderVisible(true);
+			TreeColumn c1 = new TreeColumn(tree, SWT.LEFT);
+			c1.setText("Title");
+			c1.setWidth(200);
+			TreeColumn c2 = new TreeColumn(tree, SWT.LEFT);
+			c2.setText("Date");
+			c2.setWidth(200);
+			articleTreeViewer.setUseHashlookup(true);
+			articleTreeViewer.setComparer(new AggregatorItemComparer());
+			articleTreeViewer.setContentProvider(new FeedViewerContentProvider(
+					EnumSet.of(ItemType.ARTICLE)));
+			articleTreeViewer
+					.setLabelProvider(new CollectionViewerLabelProvider());
+			articleTreeViewer
+					.addSelectionChangedListener(fViewSelectionListener);
+			preview = new ArticleViewer(browserPanel, SWT.NONE);
+
+		} else {
+			preview = new ArticleViewer(sashForm, SWT.NONE);
+		}
 		preview.addListener(new ArticleViewerListener());
 		sashForm.setWeights(new int[] { 1, 1 });
 
@@ -382,7 +397,7 @@ public class RSSView extends ViewPart implements IFeedView,
 		super.init(site, memento);
 		// It's possible that no saved state exists yet
 		if (memento == null) {
-			fHorizontalLayout = false;
+			fHorizontalLayout = true;
 			return;
 		}
 		final String name = this.getClass().getName();
@@ -392,7 +407,7 @@ public class RSSView extends ViewPart implements IFeedView,
 						+ MEMENTO_ORIENTATION));
 			}
 		} else {
-			fHorizontalLayout = false;
+			fHorizontalLayout = true;
 		}
 	}
 

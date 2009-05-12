@@ -12,13 +12,15 @@
 package no.resheim.aggregator.core.ui;
 
 import java.io.ByteArrayInputStream;
+import java.text.DateFormat;
+import java.util.Calendar;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.BrokenItem;
-import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.AggregatorItem.Flag;
 
 import org.eclipse.core.runtime.CoreException;
@@ -35,6 +37,7 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -51,7 +54,8 @@ import org.eclipse.swt.widgets.Display;
  * @since 1.0
  */
 public class CollectionViewerLabelProvider extends ColumnLabelProvider
-		implements ILabelProvider, IColorProvider, IPropertyChangeListener {
+		implements ILabelProvider, IColorProvider, IPropertyChangeListener,
+		ITableLabelProvider {
 	private static ImageRegistry registry = AggregatorUIPlugin.getDefault()
 			.getImageRegistry();
 
@@ -420,4 +424,24 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 
 	}
 
+	public Image getColumnImage(Object element, int columnIndex) {
+		return null;
+	}
+
+	final Calendar calendar = Calendar.getInstance();
+	final DateFormat dateFormat = DateFormat.getDateTimeInstance();
+
+	public String getColumnText(Object element, int columnIndex) {
+		switch (columnIndex) {
+		case 0:
+			return getText(element);
+		case 1:
+			long date = ((Article) element).getPublicationDate();
+			calendar.setTimeInMillis(date);
+			return dateFormat.format(calendar.getTime());
+		default:
+			break;
+		}
+		return null;
+	}
 }
