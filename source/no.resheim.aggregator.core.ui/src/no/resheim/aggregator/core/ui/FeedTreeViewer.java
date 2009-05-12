@@ -16,13 +16,11 @@ import java.util.EnumSet;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
-import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 
-import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -49,30 +47,6 @@ import org.eclipse.swt.widgets.Widget;
  * @since 1.0
  */
 public class FeedTreeViewer extends TreeViewer {
-	/**
-	 * The purpose of using this type is to handle situations where for instance
-	 * the selection is set using an {@link Article} that has been created by a
-	 * feed update. That will not be the same instance as presented in the
-	 * viewer as these are normally created from the database.
-	 */
-	class Comparer implements IElementComparer {
-
-		public boolean equals(Object a, Object b) {
-			if (a instanceof AggregatorItem && b instanceof AggregatorItem) {
-				return (((AggregatorItem) a).getUUID()
-						.equals(((AggregatorItem) b).getUUID()));
-			}
-			return false;
-		}
-
-		public int hashCode(Object element) {
-			if (element instanceof AggregatorItem) {
-				return ((AggregatorItem) element).getUUID().hashCode();
-			}
-			return element.hashCode();
-		}
-	}
-
 	/**
 	 * Expands all ancestors of the given element or tree path so that the given
 	 * element becomes visible in this viewer's tree control, and then expands
@@ -104,7 +78,7 @@ public class FeedTreeViewer extends TreeViewer {
 	 */
 	public FeedTreeViewer(Composite parent, int style) {
 		super(parent, style | SWT.VIRTUAL);
-		setComparer(new Comparer());
+		setComparer(new AggregatorItemComparer());
 		setUseHashlookup(true);
 		initDND();
 	}

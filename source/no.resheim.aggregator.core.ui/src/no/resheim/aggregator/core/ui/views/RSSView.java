@@ -25,6 +25,7 @@ import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.IAggregatorEventListener;
 import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
+import no.resheim.aggregator.core.ui.AggregatorItemComparer;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.ArticleViewer;
 import no.resheim.aggregator.core.ui.CollectionViewerLabelProvider;
@@ -57,6 +58,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.TitleEvent;
 import org.eclipse.swt.browser.TitleListener;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
@@ -132,12 +134,15 @@ public class RSSView extends ViewPart implements IFeedView,
 				}
 				if (fSplitBrowsing
 						&& selection.getFirstElement() instanceof Folder) {
+					getSite().getShell().setCursor(fWaitCursor);
 					articleTreeViewer.setInput(selection.getFirstElement());
-					// preview.show((Feed) selection.getFirstElement());
+					getSite().getShell().setCursor(null);
 				}
 			}
 		}
 	}
+
+	private Cursor fWaitCursor;
 
 	class ArticleViewerListener implements IArticleViewerListener {
 
@@ -236,6 +241,10 @@ public class RSSView extends ViewPart implements IFeedView,
 	public void dispose() {
 		treeView.removeSelectionChangedListener(fViewSelectionListener);
 		AggregatorPlugin.getDefault().removeFeedCollectionListener(this);
+		if (fWaitCursor != null) {
+			fWaitCursor.dispose();
+			fWaitCursor = null;
+		}
 	}
 
 	private String fLastArticleInfo;
@@ -245,7 +254,7 @@ public class RSSView extends ViewPart implements IFeedView,
 	 * Whether or not to split the navigation pane into two parts. Either we
 	 * have a combined folders and articles view or these are shown separately.
 	 */
-	private boolean fSplitBrowsing = false;
+	private boolean fSplitBrowsing = true;
 
 	/**
 	 * This is a callback that will allow us to create the viewer and initialise
@@ -254,9 +263,11 @@ public class RSSView extends ViewPart implements IFeedView,
 	public void createPartControl(Composite parent) {
 
 		updateFromPreferences();
-
+		fWaitCursor = new Cursor(getSite().getShell().getDisplay(),
+				SWT.CURSOR_WAIT);
 		sashForm = new SashForm(parent, SWT.SMOOTH);
 		fViewSelectionListener = new ViewSelectionListener();
+		// If split browsing is enabled.
 		if (fSplitBrowsing) {
 			SashForm browserPanel = new SashForm(sashForm, SWT.NONE);
 			treeView = new FeedTreeViewer(browserPanel, SWT.MULTI
@@ -266,6 +277,8 @@ public class RSSView extends ViewPart implements IFeedView,
 			// Create a tree viewer for the articles
 			articleTreeViewer = new TreeViewer(browserPanel, SWT.MULTI
 					| SWT.H_SCROLL | SWT.V_SCROLL | SWT.VIRTUAL);
+			articleTreeViewer.setUseHashlookup(true);
+			articleTreeViewer.setComparer(new AggregatorItemComparer());
 			articleTreeViewer.setContentProvider(new FeedViewerContentProvider(
 					EnumSet.of(ItemType.ARTICLE)));
 			articleTreeViewer
