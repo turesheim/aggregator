@@ -425,6 +425,9 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 	}
 
 	public Image getColumnImage(Object element, int columnIndex) {
+		if (columnIndex == 0) {
+			return getImage(element);
+		}
 		return null;
 	}
 
