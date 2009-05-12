@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.4"?>
 
-<product name="Resheim Aggregator" id="no.resheim.aggregator.rcp.product" application="no.resheim.aggregator.rcp.application" version="1.0.0" useFeatures="false">
+<product name="Muninn" id="no.resheim.aggregator.rcp.product" application="no.resheim.aggregator.rcp.application" version="1.0.0" useFeatures="false">
 
    <configIni use="default">
    </configIni>
@@ -12,8 +12,6 @@
 
    <windowImages i16="icons/aggregator_window_16.png" i32="icons/aggregator_window_32.png" i48="icons/aggregator_window_48.png" i64="icons/aggregator_window_64.png" i128="icons/aggregator_window_128.png"/>
 
-   <splash
-      handlerType="extensible" />
    <launcher name="muninn">
       <solaris/>
       <win useIco="false">

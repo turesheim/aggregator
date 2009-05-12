@@ -33,7 +33,7 @@
          </property>
          <property
                name="appName"
-               value="Resheim Aggregator">
+               value="Muninn">
          </property>
       </product>
    </extension>
@@ -110,9 +110,5 @@
             class="no.resheim.aggregator.rcp.splashHandlers.ExtensibleSplashHandler"
             id="no.resheim.aggregator.rcp.splashHandlers.extensible">
       </splashHandler>
-      <splashHandlerProductBinding
-            productId="no.resheim.aggregator.rcp.product"
-            splashId="no.resheim.aggregator.rcp.splashHandlers.extensible">
-      </splashHandlerProductBinding>
    </extension>
 </plugin>
