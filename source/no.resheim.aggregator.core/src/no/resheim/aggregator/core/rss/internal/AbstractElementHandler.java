@@ -11,15 +11,14 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.rss.internal;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.Subscription;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -42,9 +41,6 @@ import org.xml.sax.SAXException;
  */
 public abstract class AbstractElementHandler implements IElementHandler {
 
-	static final SimpleDateFormat dc_date = new SimpleDateFormat(
-			"yyyy-MM-dd'T'hh:mm:ss'Z'"); //$NON-NLS-1$	
-
 	// Dublin Core Elements
 	// http://homepage.univie.ac.at/horst.prillinger/blog/archives/2005/01/000922.
 	// html
@@ -52,8 +48,7 @@ public abstract class AbstractElementHandler implements IElementHandler {
 	static final String DC_DATE = "dc:date"; //$NON-NLS-1$
 	private static final String DC_CREATOR = "dc:creator"; //$NON-NLS-1$
 
-	static String[] date_formats = {
-			"yyyy-MM-dd'T'kk:mm:ssZ", // ISO //$NON-NLS-1$
+	static String[] date_formats = { "yyyy-MM-dd'T'kk:mm:ssZ", // ISO //$NON-NLS-1$
 			"yyyy-MM-dd'T'kk:mm:ss'Z'", // ISO //$NON-NLS-1$
 			"yyyy-MM-dd'T'kk:mm:ssz", // ISO //$NON-NLS-1$
 			"yyyy-MM-dd'T'kk:mm:ss", // ISO //$NON-NLS-1$
@@ -165,11 +160,7 @@ public abstract class AbstractElementHandler implements IElementHandler {
 			setCapture(false);
 		}
 		if (qName.equals(DC_DATE)) {
-			try {
-				item.setPublicationDate(dc_date.parse(getBuffer().toString())
-						.getTime());
-			} catch (ParseException e) {
-			}
+			item.setPublicationDate(parse(getBuffer().toString()).getTime());
 			setCapture(false);
 		}
 	}

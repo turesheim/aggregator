@@ -25,20 +25,6 @@ import org.eclipse.core.runtime.CoreException;
  */
 public abstract class AggregatorItem {
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * The type of aggregator item. This enumeration is normally used when
-	 * wanting to define a set of item types to handle. In some situations only
-	 * folders are wanted, in others all types are wanted.
-	 */
-	public enum ItemType {
-		FOLDER, ARTICLE
-	};
-
-	/**
 	 * Flags are for internal use
 	 */
 	public enum Flag {
@@ -51,12 +37,29 @@ public abstract class AggregatorItem {
 	}
 
 	/**
+	 * The type of aggregator item. This enumeration is normally used when
+	 * wanting to define a set of item types to handle. In some situations only
+	 * folders are wanted, in others all types are wanted.
+	 */
+	public enum ItemType {
+		ARTICLE, FOLDER
+	};
+
+	/**
 	 * "Marks" can be used by the user to mark the aggregator item in question.
 	 * <code>Flags</code> are used to for system marking.
 	 */
 	public enum Mark {
 		FIRST_PRIORITY, IMPORTANT, NONE, SECOND_PRIORITY, THIRD_PRIORITY, TODO
 	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/** The collection this item belongs to */
+	private FeedCollection collection;
 
 	private EnumSet<Flag> fFlags = EnumSet.noneOf(Flag.class);
 
@@ -103,11 +106,15 @@ public abstract class AggregatorItem {
 	 * @throws CoreException
 	 */
 	public FeedCollection getCollection() throws CoreException {
-		AggregatorItem p = this;
-		while (!(p instanceof FeedCollection)) {
-			p = p.getParent();
+		if (collection == null) {
+			AggregatorItem p = this;
+			while (!(p instanceof FeedCollection)) {
+				p = p.getParent();
+			}
+			collection = (FeedCollection) p;
 		}
-		return (FeedCollection) p;
+		return collection;
+
 	}
 
 	/**

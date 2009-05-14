@@ -11,13 +11,12 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.rss.internal;
 
-import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.MediaContent;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.MediaContent.Medium;
 
 import org.xml.sax.Attributes;
@@ -56,9 +55,6 @@ public class RSS20ItemHandler extends AbstractItemHandler {
 
 	/** WordPress full content element */
 	public static final String CONTENT_ENCODED = "content:encoded"; //$NON-NLS-1$
-
-	static final SimpleDateFormat date = new SimpleDateFormat(
-			"EEE, d MMM yyyy HH:mm:ss Z"); //$NON-NLS-1$
 
 	public RSS20ItemHandler(FeedCollection registry, Subscription feed) {
 		this.collection = registry;
@@ -101,6 +97,7 @@ public class RSS20ItemHandler extends AbstractItemHandler {
 			item.setPublicationDate(parse(getBuffer().toString()).getTime());
 			setCapture(false);
 		}
+
 		if (qName.equals(ITEM)) {
 			// We don't have a GUID so we need to fake it if possible. If not
 			// we'll bail out as this feed is useless
@@ -117,6 +114,7 @@ public class RSS20ItemHandler extends AbstractItemHandler {
 		}
 	}
 
+	// 2009-05-13T16:58:37+02:00
 	public IElementHandler startElement(String qName, Attributes atts)
 			throws SAXException {
 		super.startElement(qName, atts);

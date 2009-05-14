@@ -438,8 +438,7 @@ public class AggregatorPlugin extends Plugin {
 			e1.printStackTrace();
 		}
 		// The bundle may not be active yet and hence the service we're
-		// looking
-		// for is unavailable. We must wait until everything is ready.
+		// looking for is unavailable. We must wait until everything is ready.
 		while (bundle.getState() != Bundle.ACTIVE) {
 			try {
 				Thread.sleep(1000);

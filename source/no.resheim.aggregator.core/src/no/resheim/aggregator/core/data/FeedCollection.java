@@ -441,9 +441,10 @@ public class FeedCollection extends AggregatorItemParent {
 				// Shift affected siblings
 				shiftUp(item);
 				// Switch parent item
-				item.getParent().internalRemove(item);
+				// XXX:
+				// item.getParent().internalRemove(item);
 				item.parent = newParent;
-				item.getParent().internalAdd(item);
+				// item.getParent().internalAdd(item);
 				// Change the order
 				item.setOrdering(newOrder);
 				// Update the database
@@ -502,9 +503,10 @@ public class FeedCollection extends AggregatorItemParent {
 				}
 				// Switch parent on the moved items
 				for (AggregatorItem item : items) {
-					oldParent.internalRemove(item);
+					// XXX:
+					// oldParent.internalRemove(item);
 					item.parent = newParent;
-					item.getParent().internalAdd(item);
+					// item.getParent().internalAdd(item);
 					// Change the order
 					item.setOrdering(newParent.getChildCount(EnumSet
 							.allOf(ItemType.class)));

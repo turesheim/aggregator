@@ -24,6 +24,7 @@ import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IBasicPropertyConstants;
 import org.eclipse.jface.viewers.ILazyTreeContentProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
@@ -66,6 +67,9 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 		if (v instanceof TreeViewer) {
 			fViewer = (TreeViewer) v;
 		}
+		// Clear the selection so it does not attempt to select the same item
+		// number in the new selection.
+		fViewer.setSelection(new StructuredSelection());
 		if (newInput instanceof Folder) {
 			try {
 				FeedCollection fc = ((Folder) newInput).getCollection();

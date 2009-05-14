@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.locks.ReentrantLock;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
@@ -21,22 +20,6 @@ import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
  */
 public abstract class AggregatorItemParent extends AggregatorItem {
 
-	/**
-	 * Note that because of the cache we're guaranteed that the same instance is
-	 * retrieved when an item is requested. Thus we won't get into trouble
-	 * because a viewer does not have the same instance as the action that
-	 * manipulated the item.
-	 * 
-	 * @uml.property name="children"
-	 */
-	private ArrayList<AggregatorItem> children;
-
-	/**
-	 * Lock to prevent that the cache is being read/modified by different
-	 * threads at the same time.
-	 */
-	private final ReentrantLock cacheLock = new ReentrantLock();
-
 	/** The number of milliseconds in a day */
 	private static final long DAY = 86400000;
 
@@ -51,39 +34,6 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 */
 	protected AggregatorItemParent(AggregatorItemParent parent, UUID uuid) {
 		super(parent, uuid);
-		children = new ArrayList<AggregatorItem>();
-	}
-
-	/**
-	 * Removes the child item from the internal list, but does not update the
-	 * database. Should only be used when moving from one parent to another.
-	 * 
-	 * @param item
-	 *            the item to remove
-	 */
-	void internalRemove(AggregatorItem item) {
-		cacheLock.lock();
-		try {
-			children.remove(item);
-		} finally {
-			cacheLock.unlock();
-		}
-	}
-
-	/**
-	 * Adds the item to the internal list, but does not update the database.
-	 * Should only be used when moving from one parent to another.
-	 * 
-	 * @param item
-	 *            the item to add
-	 */
-	void internalAdd(AggregatorItem item) {
-		cacheLock.lock();
-		try {
-			children.add(item);
-		} finally {
-			cacheLock.unlock();
-		}
 	}
 
 	/**
@@ -95,7 +45,6 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 * @throws CoreException
 	 */
 	public void add(AggregatorItem item) throws CoreException {
-		internalAdd(item);
 		getCollection().addNew(new AggregatorItem[] { item });
 	}
 
@@ -108,28 +57,16 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 */
 	public AggregatorItem getChildAt(int index) throws CoreException {
 		// Check the cache first
-		cacheLock.lock();
-		try {
-			for (AggregatorItem child : children) {
-				if (child.getOrdering() == index)
-					return child;
-			}
-		} finally {
-			cacheLock.unlock();
-		}
+		/*
+		 * cacheLock.lock(); try { for (AggregatorItem child : children) { if
+		 * (child.getOrdering() == index) return child; } } finally {
+		 * cacheLock.unlock(); }
+		 */
 		// If nothing is found we must check the storage
 		IAggregatorStorage storage = getCollection().getStorage();
 		try {
 			storage.readLock().lock();
 			AggregatorItem child = storage.getChildAt(this, index);
-			if (child != null) {
-				cacheLock.lock();
-				try {
-					children.add(child);
-				} finally {
-					cacheLock.unlock();
-				}
-			}
 			return child;
 		} finally {
 			storage.readLock().unlock();
@@ -143,6 +80,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 * 
 	 * @param site
 	 * @throws CoreException
+	 * @deprecated
 	 */
 	public void cleanUp(Subscription site) throws CoreException {
 		Archiving archiving = site.getArchiving();
@@ -159,21 +97,23 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		// TODO: Optimise
 		case KEEP_NEWEST:
 			long lim = System.currentTimeMillis() - ((long) days * DAY);
-			for (AggregatorItem item : getChildren(EnumSet.of(ItemType.ARTICLE))) {
-				doTrash = false;
-				Article article = (Article) item;
-				if (site.keepUnread()) {
-					if (((Article) item).isRead()) {
-						doTrash = considerDate(lim, article);
-					}
-				} else {
-					doTrash = considerDate(lim, article);
-				}
-				if (doTrash) {
-					trashed.add((Article) item);
-					item.setFlag(Flag.TRASHED);
-				}
-			}
+			// FIXME: Move cleaning to database
+			// for (AggregatorItem item :
+			// getChildren(EnumSet.of(ItemType.ARTICLE))) {
+			// doTrash = false;
+			// Article article = (Article) item;
+			// if (site.keepUnread()) {
+			// if (((Article) item).isRead()) {
+			// doTrash = considerDate(lim, article);
+			// }
+			// } else {
+			// doTrash = considerDate(lim, article);
+			// }
+			// if (doTrash) {
+			// trashed.add((Article) item);
+			// item.setFlag(Flag.TRASHED);
+			// }
+			// }
 			break;
 		// Remove the oldest items so that only a specified number of items is
 		// kept. Does not consider the read state.
@@ -304,13 +244,6 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 */
 	public IStatus deleteChild(AggregatorItem item, boolean shift)
 			throws CoreException {
-		// Remove the item from the cache (if it's there).
-		cacheLock.lock();
-		try {
-			children.remove(item);
-		} finally {
-			cacheLock.unlock();
-		}
 		IAggregatorStorage storage = getCollection().getStorage();
 		try {
 			storage.writeLock().lock();

@@ -76,6 +76,8 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	public DerbySQLStorage(FeedCollection registry, IPath path) {
 		super(registry, path);
+		fArticleResults = new HashMap<AggregatorItemParent, ResultSet>();
+		fArticleStatements = new HashMap<AggregatorItemParent, PreparedStatement>();
 	}
 
 	/*
@@ -776,20 +778,39 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		}
 	}
 
+	/** Article selection result sets */
+	private HashMap<AggregatorItemParent, ResultSet> fArticleResults;
+
+	/** Article selection statements */
+	private HashMap<AggregatorItemParent, PreparedStatement> fArticleStatements;
+
 	private AggregatorItem selectArticle(AggregatorItemParent parent, int index)
 			throws SQLException {
-		Statement s = connection.createStatement();
 		Article article = null;
-		ResultSet rs = s
-				.executeQuery("select * from articles where parent_uuid='" //$NON-NLS-1$
-						+ ((AggregatorItem) parent).getUUID().toString()
-						+ "' and ordering=" + index); //$NON-NLS-1$
+		ResultSet rs = fArticleResults.get(parent);
+		PreparedStatement st = fArticleStatements.get(parent);
+		if (st == null) {
+			st = connection
+					.prepareStatement(
+							"SELECT * FROM articles WHERE parent_uuid='" //$NON-NLS-1$
+									+ ((AggregatorItem) parent).getUUID()
+											.toString()
+									+ "' ORDER BY publication_date DESC",
+							ResultSet.TYPE_SCROLL_SENSITIVE,
+							ResultSet.CONCUR_READ_ONLY);
+			fArticleStatements.put(parent, st);
+		}
+		if (rs == null) {
+			rs = st.executeQuery();
+			fArticleResults.put(parent, rs);
+		}
+		rs.absolute(index);
 		if (rs.next()) {
 			article = composeArticle(parent, rs);
 			article.setOrdering(index);
 		}
-		rs.close();
 		if (article != null) {
+			Statement s = connection.createStatement();
 			ResultSet rs2 = s
 					.executeQuery("select * from media_content where article_uuid='" //$NON-NLS-1$
 							+ article.getUUID().toString()
@@ -824,8 +845,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	}
 
 	public void setFilters(Filter[] filters) {
-		// TODO Auto-generated method stub
-
 	}
 
 	/*

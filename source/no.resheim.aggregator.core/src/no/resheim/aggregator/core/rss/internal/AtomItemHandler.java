@@ -11,7 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.rss.internal;
 
-import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.data.Article;
@@ -33,7 +32,7 @@ public class AtomItemHandler extends AbstractItemHandler {
 	// TODO: Properly handle links within content
 	private static final String ENTRY = "entry"; //$NON-NLS-1$
 
-	private static final String ISSUED = "issued"; //$NON-NLS-1$
+	private static final String PUBLISHED = "published"; //$NON-NLS-1$
 
 	private static final String ID = "id"; //$NON-NLS-1$
 
@@ -41,9 +40,6 @@ public class AtomItemHandler extends AbstractItemHandler {
 
 	/** WordPress full content element */
 	private static final String CONTENT = "content"; //$NON-NLS-1$
-
-	static final SimpleDateFormat date = new SimpleDateFormat(
-			"yyyy-MM-ddEEE, d MMM yyyy HH:mm:ss Z"); //$NON-NLS-1$
 
 	public AtomItemHandler(FeedCollection registry, Subscription feed) {
 		this.collection = registry;
@@ -68,7 +64,7 @@ public class AtomItemHandler extends AbstractItemHandler {
 			item.setGuid(getBuffer().toString());
 		}
 		// RFC822 date specification
-		if (qName.equals(ISSUED)) {
+		if (qName.equals(PUBLISHED)) {
 			item.setPublicationDate(parse(getBuffer().toString()).getTime());
 		}
 		if (qName.equals(ENTRY)) {
@@ -82,7 +78,7 @@ public class AtomItemHandler extends AbstractItemHandler {
 			throws SAXException {
 		super.startElement(qName, atts);
 		if (qName.equals(TITLE) || qName.equals(SUMMARY)
-				|| qName.equals(ISSUED) || qName.equals(ID)
+				|| qName.equals(PUBLISHED) || qName.equals(ID)
 				|| qName.equals(CONTENT) || qName.equals(UPDATED)) {
 			setCapture(true);
 		} else {

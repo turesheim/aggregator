@@ -12,6 +12,7 @@
 package no.resheim.aggregator.core.ui.views;
 
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
@@ -19,6 +20,7 @@ import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.IFeedCollectionEventListener;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
+import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
@@ -29,7 +31,6 @@ import no.resheim.aggregator.core.ui.AggregatorItemComparer;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.ArticleViewer;
 import no.resheim.aggregator.core.ui.CollectionViewerLabelProvider;
-import no.resheim.aggregator.core.ui.FeedTreeViewer;
 import no.resheim.aggregator.core.ui.FeedViewerContentProvider;
 import no.resheim.aggregator.core.ui.IArticleViewerListener;
 import no.resheim.aggregator.core.ui.IFeedView;
@@ -54,16 +55,27 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.TitleEvent;
 import org.eclipse.swt.browser.TitleListener;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.DragSourceListener;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
@@ -210,7 +222,7 @@ public class RSSView extends ViewPart implements IFeedView,
 	private SashForm sashForm;
 
 	/** Tree viewer to show all the feeds and articles */
-	private FeedTreeViewer treeView;
+	private TreeViewer treeView;
 
 	/**
 	 * The constructor.
@@ -269,8 +281,11 @@ public class RSSView extends ViewPart implements IFeedView,
 				SWT.CURSOR_WAIT);
 		sashForm = new SashForm(parent, SWT.SMOOTH);
 		fViewSelectionListener = new ViewSelectionListener();
-		treeView = new FeedTreeViewer(sashForm, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
+		treeView = new TreeViewer(sashForm, SWT.MULTI | SWT.H_SCROLL
+				| SWT.V_SCROLL | SWT.VIRTUAL);
+		treeView.setUseHashlookup(true);
+		treeView.setComparer(new AggregatorItemComparer());
+		initDND();
 		// If split browsing is enabled we'll only show folders in this tree
 		// view
 		if (fSplitBrowsing) {
@@ -522,4 +537,142 @@ public class RSSView extends ViewPart implements IFeedView,
 			break;
 		}
 	}
+
+	private void initDND() {
+		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
+		int operations = DND.DROP_MOVE;
+		final Tree tree = treeView.getTree();
+		final DragSource source = new DragSource(tree, operations);
+		source.setTransfer(types);
+		final TreeItem[] dragSourceItem = new TreeItem[1];
+		source.addDragListener(new DragSourceListener() {
+			public void dragStart(DragSourceEvent event) {
+				TreeItem[] selection = tree.getSelection();
+				event.doit = false;
+				if (selection.length > 0) {
+					event.doit = true;
+					dragSourceItem[0] = selection[0];
+				}
+			};
+
+			public void dragSetData(DragSourceEvent event) {
+				AggregatorItem item = (AggregatorItem) dragSourceItem[0]
+						.getData();
+				event.data = item.getUUID().toString();
+			}
+
+			public void dragFinished(DragSourceEvent event) {
+				if (event.detail == DND.DROP_MOVE) {
+					dragSourceItem[0].dispose();
+					dragSourceItem[0] = null;
+				}
+			}
+		});
+		DropTarget target = new DropTarget(tree, operations);
+		target.setTransfer(types);
+		target.addDropListener(new ViewerDropAdapter(treeView) {
+
+			@Override
+			protected Object determineTarget(DropTargetEvent event) {
+				fItem = (TreeItem) event.item;
+				return super.determineTarget(event);
+			}
+
+			private TreeItem fItem;
+
+			private int getItemIndex(TreeItem item) {
+				if (item.getParentItem() == null) {
+					return item.getParent().indexOf(item);
+				} else {
+					return item.getParentItem().indexOf(item);
+				}
+			}
+
+			private AggregatorItemParent getParent(TreeItem item) {
+				if (item.getParentItem() == null) {
+					return getFeedCollection();
+				} else {
+					return (AggregatorItemParent) item.getParentItem()
+							.getData();
+				}
+			}
+
+			@Override
+			public boolean performDrop(Object data) {
+				// The item being dragged...
+				AggregatorItem source = (AggregatorItem) ((IStructuredSelection) treeView
+						.getSelection()).getFirstElement();
+
+				Object input = treeView.getInput();
+
+				if (!(input instanceof FeedCollection)) {
+					return false;
+				}
+				AggregatorItemParent newParent = (AggregatorItemParent) getCurrentTarget();
+				AggregatorItemParent oldParent = getParent(dragSourceItem[0]);
+
+				// Don't allow to drop into itself!
+				if (newParent == source) {
+					return false;
+				}
+
+				int newOrder = 0;
+				int oldOrder = getItemIndex(dragSourceItem[0]);
+
+				int location = getCurrentLocation();
+
+				try {
+					if (location == LOCATION_BEFORE) {
+						// Before
+						newOrder = getItemIndex(fItem) - 1;
+						newParent = oldParent;
+					} else if (location == LOCATION_AFTER) {
+						// After
+						newOrder = getItemIndex(fItem);
+						newParent = oldParent;
+					} else {
+						newOrder = newParent.getChildCount(EnumSet
+								.allOf(ItemType.class));
+					}
+
+					if (newParent.equals(oldParent)) {
+						if (newOrder > oldOrder) {
+							System.out.println(MessageFormat.format(
+									"Moving {0} downwards to {1}", //$NON-NLS-1$
+									new Object[] { source, newOrder }));
+							getFeedCollection().move(source, oldParent,
+									oldOrder, newParent, newOrder);
+						} else {
+							System.out.println(MessageFormat.format(
+									"Moving {0} upwards to {1}", new Object[] { //$NON-NLS-1$
+									source, newOrder + 1 }));
+							getFeedCollection().move(source, oldParent,
+									oldOrder, newParent, newOrder + 1);
+						}
+					} else {
+						System.out.println(MessageFormat.format(
+								"Dropping {0} into {1} at {2}", new Object[] { //$NON-NLS-1$
+								source, fItem, newOrder }));
+						getFeedCollection().move(source, oldParent, oldOrder,
+								newParent, newOrder);
+					}
+					// Tell our listeners that the deed is done
+					getFeedCollection().notifyListerners(
+							new Object[] { source }, EventType.MOVED);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return true;
+			}
+
+			@Override
+			public boolean validateDrop(Object target, int operation,
+					TransferData transferType) {
+
+				return target instanceof Folder;
+			}
+		});
+	}
+
 }

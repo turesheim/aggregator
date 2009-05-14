@@ -55,11 +55,6 @@ public class DirectSynchronizer extends AbstractSynchronizer {
 			if (!subscription.getURL().startsWith("test://")) { //$NON-NLS-1$
 				ms.add(download());
 			}
-			if (ms.isOK()) {
-				setName(MessageFormat.format(Messages.FeedUpdateJob_CleaningUp,
-						new Object[] { subscription.getTitle() }));
-				cleanUp();
-			}
 			synchronized (subscription) {
 				subscription.setUpdating(false);
 			}

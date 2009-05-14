@@ -173,7 +173,8 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	public abstract void rename(AggregatorItem item);
 
 	/**
-	 * Shuts down the storage.
+	 * Shuts down the storage. Implementors should use this opportunity to clean
+	 * up the database and remove items that are scheduled for deletion.
 	 * 
 	 * @return the status of the shut-down
 	 */

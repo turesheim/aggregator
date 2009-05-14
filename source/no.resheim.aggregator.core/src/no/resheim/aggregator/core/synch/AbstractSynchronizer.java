@@ -25,11 +25,9 @@ import javax.xml.parsers.SAXParserFactory;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.FeedCollection;
-import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.rss.internal.FeedParser;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -90,25 +88,6 @@ public abstract class AbstractSynchronizer extends Job {
 	}
 
 	/**
-	 * Uses the archiving rules of the site to remove articles from the feed.
-	 * Should only be called after a FeedUpdateJob has been executed.
-	 * 
-	 * @param site
-	 *            the site to clean up
-	 */
-	protected void cleanUp() {
-		try {
-			for (Folder folder : collection.getDescendingFolders()) {
-				if (folder.getUUID().equals(subscription.getLocation())) {
-					folder.cleanUp(subscription);
-				}
-			}
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Returns the URL to use when updating the feed. In cases where special
 	 * handling of the feed URL is required, this method should be
 	 * re-implemented in the subclass.
@@ -138,6 +117,9 @@ public abstract class AbstractSynchronizer extends Job {
 			URLConnection yc = AggregatorPlugin.getDefault().getConnection(
 					feedURL, subscription.isAnonymousAccess(),
 					subscription.getUUID().toString());
+			// XXX: We must hide the user agent or Google News will give us a
+			// 403 error
+			yc.setRequestProperty("User-agent", "");
 			FeedParser handler = new FeedParser(collection, subscription);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser parser = factory.newSAXParser();

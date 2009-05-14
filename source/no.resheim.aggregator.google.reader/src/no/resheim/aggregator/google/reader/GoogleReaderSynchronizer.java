@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -38,10 +39,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class GoogleReaderSynchronizer extends AbstractSynchronizer {
+	private static final String ENCODING = "UTF-8";
+	private static final String STATE_STARRED = "user/-/state/com.google/starred";
+	private static final String STATE_READ = "user/-/state/com.google/read";
 	private static final String FEED_URL_PREFIX = "http://www.google.com/reader/atom/feed/";
 
 	/**
@@ -103,15 +108,14 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 				// Upload changes
 				List<Article> changed = collection.getChangedArticles(
 						subscription, subscription.getLastUpdate());
-				setName("Uploading changes");
+				setName("Synchronizing changes");
+				SubProgressMonitor update = new SubProgressMonitor(monitor, 1);
+				update.beginTask("Synchronizing changes", changed.size());
 				for (Article article : changed) {
-					setStarredState(article);
+					update.setTaskName(article.getTitle());
+					synchronize(article);
+					update.worked(1);
 				}
-			}
-			if (ms.isOK()) {
-				setName(MessageFormat.format(Messages.FeedUpdateJob_CleaningUp,
-						new Object[] { subscription.getTitle() }));
-				cleanUp();
 			}
 			Collections.sort(subscription.getTempItems());
 			if (subscription.getTempItems().size() > 0) {
@@ -135,12 +139,30 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 		return ms;
 	}
 
+	private String encode(boolean state, String id)
+			throws UnsupportedEncodingException {
+		StringBuilder sb = new StringBuilder();
+		sb.append(URLEncoder.encode(state ? "a" : "r", ENCODING));
+		sb.append("=");
+		sb.append(URLEncoder.encode(id, ENCODING));
+		return sb.toString();
+	}
+
+	private String getStateString(Article article, String encoding)
+			throws UnsupportedEncodingException {
+		StringBuilder sb = new StringBuilder();
+		sb.append(encode(article.isStarred(), STATE_STARRED));
+		sb.append("&");
+		sb.append(encode(article.isRead(), STATE_READ));
+		return sb.toString();
+	}
+
 	/**
 	 * TODO: Change to become a generic method.
 	 * 
 	 * @param article
 	 */
-	private void setStarredState(Article article) throws CoreException {
+	private void synchronize(Article article) throws CoreException {
 		try {
 			// We need this or we'll get a 401
 			GoogleReaderPlugin.login();
@@ -149,18 +171,13 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 			URLConnection yc = AggregatorPlugin.getDefault().getConnection(url,
 					true, null);
 			yc.setDoOutput(true);
-			String data = URLEncoder.encode("i", "UTF-8") + "="
-					+ URLEncoder.encode(article.getGuid(), "UTF-8");
-			data += "&"
-					+ URLEncoder.encode(article.isStarred() ? "a" : "r",
-							"UTF-8")
-					+ "="
-					+ URLEncoder.encode("user/-/state/com.google/starred",
-							"UTF-8");
-			data += "&" + URLEncoder.encode("ac", "UTF-8") + "="
-					+ URLEncoder.encode("edit", "UTF-8");
-			data += "&" + URLEncoder.encode("T", "UTF-8") + "="
-					+ URLEncoder.encode(token, "UTF-8");
+			String data = URLEncoder.encode("i", ENCODING) + "="
+					+ URLEncoder.encode(article.getGuid(), ENCODING);
+			data += "&" + getStateString(article, ENCODING);
+			data += "&" + URLEncoder.encode("ac", ENCODING) + "="
+					+ URLEncoder.encode("edit", ENCODING);
+			data += "&" + URLEncoder.encode("T", ENCODING) + "="
+					+ URLEncoder.encode(token, ENCODING);
 			OutputStreamWriter wr = new OutputStreamWriter(yc.getOutputStream());
 			wr.write(data);
 			wr.flush();
@@ -168,7 +185,9 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 					.getInputStream()));
 			String line;
 			while ((line = rd.readLine()) != null) {
-				// TODO: Handle OK here
+				if (!line.equals("OK")) {
+					throw new IOException("Item update did not succeed.");
+				}
 			}
 			rd.close();
 		} catch (MalformedURLException e) {
