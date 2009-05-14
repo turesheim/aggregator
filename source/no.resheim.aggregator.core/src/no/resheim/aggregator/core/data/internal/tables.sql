@@ -139,14 +139,11 @@ CREATE TABLE filter_action (
 /* Selection*/
 CREATE INDEX folders_parent ON folders (parent_uuid,uuid);
 CREATE INDEX feeds_url ON subscriptions (url,uuid);
-CREATE INDEX articles_parent ON articles (parent_uuid,uuid);
-CREATE INDEX articles_guid ON articles (guid,uuid);
 /* Article list display per date */
 CREATE INDEX articles_date ON articles (parent_uuid, publication_date DESC);
 
 /* Virtual tree browsing */
 CREATE INDEX folders_tree ON folders (parent_uuid,ordering,uuid);
-CREATE INDEX articles_tree ON articles (parent_uuid,ordering,uuid);
 
 /* Finding read articles */
 CREATE INDEX articles_old ON articles (subscription_uuid,is_read);
