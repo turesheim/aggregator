@@ -1,7 +1,6 @@
 CREATE TABLE folders (
 		uuid CHAR(36) NOT NULL PRIMARY KEY,
 		parent_uuid CHAR(36),
-		ordering INTEGER NOT NULL,
 		subscription_uuid CHAR(36),
 		hidden INT NOT NULL,
         title VARCHAR(256) NOT NULL,
@@ -15,8 +14,6 @@ CREATE TABLE articles (
         uuid CHAR(36) NOT NULL PRIMARY KEY,
         /* Unique identifier of the parent node */
 		parent_uuid CHAR(36) NOT NULL,
-		/* Presentation order */
-		ordering INTEGER NOT NULL,
 		/** Unique identifier of the feed creating the item */
 		subscription_uuid CHAR(36) NOT NULL,
 		/* Globally unique identifier */
@@ -25,6 +22,7 @@ CREATE TABLE articles (
 		title VARCHAR(256) NOT NULL,
 		/* URL of the original publication */
 		url VARCHAR(256) NOT NULL,
+		/* The marking of the item */
 		marking VARCHAR(32) NOT NULL,		
 		flags VARCHAR(128) NOT NULL,
 		is_read INT NOT NULL,
@@ -33,6 +31,7 @@ CREATE TABLE articles (
 		read_date BIGINT NOT NULL,
 		/* Date when added to the collection */
 		added_date BIGINT NOT NULL,
+		/* The article content */
 		description CLOB,
 		creator VARCHAR(128),
 		media_player VARCHAR(128),
@@ -137,13 +136,11 @@ CREATE TABLE filter_action (
 	);
 
 /* Selection*/
-CREATE INDEX folders_parent ON folders (parent_uuid,uuid);
-CREATE INDEX feeds_url ON subscriptions (url,uuid);
+CREATE INDEX feeds_url ON subscriptions (url, uuid);
 /* Article list display per date */
-CREATE INDEX articles_date ON articles (parent_uuid, publication_date DESC);
-
-/* Virtual tree browsing */
-CREATE INDEX folders_tree ON folders (parent_uuid,ordering,uuid);
+CREATE INDEX articles_date ON articles (parent_uuid, publication_date DESC, uuid);
+/* Folder tree browsing */
+CREATE INDEX folders ON folders (parent_uuid, title);
 
 /* Finding read articles */
 CREATE INDEX articles_old ON articles (subscription_uuid,is_read);
