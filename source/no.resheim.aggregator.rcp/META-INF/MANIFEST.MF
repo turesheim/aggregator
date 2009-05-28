@@ -3,8 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Aggregator Application
 Bundle-SymbolicName: no.resheim.aggregator.rcp;singleton:=true
 Bundle-Version: 1.0.0
-Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.4.0,3.5.0)",
- org.eclipse.ui;bundle-version="[3.4.0,3.5.0)",
+Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.4.0,4.0.0)",
+ org.eclipse.ui;bundle-version="[3.4.0,4.0.0)",
  org.eclipse.ui.browser;bundle-version="[3.2.0,3.3.0)",
  no.resheim.aggregator.core;bundle-version="[1.0.0,1.1.0)",
  no.resheim.aggregator.core.ui;bundle-version="[1.0.0,1.1.0)"
