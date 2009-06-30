@@ -14,7 +14,7 @@ package no.resheim.aggregator.core.rss.internal;
 import java.text.MessageFormat;
 
 import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -40,7 +40,7 @@ public class RSSFeedHandler extends AbstractElementHandler {
 	private static final String ELEMENT_RDF = "rdf:RDF"; //$NON-NLS-1$
 	private static final String ATTR_VERSION = "version"; //$NON-NLS-1$
 
-	public RSSFeedHandler(FeedCollection registry, Subscription feed) {
+	public RSSFeedHandler(AggregatorCollection registry, Subscription feed) {
 		super();
 		this.collection = registry;
 		this.feed = feed;

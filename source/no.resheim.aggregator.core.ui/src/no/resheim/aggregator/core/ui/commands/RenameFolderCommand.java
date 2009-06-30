@@ -1,7 +1,7 @@
 package no.resheim.aggregator.core.ui.commands;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.ui.IFeedView;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -33,7 +33,7 @@ public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedCollection collection = ((IFeedView) part).getFeedCollection();
+			AggregatorCollection collection = ((IFeedView) part).getFeedCollection();
 			if (collection == null) {
 				return null;
 			}
@@ -48,7 +48,7 @@ public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 	}
 
 	protected void renameItem(final TreeItem item, final TreeViewer treeView,
-			final AggregatorItem aggregatorItem, final FeedCollection collection) {
+			final AggregatorItem aggregatorItem, final AggregatorCollection collection) {
 		TreeEditor treeEditor = new TreeEditor(treeView.getTree());
 		treeEditor.horizontalAlignment = SWT.LEFT;
 		treeEditor.grabHorizontal = true;
@@ -64,7 +64,7 @@ public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 			public void focusLost(FocusEvent event) {
 				item.setText(text.getText());
 				aggregatorItem.setTitle(text.getText());
-				collection.rename(aggregatorItem);
+				collection.writeBack(aggregatorItem);
 				text.dispose();
 			}
 		});
@@ -79,7 +79,7 @@ public class RenameFolderCommand extends AbstractAggregatorCommandHandler {
 					// Enter hit--set the text into the tree and drop through
 					item.setText(text.getText());
 					aggregatorItem.setTitle(text.getText());
-					collection.rename(aggregatorItem);
+					collection.writeBack(aggregatorItem);
 				case SWT.ESC:
 					// End editing session
 					text.dispose();

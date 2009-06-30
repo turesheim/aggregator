@@ -7,7 +7,7 @@ import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.test.TestUtils;
 
@@ -23,7 +23,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 	 * 
 	 * @return the feed collection
 	 */
-	protected abstract FeedCollection getCollection();
+	protected abstract AggregatorCollection getCollection();
 
 	protected void compareAggregatorItems(AggregatorItem item_a,
 			AggregatorItem item_b) {
@@ -59,7 +59,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 	 */
 	@Test
 	public final void testGetCollection() {
-		FeedCollection collection = getCollection();
+		AggregatorCollection collection = getCollection();
 		if (collection == null) {
 			fail("Persistent collection not declared or could not be retrieved"); //$NON-NLS-1$
 		}
@@ -95,7 +95,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 	 * @throws CoreException
 	 */
 	public final void testDeleteFolder() throws CoreException {
-		FeedCollection collection = getCollection();
+		AggregatorCollection collection = getCollection();
 		// Assume the folder was added in the method above
 		AggregatorItem item = collection.getChildAt(0);
 		if (item == null) {
@@ -129,7 +129,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 	}
 
 	public final void testAddArticle() throws CoreException {
-		FeedCollection collection = getCollection();
+		AggregatorCollection collection = getCollection();
 		// Create the feed
 		Subscription feed = TestUtils.createNewFeed("Feed title"); //$NON-NLS-1$
 		// This should also add a new folder automatically as we did not specify
@@ -164,7 +164,7 @@ public abstract class AbstractCollectionTest extends TestCase {
 	 * @throws CoreException
 	 */
 	public final void testAdd1000Articles() throws CoreException {
-		FeedCollection collection = getCollection();
+		AggregatorCollection collection = getCollection();
 		Subscription feed = TestUtils.createNewFeed("1000 articles"); //$NON-NLS-1$
 		Folder folder = collection.addNew(feed);
 		for (int a = 0; a < 1000; a++) {

@@ -260,7 +260,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 				// Make sure everyone knows about the change
 
 				try {
-					selectedArticle.getCollection().write(selectedArticle);
+					selectedArticle.getCollection().writeBack(selectedArticle);
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}

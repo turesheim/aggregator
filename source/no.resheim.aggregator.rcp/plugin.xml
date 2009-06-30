@@ -74,27 +74,6 @@
          <menu
                id="window"
                label="Window">
-            <menu
-                  label="Layout">
-               <command
-                     commandId="no.resheim.aggregator.core.ui.setLayoutCommand"
-                     label="Vertical"
-                     style="radio">
-                  <parameter
-                        name="no.resheim.aggregator.core.ui.layoutCommandParameter"
-                        value="vertical">
-                  </parameter>
-               </command>
-               <command
-                     commandId="no.resheim.aggregator.core.ui.setLayoutCommand"
-                     label="Horizontal"
-                     style="radio">
-                  <parameter
-                        name="no.resheim.aggregator.core.ui.layoutCommandParameter"
-                        value="horizontal">
-                  </parameter>
-               </command>
-            </menu>
             <command
                   commandId="org.eclipse.ui.window.preferences"
                   label="Preferences"

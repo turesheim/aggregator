@@ -13,7 +13,7 @@ import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.IAggregatorEventListener;
 import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
@@ -36,8 +36,8 @@ public class FeedParserTest extends TestCase {
 		super.tearDown();
 	}
 
-	protected FeedCollection getCollection() {
-		FeedCollection collection = AggregatorPlugin.getDefault()
+	protected AggregatorCollection getCollection() {
+		AggregatorCollection collection = AggregatorPlugin.getDefault()
 				.getFeedCollection(TestUtils.PERSISTENT_COLLECTION_ID);
 		if (collection == null) {
 			fail("Collection not declared or could not be retrieved"); //$NON-NLS-1$

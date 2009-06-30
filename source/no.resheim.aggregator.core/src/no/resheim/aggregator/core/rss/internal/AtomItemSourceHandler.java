@@ -14,7 +14,7 @@ package no.resheim.aggregator.core.rss.internal;
 import java.text.SimpleDateFormat;
 
 import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -33,7 +33,7 @@ public class AtomItemSourceHandler extends AbstractItemHandler {
 	static final SimpleDateFormat date = new SimpleDateFormat(
 			"yyyy-MM-ddEEE, d MMM yyyy HH:mm:ss Z"); //$NON-NLS-1$
 
-	public AtomItemSourceHandler(FeedCollection registry, Subscription feed) {
+	public AtomItemSourceHandler(AggregatorCollection registry, Subscription feed) {
 		this.collection = registry;
 		this.feed = feed;
 	}

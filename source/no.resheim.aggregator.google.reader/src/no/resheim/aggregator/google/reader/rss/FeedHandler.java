@@ -28,6 +28,7 @@ class FeedHandler implements IGoogleElementHandler {
 	private ArrayList<Subscription> feeds;
 	private StringBuffer buffer = new StringBuffer();
 	private boolean capture;
+	private boolean fIgnore;
 
 	private Capturing fCapturing;
 
@@ -61,6 +62,11 @@ class FeedHandler implements IGoogleElementHandler {
 	}
 
 	public void endElement(String qName) throws SAXException {
+
+		if (qName.equals("list")) {
+			fIgnore = false;
+		}
+
 		if (qName.equals("object")) {
 			fObjectLevel--;
 			if (fObjectLevel == 0) {
@@ -93,6 +99,14 @@ class FeedHandler implements IGoogleElementHandler {
 
 	public IGoogleElementHandler startElement(String qName, Attributes atts)
 			throws SAXException {
+
+		if (fIgnore) {
+			return this;
+		}
+		// Ignore this list!
+		if (qName.equals("list")) {
+			fIgnore = true;
+		}
 		if (qName.equals("string") && fObjectLevel == 1) {
 			String id = atts.getValue("name");
 			if (id != null) {
@@ -106,12 +120,6 @@ class FeedHandler implements IGoogleElementHandler {
 				}
 			}
 		}
-		// if (qName.equals("list")) {
-		// return new CategoriesHandler();
-		// }
-		// if (qName.equals("number")) {
-		// return new CategoriesHandler();
-		// }
 		return this;
 	}
 }

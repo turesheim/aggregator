@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.catalog.AbstractFeedCatalog;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.Subscription.Archiving;
 import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
@@ -44,7 +44,7 @@ public class DeclaredFeedsCatalog extends AbstractFeedCatalog {
 							.getAttribute("create")); //$NON-NLS-1$
 					// Will use the default collection if the collectionId is
 					// null.
-					FeedCollection collection = AggregatorPlugin.getDefault()
+					AggregatorCollection collection = AggregatorPlugin.getDefault()
 							.getFeedCollection(collectionId);
 					if (collection != null) {
 						Subscription feed = createNewFeed(collection, element);
@@ -61,7 +61,7 @@ public class DeclaredFeedsCatalog extends AbstractFeedCatalog {
 		return feeds.toArray(new Subscription[feeds.size()]);
 	}
 
-	private Subscription createNewFeed(FeedCollection parent,
+	private Subscription createNewFeed(AggregatorCollection parent,
 			IConfigurationElement element) {
 		Subscription feed = new Subscription(this);
 		// Initialise with default values from the preference store.

@@ -12,7 +12,7 @@
 package no.resheim.aggregator.core.ui.commands;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.FeedWorkingCopy;
 import no.resheim.aggregator.core.data.Subscription.Archiving;
 import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
@@ -50,7 +50,7 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
-		FeedCollection collection = getCollection(event);
+		AggregatorCollection collection = getCollection(event);
 		if (collection == null) {
 			return null;
 		}

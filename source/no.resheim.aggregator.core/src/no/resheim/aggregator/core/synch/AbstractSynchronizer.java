@@ -24,7 +24,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.rss.internal.FeedParser;
 
@@ -49,7 +49,7 @@ public abstract class AbstractSynchronizer extends Job {
 	protected Subscription subscription;
 
 	/** The collection of the subscription */
-	protected FeedCollection collection;
+	protected AggregatorCollection collection;
 
 	protected static final String EMPTY_STRING = "";
 
@@ -70,7 +70,7 @@ public abstract class AbstractSynchronizer extends Job {
 	 * @param collection
 	 *            the collection
 	 */
-	public void setCollection(FeedCollection collection) {
+	public void setCollection(AggregatorCollection collection) {
 		this.collection = collection;
 	}
 

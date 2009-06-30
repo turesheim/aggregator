@@ -59,18 +59,13 @@ public abstract class AggregatorItem {
 	private static final long serialVersionUID = 1L;
 
 	/** The collection this item belongs to */
-	private FeedCollection collection;
+	private AggregatorCollection collection;
 
 	private EnumSet<Flag> fFlags = EnumSet.noneOf(Flag.class);
 
 	private Mark fMark = Mark.NONE;
 
 	private boolean fSystem = false;
-
-	/**
-	 * @uml.property name="ordering"
-	 */
-	protected int ordering;
 
 	/**
 	 * @uml.property name="parent"
@@ -105,13 +100,13 @@ public abstract class AggregatorItem {
 	 * @return the collection of the item.
 	 * @throws CoreException
 	 */
-	public FeedCollection getCollection() throws CoreException {
+	public AggregatorCollection getCollection() throws CoreException {
 		if (collection == null) {
 			AggregatorItem p = this;
-			while (!(p instanceof FeedCollection)) {
+			while (!(p instanceof AggregatorCollection)) {
 				p = p.getParent();
 			}
-			collection = (FeedCollection) p;
+			collection = (AggregatorCollection) p;
 		}
 		return collection;
 
@@ -133,14 +128,6 @@ public abstract class AggregatorItem {
 	 */
 	public Mark getMark() {
 		return fMark;
-	}
-
-	/**
-	 * @return
-	 * @uml.property name="ordering"
-	 */
-	public int getOrdering() {
-		return ordering;
 	}
 
 	/**
@@ -186,16 +173,6 @@ public abstract class AggregatorItem {
 
 	public void setMark(Mark mark) {
 		this.fMark = mark;
-	}
-
-	/**
-	 * <b>Must only be called when inside a collection lock</b>
-	 * 
-	 * @param ordering
-	 * @uml.property name="ordering"
-	 */
-	public void setOrdering(int ordering) {
-		this.ordering = ordering;
 	}
 
 	public void setSystem(boolean hidden) {

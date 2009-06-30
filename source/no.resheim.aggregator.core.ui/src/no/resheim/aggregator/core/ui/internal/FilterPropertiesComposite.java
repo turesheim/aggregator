@@ -10,7 +10,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal;
 
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.filter.Criterion;
 import no.resheim.aggregator.core.filter.Filter;
 
@@ -153,7 +153,7 @@ public class FilterPropertiesComposite extends Composite {
 
 	}
 
-	private FeedCollection fCollection;
+	private AggregatorCollection fCollection;
 
 	/**
 	 * Create the composite
@@ -162,7 +162,7 @@ public class FilterPropertiesComposite extends Composite {
 	 * @param style
 	 */
 	public FilterPropertiesComposite(Composite parent, int style,
-			FeedCollection collection) {
+			AggregatorCollection collection) {
 		super(parent, style);
 		fCollection = collection;
 

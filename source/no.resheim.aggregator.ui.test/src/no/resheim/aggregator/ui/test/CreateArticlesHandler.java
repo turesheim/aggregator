@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.Subscription.Archiving;
 import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
@@ -50,7 +50,7 @@ public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			final FeedCollection collection = ((IFeedView) part)
+			final AggregatorCollection collection = ((IFeedView) part)
 					.getFeedCollection();
 			if (collection == null) {
 				return null;
@@ -83,7 +83,7 @@ public class CreateArticlesHandler extends AbstractAggregatorCommandHandler {
 		return null;
 	}
 
-	private Subscription createNewFeed(FeedCollection parent, String title) {
+	private Subscription createNewFeed(AggregatorCollection parent, String title) {
 		Subscription feed = new Subscription();
 		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.

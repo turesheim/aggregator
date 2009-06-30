@@ -138,11 +138,8 @@ CREATE TABLE filter_action (
 /* Selection*/
 CREATE INDEX feeds_url ON subscriptions (url, uuid);
 /* Article list display per date */
-CREATE INDEX articles_date ON articles (parent_uuid, publication_date DESC, uuid);
+CREATE UNIQUE INDEX articles ON articles (parent_uuid, publication_date DESC, uuid);
 /* Folder tree browsing */
 CREATE INDEX folders ON folders (parent_uuid, title);
-
-/* Finding read articles */
-CREATE INDEX articles_old ON articles (subscription_uuid,is_read);
 
 CREATE UNIQUE INDEX media_content ON media_content (ordering, article_uuid);

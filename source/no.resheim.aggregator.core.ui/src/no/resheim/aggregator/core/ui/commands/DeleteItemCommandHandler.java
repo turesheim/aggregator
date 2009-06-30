@@ -12,7 +12,7 @@
 package no.resheim.aggregator.core.ui.commands;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.AggregatorItem.Flag;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.ui.IFeedView;
@@ -54,7 +54,7 @@ public class DeleteItemCommandHandler extends AbstractAggregatorCommandHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			final FeedCollection collection = ((IFeedView) part)
+			final AggregatorCollection collection = ((IFeedView) part)
 					.getFeedCollection();
 			if (collection == null) {
 				return null;

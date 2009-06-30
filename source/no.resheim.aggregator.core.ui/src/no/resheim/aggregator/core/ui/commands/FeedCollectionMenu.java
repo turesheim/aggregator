@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 
 import org.eclipse.jface.action.IContributionItem;
@@ -48,7 +48,7 @@ public class FeedCollectionMenu extends
 	@Override
 	protected IContributionItem[] getContributionItems() {
 		ArrayList<IContributionItem> actions = new ArrayList<IContributionItem>();
-		Collection<FeedCollection> collections = AggregatorPlugin.getDefault()
+		Collection<AggregatorCollection> collections = AggregatorPlugin.getDefault()
 				.getCollections();
 		// No need to show the menu if we just have one item. It's always
 		// selected per default.
@@ -58,7 +58,7 @@ public class FeedCollectionMenu extends
 		IServiceLocator locator = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow();
 		// TODO: Fix this deprecation issue when no longer supporting 3.3
-		for (FeedCollection feedRegistry : collections) {
+		for (AggregatorCollection feedRegistry : collections) {
 			if (feedRegistry.isPublic()) {
 				Map parms = new HashMap();
 				parms.put(FeedCollectionSelectionHandler.PARM_COLLECTION,

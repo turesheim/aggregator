@@ -12,7 +12,7 @@
 package no.resheim.aggregator.core.ui.commands;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.ui.IFeedView;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -40,7 +40,7 @@ public class SetReadCommandHandler extends AbstractAggregatorCommandHandler
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedCollection registry = ((IFeedView) part).getFeedCollection();
+			AggregatorCollection registry = ((IFeedView) part).getFeedCollection();
 			if (registry == null) {
 				return null;
 			}

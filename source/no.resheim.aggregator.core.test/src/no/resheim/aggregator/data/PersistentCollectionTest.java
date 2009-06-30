@@ -5,7 +5,7 @@ package no.resheim.aggregator.data;
 
 
 import no.resheim.aggregator.core.AggregatorPlugin;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.test.TestUtils;
 
 import org.junit.After;
@@ -31,7 +31,7 @@ public class PersistentCollectionTest extends AbstractCollectionTest {
 	}
 
 	@Override
-	protected FeedCollection getCollection() {
+	protected AggregatorCollection getCollection() {
 		return AggregatorPlugin.getDefault().getFeedCollection(TestUtils.PERSISTENT_COLLECTION_ID);
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2008-2009 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -56,15 +56,16 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	/**
 	 * Deletes the feed from the storage.
 	 * 
-	 * @param feed
-	 *            the feed to delete
+	 * @param subscription
+	 *            the subscription to delete
 	 */
 	public abstract void delete(Subscription subscription);
 
 	/**
 	 * Adds a new subscription to the storage.
 	 * 
-	 * @param feed
+	 * @param subscription
+	 *            the subscription to add.
 	 */
 	public abstract void add(Subscription subscription);
 
@@ -118,7 +119,7 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @return the child item or <code>null</code>
 	 */
 	public abstract AggregatorItem getChildAt(AggregatorItemParent parent,
-			int index);
+			EnumSet<ItemType> types, int index);
 
 	/**
 	 * Returns the number of unread articles the given parent item has.
@@ -164,15 +165,6 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	public abstract void moved(AggregatorItem item);
 
 	/**
-	 * Renames the given item.
-	 * 
-	 * @param item
-	 *            the item to rename
-	 */
-	// TODO: Replace with a more generic method
-	public abstract void rename(AggregatorItem item);
-
-	/**
 	 * Shuts down the storage. Implementors should use this opportunity to clean
 	 * up the database and remove items that are scheduled for deletion.
 	 * 
@@ -205,14 +197,13 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * @param item
 	 *            the aggregator item
 	 */
-	public abstract void update(AggregatorItem item);
+	public abstract void writeBack(AggregatorItem item);
 
 	/**
 	 * Updates the storage with the given filters.
 	 * 
 	 * @param filters
 	 *            the new filter set
-	 * @uml.property name="filters"
 	 */
 	public abstract void setFilters(Filter[] filters);
 
@@ -220,14 +211,21 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 * Retrieves the filter set from the storage.
 	 * 
 	 * @return the filter set
-	 * @uml.property name="filters"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     container="no.resheim.aggregator.core.filter.Filter"
 	 */
 	public abstract Filter[] getFilters();
 
+	/**
+	 * Used to obtain a lock for writing to the storage.
+	 * 
+	 * @returnt the lock.
+	 */
 	public abstract Lock writeLock();
 
+	/**
+	 * Used to obtain a lock for reading from the storage.
+	 * 
+	 * @return the lock.
+	 */
 	public abstract Lock readLock();
 
 }

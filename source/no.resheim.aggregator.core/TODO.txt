@@ -1,0 +1,6 @@
+* Optimize: There are far too many selections on the database going on.
+* Place actions and commands where they belong
+* Change application icon
+* Design articles and article view icon
+* Selecting folder contents should be recursive
+* Synchronize Google reader categorization. Borrow "label" mechanism from Opera.

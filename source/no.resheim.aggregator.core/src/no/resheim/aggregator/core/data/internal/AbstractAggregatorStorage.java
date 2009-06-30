@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2008-2009 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,8 +16,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.AggregatorItem;
-import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.IAggregatorStorage;
 import no.resheim.aggregator.core.data.AggregatorItem.Flag;
 import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
@@ -52,16 +52,13 @@ public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
 
 	/**
 	 * The feed collection that data is being handled for
-	 * 
-	 * @uml.property name="collection"
-	 * @uml.associationEnd
 	 */
-	protected FeedCollection collection;
+	protected AggregatorCollection collection;
 
 	/** The path to a folder where data can be stored */
 	protected IPath path;
 
-	public AbstractAggregatorStorage(FeedCollection collection, IPath path) {
+	public AbstractAggregatorStorage(AggregatorCollection collection, IPath path) {
 		this.collection = collection;
 		this.path = path;
 	}
@@ -87,7 +84,7 @@ public abstract class AbstractAggregatorStorage implements IAggregatorStorage {
 			AggregatorItem[] children = collection.getTrashFolder()
 					.getChildren(EnumSet.allOf(ItemType.class));
 			for (AggregatorItem aggregatorItem : children) {
-				collection.deleteChild(aggregatorItem, false);
+				collection.deleteChild(aggregatorItem);
 			}
 			collection.notifyListerners(children, EventType.REMOVED);
 		}

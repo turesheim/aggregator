@@ -17,7 +17,7 @@ import java.util.TimeZone;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.Subscription;
 
 import org.xml.sax.Attributes;
@@ -120,7 +120,7 @@ public abstract class AbstractElementHandler implements IElementHandler {
 	 * @uml.property name="collection"
 	 * @uml.associationEnd
 	 */
-	protected FeedCollection collection;
+	protected AggregatorCollection collection;
 
 	public AbstractElementHandler() {
 		buffer = new StringBuffer();

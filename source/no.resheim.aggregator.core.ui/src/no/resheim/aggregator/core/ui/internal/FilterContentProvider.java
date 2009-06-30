@@ -12,7 +12,7 @@ package no.resheim.aggregator.core.ui.internal;
 
 import java.util.UUID;
 
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.filter.Filter;
 
 import org.eclipse.jface.viewers.IContentProvider;
@@ -27,7 +27,7 @@ import org.eclipse.jface.viewers.Viewer;
 public class FilterContentProvider implements IContentProvider,
 		IStructuredContentProvider {
 
-	private FeedCollection fCollection;
+	private AggregatorCollection fCollection;
 
 	public void dispose() {
 	}
@@ -45,8 +45,8 @@ public class FilterContentProvider implements IContentProvider,
 	}
 
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		if (newInput instanceof FeedCollection) {
-			fCollection = (FeedCollection) newInput;
+		if (newInput instanceof AggregatorCollection) {
+			fCollection = (AggregatorCollection) newInput;
 		}
 	}
 

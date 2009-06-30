@@ -309,9 +309,6 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(title);
-		sb.append(" ["); //$NON-NLS-1$
-		sb.append(getOrdering());
-		sb.append(']');
 		return sb.toString();
 	}
 

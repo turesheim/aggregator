@@ -2,7 +2,7 @@ package no.resheim.aggregator.ui.test;
 
 import junit.framework.TestCase;
 import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.Subscription.Archiving;
 import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
 
@@ -16,7 +16,7 @@ public class TestRSSParser extends TestCase {
 		super.tearDown();
 	}
 
-	private Subscription createNewFeed(FeedCollection parent, String title) {
+	private Subscription createNewFeed(AggregatorCollection parent, String title) {
 		Subscription feed = new Subscription();
 		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.

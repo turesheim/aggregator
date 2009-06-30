@@ -12,7 +12,7 @@
 package no.resheim.aggregator.core.rss.internal;
 
 import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -32,7 +32,7 @@ public class AtomFeedHandler extends AbstractElementHandler {
 	private static final String COPYRIGHT = "copyright"; //$NON-NLS-1$
 	private static final String ENTRY = "entry"; //$NON-NLS-1$
 
-	public AtomFeedHandler(FeedCollection registry, Subscription feed) {
+	public AtomFeedHandler(AggregatorCollection registry, Subscription feed) {
 		super();
 		this.collection = registry;
 		this.feed = feed;

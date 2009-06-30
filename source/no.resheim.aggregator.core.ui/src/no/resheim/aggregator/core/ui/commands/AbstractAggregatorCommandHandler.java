@@ -17,7 +17,7 @@ import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.ui.IFeedView;
 
@@ -79,10 +79,10 @@ public abstract class AbstractAggregatorCommandHandler extends AbstractHandler {
 	 *            the event
 	 * @return the collection or <b>null</b>
 	 */
-	protected FeedCollection getCollection(ExecutionEvent event) {
+	protected AggregatorCollection getCollection(ExecutionEvent event) {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedCollection collection = ((IFeedView) part).getFeedCollection();
+			AggregatorCollection collection = ((IFeedView) part).getFeedCollection();
 			return collection;
 		}
 		return null;

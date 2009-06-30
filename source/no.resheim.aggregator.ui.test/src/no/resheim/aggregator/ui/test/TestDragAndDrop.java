@@ -4,7 +4,7 @@ import java.util.EnumSet;
 
 import junit.framework.TestCase;
 import no.resheim.aggregator.core.AggregatorPlugin;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.ui.FeedTreeViewer;
 import no.resheim.aggregator.core.ui.FeedViewerContentProvider;
@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Shell;
 public class TestDragAndDrop extends TestCase {
 
 	public void setUp() throws Exception {
-		FeedCollection collection = AggregatorPlugin.getDefault()
+		AggregatorCollection collection = AggregatorPlugin.getDefault()
 				.getFeedCollection(TestPlugin.ID_TEST_COLLECTION);
 		System.out.println(collection);
 		Shell shell = new Shell();

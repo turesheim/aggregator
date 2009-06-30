@@ -11,7 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 
 import org.eclipse.jface.viewers.Viewer;
 
@@ -37,14 +37,14 @@ public interface IFeedView {
 	 * 
 	 * @return The feed registry
 	 */
-	public FeedCollection getFeedCollection();
+	public AggregatorCollection getFeedCollection();
 
 	/**
 	 * Sets the feed collection that the view is obtaining it's data from.
 	 * 
 	 * @param registry
 	 */
-	public void setFeedCollection(FeedCollection registry);
+	public void setFeedCollection(AggregatorCollection registry);
 
 	/**
 	 * Returns the viewer that is actually displaying the feed contents.

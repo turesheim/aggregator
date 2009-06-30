@@ -1,0 +1,155 @@
+<object>
+	<list name="subscriptions">
+		<object>
+			<string name="id">feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</string>
+			<string name="title">Aftenposten Nettutgaven - Forsiden</string>
+			<list name="categories">
+				<object>
+					<string name="id">user/09406790088207339090/label/Nyheter
+					</string>
+					<string name="label">Nyheter</string>
+				</object>
+			</list>
+			<string name="sortid">F955F56A</string>
+			<number name="firstitemmsec">1236943001720</number>
+		</object>
+		<object>
+			<string name="id">feed/http://feeds.feedburner.com/AllAboutLinux
+			</string>
+			<string name="title">All about Linux</string>
+			<list name="categories" />
+			<string name="sortid">7124C8A3</string>
+			<number name="firstitemmsec">1232991160659</number>
+		</object>
+		<object>
+			<string name="id">feed/http://android-developers.blogspot.com/atom.xml
+			</string>
+			<string name="title">Android Developers Blog</string>
+			<list name="categories" />
+			<string name="sortid">44D504DD</string>
+			<number name="firstitemmsec">1239776580471</number>
+		</object>
+		<object>
+			<string name="id">feed/http://www.avrfreaks.net/forumrss.php
+			</string>
+			<string name="title">AVR Freaks</string>
+			<list name="categories" />
+			<string name="sortid">0319517A</string>
+			<number name="firstitemmsec">1242018550639</number>
+		</object>
+		<object>
+			<string name="id">feed/http://www.eclipsezone.com/forumRSS/18111.xml
+			</string>
+			<string name="title">Eclipse Zone - Community for Eclipse users and
+				developers</string>
+			<list name="categories">
+				<object>
+					<string name="id">user/09406790088207339090/label/Eclipse
+					</string>
+					<string name="label">Eclipse</string>
+				</object>
+			</list>
+			<string name="sortid">817E123F</string>
+			<number name="firstitemmsec">1236634436873</number>
+		</object>
+		<object>
+			<string name="id">feed/http://news.google.com/news?ned=no_no&amp;hl=no&amp;topic=w&amp;output=rss
+			</string>
+			<string name="title">Google News Norge - Utenriks</string>
+			<list name="categories" />
+			<string name="sortid">394163E3</string>
+			<number name="firstitemmsec">1242196695667</number>
+		</object>
+		<object>
+			<string name="id">feed/http://greekbitches.blogspot.com/feeds/posts/default
+			</string>
+			<string name="title">G(r)eek Bitches' Blog</string>
+			<list name="categories">
+				<object>
+					<string name="id">user/09406790088207339090/state/com.blogger/blogger-following
+					</string>
+					<string name="label">blogger-following</string>
+				</object>
+			</list>
+			<string name="sortid">9FF852B4</string>
+			<number name="firstitemmsec">1229661001771</number>
+		</object>
+		<object>
+			<string name="id">feed/http://intellectualcramps.blogspot.com/feeds/posts/default
+			</string>
+			<string name="title">Intellectual Cramps</string>
+			<list name="categories">
+				<object>
+					<string name="id">user/09406790088207339090/state/com.blogger/blogger-following
+					</string>
+					<string name="label">blogger-following</string>
+				</object>
+			</list>
+			<string name="sortid">BF83D702</string>
+			<number name="firstitemmsec">1222659235541</number>
+		</object>
+		<object>
+			<string name="id">feed/http://jeremymanson.blogspot.com/feeds/posts/default
+			</string>
+			<string name="title">Java Concurrency (&amp;c)</string>
+			<list name="categories" />
+			<string name="sortid">A6191B66</string>
+			<number name="firstitemmsec">1211530382136</number>
+		</object>
+		<object>
+			<string name="id">feed/http://planeteclipse.org/planet/rss20.xml
+			</string>
+			<string name="title">Planet Eclipse</string>
+			<list name="categories">
+				<object>
+					<string name="id">user/09406790088207339090/label/Eclipse
+					</string>
+					<string name="label">Eclipse</string>
+				</object>
+			</list>
+			<string name="sortid">F3A46711</string>
+			<number name="firstitemmsec">1205907228619</number>
+		</object>
+		<object>
+			<string name="id">feed/http://feeds.professionalvisualstudio.com/professionalvisualstudio/
+			</string>
+			<string name="title">Professional Visual Studio » Visual Studio Shell
+				Isolated Mode</string>
+			<list name="categories" />
+			<string name="sortid">3B6A5D36</string>
+			<number name="firstitemmsec">1221100232314</number>
+		</object>
+		<object>
+			<string name="id">feed/http://slashdot.org/index.rss</string>
+			<string name="title">Slashdot</string>
+			<list name="categories" />
+			<string name="sortid">685B4784</string>
+			<number name="firstitemmsec">1205889247494</number>
+		</object>
+		<object>
+			<string name="id">feed/http://feeds.feedburner.com/Techcrunch
+			</string>
+			<string name="title">TechCrunch</string>
+			<list name="categories" />
+			<string name="sortid">6947B54A</string>
+			<number name="firstitemmsec">1205905683676</number>
+		</object>
+		<object>
+			<string name="id">feed/http://visualstudiogallery.com/xml/HighestRated.xml
+			</string>
+			<string name="title">Visual Studio Gallery | Highest Rated</string>
+			<list name="categories" />
+			<string name="sortid">F3C5D633</string>
+			<number name="firstitemmsec">1235608702780</number>
+		</object>
+		<object>
+			<string name="id">feed/http://www.wired.com/news/feeds/rss2/0,2610,,00.xml
+			</string>
+			<string name="title">Wired: Top Stories</string>
+			<list name="categories" />
+			<string name="sortid">C2D7982C</string>
+			<number name="firstitemmsec">1205891145383</number>
+		</object>
+	</list>
+</object>

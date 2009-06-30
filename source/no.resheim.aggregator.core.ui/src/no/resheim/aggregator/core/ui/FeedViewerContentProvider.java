@@ -13,10 +13,10 @@ package no.resheim.aggregator.core.ui;
 
 import java.util.EnumSet;
 
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
-import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.IAggregatorEventListener;
 import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.TreeItem;
 
 /**
  * This type provides structured viewers with feeds and feed contents. The given
- * input should be an instance of a {@link FeedCollection} or
+ * input should be an instance of a {@link AggregatorCollection} or
  * {@link AggregatorItemParent}. Using the constructor one can determine which
  * types of items this class will provide.
  * 
@@ -48,7 +48,7 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 	private TreeViewer fViewer;
 
 	/** The input */
-	private FeedCollection fCollection;
+	private AggregatorCollection fCollection;
 
 	private EnumSet<ItemType> fItemTypes;
 
@@ -72,25 +72,25 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 		fViewer.setSelection(new StructuredSelection());
 		if (newInput instanceof Folder) {
 			try {
-				FeedCollection fc = ((Folder) newInput).getCollection();
+				AggregatorCollection fc = ((Folder) newInput).getCollection();
 				if (!fc.equals(this.fCollection)) {
 					if (fCollection != null) {
 						fCollection.removeFeedListener(this);
 					}
 					fCollection = fc;
 					fCollection.addFeedListener(this);
-					v.refresh();
+					// v.refresh();
 				}
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
 		}
-		if (newInput instanceof FeedCollection
+		if (newInput instanceof AggregatorCollection
 				&& !newInput.equals(this.fCollection)) {
 			if (fCollection != null) {
 				fCollection.removeFeedListener(this);
 			}
-			fCollection = (FeedCollection) newInput;
+			fCollection = (AggregatorCollection) newInput;
 			fCollection.addFeedListener(this);
 		} else if (newInput == null) {
 			if (fCollection != null) {
@@ -121,7 +121,14 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 			public void run() {
 				if (fViewer != null) {
 					synchronized (fViewer) {
-						fViewer.refresh();
+						// Refresh everything if we're displaying folders
+						if (fItemTypes.contains(ItemType.FOLDER)) {
+							fViewer.refresh();
+						} else {
+							for (Object item : event.getItems()) {
+								fViewer.refresh(item);
+							}
+						}
 					}
 				}
 			}
@@ -176,7 +183,8 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 		if (parent instanceof AggregatorItemParent) {
 			Object element;
 			try {
-				element = ((AggregatorItemParent) parent).getChildAt(index);
+				element = ((AggregatorItemParent) parent).getChildAt(
+						fItemTypes, index);
 				fViewer.replace(parent, index, element);
 				updateChildCount(element, -1);
 			} catch (CoreException e) {

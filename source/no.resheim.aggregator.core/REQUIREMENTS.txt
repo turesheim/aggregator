@@ -1,0 +1,3 @@
+* Extensible
+  - 
+* Reusable (both in Eclipse SDK, RCP and elsewhere)

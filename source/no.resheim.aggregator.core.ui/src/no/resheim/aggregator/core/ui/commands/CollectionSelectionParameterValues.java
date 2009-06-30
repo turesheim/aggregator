@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 
 import org.eclipse.core.commands.IParameterValues;
 
@@ -24,9 +24,9 @@ public class CollectionSelectionParameterValues implements IParameterValues {
 
 	public Map<String, String> getParameterValues() {
 		HashMap<String, String> map = new HashMap<String, String>();
-		Collection<FeedCollection> list = AggregatorPlugin.getDefault()
+		Collection<AggregatorCollection> list = AggregatorPlugin.getDefault()
 				.getCollections();
-		for (FeedCollection feedRegistry : list) {
+		for (AggregatorCollection feedRegistry : list) {
 			map.put(feedRegistry.getTitle(), feedRegistry.getId());
 		}
 		return map;

@@ -19,7 +19,6 @@ import no.resheim.aggregator.core.data.AggregatorItem.Mark;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -46,7 +45,9 @@ public class MarkItemSelectionHandler extends AbstractAggregatorCommandHandler
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.core.commands.IHandler#execute(org.eclipse.core.commands.ExecutionEvent)
+	 * @see
+	 * org.eclipse.core.commands.IHandler#execute(org.eclipse.core.commands.
+	 * ExecutionEvent)
 	 */
 	@SuppressWarnings("unchecked")
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -56,26 +57,25 @@ public class MarkItemSelectionHandler extends AbstractAggregatorCommandHandler
 		if (m != null) {
 			Mark mark = (Mark) m;
 			items[0].setMark(mark);
-			try {
-				getCollection(event).write(items[0]);
-				IWorkbenchWindow window = HandlerUtil
-						.getActiveWorkbenchWindowChecked(event);
-				ICommandService commandService = (ICommandService) window
-						.getService(ICommandService.class);
-				Map filter = new HashMap();
-				filter.put(PARM_MARK, event
-						.getObjectParameterForExecution(PARM_MARK));
-				commandService.refreshElements(event.getCommand().getId(),
-						filter);
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
+			getCollection(event).writeBack(items[0]);
+			IWorkbenchWindow window = HandlerUtil
+					.getActiveWorkbenchWindowChecked(event);
+			ICommandService commandService = (ICommandService) window
+					.getService(ICommandService.class);
+			Map filter = new HashMap();
+			filter.put(PARM_MARK, event
+					.getObjectParameterForExecution(PARM_MARK));
+			commandService.refreshElements(event.getCommand().getId(), filter);
 		}
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.commands.IElementUpdater#updateElement(org.eclipse.ui.menus.UIElement, java.util.Map)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.ui.commands.IElementUpdater#updateElement(org.eclipse.ui.
+	 * menus.UIElement, java.util.Map)
 	 */
 	@SuppressWarnings("unchecked")
 	public void updateElement(UIElement element, Map parameters) {

@@ -13,10 +13,9 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import no.resheim.aggregator.core.catalog.IFeedCatalog;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.IAggregatorStorage;
 import no.resheim.aggregator.core.data.internal.DerbySQLStorage;
-import no.resheim.aggregator.core.data.internal.MemoryStorage;
 import no.resheim.aggregator.core.synch.AbstractSynchronizer;
 
 import org.eclipse.core.net.proxy.IProxyData;
@@ -106,7 +105,7 @@ public class AggregatorPlugin extends Plugin {
 	 * It's contents may be manipulated by different threads so it has been made
 	 * thread safe using synchronised blocks.
 	 */
-	private final HashMap<String, FeedCollection> collectionMap = new HashMap<String, FeedCollection>();
+	private final HashMap<String, AggregatorCollection> collectionMap = new HashMap<String, AggregatorCollection>();
 
 	private final ArrayList<IAggregatorStorage> storageList = new ArrayList<IAggregatorStorage>();
 
@@ -116,7 +115,7 @@ public class AggregatorPlugin extends Plugin {
 	 * @uml.property name="defaultCollection"
 	 * @uml.associationEnd
 	 */
-	private FeedCollection defaultCollection;
+	private AggregatorCollection defaultCollection;
 
 	/**
 	 * Name of the default feed collection.
@@ -215,7 +214,7 @@ public class AggregatorPlugin extends Plugin {
 	 * 
 	 * @return the feed collection
 	 */
-	public FeedCollection getFeedCollection(String id) {
+	public AggregatorCollection getFeedCollection(String id) {
 		synchronized (collectionMap) {
 			if (id == null)
 				return defaultCollection;
@@ -230,7 +229,7 @@ public class AggregatorPlugin extends Plugin {
 	 * 
 	 * @return A pointer to the Aggregator configuration directory
 	 */
-	private IPath getStorageLocation(FeedCollection registry) {
+	private IPath getStorageLocation(AggregatorCollection registry) {
 		return getStateLocation().makeAbsolute().addTrailingSeparator().append(
 				registry.getId());
 	}
@@ -241,7 +240,7 @@ public class AggregatorPlugin extends Plugin {
 	 * 
 	 * @return
 	 */
-	public Collection<FeedCollection> getCollections() {
+	public Collection<AggregatorCollection> getCollections() {
 		synchronized (collectionMap) {
 			return collectionMap.values();
 		}
@@ -315,16 +314,13 @@ public class AggregatorPlugin extends Plugin {
 					boolean persistent = Boolean.parseBoolean(element
 							.getAttribute("persistent")); //$NON-NLS-1$
 
-					final FeedCollection collection = new FeedCollection(id,
+					final AggregatorCollection collection = new AggregatorCollection(id,
 							pub, def);
 					collection.setTitle(name);
 					collectionMap.put(id, collection);
 					IAggregatorStorage storage = null;
 					if (persistent) {
 						storage = new DerbySQLStorage(collection,
-								getStorageLocation(collection));
-					} else {
-						storage = new MemoryStorage(collection,
 								getStorageLocation(collection));
 					}
 

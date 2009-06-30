@@ -18,7 +18,7 @@ import java.util.Stack;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.synch.AbstractSynchronizer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -41,7 +41,7 @@ public class CollectionUpdateJob extends Job {
 	 * The feed collection that we're updating
 	 * 
 	 */
-	private FeedCollection fCollection;
+	private AggregatorCollection fCollection;
 
 	/**
 	 * Compares feeds by next update time.
@@ -67,7 +67,7 @@ public class CollectionUpdateJob extends Job {
 	 * 
 	 * @param collection
 	 */
-	public CollectionUpdateJob(FeedCollection collection) {
+	public CollectionUpdateJob(AggregatorCollection collection) {
 		super(Messages.RegistryUpdateJob_Label);
 		this.fCollection = collection;
 	}

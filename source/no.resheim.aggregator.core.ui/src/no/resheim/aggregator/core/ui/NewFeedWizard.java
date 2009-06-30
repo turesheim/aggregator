@@ -13,7 +13,7 @@ package no.resheim.aggregator.core.ui;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItem;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.FeedWorkingCopy;
 import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.Subscription.Archiving;
@@ -41,9 +41,9 @@ public class NewFeedWizard extends Wizard implements IWorkbenchWizard {
 
 	IWizardPage archiving;
 	IWizardPage general;
-	FeedCollection collection;
+	AggregatorCollection collection;
 
-	public FeedCollection getCollection() {
+	public AggregatorCollection getCollection() {
 		return collection;
 	}
 
@@ -58,7 +58,7 @@ public class NewFeedWizard extends Wizard implements IWorkbenchWizard {
 	/**
 	 * 
 	 */
-	public NewFeedWizard(FeedCollection collection) {
+	public NewFeedWizard(AggregatorCollection collection) {
 		super();
 		this.collection = collection;
 		setWindowTitle(Messages.NewFeedWizard_Title);

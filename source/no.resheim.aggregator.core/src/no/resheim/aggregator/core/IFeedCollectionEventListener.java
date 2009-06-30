@@ -11,7 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core;
 
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 
 /**
  * 
@@ -26,6 +26,6 @@ public interface IFeedCollectionEventListener {
 	 * @param collection
 	 *            the initialised collection
 	 */
-	public void collectionInitialized(FeedCollection collection);
+	public void collectionInitialized(AggregatorCollection collection);
 
 }

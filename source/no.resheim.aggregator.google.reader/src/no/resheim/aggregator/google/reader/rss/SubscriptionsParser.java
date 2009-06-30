@@ -20,13 +20,21 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * This type is used to parse the content of the Google Reader subscriptions
+ * list. http://www.google.com/reader/api/0/subscription/list?output=xml
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
+ */
 public class SubscriptionsParser extends DefaultHandler {
 	protected final Stack<IGoogleElementHandler> handlers;
 	StringBuffer buffer;
 	boolean capture;
 	IFeedCatalog catalog;
 
-	public SubscriptionsParser(IFeedCatalog catalog, ArrayList<Subscription> feeds) {
+	public SubscriptionsParser(IFeedCatalog catalog,
+			ArrayList<Subscription> feeds) {
 		handlers = new Stack<IGoogleElementHandler>();
 		buffer = new StringBuffer();
 		this.catalog = catalog;

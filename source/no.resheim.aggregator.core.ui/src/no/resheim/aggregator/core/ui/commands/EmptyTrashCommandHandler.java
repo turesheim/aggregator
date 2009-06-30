@@ -14,7 +14,7 @@ package no.resheim.aggregator.core.ui.commands;
 import java.util.EnumSet;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.AggregatorItem.Flag;
 import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
@@ -57,7 +57,7 @@ public class EmptyTrashCommandHandler extends AbstractAggregatorCommandHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			final FeedCollection collection = ((IFeedView) part)
+			final AggregatorCollection collection = ((IFeedView) part)
 					.getFeedCollection();
 			if (collection == null) {
 				return null;
@@ -70,7 +70,7 @@ public class EmptyTrashCommandHandler extends AbstractAggregatorCommandHandler {
 						((IFeedView) part).getFeedViewer().setSelection(null);
 						for (AggregatorItem item : items) {
 							try {
-								item.getParent().deleteChild(item, false);
+								item.getParent().deleteChild(item);
 							} catch (CoreException e) {
 								e.printStackTrace();
 							}

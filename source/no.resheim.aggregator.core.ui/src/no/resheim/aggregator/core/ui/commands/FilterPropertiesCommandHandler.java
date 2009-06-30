@@ -11,7 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.commands;
 
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.FilterPropertiesDialog;
 import no.resheim.aggregator.core.ui.IFeedView;
@@ -33,7 +33,7 @@ public class FilterPropertiesCommandHandler extends
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedCollection collection = ((IFeedView) part).getFeedCollection();
+			AggregatorCollection collection = ((IFeedView) part).getFeedCollection();
 			if (collection == null) {
 				return null;
 			}

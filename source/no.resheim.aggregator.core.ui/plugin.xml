@@ -173,19 +173,23 @@
             id="no.resheim.aggregator.core.ui.RSSView"
             name="Feeds"
             restorable="true">
-         <description>
-            description body text
-         </description>
       </view>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <command
-            categoryId="org.eclipse.ui.category.views"
-            defaultHandler="no.resheim.aggregator.core.ui.commands.NextUnreadItemCommandHandler"
-            id="no.resheim.aggregator.ui.nextUnread"
-            name="Next Unread">
-      </command>
+      <view
+            category="org.eclipse.ui"
+            class="no.resheim.aggregator.core.ui.views.ArticlesView"
+            icon="icons/clcl16/view.gif"
+            id="no.resheim.aggregator.core.ui.ArticlesView"
+            name="Articles"
+            restorable="true">
+      </view>
+      <view
+            category="org.eclipse.ui"
+            class="no.resheim.aggregator.core.ui.views.ArticleView"
+            icon="icons/etool16/play_media.gif"
+            id="no.resheim.aggregator.core.ui.ArticleView"
+            name="Article"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.contexts">
@@ -225,10 +229,21 @@
          </command>
       </menuContribution>
       <menuContribution
-            locationURI="popup:no.resheim.aggregator.core.ui.RSSView?after=navigation">
+            locationURI="popup:no.resheim.aggregator.core.ui.ArticlesView?after=additions">
+         <menu
+               label="Mark As">
+            <dynamic
+                  class="no.resheim.aggregator.core.ui.commands.MarkItemMenu"
+                  id="no.resheim.aggregator.ui.markAsMenu">
+            </dynamic>
+         </menu>
          <command
-               commandId="no.resheim.aggregator.ui.nextUnread"
-               label="Next Unread">
+               commandId="no.resheim.aggregator.core.ui.copyLinkCommand"
+               label="Copy Link Location"
+               style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
          </command>
       </menuContribution>
       <menuContribution
@@ -294,6 +309,9 @@
                   checkEnabled="true">
             </visibleWhen>
          </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="no.resheim.aggregator.core.ui.menuContribution1">
       </menuContribution>
    </extension>
    <extension

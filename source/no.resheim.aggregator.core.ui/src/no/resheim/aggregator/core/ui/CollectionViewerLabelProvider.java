@@ -18,7 +18,7 @@ import java.util.Calendar;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.BrokenItem;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.AggregatorItem.Flag;
@@ -143,7 +143,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		return baseId;
 	}
 
-	private FeedCollection getCollection(AggregatorItem item) {
+	private AggregatorCollection getCollection(AggregatorItem item) {
 		try {
 			return item.getCollection();
 		} catch (CoreException e) {

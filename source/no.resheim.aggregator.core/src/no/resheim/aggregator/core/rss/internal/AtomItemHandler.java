@@ -14,7 +14,7 @@ package no.resheim.aggregator.core.rss.internal;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.Subscription;
 
 import org.xml.sax.Attributes;
@@ -41,7 +41,7 @@ public class AtomItemHandler extends AbstractItemHandler {
 	/** WordPress full content element */
 	private static final String CONTENT = "content"; //$NON-NLS-1$
 
-	public AtomItemHandler(FeedCollection registry, Subscription feed) {
+	public AtomItemHandler(AggregatorCollection registry, Subscription feed) {
 		this.collection = registry;
 		this.feed = feed;
 		item = new Article(feed, UUID.randomUUID());

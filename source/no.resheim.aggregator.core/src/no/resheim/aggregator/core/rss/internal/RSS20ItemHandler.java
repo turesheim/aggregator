@@ -14,7 +14,7 @@ package no.resheim.aggregator.core.rss.internal;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.MediaContent;
 import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.MediaContent.Medium;
@@ -56,7 +56,7 @@ public class RSS20ItemHandler extends AbstractItemHandler {
 	/** WordPress full content element */
 	public static final String CONTENT_ENCODED = "content:encoded"; //$NON-NLS-1$
 
-	public RSS20ItemHandler(FeedCollection registry, Subscription feed) {
+	public RSS20ItemHandler(AggregatorCollection registry, Subscription feed) {
 		this.collection = registry;
 		this.feed = feed;
 		item = new Article(feed, UUID.randomUUID());

@@ -27,9 +27,7 @@ public class BrokenItem extends AggregatorItem {
 		setTitle("Broken item"); //$NON-NLS-1$
 	}
 
-	public BrokenItem(AggregatorItemParent parent, int index) {
+	public BrokenItem(AggregatorItemParent parent) {
 		this(parent, UUID.randomUUID());
-		setOrdering(index);
 	}
-
 }

@@ -14,7 +14,7 @@ package no.resheim.aggregator.core.ui.commands;
 import java.util.UUID;
 
 import no.resheim.aggregator.core.data.AggregatorItemParent;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.ui.IFeedView;
 
@@ -47,7 +47,7 @@ public class AddFolderCommandHandler extends RenameFolderCommand implements
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			FeedCollection collection = ((IFeedView) part).getFeedCollection();
+			AggregatorCollection collection = ((IFeedView) part).getFeedCollection();
 			if (collection == null) {
 				return null;
 			}

@@ -12,29 +12,26 @@
 package no.resheim.aggregator.core.ui.views;
 
 import java.net.URL;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.IFeedCollectionEventListener;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.FeedCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.IAggregatorEventListener;
 import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.ui.AggregatorItemComparer;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
-import no.resheim.aggregator.core.ui.ArticleViewer;
 import no.resheim.aggregator.core.ui.CollectionViewerLabelProvider;
 import no.resheim.aggregator.core.ui.FeedViewerContentProvider;
 import no.resheim.aggregator.core.ui.IArticleViewerListener;
 import no.resheim.aggregator.core.ui.IFeedView;
-import no.resheim.aggregator.core.ui.PreferenceConstants;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
@@ -50,9 +47,7 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerDropAdapter;
@@ -65,7 +60,6 @@ import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipse.swt.dnd.DropTarget;
-import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.TransferData;
@@ -74,7 +68,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -98,16 +91,22 @@ import org.eclipse.ui.part.ViewPart;
 public class RSSView extends ViewPart implements IFeedView,
 		IFeedCollectionEventListener {
 
-	private static final int NOTIFICATION_TIMER_INTERVAL = 10000;
-	private static final String CONTEXT_ID = "no.resheim.aggregator.ui.context"; //$NON-NLS-1$
+	class ArticleViewerListener implements IArticleViewerListener {
+
+		public void statusTextChanged(String text) {
+			if (text.length() == 0 && fLastArticleInfo != null) {
+				setStatusText(fLastArticleInfo);
+			} else {
+				setStatusText(text);
+			}
+		}
+	}
 
 	class BrowserTitleListener implements TitleListener {
 
 		public void changed(TitleEvent event) {
 		}
 	}
-
-	private static ArrayList<AggregatorItem> notificationItems;
 
 	class NotificationTimer implements Runnable {
 
@@ -125,76 +124,45 @@ public class RSSView extends ViewPart implements IFeedView,
 		}
 	}
 
-	/**
-	 * Listens to selection events in the
-	 */
-	class ViewSelectionListener implements ISelectionChangedListener {
-
-		public void selectionChanged(SelectionChangedEvent event) {
-			// Reset in case it's not an Item that is selected.
-			fLastSelectionItem = null;
-			if (event.getSelection() instanceof IStructuredSelection) {
-				IStructuredSelection selection = (IStructuredSelection) event
-						.getSelection();
-				if (selection.getFirstElement() instanceof Article) {
-					Article item = (Article) selection.getFirstElement();
-					fLastArticleInfo = item.getStatusString();
-					setStatusText(item.getStatusString());
-					preview.show(item);
-					if (pPreviewIsRead && !item.isRead()) {
-						fLastSelectionItem = item;
-						Display.getCurrent().timerExec(5000, markAsRead);
-					}
-				}
-				if (fSplitBrowsing
-						&& selection.getFirstElement() instanceof Folder) {
-					getSite().getShell().setCursor(fWaitCursor);
-					articleTreeViewer.setInput(selection.getFirstElement());
-					getSite().getShell().setCursor(null);
-				}
-			}
-		}
-	}
-
-	private Cursor fWaitCursor;
-
-	class ArticleViewerListener implements IArticleViewerListener {
-
-		public void statusTextChanged(String text) {
-			if (text.length() == 0 && fLastArticleInfo != null) {
-				setStatusText(fLastArticleInfo);
-			} else {
-				setStatusText(text);
-			}
-		}
-	}
-
-	private void setStatusText(String text) {
-		IStatusLineManager mgr = getViewSite().getActionBars()
-				.getStatusLineManager();
-		if (mgr != null) {
-			mgr.setMessage(text);
-		}
-	}
-
 	private static final String BLANK = ""; //$NON-NLS-1$
+
+	private static final String CONTEXT_ID = "no.resheim.aggregator.ui.context"; //$NON-NLS-1$
+
 	public static final String DEFAULT_COLLECTION_ID = "no.resheim.aggregator.ui.defaultFeedCollection"; //$NON-NLS-1$
+
 	private static final String MEMENTO_ORIENTATION = ".ORIENTATION"; //$NON-NLS-1$
 
 	private final static Separator modify_separator = new Separator("modify"); //$NON-NLS-1$
 
 	private final static Separator navigation_separator = new Separator(
 			"navigation"); //$NON-NLS-1$
+	private static final int NOTIFICATION_TIMER_INTERVAL = 10000;
+	private static ArrayList<AggregatorItem> notificationItems;
 
 	private final static Separator selection_separator = new Separator(
 			"selection"); //$NON-NLS-1$
 
 	private Action doubleClickAction;
 
+	private AggregatorCollection fCollection;
+
 	boolean fHorizontalLayout = false;
+
+	private String fLastArticleInfo;
 
 	/** The item that was last selected by the user */
 	private Article fLastSelectionItem;
+
+	/** Tree viewer to show all the feeds and articles */
+	private TreeViewer viewer;
+
+	/**
+	 * Whether or not to split the navigation pane into two parts. Either we
+	 * have a combined folders and articles view or these are shown separately.
+	 */
+	private boolean fSplitBrowsing = true;
+
+	private Cursor fWaitCursor;
 
 	/**
 	 * Marks the last selected item as read and updates it's and the parent's
@@ -212,17 +180,7 @@ public class RSSView extends ViewPart implements IFeedView,
 		}
 	};
 
-	/** Preference: mark previewed items as read */
-	private boolean pPreviewIsRead;
-
-	private ArticleViewer preview;
-
-	private FeedCollection fCollection;
-
 	private SashForm sashForm;
-
-	/** Tree viewer to show all the feeds and articles */
-	private TreeViewer treeView;
 
 	/**
 	 * The constructor.
@@ -233,42 +191,11 @@ public class RSSView extends ViewPart implements IFeedView,
 		}
 	}
 
-	public void collectionInitialized(FeedCollection collection) {
+	public void collectionInitialized(AggregatorCollection collection) {
 		if (collection.getId().equals(DEFAULT_COLLECTION_ID)) {
 			setDefaultCollection();
 		}
 	}
-
-	private void setDefaultCollection() {
-		Display d = getViewSite().getShell().getDisplay();
-		d.asyncExec(new Runnable() {
-			public void run() {
-				fCollection = AggregatorPlugin.getDefault().getFeedCollection(
-						DEFAULT_COLLECTION_ID);
-				treeView.setInput(fCollection);
-			}
-		});
-		registerDesktopNotifications();
-	}
-
-	@Override
-	public void dispose() {
-		treeView.removeSelectionChangedListener(fViewSelectionListener);
-		AggregatorPlugin.getDefault().removeFeedCollectionListener(this);
-		if (fWaitCursor != null) {
-			fWaitCursor.dispose();
-			fWaitCursor = null;
-		}
-	}
-
-	private String fLastArticleInfo;
-	private ViewSelectionListener fViewSelectionListener;
-	private TreeViewer articleTreeViewer;
-	/**
-	 * Whether or not to split the navigation pane into two parts. Either we
-	 * have a combined folders and articles view or these are shown separately.
-	 */
-	private boolean fSplitBrowsing = true;
 
 	/**
 	 * This is a callback that will allow us to create the viewer and initialise
@@ -276,80 +203,31 @@ public class RSSView extends ViewPart implements IFeedView,
 	 */
 	public void createPartControl(Composite parent) {
 
-		updateFromPreferences();
 		fWaitCursor = new Cursor(getSite().getShell().getDisplay(),
 				SWT.CURSOR_WAIT);
 		sashForm = new SashForm(parent, SWT.SMOOTH);
-		fViewSelectionListener = new ViewSelectionListener();
-		treeView = new TreeViewer(sashForm, SWT.MULTI | SWT.H_SCROLL
+		viewer = new TreeViewer(sashForm, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL | SWT.VIRTUAL);
-		treeView.setUseHashlookup(true);
-		treeView.setComparer(new AggregatorItemComparer());
+		viewer.setUseHashlookup(true);
+		viewer.setComparer(new AggregatorItemComparer());
 		initDND();
 		// If split browsing is enabled we'll only show folders in this tree
 		// view
 		if (fSplitBrowsing) {
-			treeView.setContentProvider(new FeedViewerContentProvider(EnumSet
+			viewer.setContentProvider(new FeedViewerContentProvider(EnumSet
 					.of(ItemType.FOLDER)));
 		} else {
-			treeView.setContentProvider(new FeedViewerContentProvider(EnumSet
+			viewer.setContentProvider(new FeedViewerContentProvider(EnumSet
 					.allOf(ItemType.class)));
 		}
-		treeView.setLabelProvider(new CollectionViewerLabelProvider());
-		treeView.addSelectionChangedListener(fViewSelectionListener);
+		viewer.setLabelProvider(new CollectionViewerLabelProvider());
 
 		// Enable tooltips for the tree items
-		ColumnViewerToolTipSupport.enableFor(treeView);
-
-		getSite().setSelectionProvider(treeView);
-		if (fSplitBrowsing) {
-			SashForm browserPanel = new SashForm(sashForm, SWT.SMOOTH);
-			browserPanel.setOrientation(SWT.VERTICAL);
-			// Create a tree viewer for the articles
-
-			articleTreeViewer = new TreeViewer(browserPanel, SWT.MULTI
-					| SWT.H_SCROLL | SWT.V_SCROLL | SWT.VIRTUAL);
-			Tree tree = articleTreeViewer.getTree();
-			tree.setHeaderVisible(true);
-			TreeColumn c1 = new TreeColumn(tree, SWT.LEFT);
-			c1.setText("Title");
-			c1.setWidth(200);
-			TreeColumn c2 = new TreeColumn(tree, SWT.LEFT);
-			c2.setText("Date");
-			c2.setWidth(200);
-			articleTreeViewer.setUseHashlookup(true);
-			articleTreeViewer.setComparer(new AggregatorItemComparer());
-			articleTreeViewer.setContentProvider(new FeedViewerContentProvider(
-					EnumSet.of(ItemType.ARTICLE)));
-			articleTreeViewer
-					.setLabelProvider(new CollectionViewerLabelProvider());
-			articleTreeViewer
-					.addSelectionChangedListener(fViewSelectionListener);
-			preview = new ArticleViewer(browserPanel, SWT.NONE);
-
-		} else {
-			preview = new ArticleViewer(sashForm, SWT.NONE);
-		}
-		preview.addListener(new ArticleViewerListener());
-		sashForm.setWeights(new int[] { 1, 1 });
-
+		ColumnViewerToolTipSupport.enableFor(viewer);
+		getSite().setSelectionProvider(viewer);
 		makeActions();
 		hookContextMenu();
 		hookDoubleClickAction();
-		IPreferenceStore store = AggregatorUIPlugin.getDefault()
-				.getPreferenceStore();
-		store.addPropertyChangeListener(new IPropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent event) {
-				updateFromPreferences();
-				if (event.getProperty().equals(
-						PreferenceConstants.P_PREVIEW_FONT)) {
-					preview.show(fLastSelectionItem);
-				} else {
-					refreshView();
-				}
-			}
-
-		});
 
 		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 			public void run() {
@@ -362,8 +240,23 @@ public class RSSView extends ViewPart implements IFeedView,
 		} else {
 			AggregatorPlugin.getDefault().addFeedCollectionListener(this);
 		}
-		// Make sure we update the layout visibly
-		setLayout(fHorizontalLayout ? Layout.HORIZONTAL : Layout.VERTICAL);
+		IPreferenceStore store = AggregatorUIPlugin.getDefault()
+				.getPreferenceStore();
+		store.addPropertyChangeListener(new IPropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent event) {
+				// TODO: Just listen to what we need.
+				refreshView();
+			}
+		});
+	}
+
+	@Override
+	public void dispose() {
+		AggregatorPlugin.getDefault().removeFeedCollectionListener(this);
+		if (fWaitCursor != null) {
+			fWaitCursor.dispose();
+			fWaitCursor = null;
+		}
 	}
 
 	/**
@@ -378,12 +271,16 @@ public class RSSView extends ViewPart implements IFeedView,
 		manager.add(selection_separator);
 	}
 
-	public FeedCollection getFeedCollection() {
+	public AggregatorCollection getFeedCollection() {
 		return fCollection;
 	}
 
 	public Viewer getFeedViewer() {
-		return treeView;
+		return viewer;
+	}
+
+	public Layout getLayout() {
+		return null;
 	}
 
 	private void hookContextMenu() {
@@ -394,13 +291,13 @@ public class RSSView extends ViewPart implements IFeedView,
 				RSSView.this.fillContextMenu(manager);
 			}
 		});
-		Menu menu = menuMgr.createContextMenu(treeView.getControl());
-		treeView.getControl().setMenu(menu);
-		getSite().registerContextMenu(menuMgr, treeView);
+		Menu menu = menuMgr.createContextMenu(viewer.getControl());
+		viewer.getControl().setMenu(menu);
+		getSite().registerContextMenu(menuMgr, viewer);
 	}
 
 	private void hookDoubleClickAction() {
-		treeView.addDoubleClickListener(new IDoubleClickListener() {
+		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				doubleClickAction.run();
 			}
@@ -426,36 +323,96 @@ public class RSSView extends ViewPart implements IFeedView,
 		}
 	}
 
-	private void registerDesktopNotifications() {
-		FeedCollection collection = AggregatorPlugin.getDefault()
-				.getFeedCollection(null);
-		collection.addFeedListener(new IAggregatorEventListener() {
+	private void initDND() {
+		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
+		int operations = DND.DROP_MOVE;
+		final Tree tree = viewer.getTree();
+		final DragSource source = new DragSource(tree, operations);
+		source.setTransfer(types);
+		final TreeItem[] dragSourceItem = new TreeItem[1];
+		source.addDragListener(new DragSourceListener() {
+			public void dragFinished(DragSourceEvent event) {
+				if (event.detail == DND.DROP_MOVE) {
+					dragSourceItem[0].dispose();
+					dragSourceItem[0] = null;
+				}
+			};
 
-			public void aggregatorItemChanged(
-					final AggregatorItemChangedEvent event) {
-				if (event.getType().equals(EventType.CREATED)) {
-					Object[] items = event.getItems();
-					for (Object object : items) {
-						if (object instanceof Article) {
-							notificationItems.add((AggregatorItem) object);
-						}
-					}
+			public void dragSetData(DragSourceEvent event) {
+				AggregatorItem item = (AggregatorItem) dragSourceItem[0]
+						.getData();
+				event.data = item.getUUID().toString();
+			}
+
+			public void dragStart(DragSourceEvent event) {
+				TreeItem[] selection = tree.getSelection();
+				event.doit = false;
+				if (selection.length > 0) {
+					event.doit = true;
+					dragSourceItem[0] = selection[0];
+				}
+			}
+		});
+		DropTarget target = new DropTarget(tree, operations);
+		target.setTransfer(types);
+		target.addDropListener(new ViewerDropAdapter(viewer) {
+
+			private AggregatorItemParent getParent(TreeItem item) {
+				if (item.getParentItem() == null) {
+					return getFeedCollection();
+				} else {
+					return (AggregatorItemParent) item.getParentItem()
+							.getData();
 				}
 			}
 
+			@Override
+			public boolean performDrop(Object data) {
+				// The item being dragged...
+				AggregatorItem source = (AggregatorItem) ((IStructuredSelection) viewer
+						.getSelection()).getFirstElement();
+
+				Object input = viewer.getInput();
+
+				if (!(input instanceof AggregatorCollection)) {
+					return false;
+				}
+				AggregatorItemParent newParent = (AggregatorItemParent) getCurrentTarget();
+				AggregatorItemParent oldParent = getParent(dragSourceItem[0]);
+
+				// Don't allow to drop into itself!
+				if (newParent == source) {
+					return false;
+				}
+
+				try {
+					if (!newParent.equals(oldParent)) {
+						getFeedCollection().move(source, oldParent, newParent);
+					}
+					// Tell our listeners that the deed is done
+					getFeedCollection().notifyListerners(
+							new Object[] { source }, EventType.MOVED);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return true;
+			}
+
+			@Override
+			public boolean validateDrop(Object target, int operation,
+					TransferData transferType) {
+
+				return target instanceof Folder;
+			}
 		});
-		// Create the timer that will pop up a notification if we have any items
-		// in the notificationItems list.
-		NotificationTimer timer = new NotificationTimer();
-		Display display = getViewSite().getShell().getDisplay();
-		display.asyncExec(timer);
 	}
 
 	private void makeActions() {
 
 		doubleClickAction = new Action() {
 			public void run() {
-				ISelection selection = treeView.getSelection();
+				ISelection selection = viewer.getSelection();
 				Object obj = ((IStructuredSelection) selection)
 						.getFirstElement();
 				String url = BLANK;
@@ -484,13 +441,38 @@ public class RSSView extends ViewPart implements IFeedView,
 	private void refreshView() {
 		Runnable update = new Runnable() {
 			public void run() {
-				if (treeView != null) {
-					treeView.refresh();
+				if (viewer != null) {
+					viewer.refresh();
 
 				}
 			};
 		};
 		Display.getDefault().asyncExec(update);
+	}
+
+	private void registerDesktopNotifications() {
+		AggregatorCollection collection = AggregatorPlugin.getDefault()
+				.getFeedCollection(null);
+		collection.addFeedListener(new IAggregatorEventListener() {
+
+			public void aggregatorItemChanged(
+					final AggregatorItemChangedEvent event) {
+				if (event.getType().equals(EventType.CREATED)) {
+					Object[] items = event.getItems();
+					for (Object object : items) {
+						if (object instanceof Article) {
+							notificationItems.add((AggregatorItem) object);
+						}
+					}
+				}
+			}
+
+		});
+		// Create the timer that will pop up a notification if we have any items
+		// in the notificationItems list.
+		NotificationTimer timer = new NotificationTimer();
+		Display display = getViewSite().getShell().getDisplay();
+		display.asyncExec(timer);
 	}
 
 	@Override
@@ -500,27 +482,28 @@ public class RSSView extends ViewPart implements IFeedView,
 				.toString(fHorizontalLayout));
 	}
 
-	public void setFeedCollection(FeedCollection registry) {
+	private void setDefaultCollection() {
+		Display d = getViewSite().getShell().getDisplay();
+		d.asyncExec(new Runnable() {
+			public void run() {
+				fCollection = AggregatorPlugin.getDefault().getFeedCollection(
+						DEFAULT_COLLECTION_ID);
+				viewer.setInput(fCollection);
+			}
+		});
+		registerDesktopNotifications();
+	}
+
+	public void setFeedCollection(AggregatorCollection registry) {
 		this.fCollection = registry;
-		treeView.setInput(registry);
+		viewer.setInput(registry);
 	}
 
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
 	public void setFocus() {
-		treeView.getControl().setFocus();
-	}
-
-	private void updateFromPreferences() {
-		IPreferenceStore store = AggregatorUIPlugin.getDefault()
-				.getPreferenceStore();
-		pPreviewIsRead = store
-				.getBoolean(PreferenceConstants.P_PREVIEW_IS_READ);
-	}
-
-	public Layout getLayout() {
-		return null;
+		viewer.getControl().setFocus();
 	}
 
 	public void setLayout(Layout layout) {
@@ -538,141 +521,12 @@ public class RSSView extends ViewPart implements IFeedView,
 		}
 	}
 
-	private void initDND() {
-		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
-		int operations = DND.DROP_MOVE;
-		final Tree tree = treeView.getTree();
-		final DragSource source = new DragSource(tree, operations);
-		source.setTransfer(types);
-		final TreeItem[] dragSourceItem = new TreeItem[1];
-		source.addDragListener(new DragSourceListener() {
-			public void dragStart(DragSourceEvent event) {
-				TreeItem[] selection = tree.getSelection();
-				event.doit = false;
-				if (selection.length > 0) {
-					event.doit = true;
-					dragSourceItem[0] = selection[0];
-				}
-			};
-
-			public void dragSetData(DragSourceEvent event) {
-				AggregatorItem item = (AggregatorItem) dragSourceItem[0]
-						.getData();
-				event.data = item.getUUID().toString();
-			}
-
-			public void dragFinished(DragSourceEvent event) {
-				if (event.detail == DND.DROP_MOVE) {
-					dragSourceItem[0].dispose();
-					dragSourceItem[0] = null;
-				}
-			}
-		});
-		DropTarget target = new DropTarget(tree, operations);
-		target.setTransfer(types);
-		target.addDropListener(new ViewerDropAdapter(treeView) {
-
-			@Override
-			protected Object determineTarget(DropTargetEvent event) {
-				fItem = (TreeItem) event.item;
-				return super.determineTarget(event);
-			}
-
-			private TreeItem fItem;
-
-			private int getItemIndex(TreeItem item) {
-				if (item.getParentItem() == null) {
-					return item.getParent().indexOf(item);
-				} else {
-					return item.getParentItem().indexOf(item);
-				}
-			}
-
-			private AggregatorItemParent getParent(TreeItem item) {
-				if (item.getParentItem() == null) {
-					return getFeedCollection();
-				} else {
-					return (AggregatorItemParent) item.getParentItem()
-							.getData();
-				}
-			}
-
-			@Override
-			public boolean performDrop(Object data) {
-				// The item being dragged...
-				AggregatorItem source = (AggregatorItem) ((IStructuredSelection) treeView
-						.getSelection()).getFirstElement();
-
-				Object input = treeView.getInput();
-
-				if (!(input instanceof FeedCollection)) {
-					return false;
-				}
-				AggregatorItemParent newParent = (AggregatorItemParent) getCurrentTarget();
-				AggregatorItemParent oldParent = getParent(dragSourceItem[0]);
-
-				// Don't allow to drop into itself!
-				if (newParent == source) {
-					return false;
-				}
-
-				int newOrder = 0;
-				int oldOrder = getItemIndex(dragSourceItem[0]);
-
-				int location = getCurrentLocation();
-
-				try {
-					if (location == LOCATION_BEFORE) {
-						// Before
-						newOrder = getItemIndex(fItem) - 1;
-						newParent = oldParent;
-					} else if (location == LOCATION_AFTER) {
-						// After
-						newOrder = getItemIndex(fItem);
-						newParent = oldParent;
-					} else {
-						newOrder = newParent.getChildCount(EnumSet
-								.allOf(ItemType.class));
-					}
-
-					if (newParent.equals(oldParent)) {
-						if (newOrder > oldOrder) {
-							System.out.println(MessageFormat.format(
-									"Moving {0} downwards to {1}", //$NON-NLS-1$
-									new Object[] { source, newOrder }));
-							getFeedCollection().move(source, oldParent,
-									oldOrder, newParent, newOrder);
-						} else {
-							System.out.println(MessageFormat.format(
-									"Moving {0} upwards to {1}", new Object[] { //$NON-NLS-1$
-									source, newOrder + 1 }));
-							getFeedCollection().move(source, oldParent,
-									oldOrder, newParent, newOrder + 1);
-						}
-					} else {
-						System.out.println(MessageFormat.format(
-								"Dropping {0} into {1} at {2}", new Object[] { //$NON-NLS-1$
-								source, fItem, newOrder }));
-						getFeedCollection().move(source, oldParent, oldOrder,
-								newParent, newOrder);
-					}
-					// Tell our listeners that the deed is done
-					getFeedCollection().notifyListerners(
-							new Object[] { source }, EventType.MOVED);
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return true;
-			}
-
-			@Override
-			public boolean validateDrop(Object target, int operation,
-					TransferData transferType) {
-
-				return target instanceof Folder;
-			}
-		});
+	private void setStatusText(String text) {
+		IStatusLineManager mgr = getViewSite().getActionBars()
+				.getStatusLineManager();
+		if (mgr != null) {
+			mgr.setMessage(text);
+		}
 	}
 
 }

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.ui.internal.FilterPropertiesComposite;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -29,12 +29,12 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class FilterPropertiesDialog extends MessageDialog {
 
-	FeedCollection fCollection;
+	AggregatorCollection fCollection;
 
 	public FilterPropertiesDialog(Shell parentShell, String dialogTitle,
 			Image dialogTitleImage, String dialogMessage, int dialogImageType,
 			String[] dialogButtonLabels, int defaultIndex,
-			FeedCollection collection) {
+			AggregatorCollection collection) {
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage,
 				dialogImageType, dialogButtonLabels, defaultIndex);
 		fCollection = collection;

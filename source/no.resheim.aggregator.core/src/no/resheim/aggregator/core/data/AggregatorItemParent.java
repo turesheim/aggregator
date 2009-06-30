@@ -55,18 +55,13 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 * @return
 	 * @throws CoreException
 	 */
-	public AggregatorItem getChildAt(int index) throws CoreException {
-		// Check the cache first
-		/*
-		 * cacheLock.lock(); try { for (AggregatorItem child : children) { if
-		 * (child.getOrdering() == index) return child; } } finally {
-		 * cacheLock.unlock(); }
-		 */
+	public AggregatorItem getChildAt(EnumSet<ItemType> types, int index)
+			throws CoreException {
 		// If nothing is found we must check the storage
 		IAggregatorStorage storage = getCollection().getStorage();
 		try {
 			storage.readLock().lock();
-			AggregatorItem child = storage.getChildAt(this, index);
+			AggregatorItem child = storage.getChildAt(this, types, index);
 			return child;
 		} finally {
 			storage.readLock().unlock();
@@ -120,13 +115,14 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		case KEEP_SOME:
 			// FIXME: This method is broken, it does not consider folders
 			// properly
-			int children = getChildCount(EnumSet.allOf(ItemType.class));
+			int children = getChildCount(EnumSet.of(ItemType.ARTICLE));
 			// Make sure we're not disturbed
 			synchronized (this) {
 				int position = 0;
 				while (children > articles) {
 					doTrash = false;
-					AggregatorItem item = getChildAt(position);
+					AggregatorItem item = getChildAt(EnumSet
+							.of(ItemType.ARTICLE), position);
 					// We're at the end
 					if (item == null)
 						break;
@@ -150,7 +146,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 			break;
 		}
 		if (trashed.size() > 0) {
-			FeedCollection collection = getCollection();
+			AggregatorCollection collection = getCollection();
 			Folder trashFolder = collection.getTrashFolder();
 			ArrayList<Article> tempTrashed = new ArrayList<Article>();
 			// Move each set of consecutive items into the trash folder. We try
@@ -161,8 +157,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 					tempTrashed.add(article);
 				} else {
 					Article prev = tempTrashed.get(tempTrashed.size() - 1);
-					if (prev.getParent().equals(article.getParent())
-							&& prev.getOrdering() == article.getOrdering() - 1) {
+					if (prev.getParent().equals(article.getParent())) {
 						tempTrashed.add(article);
 					} else {
 						Article[] items = tempTrashed
@@ -221,13 +216,10 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 * @throws CoreException
 	 */
 	public void trash(AggregatorItem item) throws CoreException {
-		FeedCollection c = getCollection();
+		AggregatorCollection c = getCollection();
 		Folder trashFolder = c.getTrashFolder();
-		int newPosition = trashFolder.getChildCount(EnumSet
-				.allOf(ItemType.class));
 		item.setFlag(Flag.TRASHED);
-		c.move(item, item.getParent(), item.getOrdering(), trashFolder,
-				newPosition);
+		c.move(item, item.getParent(), trashFolder);
 	}
 
 	/**
@@ -242,13 +234,10 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	 *            whether or not to shift siblings upwards
 	 * @throws CoreException
 	 */
-	public IStatus deleteChild(AggregatorItem item, boolean shift)
-			throws CoreException {
+	public IStatus deleteChild(AggregatorItem item) throws CoreException {
 		IAggregatorStorage storage = getCollection().getStorage();
 		try {
 			storage.writeLock().lock();
-			if (shift)
-				getCollection().shiftUp((AggregatorItem) item);
 			storage.delete((AggregatorItem) item);
 			if (item instanceof Folder) {
 				UUID feedId = ((Folder) item).getFeedUUID();
@@ -299,7 +288,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 		int count = getChildCount(types);
 		AggregatorItem[] items = new AggregatorItem[count];
 		for (int p = 0; p < count; p++) {
-			items[p] = getChildAt(p);
+			items[p] = getChildAt(types, p);
 		}
 		return items;
 	}

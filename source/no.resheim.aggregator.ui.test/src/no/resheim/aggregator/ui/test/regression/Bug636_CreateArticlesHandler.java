@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.core.data.FeedCollection;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.test.TestUtils;
 import no.resheim.aggregator.core.ui.IFeedView;
@@ -49,7 +49,7 @@ public class Bug636_CreateArticlesHandler extends
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		if (part instanceof IFeedView) {
-			final FeedCollection collection = ((IFeedView) part)
+			final AggregatorCollection collection = ((IFeedView) part)
 					.getFeedCollection();
 			if (collection == null) {
 				return null;

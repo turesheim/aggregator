@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2008-2009 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,18 +34,24 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 
 /**
- * TODO: Rename to AggregatorCollection
+ * This type represents a root data element. It holds all folders and using
+ * these one can access all other items. It also holds an instance of
+ * {@link IAggregatorStorage} which is the "back-end" where data us actually
+ * stored. Use this type to access items, instead of the storage.
+ * 
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class FeedCollection extends AggregatorItemParent {
+public class AggregatorCollection extends AggregatorItemParent {
 
 	private static final UUID COLLECTION_ID = UUID
 			.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"); //$NON-NLS-1$
 
 	/** The list of feed change listeners */
 	private static ArrayList<IAggregatorEventListener> feedListeners = new ArrayList<IAggregatorEventListener>();
+
+	/** Name of the trash folder */
 	private static final String TRASH_FOLDER_NAME = "Trash"; //$NON-NLS-1$
 
 	/** Trash folder identifier */
@@ -53,10 +59,7 @@ public class FeedCollection extends AggregatorItemParent {
 			.fromString("448119fa-609c-4463-89cf-31d41d94ad05"); //$NON-NLS-1$
 
 	/**
-	 * The storage for our data
-	 * 
-	 * @uml.property name="fDatabase"
-	 * @uml.associationEnd
+	 * The persistent storage for our data.
 	 */
 	private IAggregatorStorage fDatabase;
 
@@ -89,7 +92,6 @@ public class FeedCollection extends AggregatorItemParent {
 	 */
 	private Folder fTrashFolder;
 
-	private Folder fInboxFolder;
 	/**
 	 * The identifier of the registry as specified when the registry was
 	 * declared.
@@ -99,7 +101,7 @@ public class FeedCollection extends AggregatorItemParent {
 	private String id;
 
 	/**
-	 * Initialises the new collection.
+	 * Initialises the collection.
 	 * 
 	 * @param id
 	 *            the identifier of the collection
@@ -108,7 +110,7 @@ public class FeedCollection extends AggregatorItemParent {
 	 * @param def
 	 *            whether or not the collection is the default collection
 	 */
-	public FeedCollection(String id, boolean pub, boolean def) {
+	public AggregatorCollection(String id, boolean pub, boolean def) {
 		super(null, COLLECTION_ID);
 		this.id = id;
 		fPublic = pub;
@@ -117,7 +119,7 @@ public class FeedCollection extends AggregatorItemParent {
 	}
 
 	/**
-	 * Add listener to be notified about feed changes. The added listener will
+	 * Add a listener to be notified about feed changes. The added listener will
 	 * be notified when feeds are added, removed and when their contents has
 	 * changed.
 	 * 
@@ -129,7 +131,7 @@ public class FeedCollection extends AggregatorItemParent {
 	}
 
 	/**
-	 * Adds a new feed to the database and immediately stores it's data in the
+	 * Adds a new items to the database and immediately stores it's data in the
 	 * persistent storage.
 	 * 
 	 * @param subscription
@@ -187,8 +189,10 @@ public class FeedCollection extends AggregatorItemParent {
 				folder.setFeed(feed.getUUID());
 				folder.setTitle(feed.getTitle());
 				fDatabase.add(folder);
-				move(folder, this, folder.getOrdering(), this, 0);
+				move(folder, this, this);
 				feed.setLocation(folder.getUUID());
+				// XXX: Bad hack. Find a better way to create the RS
+				// fDatabase.getChildAt(folder, 0);
 			} else {
 				// FIXME: Determine the folder from the location
 			}
@@ -340,10 +344,6 @@ public class FeedCollection extends AggregatorItemParent {
 		return fTrashFolder;
 	}
 
-	public Folder getInboxFolder() {
-		return fInboxFolder;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -430,34 +430,15 @@ public class FeedCollection extends AggregatorItemParent {
 	 * 
 	 */
 	public void move(AggregatorItem item, AggregatorItem oldParent,
-			int oldOrder, AggregatorItemParent newParent, int newOrder)
-			throws CoreException {
+			AggregatorItemParent newParent) throws CoreException {
 		try {
 			fDatabase.writeLock().lock();
 			int details = 0;
 			if (!oldParent.equals(newParent)) {
 				// The item is moved into a new parent
 				details |= AggregatorItemChangedEvent.NEW_PARENT;
-				// Shift affected siblings
-				shiftUp(item);
-				// Switch parent item
-				// XXX:
-				// item.getParent().internalRemove(item);
 				item.parent = newParent;
-				// item.getParent().internalAdd(item);
-				// Change the order
-				item.setOrdering(newOrder);
 				// Update the database
-				fDatabase.moved(item);
-			} else if (newOrder > oldOrder) {
-				// The item is moved down (new order is higher)
-				shiftUp(item, oldOrder, newOrder);
-				item.setOrdering(newOrder);
-				fDatabase.moved(item);
-			} else {
-				// The item is moved up
-				shiftDown(item, oldOrder, newOrder);
-				item.setOrdering(newOrder);
 				fDatabase.moved(item);
 			}
 		} finally {
@@ -487,29 +468,15 @@ public class FeedCollection extends AggregatorItemParent {
 			int details = 0;
 			// The (shared) parent item
 			AggregatorItemParent oldParent = items[0].getParent();
-			// The number of items moved
-			int length = items.length;
-			// The old number of children
-			int count = oldParent.getChildCount(EnumSet.allOf(ItemType.class));
 			if (!oldParent.equals(newParent)) {
 				// The item is moved into a new parent
 				details |= AggregatorItemChangedEvent.NEW_PARENT;
-				// Shift affected siblings
-				for (int i = items[length - 1].getOrdering() + 1; i < count; i++) {
-					AggregatorItem sibling = oldParent.getChildAt(i);
-					Assert.isNotNull(sibling);
-					sibling.setOrdering(sibling.getOrdering() - length);
-					fDatabase.moved((AggregatorItem) sibling);
-				}
 				// Switch parent on the moved items
 				for (AggregatorItem item : items) {
 					// XXX:
 					// oldParent.internalRemove(item);
 					item.parent = newParent;
 					// item.getParent().internalAdd(item);
-					// Change the order
-					item.setOrdering(newParent.getChildCount(EnumSet
-							.allOf(ItemType.class)));
 					// Update the database
 					fDatabase.moved(item);
 				}
@@ -582,21 +549,6 @@ public class FeedCollection extends AggregatorItemParent {
 		feedListeners.remove(listener);
 	}
 
-	/**
-	 * Renames the given aggregator item, but does not fire an event.
-	 * 
-	 * @param item
-	 *            the item to rename
-	 */
-	public void rename(AggregatorItem item) {
-		try {
-			fDatabase.writeLock().lock();
-			fDatabase.rename((AggregatorItem) item);
-		} finally {
-			fDatabase.writeLock().unlock();
-		}
-	}
-
 	public void setOrdering(int ordering) {
 	}
 
@@ -619,16 +571,15 @@ public class FeedCollection extends AggregatorItemParent {
 		if (item instanceof Article) {
 			((Article) item).setRead(true);
 			if (item instanceof Article) {
-				write(item);
+				writeBack(item);
 			}
-			notifyListerners(new Object[] { item }, EventType.READ);
 		} else if (item instanceof AggregatorItemParent) {
 			AggregatorItem[] children = ((AggregatorItemParent) item)
 					.getChildren(EnumSet.allOf(ItemType.class));
 			for (AggregatorItem child : children) {
 				setRead(child);
 				if (child instanceof Article) {
-					write(child);
+					writeBack(child);
 				}
 			}
 		}
@@ -639,82 +590,20 @@ public class FeedCollection extends AggregatorItemParent {
 	}
 
 	/**
-	 * Updates the sibling item positions by shifting them downwards.
-	 * 
-	 * TODO: Move to AggregatorItemParent
-	 * 
-	 * @param item
-	 *            the item that was moved
-	 * @param from
-	 *            the initial position of the moved item
-	 * @param to
-	 *            the new position of the moved item
-	 * @throws CoreException
-	 * 
-	 */
-	private void shiftDown(AggregatorItem item, int from, int to)
-			throws CoreException {
-		AggregatorItemParent parent = item.getParent();
-		for (int i = from - 1; i >= to; i--) {
-			AggregatorItem sibling = parent.getChildAt(i);
-			sibling.setOrdering(sibling.getOrdering() + 1);
-			fDatabase.moved((AggregatorItem) sibling);
-		}
-	}
-
-	/**
-	 * TODO: Move to AggregatorItemParent
+	 * Writes back the aggregator item data so that the
+	 * {@link IAggregatorStorage} database (if any) is in sync with the live
+	 * object.
 	 * 
 	 * @param item
-	 * @return
-	 * @throws CoreException
+	 *            the aggregator item
 	 */
-	List<AggregatorItemChangedEvent> shiftUp(AggregatorItem item)
-			throws CoreException {
-		AggregatorItemParent parent = item.getParent();
-		int count = parent.getChildCount(EnumSet.allOf(ItemType.class));
-		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
-		for (int i = item.getOrdering() + 1; i < count; i++) {
-			AggregatorItem sibling = parent.getChildAt(i);
-			Assert.isNotNull(sibling);
-			sibling.setOrdering(sibling.getOrdering() - 1);
-			fDatabase.moved((AggregatorItem) sibling);
-		}
-		return events;
-	}
-
-	/**
-	 * Updates the sibling item positions by shifting them upwards.
-	 * 
-	 * TODO: Move to AggregatorItemParent
-	 * 
-	 * @param item
-	 *            the item that was moved
-	 * @param from
-	 *            the initial position of the moved item
-	 * @param to
-	 *            the new position of the moved item
-	 * @throws CoreException
-	 */
-	private List<AggregatorItemChangedEvent> shiftUp(AggregatorItem item,
-			final int from, final int to) throws CoreException {
-		AggregatorItemParent parent = item.getParent();
-		ArrayList<AggregatorItemChangedEvent> events = new ArrayList<AggregatorItemChangedEvent>();
-		for (int i = from + 1; i <= to; i++) {
-			AggregatorItem sibling = parent.getChildAt(i);
-			sibling.setOrdering(sibling.getOrdering() - 1);
-			fDatabase.moved((AggregatorItem) sibling);
-		}
-		return events;
-	}
-
-	public void write(AggregatorItem item) throws CoreException {
+	public void writeBack(AggregatorItem item) {
 		try {
 			fDatabase.writeLock().lock();
 			if (item instanceof Article) {
 				((Article) item).setLastChanged(System.currentTimeMillis());
 			}
-			fDatabase.update((AggregatorItem) item);
+			fDatabase.writeBack((AggregatorItem) item);
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
