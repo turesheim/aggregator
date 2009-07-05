@@ -14,8 +14,6 @@ package no.resheim.aggregator.core.ui.commands;
 import java.util.HashMap;
 import java.util.Map;
 
-import no.resheim.aggregator.core.data.AggregatorItem.Mark;
-
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.PlatformUI;
@@ -29,31 +27,36 @@ import org.eclipse.ui.services.IServiceLocator;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class MarkItemMenu extends CompoundContributionItem {
+public class LabelItemMenu extends CompoundContributionItem {
 
 	private static final String COMMAND_ID = "no.resheim.aggregator.core.ui.markItem"; //$NON-NLS-1$
 
 	@Override
 	protected IContributionItem[] getContributionItems() {
 		IContributionItem[] marks = new IContributionItem[6];
-		marks[0] = createAction(Mark.NONE, "None"); //$NON-NLS-1$
-		marks[1] = createAction(Mark.IMPORTANT, "Important"); //$NON-NLS-1$
-		marks[2] = createAction(Mark.TODO, "To Do"); //$NON-NLS-1$
-		marks[3] = createAction(Mark.FIRST_PRIORITY, "1. Priority"); //$NON-NLS-1$
-		marks[4] = createAction(Mark.SECOND_PRIORITY, "2. Priority"); //$NON-NLS-1$
-		marks[5] = createAction(Mark.THIRD_PRIORITY, "3. Priority"); //$NON-NLS-1$
+		marks[0] = createAction("None"); //$NON-NLS-1$
+		marks[1] = createAction("Important"); //$NON-NLS-1$
+		marks[2] = createAction("To Do"); //$NON-NLS-1$
+		marks[3] = createAction("1. Priority"); //$NON-NLS-1$
+		marks[4] = createAction("2. Priority"); //$NON-NLS-1$
+		marks[5] = createAction("3. Priority"); //$NON-NLS-1$
 		return marks;
 	}
 
 	@SuppressWarnings("unchecked")
-	private IContributionItem createAction(Mark mark, String title) {
+	private IContributionItem createAction(String title) {
 		IServiceLocator locator = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow();
 		Map parms = new HashMap();
-		parms.put(MarkItemSelectionHandler.PARM_MARK, mark.toString());
+		parms.put(LabelItemSelectionHandler.PARM_MARK, title);
+		/*
+		 * CommandContributionItemParameter item = new
+		 * CommandContributionItemParameter( locator, COMMAND_ID, "",
+		 * SWT.CHECK); item.parameters = parms; item.label = title;
+		 */
 		CommandContributionItemParameter item = new CommandContributionItemParameter(
-				locator, mark.toString(), COMMAND_ID, parms, null, null, null,
-				title, null, null, SWT.RADIO, null, false);
+				locator, title, COMMAND_ID, parms, null, null, null, title,
+				null, null, SWT.CHECK, null, false);
 		return new CommandContributionItem(item);
 	}
 }

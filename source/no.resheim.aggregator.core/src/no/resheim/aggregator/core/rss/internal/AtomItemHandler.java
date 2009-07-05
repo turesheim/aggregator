@@ -13,8 +13,8 @@ package no.resheim.aggregator.core.rss.internal;
 
 import java.util.UUID;
 
-import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.AggregatorCollection;
+import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.Subscription;
 
 import org.xml.sax.Attributes;
@@ -88,17 +88,21 @@ public class AtomItemHandler extends AbstractItemHandler {
 			return new AtomItemSourceHandler(collection, feed);
 		}
 		if (qName.equals("category")) {
-			// FIXME: This should strictly be handled by the reader plug-in
+			// FIXME: This should strictly be handled by the synchronizer
 			String term = atts.getValue("term");
 			String label = atts.getValue("label");
 			if (term != null && term.endsWith("/state/com.google/read")) {
 				if (label != null && label.equals("read")) {
 					item.setRead(true);
 				}
-			}
-			if (term != null && term.endsWith("/state/com.google/starred")) {
+			} else if (term != null
+					&& term.endsWith("/state/com.google/starred")) {
 				if (label != null && label.equals("starred")) {
 					item.setStarred(true);
+				}
+			} else {
+				if (term.contains("/label/")) {
+					item.addLabel(label);
 				}
 			}
 		}

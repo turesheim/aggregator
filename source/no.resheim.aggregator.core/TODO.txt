@@ -4,3 +4,5 @@
 * Design articles and article view icon
 * Selecting folder contents should be recursive
 * Synchronize Google reader categorization. Borrow "label" mechanism from Opera.
+
+* When integrated in an IDE. The 

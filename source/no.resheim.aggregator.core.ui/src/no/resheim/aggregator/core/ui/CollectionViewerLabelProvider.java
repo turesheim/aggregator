@@ -15,10 +15,10 @@ import java.io.ByteArrayInputStream;
 import java.text.DateFormat;
 import java.util.Calendar;
 
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Article;
 import no.resheim.aggregator.core.data.BrokenItem;
-import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.AggregatorItem.Flag;
@@ -219,7 +219,8 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 	 * @return an image representing the item
 	 */
 	private Image getImage(AggregatorItem item) {
-		String id = getBaseId(item) + "_" + item.getMark(); //$NON-NLS-1$
+		String label = "NONE";
+		String id = getBaseId(item) + "_" + label; //$NON-NLS-1$
 		ImageDescriptor type = null;
 
 		// Add status overlays
@@ -252,12 +253,13 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 
 	private Image getImage(Subscription feed, IStatus status, Folder folder) {
 		String id = AggregatorUIPlugin.IMG_FEED_OBJ;
+		String label = "NONE";
 		// The feed has a custom image
 		if (feed.getImageData() != null) {
 			id = feed.getUUID().toString();
 		}
 		if (folder != null) {
-			id += "_" + folder.getMark(); //$NON-NLS-1$
+			id += "_" + label; //$NON-NLS-1$
 		}
 		// Add status overlays
 		ImageDescriptor si = null;
@@ -321,26 +323,23 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 			return null;
 		}
 		ImageDescriptor mark = null;
-		switch (item.getMark()) {
-		case IMPORTANT:
-			mark = registry
-					.getDescriptor(AggregatorUIPlugin.IMG_MARK_IMPORTANT);
-			break;
-		case TODO:
-			mark = registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_TODO);
-			break;
-		case FIRST_PRIORITY:
-			mark = registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_1PRI);
-			break;
-		case SECOND_PRIORITY:
-			mark = registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_2PRI);
-			break;
-		case THIRD_PRIORITY:
-			mark = registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_3PRI);
-			break;
-		default:
-			break;
+		String label = "NONE";
+		if (item.getLabels().length > 0) {
+			label = item.getLabels()[0];
 		}
+		/*
+		 * switch (label) { case IMPORTANT: mark = registry
+		 * .getDescriptor(AggregatorUIPlugin.IMG_MARK_IMPORTANT); break; case
+		 * TODO: mark =
+		 * registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_TODO); break; case
+		 * FIRST_PRIORITY: mark =
+		 * registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_1PRI); break; case
+		 * SECOND_PRIORITY: mark =
+		 * registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_2PRI); break; case
+		 * THIRD_PRIORITY: mark =
+		 * registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_3PRI); break;
+		 * default: break; }
+		 */
 		return mark;
 	}
 
@@ -439,9 +438,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		case 0:
 			return getText(element);
 		case 1:
-			long date = ((Article) element).getPublicationDate();
-			calendar.setTimeInMillis(date);
-			return dateFormat.format(calendar.getTime());
+			return ((AggregatorItem) element).getLabelString();
 		default:
 			break;
 		}

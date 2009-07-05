@@ -4,8 +4,10 @@ CREATE TABLE folders (
 		subscription_uuid CHAR(36),
 		hidden INT NOT NULL,
         title VARCHAR(256) NOT NULL,
-		marking VARCHAR(32) NOT NULL,
+		/* System flags */
 		flags VARCHAR(128) NOT NULL,
+		/* Comma separated list of labels */
+		labels VARCHAR(256) NOT NULL,
 		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);
 
@@ -22,9 +24,10 @@ CREATE TABLE articles (
 		title VARCHAR(256) NOT NULL,
 		/* URL of the original publication */
 		url VARCHAR(256) NOT NULL,
-		/* The marking of the item */
-		marking VARCHAR(32) NOT NULL,		
+		/* System flags */
 		flags VARCHAR(128) NOT NULL,
+		/* Comma separated list of labels */
+		labels VARCHAR(256) NOT NULL,
 		is_read INT NOT NULL,
 		/* Publication date */
 	    publication_date BIGINT NOT NULL,

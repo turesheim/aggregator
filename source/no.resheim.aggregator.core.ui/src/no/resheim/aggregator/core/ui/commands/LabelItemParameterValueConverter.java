@@ -11,8 +11,6 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.commands;
 
-import no.resheim.aggregator.core.data.AggregatorItem.Mark;
-
 import org.eclipse.core.commands.AbstractParameterValueConverter;
 import org.eclipse.core.commands.ParameterValueConversionException;
 
@@ -22,10 +20,10 @@ import org.eclipse.core.commands.ParameterValueConversionException;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class MarkItemParameterValueConverter extends
+public class LabelItemParameterValueConverter extends
 		AbstractParameterValueConverter {
 
-	public MarkItemParameterValueConverter() {
+	public LabelItemParameterValueConverter() {
 	}
 
 	/**
@@ -34,7 +32,7 @@ public class MarkItemParameterValueConverter extends
 	@Override
 	public Object convertToObject(String parameterValue)
 			throws ParameterValueConversionException {
-		return Mark.valueOf(parameterValue);
+		return parameterValue;
 	}
 
 	@Override

@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
-import no.resheim.aggregator.core.data.AggregatorItem.Mark;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -33,12 +32,12 @@ import org.eclipse.ui.menus.UIElement;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class MarkItemSelectionHandler extends AbstractAggregatorCommandHandler
+public class LabelItemSelectionHandler extends AbstractAggregatorCommandHandler
 		implements IElementUpdater {
 
 	public static final String PARM_MARK = "markId"; //$NON-NLS-1$
 
-	public MarkItemSelectionHandler() {
+	public LabelItemSelectionHandler() {
 		super(true);
 	}
 
@@ -54,18 +53,30 @@ public class MarkItemSelectionHandler extends AbstractAggregatorCommandHandler
 
 		AggregatorItem[] items = getSelectedItems(event);
 		Object m = event.getObjectParameterForExecution(PARM_MARK);
-		if (m != null) {
-			Mark mark = (Mark) m;
-			items[0].setMark(mark);
-			getCollection(event).writeBack(items[0]);
-			IWorkbenchWindow window = HandlerUtil
-					.getActiveWorkbenchWindowChecked(event);
-			ICommandService commandService = (ICommandService) window
-					.getService(ICommandService.class);
-			Map filter = new HashMap();
-			filter.put(PARM_MARK, event
-					.getObjectParameterForExecution(PARM_MARK));
-			commandService.refreshElements(event.getCommand().getId(), filter);
+		if (m != null && items.length > 0) {
+			try {
+				String label = m.toString();
+				if (!items[0].hasLabel(label)) {
+					items[0].addLabel(label);
+				} else {
+					items[0].removeLabel(label);
+				}
+				items[0].getCollection().writeBack(items[0]);
+				IWorkbenchWindow window = HandlerUtil
+						.getActiveWorkbenchWindowChecked(event);
+				ICommandService commandService = (ICommandService) window
+						.getService(ICommandService.class);
+				Map filter = new HashMap();
+				filter.put(PARM_MARK, event
+						.getObjectParameterForExecution(PARM_MARK));
+				// filter.put(IServiceScopes.PARTSITE_SCOPE,
+				// window.getActivePage()
+				// .getActivePart());
+				commandService.refreshElements(event.getCommand().getId(),
+						filter);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -83,12 +94,9 @@ public class MarkItemSelectionHandler extends AbstractAggregatorCommandHandler
 				.getActiveWorkbenchWindow().getSelectionService()
 				.getSelection();
 		AggregatorItem[] items = getSelectedItems(selection);
-		if (items.length == 1) {
-			Object m = parameters.get(PARM_MARK);
-			if (m != null) {
-				Mark mark = Mark.valueOf(m.toString());
-				element.setChecked(items[0].getMark().equals(mark));
-			}
-		}
+		Object m = parameters.get(PARM_MARK);
+		String label = m.toString();
+		String[] labels = items[0].getLabels();
+		element.setChecked(items[0].hasLabel(label));
 	}
 }

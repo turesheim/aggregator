@@ -52,6 +52,7 @@ public class ArticlesView extends ViewPart implements ISelectionListener {
 	public class AutoResizeTableLayout extends TableLayout implements
 			ControlListener {
 		private final Tree table;
+		@SuppressWarnings("unchecked")
 		private List columns = new ArrayList();
 		private boolean autosizing = false;
 
@@ -60,6 +61,7 @@ public class ArticlesView extends ViewPart implements ISelectionListener {
 			table.addControlListener(this);
 		}
 
+		@SuppressWarnings("unchecked")
 		public void addColumnData(ColumnLayoutData data) {
 			columns.add(data);
 			super.addColumnData(data);
@@ -167,10 +169,10 @@ public class ArticlesView extends ViewPart implements ISelectionListener {
 		tree.setHeaderVisible(true);
 		TreeColumn c1 = new TreeColumn(tree, SWT.LEFT);
 		c1.setText("Title");
-		layout.addColumnData(new ColumnWeightData(80, 300, false));
+		layout.addColumnData(new ColumnWeightData(75, 300, false));
 		TreeColumn c2 = new TreeColumn(tree, SWT.LEFT);
-		c2.setText("Date");
-		layout.addColumnData(new ColumnWeightData(20, 120, false));
+		c2.setText("Labels");
+		layout.addColumnData(new ColumnWeightData(25, 140, false));
 
 		viewer.setUseHashlookup(true);
 		viewer.setComparer(new AggregatorItemComparer());

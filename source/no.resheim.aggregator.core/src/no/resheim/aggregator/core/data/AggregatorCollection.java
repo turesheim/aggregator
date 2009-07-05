@@ -131,6 +131,14 @@ public class AggregatorCollection extends AggregatorItemParent {
 	}
 
 	/**
+	 * Returns a list of valid labels for the collection.
+	 */
+	public String[] getLabels() {
+		return new String[] { "Important", "To Do", "1. Priority",
+				"2. Priority", "3. Priority" };
+	}
+
+	/**
 	 * Adds a new items to the database and immediately stores it's data in the
 	 * persistent storage.
 	 * 
@@ -250,20 +258,6 @@ public class AggregatorCollection extends AggregatorItemParent {
 		} finally {
 			fDatabase.writeLock().unlock();
 		}
-	}
-
-	private List<AggregatorItem> getDescendants(AggregatorItem item)
-			throws CoreException {
-		ArrayList<AggregatorItem> descendants = new ArrayList<AggregatorItem>();
-		if (item instanceof AggregatorItemParent) {
-			AggregatorItem[] children = ((AggregatorItemParent) item)
-					.getChildren(EnumSet.allOf(ItemType.class));
-			for (AggregatorItem aggregatorItem : children) {
-				descendants.add(aggregatorItem);
-				descendants.addAll(getDescendants(aggregatorItem));
-			}
-		}
-		return descendants;
 	}
 
 	public String getDescription(Article item) {
@@ -509,29 +503,37 @@ public class AggregatorCollection extends AggregatorItemParent {
 		}
 	}
 
-	public IStatus refresh(AggregatorItem item) throws CoreException {
-		List<AggregatorItem> items = getDescendants(item);
-		items.add(item);
+	/**
+	 * Synchronises feeds associated with the given folder item or it's
+	 * descendants.
+	 * 
+	 * @param item
+	 *            the folder item to synchronise
+	 * @return the syncrhonisation status
+	 * @throws CoreException
+	 */
+	public IStatus synchronize(AggregatorItem item) throws CoreException {
+		Assert.isTrue(item instanceof Folder);
+		AggregatorItem[] descendants = ((Folder) item).getChildren(EnumSet
+				.of(ItemType.FOLDER));
+		AggregatorItem[] items = new AggregatorItem[descendants.length + 1];
+		items[0] = item;
+		System.arraycopy(descendants, 0, items, 1, descendants.length);
 		for (AggregatorItem aggregatorItem : items) {
-			if (aggregatorItem instanceof Folder) {
-				UUID feedId = ((Folder) aggregatorItem).getFeedUUID();
-				if (feedId != null) {
-					Subscription feed = getFeeds().get(feedId);
-					if (!feed.isUpdating()) {
-						AbstractSynchronizer synchronizer = AggregatorPlugin
-								.getSynchronizer(feed.getSynchronizer());
-						synchronizer.setCollection(this);
-						synchronizer.setSubscription(feed);
-						synchronizer.schedule();
-					} else {
-						return new Status(
-								IStatus.ERROR,
-								AggregatorPlugin.PLUGIN_ID,
-								MessageFormat
-										.format(
-												Messages.FeedCollection_UpdateInProgress,
-												feed.getTitle()));
-					}
+			UUID feedId = ((Folder) aggregatorItem).getFeedUUID();
+			if (feedId != null) {
+				Subscription feed = getFeeds().get(feedId);
+				if (!feed.isUpdating()) {
+					AbstractSynchronizer synchronizer = AggregatorPlugin
+							.getSynchronizer(feed.getSynchronizer());
+					synchronizer.setCollection(this);
+					synchronizer.setSubscription(feed);
+					synchronizer.schedule();
+				} else {
+					return new Status(IStatus.ERROR,
+							AggregatorPlugin.PLUGIN_ID, MessageFormat.format(
+									Messages.FeedCollection_UpdateInProgress,
+									feed.getTitle()));
 				}
 			}
 		}

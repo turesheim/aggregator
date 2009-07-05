@@ -79,7 +79,7 @@
          </commandParameter>
       </command>
       <command
-            defaultHandler="no.resheim.aggregator.core.ui.commands.MarkItemSelectionHandler"
+            defaultHandler="no.resheim.aggregator.core.ui.commands.LabelItemSelectionHandler"
             id="no.resheim.aggregator.core.ui.markItem"
             name="Mark Item">
          <commandParameter
@@ -110,7 +110,7 @@
             type="no.resheim.aggregator.core.data.FeedCollection">
       </commandParameterType>
       <commandParameterType
-            converter="no.resheim.aggregator.core.ui.commands.MarkItemParameterValueConverter"
+            converter="no.resheim.aggregator.core.ui.commands.LabelItemParameterValueConverter"
             id="no.resheim.aggregator.core.ui.markItemCommandParameterType"
             type="no.resheim.aggregator.core.data.AggregatorItem.Mark">
       </commandParameterType>
@@ -231,9 +231,9 @@
       <menuContribution
             locationURI="popup:no.resheim.aggregator.core.ui.ArticlesView?after=additions">
          <menu
-               label="Mark As">
+               label="Label As">
             <dynamic
-                  class="no.resheim.aggregator.core.ui.commands.MarkItemMenu"
+                  class="no.resheim.aggregator.core.ui.commands.LabelItemMenu"
                   id="no.resheim.aggregator.ui.markAsMenu">
             </dynamic>
          </menu>
@@ -278,18 +278,11 @@
          </command>
          <command
                commandId="no.resheim.aggregator.core.ui.setRead"
-               label="Mark As Read">
+               label="Mark All As Read">
             <visibleWhen
                   checkEnabled="true">
             </visibleWhen>
          </command>
-         <menu
-               label="Mark As">
-            <dynamic
-                  class="no.resheim.aggregator.core.ui.commands.MarkItemMenu"
-                  id="no.resheim.aggregator.ui.markAsMenu">
-            </dynamic>
-         </menu>
          <command
                commandId="no.resheim.aggregator.core.ui.copyLinkCommand"
                label="Copy Link Location"
@@ -309,9 +302,6 @@
                   checkEnabled="true">
             </visibleWhen>
          </command>
-      </menuContribution>
-      <menuContribution
-            locationURI="no.resheim.aggregator.core.ui.menuContribution1">
       </menuContribution>
    </extension>
    <extension

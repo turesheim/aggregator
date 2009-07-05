@@ -1,0 +1,3011 @@
+<?xml version="1.0"?>
+<feed xmlns:idx="urn:atom-extension:indexing" xmlns:gr="http://www.google.com/schemas/reader/atom/"
+	xmlns:media="http://search.yahoo.com/mrss/" xmlns="http://www.w3.org/2005/Atom"
+	idx:index="no"><!--
+Content-type: Preventing XSRF in IE.
+
+-->
+	<generator uri="http://www.google.com/reader">Google Reader</generator>
+	<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+	</id>
+	<title>Aftenposten Nettutgaven - Forsiden</title>
+	<gr:continuation>CM-kteKgupsC</gr:continuation>
+	<link rel="self"
+		href="http://www.google.com/reader/atom/feed/http://www.aftenposten.no/eksport/rss-1_0/?n=100" />
+	<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+	<updated>2009-07-05T19:07:38Z</updated>
+	<entry gr:crawl-timestamp-msec="1246820858243">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3155848.ece#xtor=RSS-3">tag:google.com,2005:reader/item/6b5126c67264be36</id>
+		<category term="user/09406790088207339090/label/Test" scheme="http://www.google.com/reader/"
+			label="Test" />
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Væpner seg mot seriemorder</title>
+		<published>2009-07-05T18:38:27Z</published>
+		<updated>2009-07-05T18:38:27Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3155848.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Fem
+			personer drept - amerikanere holder seg innendørs og bevæpnet.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246820858243">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3155894.ece#xtor=RSS-3">tag:google.com,2005:reader/item/1e71296f06e94088</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Siktet for drapsforsøk etter knivstikking</title>
+		<published>2009-07-05T18:33:17Z</published>
+		<updated>2009-07-05T18:33:17Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3155894.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">To menn er
+			siktet for drapsforsøk etter at to personer ble knivstukket under et
+			slagsmål på Trosterud i Oslo søndag morgen.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246820858243">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3155941.ece#xtor=RSS-3">tag:google.com,2005:reader/item/cbd247604e7417f4</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Mann (25) savnet i fjellet</title>
+		<published>2009-07-05T18:44:47Z</published>
+		<updated>2009-07-05T18:44:47Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3155941.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Intens
+			leting i tett krattskog.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246818663168">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/article3155852.ece#xtor=RSS-3">tag:google.com,2005:reader/item/0c990d631b4aff37</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Federer ble historisk</title>
+		<published>2009-07-05T18:08:18Z</published>
+		<updated>2009-07-05T18:08:18Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/article3155852.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Roger
+			Federer vant Wimbledon-finalen mot Andy Roddick søndag og tok sin 15.
+			Grand Slam-tittel. Sveitseren slo dermed Pete Sampras’ rekord.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246818663168">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3155780.ece#xtor=RSS-3">tag:google.com,2005:reader/item/be464b56830fbb83</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Brannbil mistet bremsene under utrykning</title>
+		<published>2009-07-05T17:59:26Z</published>
+		<updated>2009-07-05T17:59:26Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3155780.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">I full
+			fart på vei mot utrykningsstedet i Stokke kommune, sviktet bremsene
+			til brannbilen.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246815053158">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3155817.ece#xtor=RSS-3">tag:google.com,2005:reader/item/4dd8fd6988d1f5dd</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">17-åring døde etter påkjørsel på gangvei</title>
+		<published>2009-07-05T17:11:45Z</published>
+		<updated>2009-07-05T17:11:45Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3155817.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Kjørt ned
+			på gangvei i Kongsberg natt til søndag.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246815053155">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/article3155741.ece#xtor=RSS-3">tag:google.com,2005:reader/item/d45f0ebfc45125d6</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Historisk VM-gull</title>
+		<published>2009-07-05T16:30:12Z</published>
+		<updated>2009-07-05T16:30:12Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/article3155741.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Tyskerne
+			Jonas Reckermann og Julius Brink ordnet historiens første VM-gull til
+			Europa i sandvolleyball.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246811427249">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3155685.ece#xtor=RSS-3">tag:google.com,2005:reader/item/d0cae70211364178</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Datter (4) sto igjen da moren tok overdose</title>
+		<published>2009-07-05T14:52:31Z</published>
+		<updated>2009-07-05T14:52:31Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3155685.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Politiet
+			bekymret for konsekvensene av mindre ressurser.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246811427248">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/tourdefrance/article3155723.ece#xtor=RSS-3">tag:google.com,2005:reader/item/10e14a929062d691</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Overlegen i spurten</title>
+		<published>2009-07-05T15:29:23Z</published>
+		<updated>2009-07-05T15:29:23Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/tourdefrance/article3155723.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Mark
+			Cavendish var overlegen i spurten på 2. etappe i Tour de France
+			søndag. Thor Hushovd ble nummer fire.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246811427242">
+		<id gr:original-id="http://e24.no/boers-og-finans/article3155416.ece#xtor=RSS-3">tag:google.com,2005:reader/item/2730b69d46cb6407
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Norske selskaper doper laks i Chile</title>
+		<published>2009-07-05T15:27:14Z</published>
+		<updated>2009-07-05T15:27:14Z</updated>
+		<link rel="alternate"
+			href="http://e24.no/boers-og-finans/article3155416.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Norske
+			oppdrettsselskap bruker 5000 ganger så mye antibiotika i Chile enn i
+			Norge.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246811427242">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3155229.ece#xtor=RSS-3">tag:google.com,2005:reader/item/4de155f643ec9ce7</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Halvparten vil ha 20-års aldersgrense</title>
+		<published>2009-07-05T15:43:31Z</published>
+		<updated>2009-07-05T15:43:31Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3155229.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Enda flere
+			vil i tillegg redusere antall utsalgssteder for tobakk. Tiltakene vil
+			skåne de unge, mener Tobakksfritt og Legeforeningen.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246807286580">
+		<id
+			gr:original-id="http://fotball.aftenposten.no/eliteserien/article144042.ece#xtor=RSS-3">tag:google.com,2005:reader/item/c0f8e698a6045b51</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Sunderland neste?</title>
+		<published>2009-07-05T14:33:21Z</published>
+		<updated>2009-07-05T14:33:21Z</updated>
+		<link rel="alternate"
+			href="http://fotball.aftenposten.no/eliteserien/article144042.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Steve
+			Bruce skal være villig til å betale 40 millioner for Moa.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246799149615">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/tourdefrance/article3148146.ece#xtor=RSS-3">tag:google.com,2005:reader/item/1e36000d33ffe480</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Tour de France direkte</title>
+		<published>2009-07-05T12:44:00Z</published>
+		<updated>2009-07-05T12:44:00Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/tourdefrance/article3148146.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Her kan du
+			følge dagens etappe direkte</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246799149614">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3155226.ece#xtor=RSS-3">tag:google.com,2005:reader/item/3d9e5d235e67bb3e</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Vil ikke reise hjem</title>
+		<published>2009-07-05T12:39:22Z</published>
+		<updated>2009-07-05T12:39:22Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3155226.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Arbeidsinnvandrere
+			foretrekker å bli i Norge fremfor å dra hjem. Der er nemlig
+			finanskrisens herjinger enda verre.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246796992652">
+		<id gr:original-id="http://e24.no/lov-og-rett/article3147508.ece#xtor=RSS-3">tag:google.com,2005:reader/item/3dd32bc180bd6f18
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">- Økonomisk kriminalitet straffes for hardt</title>
+		<published>2009-07-05T12:04:31Z</published>
+		<updated>2009-07-05T12:04:31Z</updated>
+		<link rel="alternate"
+			href="http://e24.no/lov-og-rett/article3147508.ece#xtor=RSS-3" type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Harald
+			Stabell reagerer på at økonomisk kriminalitet straffes hardere enn
+			overgrep.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246796992651">
+		<id
+			gr:original-id="http://www.aftenposten.no/kul_und/musikk/article3155499.ece#xtor=RSS-3">tag:google.com,2005:reader/item/4040463b152fb8fd</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">1,6 millioner har bedt om Jackson-billetter</title>
+		<published>2009-07-05T12:26:22Z</published>
+		<updated>2009-07-05T12:26:22Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/kul_und/musikk/article3155499.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">1,6
+			millioner fans ba om billetter til minnemarkeringen for Michael
+			Jackson i Los Angeles innen fristen utløp lørdag ettermiddag.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246796192014">
+		<id
+			gr:original-id="http://oslopuls.aftenposten.no/musikk/article230577.ece#xtor=RSS-3">tag:google.com,2005:reader/item/5cab96a1799ed9a9</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">26.000 besøkte billigfestival</title>
+		<published>2009-07-05T11:56:38Z</published>
+		<updated>2009-07-05T11:56:38Z</updated>
+		<link rel="alternate"
+			href="http://oslopuls.aftenposten.no/musikk/article230577.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Oslo Live
+			har kommet for å bli.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246796192013">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3155536.ece#xtor=RSS-3">tag:google.com,2005:reader/item/7ffe47d347c29ff5</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Mann (28) døde i badeulykke</title>
+		<published>2009-07-05T11:29:56Z</published>
+		<updated>2009-07-05T11:29:56Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3155536.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Hoppet fra
+			13 meter midt på natten.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246793383592">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3155531.ece#xtor=RSS-3">tag:google.com,2005:reader/item/fdd1a5f920154362</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Snakker via Facebook</title>
+		<published>2009-07-05T11:23:59Z</published>
+		<updated>2009-07-05T11:23:59Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3155531.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Sarah
+			Palin uttaler seg kun via sosiale medier.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246792642476">
+		<id gr:original-id="http://e24.no/eiendom/article3155426.ece#xtor=RSS-3">tag:google.com,2005:reader/item/e723665dd567fa2a
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Nå er det lønnsomt å «kvitte seg» med hytten</title>
+		<published>2009-07-05T10:30:37Z</published>
+		<updated>2009-07-05T10:30:37Z</updated>
+		<link rel="alternate" href="http://e24.no/eiendom/article3155426.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">I sommer
+			kan du for første gang overføre hytten til barna uten å betale
+			arveavgift.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246792642475">
+		<id gr:original-id="http://forbruker.no/digital/article3155498.ece#xtor=RSS-3">tag:google.com,2005:reader/item/b261fcfa215f6d18
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Norge kan bli supermakt på datasentre</title>
+		<published>2009-07-05T10:35:46Z</published>
+		<updated>2009-07-05T10:35:46Z</updated>
+		<link rel="alternate"
+			href="http://forbruker.no/digital/article3155498.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">IT-kjemper
+			som Microsoft og Google jakter på steder der de kan plassere sine
+			datasentre. Island, Russland, Sverige og Finland er blant dem som
+			gjerne vil huse disse. Nå kaster også Norge seg inn i kampen.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246789776483">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3155480.ece#xtor=RSS-3">tag:google.com,2005:reader/item/cd60ff3a13b330a6</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Dykkere fant svenske Christine</title>
+		<published>2009-07-05T09:52:52Z</published>
+		<updated>2009-07-05T09:52:52Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3155480.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Christine
+			Badre Schnabls (34) døde kropp funnet etter fem ukers søk.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246789776482">
+		<id
+			gr:original-id="http://fotball.aftenposten.no/eliteserien/article144033.ece#xtor=RSS-3">tag:google.com,2005:reader/item/4c4cb69fa042ff27</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Lyn vurderer Bislett</title>
+		<published>2009-07-05T09:27:04Z</published>
+		<updated>2009-07-05T09:27:04Z</updated>
+		<link rel="alternate"
+			href="http://fotball.aftenposten.no/eliteserien/article144033.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Lyn var på
+			arenainspeksjon under Bislett Games.ar på arenainspeksjon under
+			Bislett Games.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246789776482">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3155311.ece#xtor=RSS-3">tag:google.com,2005:reader/item/1aa31943db6dfca7</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">33-åring likvidert i «drive-by»-skyting i København
+		</title>
+		<published>2009-07-05T10:09:34Z</published>
+		<updated>2009-07-05T10:09:34Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3155311.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Dansk
+			politi har pågrepet tre personer etter at en 33 år gammel mann ble
+			skutt og drept på åpen gate i København lørdag.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246789776480">
+		<id
+			gr:original-id="http://forbruker.no/digital/nyheter/data/article3153643.ece#xtor=RSS-3">tag:google.com,2005:reader/item/702fce878302373a</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Supernettverk med supercomputere besto testen
+		</title>
+		<published>2009-07-05T08:30:40Z</published>
+		<updated>2009-07-05T08:30:40Z</updated>
+		<link rel="alternate"
+			href="http://forbruker.no/digital/nyheter/data/article3153643.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">140
+			supercomputere koblet sammen gav ytelse tilsvarende en halv million
+			PC-er.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246786077673">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3155210.ece#xtor=RSS-3">tag:google.com,2005:reader/item/f0b41600afc982f2</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Ingen ville jobbe for svarte sjefer</title>
+		<published>2009-07-04T22:04:04Z</published>
+		<updated>2009-07-04T22:04:04Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3155210.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">De kom fra
+			Soweto og kjøpte en vingård i Kapp-provinsen, men personalet sa opp
+			fordi det ble vanskelig for dem å arbeide for svarte landeiere.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246786077671">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3155475.ece#xtor=RSS-3">tag:google.com,2005:reader/item/8c7d13aeaa0ed02a</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Mann (19) kjørt ned på gangvei</title>
+		<published>2009-07-05T08:58:25Z</published>
+		<updated>2009-07-05T08:58:25Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3155475.ece#xtor=RSS-3"
+			type="text/html" />
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246786077670">
+		<id gr:original-id="http://www.aftenposten.no/viten/article3153643.ece#xtor=RSS-3">tag:google.com,2005:reader/item/b75d6b226283344e
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Supernettverk med supercomputere besto testen
+		</title>
+		<published>2009-07-05T08:30:40Z</published>
+		<updated>2009-07-05T08:30:40Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/viten/article3153643.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">140
+			supercomputere koblet sammen gav ytelse tilsvarende en halv million
+			PC-er.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246782466555">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3155441.ece#xtor=RSS-3">tag:google.com,2005:reader/item/6c93d1c9ccce2a33</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">16 mineryddere kidnappet i Afghanistan</title>
+		<published>2009-07-05T08:20:11Z</published>
+		<updated>2009-07-05T08:20:11Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3155441.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Væpnede
+			menn har kidnappet 16 afghanske mineryddere som jobbet på et
+			FN-støttet prosjekt øst i Afghanistan, opplyser FN søndag.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246778859327">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3155391.ece#xtor=RSS-3">tag:google.com,2005:reader/item/f23c70ec1f59b932</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">To knivstukket på Trosterud</title>
+		<published>2009-07-05T06:40:55Z</published>
+		<updated>2009-07-05T06:40:55Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3155391.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">To
+			personer pågrepet og to kjørt til sykehus etter masseslagsmål.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246778859327">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3155379.ece#xtor=RSS-3">tag:google.com,2005:reader/item/e6ab87224ef23a8a</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">En person er pågrepet etter boligbrann i Bergen
+		</title>
+		<published>2009-07-05T06:26:47Z</published>
+		<updated>2009-07-05T06:26:47Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3155379.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Over 20
+			personer ble evakuert etter en brann i en boligblokk i Bergen natt
+			til søndag. En person er pågrepet mistenkt for å stå bak brannen.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246778859323">
+		<id gr:original-id="http://www.aftenposten.no/video/article3155417.ece#xtor=RSS-3">tag:google.com,2005:reader/item/0a2000de8f013926
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Madonna starter verdensturnéen</title>
+		<published>2009-07-05T07:23:34Z</published>
+		<updated>2009-07-05T07:23:34Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/video/article3155417.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Se
+			smakebiter fra popdronningens turnéåpning i London lørdag.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246775247854">
+		<id gr:original-id="Les anmeldelsen#xtor=RSS-3">tag:google.com,2005:reader/item/a2b9023de0ca8f88
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Multitasking på høyt nivå</title>
+		<published>2009-07-05T06:13:15Z</published>
+		<updated>2009-07-05T06:13:15Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/Les%20anmeldelsen#xtor=RSS-3" type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Popdronningen
+			rocker, rister på rumpa og vil redde verden i en og samme konsert.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246757220391">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/oslo/article3155350.ece#xtor=RSS-3">tag:google.com,2005:reader/item/7e03bbfd972bf8a0</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Mann skadet i fall fra tre på Karl Johan</title>
+		<published>2009-07-05T00:23:25Z</published>
+		<updated>2009-07-05T00:23:25Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/oslo/article3155350.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">En mann
+			ble alvorlig skadet da han falt ned fra et tre ved Domkirken i Oslo
+			natt til søndag.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246749995309">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3155334.ece#xtor=RSS-3">tag:google.com,2005:reader/item/53a764847ff846d2</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Landgang brøt sammen - flere personer i sjøen
+		</title>
+		<published>2009-07-04T22:51:55Z</published>
+		<updated>2009-07-04T22:51:55Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3155334.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Flere
+			personer havnet i sjøen ved Odderøya i Kristiansand, etter at den ene
+			landgangen til Quart Marina kollapset like etter midnatt.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246745635477">
+		<id
+			gr:original-id="http://oslopuls.aftenposten.no/musikk/article230573.ece#xtor=RSS-3">tag:google.com,2005:reader/item/1c3c321bfe44e54c</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Ekstremt overraskende</title>
+		<published>2009-07-04T21:54:53Z</published>
+		<updated>2009-07-04T21:54:53Z</updated>
+		<link rel="alternate"
+			href="http://oslopuls.aftenposten.no/musikk/article230573.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Øya-aktuelle
+			Lily Allen imponerte på Roskilde.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246745635477">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/article3155309.ece#xtor=RSS-3">tag:google.com,2005:reader/item/5f7b76fb77593e7b</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Tidligere NFL-stjerne drept</title>
+		<published>2009-07-04T21:37:38Z</published>
+		<updated>2009-07-04T21:37:38Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/article3155309.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Steve
+			McNair, tidligere quarterbackstjerne i NFL, ble lørdag skutt og drept
+			i Nashville.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246745635476">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3155211.ece#xtor=RSS-3">tag:google.com,2005:reader/item/5cee0b8796d7d6a3</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Sarah Palins exit er en gåte</title>
+		<published>2009-07-04T22:00:18Z</published>
+		<updated>2009-07-04T22:00:18Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3155211.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">John
+			McCains visepresidentkandidat fra i fjor utløste en ny runde med
+			spekulasjoner da hun besluttet å gå av som guvernør i slutten av
+			måneden.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246742604470">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/tourdefrance/article3155269.ece#xtor=RSS-3">tag:google.com,2005:reader/item/c4fb2ea094930f64</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Nervøs Armstrong manglet litt</title>
+		<published>2009-07-04T21:00:07Z</published>
+		<updated>2009-07-04T21:00:07Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/tourdefrance/article3155269.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Fabian
+			Cancellara utklasset konkurrentene, men ikke uventet var det Lance
+			Armstrong som ble studert mest i Tour-åpningen.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246742604469">
+		<id gr:original-id="http://www.aftenposten.no/kul_und/article3155288.ece#xtor=RSS-3">tag:google.com,2005:reader/item/fd65775953709be3
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Beatles og Rolling Stones-manager død</title>
+		<published>2009-07-04T20:49:22Z</published>
+		<updated>2009-07-04T20:49:22Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/kul_und/article3155288.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Beatles og
+			Rolling Stones’ tidligere manager Allen Klein døde lørdag av
+			alzheimer.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246739171109">
+		<id gr:original-id="http://www.aftenposten.no/kul_und/article3155172.ece#xtor=RSS-3">tag:google.com,2005:reader/item/6e46ac3a85d2a81c
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">LA forbereder seg på «Jack Attack»</title>
+		<published>2009-07-04T19:24:01Z</published>
+		<updated>2009-07-04T19:24:01Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/kul_und/article3155172.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Stenger av
+			et stort område rundt minneseremonien - myndighetene ber folk holde
+			seg hjemme.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246734677057">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3155050.ece#xtor=RSS-3">tag:google.com,2005:reader/item/a54c49cb2f6b047e</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Biden feiret 4. juli med Saddam-hets</title>
+		<published>2009-07-04T18:47:53Z</published>
+		<updated>2009-07-04T18:47:53Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3155050.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">USAs
+			visepresident Joe Biden feiret den amerikanske nasjonaldagen med
+			mobbing av avdøde Saddam Hussein.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246734677057">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/article3154127.ece#xtor=RSS-3">tag:google.com,2005:reader/item/7c3e9147475cfcf3</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Andy den stores fall</title>
+		<published>2009-07-03T18:03:04Z</published>
+		<updated>2009-07-03T18:03:04Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/article3154127.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Andy
+			Roddick slo navnebror Murray i Wimbledon-semifinalen.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246734677057">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3155085.ece#xtor=RSS-3">tag:google.com,2005:reader/item/bdd66762ea75ba66</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Kylling i Icas frokostegg</title>
+		<published>2009-07-04T18:21:45Z</published>
+		<updated>2009-07-04T18:21:45Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3155085.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Svenske
+			Suzan ville teste om det gikk an, og 21 dager senere kravlet lille
+			«Ica» ut.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246734677056">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/article3155098.ece#xtor=RSS-3">tag:google.com,2005:reader/item/718fcce5785d111e</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Cancellara vant åpningsetappen</title>
+		<published>2009-07-04T18:25:52Z</published>
+		<updated>2009-07-04T18:25:52Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/article3155098.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Fabian
+			Cancellara vant åpningsetappen i Tour de France lørdag. Sveitseren
+			var klart raskest på den 15,5 kilometer lange tempoetappen i Monaco.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246731324307">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/oslo/article3155047.ece#xtor=RSS-3">tag:google.com,2005:reader/item/c6c2468e7fd18c7e</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Tok en dukkert i Akersbakken</title>
+		<published>2009-07-04T18:01:25Z</published>
+		<updated>2009-07-04T18:01:25Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/oslo/article3155047.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Mens de
+			aller fleste trakk under nærmeste tak da uværet brakte løs fredag
+			kveld, så enkelte muligheten for å få seg en dukkert.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246731324307">
+		<id gr:original-id="http://e24.no/naeringsliv/article3154623.ece#xtor=RSS-3">tag:google.com,2005:reader/item/c19401578b5acf0e
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Vi drikker mer øl</title>
+		<published>2009-07-04T17:41:17Z</published>
+		<updated>2009-07-04T17:41:17Z</updated>
+		<link rel="alternate"
+			href="http://e24.no/naeringsliv/article3154623.ece#xtor=RSS-3" type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Bryggeriene
+			omsetter for flere kroner, men det er kun én som gjør det bra på øl.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246731324306">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3155065.ece#xtor=RSS-3">tag:google.com,2005:reader/item/3054c4008f1343d4</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Brente sin kone i hagen</title>
+		<published>2009-07-04T17:29:26Z</published>
+		<updated>2009-07-04T17:29:26Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3155065.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Dansk mann
+			(72) drepte sin kone - tre barn etterlates.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246731324306">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154993.ece#xtor=RSS-3">tag:google.com,2005:reader/item/aec9d985a6b5f34c</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">- Dette går veldig inn på ham</title>
+		<published>2009-07-04T17:46:23Z</published>
+		<updated>2009-07-04T17:46:23Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154993.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">- Han er
+			dypt sjokkert over tiltalen for besittelse av overgrepsbilder av
+			barn, sier forsvareren til den narko- og våpentiltalte politimannen i
+			Ski.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246728313813">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3155000.ece#xtor=RSS-3">tag:google.com,2005:reader/item/ad97ca3ee99625bf</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Afghanistans eneste gris ute av karantene</title>
+		<published>2009-07-04T16:52:28Z</published>
+		<updated>2009-07-04T16:52:28Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3155000.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Afghanistans
+			eneste gris er sluppet ut av svineinfluensakarantene.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246727662925">
+		<id
+			gr:original-id="http://oslopuls.aftenposten.no/musikk/article230555.ece#xtor=RSS-3">tag:google.com,2005:reader/item/4a52277a95ba85ce</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Tjener mer penger enn noen – og noensinne.</title>
+		<published>2009-07-04T17:57:48Z</published>
+		<updated>2009-07-04T17:57:48Z</updated>
+		<link rel="alternate"
+			href="http://oslopuls.aftenposten.no/musikk/article230555.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Starter
+			sin verdensturné ikveld.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246727662924">
+		<id gr:original-id="http://e24.no/naeringsliv/article3154740.ece#xtor=RSS-3">tag:google.com,2005:reader/item/24aecf10f0b3f584
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Greier ikke slukke tørsten</title>
+		<published>2009-07-04T16:41:58Z</published>
+		<updated>2009-07-04T16:41:58Z</updated>
+		<link rel="alternate"
+			href="http://e24.no/naeringsliv/article3154740.ece#xtor=RSS-3" type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Bryggeriene
+			jobber på spreng for å dekke etterspørselen av flaskevann.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246727662924">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154998.ece#xtor=RSS-3">tag:google.com,2005:reader/item/236c961618ecd96f</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Ti skogbranner i Telemark</title>
+		<published>2009-07-04T16:43:39Z</published>
+		<updated>2009-07-04T16:43:39Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154998.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Totalforbud
+			mot å gjøre opp ild i hele fylket.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246724297627">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154960.ece#xtor=RSS-3">tag:google.com,2005:reader/item/57f8e29e5bc9e07c</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Seksåring gjenglemt på ferietur</title>
+		<published>2009-07-04T16:06:44Z</published>
+		<updated>2009-07-04T16:06:44Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154960.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Da
+			familien dro videre etter en kort stopp ved hotellet, glemte de igjen
+			sin seks år gamle guttunge.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246724297626">
+		<id gr:original-id="http://www.aftenposten.no/kul_und/article3154803.ece#xtor=RSS-3">tag:google.com,2005:reader/item/348ed98f6d6ce2f4
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Skiippagurra-festivalen kan bli politianmeldt
+		</title>
+		<published>2009-07-04T15:32:02Z</published>
+		<updated>2009-07-04T15:32:02Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/kul_und/article3154803.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Hellbillies-vokalist
+			Aslag Haugen ramlet av scenen og brakk begge håndleddene under
+			Skiippagurra-festivalen i Finnmark fredag kveld. Nå vurderer bandets
+			manager å politianmelde festivalen.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246724297626">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3154970.ece#xtor=RSS-3">tag:google.com,2005:reader/item/d6ab7e912a105621</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Kvinne lå død i fem år</title>
+		<published>2009-07-04T16:00:23Z</published>
+		<updated>2009-07-04T16:00:23Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3154970.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">- Et
+			tragisk eksempel på et samfunn hvor ingen bryr seg om hverandre.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246724297626">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154885.ece#xtor=RSS-3">tag:google.com,2005:reader/item/df793a65106528dd</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Mann funnet druknet i Kongsberg</title>
+		<published>2009-07-04T15:31:25Z</published>
+		<updated>2009-07-04T15:31:25Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154885.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">En mann
+			ble lørdag ettermiddag funnet død i Kjennerudvannet i Kongsberg.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246721007205">
+		<id
+			gr:original-id="http://fotball.aftenposten.no/internasjonal/article144013.ece#xtor=RSS-3">tag:google.com,2005:reader/item/28fda0e25029ee6e</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Vraket United</title>
+		<published>2009-07-04T14:13:45Z</published>
+		<updated>2009-07-04T14:13:45Z</updated>
+		<link rel="alternate"
+			href="http://fotball.aftenposten.no/internasjonal/article144013.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Real
+			Madrid-sjefen dro hjem til Benzema og overtalte ham til å signere.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246721007204">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/article3154906.ece#xtor=RSS-3">tag:google.com,2005:reader/item/ff05446c4a4037c0</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Serena til topps</title>
+		<published>2009-07-04T15:03:40Z</published>
+		<updated>2009-07-04T15:03:40Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/article3154906.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Serena
+			Williams gikk seirende ut av søsterduellen i Wimbledon-finalen.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246721007203">
+		<id gr:original-id="http://e24.no/boers-og-finans/article3154632.ece#xtor=RSS-3">tag:google.com,2005:reader/item/3a2586e4a0a1b9cd
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">- Bill Gates vet ikke en dritt</title>
+		<published>2009-07-04T14:45:52Z</published>
+		<updated>2009-07-04T14:45:52Z</updated>
+		<link rel="alternate"
+			href="http://e24.no/boers-og-finans/article3154632.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Norges
+			tobakkonge provosert over «riking-utspill.»</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246717388548">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/politikk/article3154768.ece#xtor=RSS-3">tag:google.com,2005:reader/item/1b57b9bd21732c12</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Etterlyser regelverk</title>
+		<published>2009-07-04T14:11:31Z</published>
+		<updated>2009-07-04T14:11:31Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/politikk/article3154768.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Den
+			prekære situasjonen til Martha Sogn (75) viser at et konkret
+			regelverk er helt nødvendig, mener KrFs Bjørg Tørresdal.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246717388539">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/article3154806.ece#xtor=RSS-3">tag:google.com,2005:reader/item/4bb4852f92f9d7cc</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Kritisert etter Hitler-ros</title>
+		<published>2009-07-04T13:58:25Z</published>
+		<updated>2009-07-04T13:58:25Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/article3154806.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Formel
+			1-sjef Bernie Ecclestone er i hardt vær etter rosende omtale av Adolf
+			Hitler.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246712209293">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154707.ece#xtor=RSS-3">tag:google.com,2005:reader/item/123d2444f7a03a7f</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Seksåring gjenglemt på hotell i Geiranger</title>
+		<published>2009-07-04T12:29:47Z</published>
+		<updated>2009-07-04T12:29:47Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154707.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">En seks år
+			gammel gutt ble gjenglemt i en hotellresepsjon i Geiranger lørdag. Da
+			familien reiste videre etter en rast, sto gutten gråtende igjen.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246710181524">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/tourdefrance/article3154718.ece#xtor=RSS-3">tag:google.com,2005:reader/item/98bc17c4296cf424</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Tar ikke ut 100 prosent</title>
+		<published>2009-07-04T12:05:27Z</published>
+		<updated>2009-07-04T12:05:27Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/tourdefrance/article3154718.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">MONACO
+			(Aftenposten.no): Thor Hushovd kommer ikke til å tyne ut max av
+			kreftene under dagens åpningsetappe av Tour de France.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246710181524">
+		<id
+			gr:original-id="http://fotball.aftenposten.no/eliteserien/article143978.ece#xtor=RSS-3">tag:google.com,2005:reader/item/99b02f79b962d1c0</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">- Kan ikke stole på RBK-folkene</title>
+		<published>2009-07-04T11:26:08Z</published>
+		<updated>2009-07-04T11:26:08Z</updated>
+		<link rel="alternate"
+			href="http://fotball.aftenposten.no/eliteserien/article143978.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Agent Rune
+			Hauge mener det er ufint å avfeie Tettey-tilbud.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246710181522">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/article3154251.ece#xtor=RSS-3">tag:google.com,2005:reader/item/dcc09fa99c53010b</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">- Ryktene har gått lenge</title>
+		<published>2009-07-03T19:53:13Z</published>
+		<updated>2009-07-03T19:53:13Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/article3154251.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Ådne
+			Søndrål mener det verste med Pechsteins utestengelse er at hun ikke
+			er blitt tatt før.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246710181518">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154684.ece#xtor=RSS-3">tag:google.com,2005:reader/item/cefb67d28cb3a870</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Lær å lese strekkoden</title>
+		<published>2009-07-04T12:06:43Z</published>
+		<updated>2009-07-04T12:06:43Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154684.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Det er
+			lenge siden de svarte og hvite strekene bare fortalte hva en vare
+			koster. Nå brukes den til påmelding på Birkebeinerrittet og
+			oppskrifter på mobilen.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246706558847">
+		<id
+			gr:original-id="http://oslopuls.aftenposten.no/musikk/article230572.ece#xtor=RSS-3">tag:google.com,2005:reader/item/f34005302c56cfdc</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Legendarisk fra Röyksopp</title>
+		<published>2009-07-04T10:25:20Z</published>
+		<updated>2009-07-04T10:25:20Z</updated>
+		<link rel="alternate"
+			href="http://oslopuls.aftenposten.no/musikk/article230572.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Satte fyr
+			på Rosilde på ekstremt imponerende vis.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246706558846">
+		<id
+			gr:original-id="http://fotball.aftenposten.no/eliteserien/article143976.ece#xtor=RSS-3">tag:google.com,2005:reader/item/847323702802499a</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Har gjeld på 10-14 millioner</title>
+		<published>2009-07-04T11:04:39Z</published>
+		<updated>2009-07-04T11:04:39Z</updated>
+		<link rel="alternate"
+			href="http://fotball.aftenposten.no/eliteserien/article143976.ece#xtor=RSS-3"
+			type="text/html" />
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246702831168">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/tourdefrance/article3154369.ece#xtor=RSS-3">tag:google.com,2005:reader/item/f3452c609f608923</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Overlegen og (litt) ydmyk</title>
+		<published>2009-07-04T09:52:34Z</published>
+		<updated>2009-07-04T09:52:34Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/tourdefrance/article3154369.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">MONACO
+			(AFTENPOSTEN): Ingen er i tvil om at Mark Cavendish er den raskeste
+			spurteren i Tour de France-feltet. Men i går nektet briten å ta noen
+			seire på forskudd.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246702831168">
+		<id gr:original-id="http://e24.no/olje/article3154420.ece#xtor=RSS-3">tag:google.com,2005:reader/item/26a20149db99b4f2
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Kina slåss om oljen</title>
+		<published>2009-07-04T09:49:37Z</published>
+		<updated>2009-07-04T09:49:37Z</updated>
+		<link rel="alternate" href="http://e24.no/olje/article3154420.ece#xtor=RSS-3"
+			type="text/html" />
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246702831167">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154596.ece#xtor=RSS-3">tag:google.com,2005:reader/item/e2eb2a7eac4dd029</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Politiet beklaget omskjæringsfeil</title>
+		<published>2009-07-04T09:59:33Z</published>
+		<updated>2009-07-04T09:59:33Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154596.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Politiet
+			har sagt unnskyld til det somaliske foreldreparet som ble siktet og
+			varetektsfengslet for å ha kjønnslemlestet døtrene sine.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246698464138">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154589.ece#xtor=RSS-3">tag:google.com,2005:reader/item/3a422f0c37172b19</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Feil værvarsel skremmer turistene</title>
+		<published>2009-07-04T08:50:59Z</published>
+		<updated>2009-07-04T08:50:59Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154589.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Nordmenn
+			dropper ferieturer på grunn av at yr.no melder dårligere vær enn det
+			faktisk blir.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246698464138">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3154532.ece#xtor=RSS-3">tag:google.com,2005:reader/item/764bd2780ab9785c</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Drept på ettårsdagen</title>
+		<published>2009-07-04T08:44:30Z</published>
+		<updated>2009-07-04T08:44:30Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3154532.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Politiet
+			mistenker at faren drepte sønnen og sin kone før han tok sitt eget
+			liv.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246695727733">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3154557.ece#xtor=RSS-3">tag:google.com,2005:reader/item/31c3260631a7af03</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Dømt for å ha skjenket 16-åring til døde</title>
+		<published>2009-07-04T07:55:43Z</published>
+		<updated>2009-07-04T07:55:43Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3154557.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">BERLIN
+			(Aftenposten.no): Den 28 år gamle bartenderen Aytac G. ble i går dømt
+			til tre år og seks måneders fengsel for å ha skjenket 16-åringen
+			Lukas W. 45 tequilladrinker så han døde. Lukas stupte i gulvet med
+			4,2 i promille og døde på sykehuset fire uker senere.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246692118330">
+		<id
+			gr:original-id="http://oslopuls.aftenposten.no/musikk/article230553.ece#xtor=RSS-3">tag:google.com,2005:reader/item/b4762920c9ecd8ae</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Quart krever 10 mill</title>
+		<published>2009-07-04T06:40:24Z</published>
+		<updated>2009-07-04T06:40:24Z</updated>
+		<link rel="alternate"
+			href="http://oslopuls.aftenposten.no/musikk/article230553.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Quartsjef
+			Arild Buli er skuffet over næringslivet.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246692118330">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3154474.ece#xtor=RSS-3">tag:google.com,2005:reader/item/bad336f13cf8a5f7</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Honduras trekker seg</title>
+		<published>2009-07-04T06:22:19Z</published>
+		<updated>2009-07-04T06:22:19Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3154474.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Honduras
+			trekker seg ut av Organisasjonen av amerikanske stater (OAS) som
+			følge av presset for å gjeninnsette den avsatte presidenten Manuel
+			Zelaya.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246692118329">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3154486.ece#xtor=RSS-3">tag:google.com,2005:reader/item/a079c6e2c117c71c</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Nord-Korea har skutt opp syv raketter</title>
+		<published>2009-07-04T06:25:22Z</published>
+		<updated>2009-07-04T06:25:22Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3154486.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Nord-Korea
+			har skutt opp enda seks kortdistanseraketter, melder sørkoreanske og
+			japanske medier.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246688511654">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/politikk/article3154306.ece#xtor=RSS-3">tag:google.com,2005:reader/item/fad309e966f79fbc</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Ap sparer, Høyre bruker, Frp rikest</title>
+		<published>2009-07-04T06:03:37Z</published>
+		<updated>2009-07-04T06:03:37Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/politikk/article3154306.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Høyres
+			stortingsgruppe måtte tære på oppsparte midler i fjor. Ap-gruppen la
+			seg opp flere millioner. Frp greier ikke å bruke opp pengene.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246688511654">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/friidrett/article3154429.ece#xtor=RSS-3">tag:google.com,2005:reader/item/185f956c57aa5cca</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">VM-oppkjøringen i fare</title>
+		<published>2009-07-03T22:59:38Z</published>
+		<updated>2009-07-03T22:59:38Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/friidrett/article3154429.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Andreas
+			Thorkildsen kan komme «stevneløs» til VM. Dagene fremover vil
+			klargjøre lyskeskaden.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246688511650">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3154475.ece#xtor=RSS-3">tag:google.com,2005:reader/item/72131eff567f7c87</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Ban Ki-moon nektes å møte Aung San Suu Kyi</title>
+		<published>2009-07-04T05:34:04Z</published>
+		<updated>2009-07-04T05:34:04Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3154475.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">FNs
+			generalsekretær Ban Ki-moon ble lørdag igjen nektet å treffe den
+			fengslede opposisjonslederen i Burma, Aung San Suu Kyi.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246688511650">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154467.ece#xtor=RSS-3">tag:google.com,2005:reader/item/fe13c9d2b0b3dbc0</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Alvorlig skadet etter knivstikking på Lillehammer
+		</title>
+		<published>2009-07-04T05:35:31Z</published>
+		<updated>2009-07-04T05:35:31Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154467.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">En mann i
+			30-årsalderen ligger alvorlig skadet etter å ha blitt knivstukket på
+			Lillehammer natt til lørdag.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246663264394">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3154293.ece#xtor=RSS-3">tag:google.com,2005:reader/item/2f5aa40591d217e2</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Gransker NYPD etter politidrap</title>
+		<published>2009-07-03T20:02:00Z</published>
+		<updated>2009-07-03T20:02:00Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3154293.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">En
+			psykologiprofessor skal granske om rasisme var en medvirkende årsak
+			da en svart politimann ble skutt av en hvit kollega i Harlem.
+			Forholdet mellom politiet og det afrikanskamerikanske miljøet er
+			blitt dårligere de siste årene.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246663264393">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154277.ece#xtor=RSS-3">tag:google.com,2005:reader/item/047a524152c30ad4</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Uten politi kveld og natt</title>
+		<published>2009-07-03T22:38:51Z</published>
+		<updated>2009-07-03T22:38:51Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154277.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Bor du i
+			Distrikts-Norge, kan du trolig glemme politihjelp om kvelden og
+			natten.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246663264384">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/friidrett/article3154359.ece#xtor=RSS-3">tag:google.com,2005:reader/item/891d071a3058e7cc</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Heisann, en ny Vukicevic</title>
+		<published>2009-07-03T23:08:30Z</published>
+		<updated>2009-07-03T23:08:30Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/friidrett/article3154359.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Neste gang
+			du hører om en Vukicevic-rekord, så sjekk fornavnet. Det kan godt
+			være Vladimir.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246659657936">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154199.ece#xtor=RSS-3">tag:google.com,2005:reader/item/58065ba60a3b56a5</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Dette er rommet til Martha Sogn (75)</title>
+		<published>2009-07-03T22:08:20Z</published>
+		<updated>2009-07-03T22:08:20Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154199.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Medisiner
+			i badekaret. S241 BAD, står det på døren. Innenfor troner et gammelt
+			badekar. Oppi karet er det stablet en dostol, en gjestestol og Martha
+			Sogns personlige eiendeler.Sykehjemmets tilbud. Det kombinerte badet
+			og lageret har vært slagrammede Martha Sogns rom på sykehjemmet i
+			Råde i to og en halv uke.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246658014127">
+		<id gr:original-id="http://www.aftenposten.no/kul_und/article3154386.ece#xtor=RSS-3">tag:google.com,2005:reader/item/328a015e739ec80b
+		</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Fansen krever et minnested</title>
+		<published>2009-07-03T21:35:54Z</published>
+		<updated>2009-07-03T21:35:54Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/kul_und/article3154386.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Jackson-familien
+			kan gå glipp av milliardinntekter hvis Michael ikke gravlegges på
+			Neverland. Eks-manageren vil bygge fornøyelsespark</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246656042796">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/article3154265.ece#xtor=RSS-3">tag:google.com,2005:reader/item/6adb63882ae4e22e</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Derfor kastet Thorkildsen skyhøyt</title>
+		<published>2009-07-03T21:08:33Z</published>
+		<updated>2009-07-03T21:08:33Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/article3154265.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">BISLETT
+			(Aftenposten.no): - Kunne kastet 2-3-4 meter lenger, sier trener
+			Åsmund Martinsen.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246656042796">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3154069.ece#xtor=RSS-3">tag:google.com,2005:reader/item/fe4bfafc19ec8a7b</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Mafiaen til valg i Bulgaria</title>
+		<published>2009-07-03T20:59:26Z</published>
+		<updated>2009-07-03T20:59:26Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3154069.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Flere
+			beryktede mafialedere har fått permisjon fra fengsel fordi de stiller
+			i morgendagens parlamentsvalg i Bulgaria.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246656042795">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154180.ece#xtor=RSS-3">tag:google.com,2005:reader/item/56c7d8c7b5dc1fbc</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Piloten reddet ut da sjøfly havarerte i Nordland
+		</title>
+		<published>2009-07-03T19:59:08Z</published>
+		<updated>2009-07-03T19:59:08Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154180.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Piloten
+			reddet seg ut etter at et sjøfly havarerte mellom Bardalsøya og
+			Bardal i Ransfjorden i Nordland fredag kveld.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246655222087">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/oslo/article3154273.ece#xtor=RSS-3">tag:google.com,2005:reader/item/d09f2656ca423110</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Voldsomt uvær herjet Oslo</title>
+		<published>2009-07-03T20:36:10Z</published>
+		<updated>2009-07-03T20:36:10Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/oslo/article3154273.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">40 000
+			mistet strømmen, flere trær ble feid over ende og to hus ble truffet
+			av lynet i det voldsomme uværet som herjet Oslo fredag kveld.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246655222087">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/article3154242.ece#xtor=RSS-3">tag:google.com,2005:reader/item/d05093d8b69d9f95</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Ezinne satte rekord</title>
+		<published>2009-07-03T21:04:17Z</published>
+		<updated>2009-07-03T21:04:17Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/article3154242.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">BISLETT
+			(Aftenposten.no): 3 hundredeler ble kuttet av norgesrekorden. - Det
+			er fremdeles forbedringspotensial, sier Okparaebo.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246655222087">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154174.ece#xtor=RSS-3">tag:google.com,2005:reader/item/b8adf6082a4fed52</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Politiet ble nektet å snu ryggen til
+			politidirektøren</title>
+		<published>2009-07-03T19:55:21Z</published>
+		<updated>2009-07-03T19:55:21Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154174.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Over 80
+			polititjenestemenn i Hordaland ville markere sin misnøye med
+			politidirektør Ingelin Killengreen, men markeringen ble stanset.
+		</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246655222087">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3154343.ece#xtor=RSS-3">tag:google.com,2005:reader/item/72d38f17a02f6d36</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Palin trekker seg som Alaska-guvernør</title>
+		<published>2009-07-03T20:55:43Z</published>
+		<updated>2009-07-03T20:55:43Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3154343.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Sarah
+			Palin trakk seg fredag som Alaskas guvernør.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246655222086">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/uriks/article3154307.ece#xtor=RSS-3">tag:google.com,2005:reader/item/97457d7792f9bac1</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Seks omkommet i brann i London</title>
+		<published>2009-07-03T20:17:19Z</published>
+		<updated>2009-07-03T20:17:19Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/uriks/article3154307.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Tilsammen
+			seks personer - tre voksne og tre barn - omkom i en brann i en
+			høyblokk sørøst i London fredag.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246652434656">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154236.ece#xtor=RSS-3">tag:google.com,2005:reader/item/f9ba684e46e24053</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Gutt (15) alvorlig skadd i ulykke i Hurdal</title>
+		<published>2009-07-03T19:33:59Z</published>
+		<updated>2009-07-03T19:33:59Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154236.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">En 15 år
+			gammel mopedfører ble alvorlig skadd da han kjørte inn i en bil i
+			Hurdal i Akershus fredag ettermiddag.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246652434656">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154239.ece#xtor=RSS-3">tag:google.com,2005:reader/item/b2684419d289a241</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Kvinne druknet</title>
+		<published>2009-07-03T19:30:37Z</published>
+		<updated>2009-07-03T19:30:37Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154239.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">En 60 år
+			gammel kvinne er funnet druknet på Notodden.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246652434655">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/oslo/article3154195.ece#xtor=RSS-3">tag:google.com,2005:reader/item/df52797093d19ee0</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Narkotikasalg på ferieøy i Oslofjorden</title>
+		<published>2009-07-03T19:15:47Z</published>
+		<updated>2009-07-03T19:15:47Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/oslo/article3154195.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Gjør
+			feriegjester utrygge.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246648976269">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/iriks/article3154195.ece#xtor=RSS-3">tag:google.com,2005:reader/item/50f52a4b9e0388cf</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">Narkotikasalg på ferieøy i Oslofjorden</title>
+		<published>2009-07-03T19:15:47Z</published>
+		<updated>2009-07-03T19:15:47Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/iriks/article3154195.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Gjør
+			feriegjester utrygge.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+	<entry gr:crawl-timestamp-msec="1246648823796">
+		<id
+			gr:original-id="http://www.aftenposten.no/nyheter/sport/article3154213.ece#xtor=RSS-3">tag:google.com,2005:reader/item/a44492413bd446e3</id>
+		<category term="user/09406790088207339090/state/com.google/read"
+			scheme="http://www.google.com/reader/" label="read" />
+		<category term="user/09406790088207339090/state/com.google/reading-list"
+			scheme="http://www.google.com/reader/" label="reading-list" />
+		<category term="user/09406790088207339090/label/Nyheter"
+			scheme="http://www.google.com/reader/" label="Nyheter" />
+		<category term="user/09406790088207339090/state/com.google/fresh"
+			scheme="http://www.google.com/reader/" label="fresh" />
+		<title type="html">- Kjempefornøyd!</title>
+		<published>2009-07-03T19:12:19Z</published>
+		<updated>2009-07-03T19:12:19Z</updated>
+		<link rel="alternate"
+			href="http://www.aftenposten.no/nyheter/sport/article3154213.ece#xtor=RSS-3"
+			type="text/html" />
+		<summary xml:base="http://www.aftenposten.no/" type="html">Vukicevic
+			under 13 sekunder igjen.</summary>
+		<author gr:unknown-author="true">
+			<name>(ukjent forfatter)</name>
+		</author>
+		<source gr:stream-id="feed/http://www.aftenposten.no/eksport/rss-1_0/">
+			<id>tag:google.com,2005:reader/feed/http://www.aftenposten.no/eksport/rss-1_0/
+			</id>
+			<title type="html">Aftenposten Nettutgaven - Forsiden</title>
+			<link rel="alternate" href="http://www.aftenposten.no/" type="text/html" />
+		</source>
+	</entry>
+</feed>

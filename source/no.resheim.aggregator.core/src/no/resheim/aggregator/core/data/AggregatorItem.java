@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008 Torkild Ulvøy Resheim.
+ * Copyright (c) 2008-2009 Torkild Ulvøy Resheim.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -45,38 +45,19 @@ public abstract class AggregatorItem {
 		ARTICLE, FOLDER
 	};
 
-	/**
-	 * "Marks" can be used by the user to mark the aggregator item in question.
-	 * <code>Flags</code> are used to for system marking.
-	 */
-	public enum Mark {
-		FIRST_PRIORITY, IMPORTANT, NONE, SECOND_PRIORITY, THIRD_PRIORITY, TODO
-	}
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	/** The collection this item belongs to */
 	private AggregatorCollection collection;
 
 	private EnumSet<Flag> fFlags = EnumSet.noneOf(Flag.class);
 
-	private Mark fMark = Mark.NONE;
+	private String[] fLabels;
 
 	private boolean fSystem = false;
 
-	/**
-	 * @uml.property name="parent"
-	 * @uml.associationEnd
-	 */
 	protected AggregatorItemParent parent;
 
 	/**
 	 * The folder title
-	 * 
-	 * @uml.property name="title"
 	 */
 	protected String title = ""; //$NON-NLS-1$
 
@@ -87,10 +68,33 @@ public abstract class AggregatorItem {
 
 	/**
 	 * @param parent
+	 *            the parent item
+	 * @param uuid
+	 *            the unique identifier of the item
 	 */
 	protected AggregatorItem(AggregatorItemParent parent, UUID uuid) {
 		this.parent = parent;
 		this.uuid = uuid;
+		fLabels = new String[0];
+	}
+
+	/**
+	 * Adds a new label to the aggregator item.
+	 * 
+	 * @param label
+	 *            the label to add.
+	 */
+	public void addLabel(String label) {
+		if (!hasLabel(label)) {
+			try {
+				String[] newLabels = new String[fLabels.length + 1];
+				System.arraycopy(fLabels, 0, newLabels, 1, fLabels.length);
+				newLabels[0] = label.trim();
+				fLabels = newLabels;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -121,13 +125,23 @@ public abstract class AggregatorItem {
 		return fFlags;
 	}
 
-	/**
-	 * Returns the user marks of this aggregator item.
-	 * 
-	 * @return the marks
-	 */
-	public Mark getMark() {
-		return fMark;
+	public String[] getLabels() {
+		return fLabels;
+	}
+
+	public String getLabelString() {
+		StringBuilder sb = new StringBuilder();
+		synchronized (fLabels) {
+			boolean comma = false;
+			for (String string : fLabels) {
+				if (comma) {
+					sb.append(", ");
+				}
+				sb.append(string);
+				comma = true;
+			}
+		}
+		return sb.toString();
 	}
 
 	/**
@@ -148,7 +162,7 @@ public abstract class AggregatorItem {
 	 */
 	public String getTitle() {
 		return title;
-	};
+	}
 
 	/**
 	 * Returns the identifier of this feed item.
@@ -159,8 +173,45 @@ public abstract class AggregatorItem {
 		return uuid;
 	}
 
+	/**
+	 * Tests if the given label is already assigned to the item and returns
+	 * <code>true</code> if this is the case.
+	 * 
+	 * @param label
+	 *            the label to test for.
+	 * @return <code>true</code> if the label is assigned.
+	 */
+	public boolean hasLabel(String label) {
+		boolean found = false;
+		synchronized (fLabels) {
+			for (String l : fLabels) {
+				if (l != null && l.equalsIgnoreCase(label.trim())) {
+					found = true;
+				}
+			}
+		}
+		return found;
+	}
+
 	public boolean isSystem() {
 		return fSystem;
+	};
+
+	/**
+	 * 
+	 * @param label
+	 */
+	public void removeLabel(String label) {
+		if (hasLabel(label)) {
+			int c = 0;
+			String[] newLabels = new String[fLabels.length - 1];
+			for (String string : fLabels) {
+				if (!string.equalsIgnoreCase(label.trim())) {
+					newLabels[c++] = string;
+				}
+			}
+			fLabels = newLabels;
+		}
 	}
 
 	public void setFlag(Flag flag) {
@@ -171,8 +222,8 @@ public abstract class AggregatorItem {
 		this.fFlags = flags;
 	}
 
-	public void setMark(Mark mark) {
-		this.fMark = mark;
+	public void setLabels(String[] labels) {
+		this.fLabels = labels;
 	}
 
 	public void setSystem(boolean hidden) {

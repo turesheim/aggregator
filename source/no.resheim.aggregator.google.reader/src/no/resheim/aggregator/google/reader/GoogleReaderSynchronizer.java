@@ -47,6 +47,7 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 	private static final String ENCODING = "UTF-8";
 	private static final String STATE_STARRED = "user/-/state/com.google/starred";
 	private static final String STATE_READ = "user/-/state/com.google/read";
+	private static final String LABEL_PREFIX = "user/-/label/";
 	private static final String FEED_URL_PREFIX = "http://www.google.com/reader/atom/feed/";
 
 	/**
@@ -152,8 +153,24 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 			throws UnsupportedEncodingException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(encode(article.isStarred(), STATE_STARRED));
-		sb.append("&");
+		sb.append('&');
 		sb.append(encode(article.isRead(), STATE_READ));
+		return sb.toString();
+	}
+
+	private String getLabelString(Article article, String encoding)
+			throws UnsupportedEncodingException {
+		boolean more = false;
+		StringBuilder sb = new StringBuilder();
+		for (String label : article.getLabels()) {
+			if (more) {
+				sb.append('&');
+			}
+			sb.append(URLEncoder.encode("a", encoding));
+			sb.append('=');
+			sb.append(URLEncoder.encode(LABEL_PREFIX + label, encoding));
+			more = true;
+		}
 		return sb.toString();
 	}
 
@@ -174,6 +191,7 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 			String data = URLEncoder.encode("i", ENCODING) + "="
 					+ URLEncoder.encode(article.getGuid(), ENCODING);
 			data += "&" + getStateString(article, ENCODING);
+			data += "&" + getLabelString(article, ENCODING);
 			data += "&" + URLEncoder.encode("ac", ENCODING) + "="
 					+ URLEncoder.encode("edit", ENCODING);
 			data += "&" + URLEncoder.encode("T", ENCODING) + "="
@@ -181,6 +199,7 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 			OutputStreamWriter wr = new OutputStreamWriter(yc.getOutputStream());
 			wr.write(data);
 			wr.flush();
+			System.out.println(data);
 			BufferedReader rd = new BufferedReader(new InputStreamReader(yc
 					.getInputStream()));
 			String line;

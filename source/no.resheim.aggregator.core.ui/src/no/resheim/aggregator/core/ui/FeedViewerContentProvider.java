@@ -126,6 +126,7 @@ public class FeedViewerContentProvider implements ILazyTreeContentProvider,
 							fViewer.refresh();
 						} else {
 							for (Object item : event.getItems()) {
+								System.out.println("Updating item " + item);
 								fViewer.refresh(item);
 							}
 						}
