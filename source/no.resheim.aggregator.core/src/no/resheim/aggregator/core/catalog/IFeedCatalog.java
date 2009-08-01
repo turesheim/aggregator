@@ -15,7 +15,8 @@ import java.net.URL;
 import no.resheim.aggregator.core.data.Subscription;
 
 /**
- * Describes a feed catalog.
+ * Describes a feed catalogue. Instances of this is used to provide a list of
+ * feeds that can be subscribed to.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0

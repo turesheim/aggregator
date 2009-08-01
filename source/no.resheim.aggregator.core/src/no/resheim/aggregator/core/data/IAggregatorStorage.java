@@ -22,6 +22,7 @@ import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.filter.Filter;
 
 import org.eclipse.core.resources.ISaveParticipant;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
@@ -110,16 +111,18 @@ public interface IAggregatorStorage extends ISaveParticipant {
 
 	/**
 	 * Returns the item at the given index in the specified parent item. If no
-	 * item could be found <code>null</code> is returned.
+	 * item could be found <code>null</code> is returned. A
+	 * {@link CoreException} is thrown if somthing went amiss.
 	 * 
 	 * @param parent
 	 *            the parent item
 	 * @param index
 	 *            the index of the child item
 	 * @return the child item or <code>null</code>
+	 * @throws CoreException
 	 */
 	public abstract AggregatorItem getChildAt(AggregatorItemParent parent,
-			EnumSet<ItemType> types, int index);
+			EnumSet<ItemType> types, int index) throws CoreException;
 
 	/**
 	 * Returns the number of unread articles the given parent item has.

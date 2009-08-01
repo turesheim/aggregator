@@ -17,6 +17,7 @@ package no.resheim.aggregator.core.ui;
  * @author Torkild Ulvøy Resheim
  */
 public class PreferenceConstants {
+
 	public enum LinkOpen {
 		/** Links open in the aggregator view */
 		VIEW,
@@ -27,28 +28,43 @@ public class PreferenceConstants {
 	};
 
 	public static final String P_OPEN_LINK = "link_open"; //$NON-NLS-1$
+
 	/** Automatically mark previewed items as read */
 	public static final String P_PREVIEW_IS_READ = "preview_is_read"; //$NON-NLS-1$
+
 	/** Show the number of unread articles in the feed label */
 	public static final String P_SHOW_UNREAD_COUNT = "show_unread_count"; //$NON-NLS-1$
-	/** The color to use for unread items */
+
+	/** The colour to use for unread items */
 	public static final String P_UNREAD_ITEM_COLOR = "unread_item_color"; //$NON-NLS-1$
+
 	/** The font to use when showing the article */
 	public static final String P_PREVIEW_FONT = "preview_font"; //$NON-NLS-1$
+
 	/** The default archiving method to use */
 	public static final String P_ARCHIVING_METHOD = "archiving_method"; //$NON-NLS-1$
+
 	/** The default number of days to keep articles */
 	public static final String P_ARCHIVING_DAYS = "archiving_days"; //$NON-NLS-1$
+
 	/** The default number of items to keep */
 	public static final String P_ARCHIVING_ITEMS = "archiving_items"; //$NON-NLS-1$
+
 	/** The default update period */
 	public static final String P_UPDATING_PERIOD = "updating_period"; //$NON-NLS-1$
+
 	/** The update interval */
 	public static final String P_UPDATING_INTERVAL = "updating_interval"; //$NON-NLS-1$
+
 	/** Show the browser location bar or not */
 	public static final String P_BROWSER_LOCATION_BAR = "browser_location_bar"; //$NON-NLS-1$
+
 	/** Show the browser navigation bar or not */
 	public static final String P_BROWSER_NAVIGATION_BAR = "browser_navigation_bar"; //$NON-NLS-1$
+
 	/** Open each article in a new frame or reuse the preview window */
 	public static final String P_BROWSER_CREATE_NEW_WINDOW = "browser_create_new_window"; //$NON-NLS-1$
+
+	/** Comma separated list of labels allowed for articles */
+	public static final String P_ITEM_LABELS = "item_labels"; //$NON-NLS-1$
 }

@@ -36,6 +36,7 @@ CREATE TABLE articles (
 		added_date BIGINT NOT NULL,
 		/* The article content */
 		description CLOB,
+		/* The name of the author ? */
 		creator VARCHAR(128),
 		media_player VARCHAR(128),
 		/* Date of the last (local) change */

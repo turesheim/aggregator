@@ -35,6 +35,7 @@ import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
 import no.resheim.aggregator.core.filter.Filter;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -457,7 +458,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	}
 
 	public AggregatorItem getChildAt(AggregatorItemParent parent,
-			EnumSet<ItemType> types, int index) {
+			EnumSet<ItemType> types, int index) throws CoreException {
 		Assert.isNotNull(parent);
 		AggregatorItem item = null;
 		try {
@@ -474,7 +475,9 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 				item = new BrokenItem(parent);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new CoreException(new Status(IStatus.ERROR,
+					AggregatorPlugin.PLUGIN_ID, "Could not obtain child item",
+					e));
 		}
 		return item;
 	}

@@ -131,14 +131,6 @@ public class AggregatorCollection extends AggregatorItemParent {
 	}
 
 	/**
-	 * Returns a list of valid labels for the collection.
-	 */
-	public String[] getLabels() {
-		return new String[] { "Important", "To Do", "1. Priority",
-				"2. Priority", "3. Priority" };
-	}
-
-	/**
 	 * Adds a new items to the database and immediately stores it's data in the
 	 * persistent storage.
 	 * 

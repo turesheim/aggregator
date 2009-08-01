@@ -59,6 +59,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 				.toString());
 		PreferenceConverter.setDefault(store,
 				PreferenceConstants.P_UNREAD_ITEM_COLOR, new RGB(0, 0, 255));
+		store.setDefault(PreferenceConstants.P_ITEM_LABELS, "Important,To Do");
 	}
 
 }
