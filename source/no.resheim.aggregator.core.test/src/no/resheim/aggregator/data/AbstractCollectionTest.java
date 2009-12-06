@@ -1,14 +1,16 @@
 package no.resheim.aggregator.data;
 
+import java.util.EnumSet;
 import java.util.UUID;
 
 import junit.framework.TestCase;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
-import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.Folder;
+import no.resheim.aggregator.core.data.Subscription;
+import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.test.TestUtils;
 
 import org.eclipse.core.runtime.CoreException;
@@ -31,15 +33,11 @@ public abstract class AbstractCollectionTest extends TestCase {
 			failNotEquals("Unique identifier differs", item_b.getUUID(), item_a //$NON-NLS-1$
 					.getUUID());
 		}
-		if (!item_a.getMark().equals(item_a.getMark())) {
-			failNotEquals("Marks identifier differs", item_b.getMark(), item_a //$NON-NLS-1$
-					.getMark());
+		if (!item_a.getFlags().equals(item_a.getFlags())) {
+			failNotEquals("Marks identifier differs", item_b.getFlags(), item_a //$NON-NLS-1$
+					.getFlags());
 		}
-		if (item_a.getOrdering() != item_a.getOrdering()) {
-			failNotEquals(
-					"Ordering identifier differs", item_b.getOrdering(), item_a //$NON-NLS-1$
-							.getOrdering());
-		}
+
 		if (!item_a.getParent().equals(item_a.getParent())) {
 			failNotEquals("Parent differs", item_b.getParent(), item_a //$NON-NLS-1$
 					.getParent());
@@ -70,11 +68,10 @@ public abstract class AbstractCollectionTest extends TestCase {
 		// Create the folder instance
 		Folder folder_a = new Folder(getCollection(), UUID.randomUUID());
 		// Add it to the collection
-		getCollection().addNew(new Folder[] {
-			folder_a
-		});
+		getCollection().addNew(new Folder[] { folder_a });
 		// See that it's available in from the storage
-		AggregatorItem item = getCollection().getChildAt(0);
+		AggregatorItem item = getCollection().getChildAt(
+				EnumSet.allOf(ItemType.class), 0);
 		if (item == null) {
 			fail("Folder item could not be retrieved"); //$NON-NLS-1$
 		}
@@ -97,12 +94,13 @@ public abstract class AbstractCollectionTest extends TestCase {
 	public final void testDeleteFolder() throws CoreException {
 		AggregatorCollection collection = getCollection();
 		// Assume the folder was added in the method above
-		AggregatorItem item = collection.getChildAt(0);
+		AggregatorItem item = collection.getChildAt(EnumSet
+				.allOf(ItemType.class), 0);
 		if (item == null) {
 			fail("Folder item could not be retrieved"); //$NON-NLS-1$
 		}
 		item.getParent().trash(item);
-		item = collection.getChildAt(0);
+		item = collection.getChildAt(EnumSet.allOf(ItemType.class), 0);
 		if (item != null) {
 			fail("Folder item was not deleted"); //$NON-NLS-1$
 		}
@@ -114,7 +112,8 @@ public abstract class AbstractCollectionTest extends TestCase {
 		// This should also add a new folder automatically as we did not specify
 		// the location for the feed.
 		getCollection().addNew(feed);
-		AggregatorItem item = getCollection().getChildAt(0);
+		AggregatorItem item = getCollection().getChildAt(
+				EnumSet.allOf(ItemType.class), 0);
 		// Remove the folder.
 		getCollection().trash(item);
 
@@ -140,11 +139,10 @@ public abstract class AbstractCollectionTest extends TestCase {
 				.randomUUID(), feed.getUUID());
 		article_a.setGuid("myGUID"); //$NON-NLS-1$
 		// Add it to the collection
-		collection.addNew(new Article[] {
-			article_a
-		});
+		collection.addNew(new Article[] { article_a });
 		// See that it's there (at position 0 in the folder)
-		AggregatorItem item = folder.getChildAt(0);
+		AggregatorItem item = folder.getChildAt(EnumSet.allOf(ItemType.class),
+				0);
 		if (item == null) {
 			fail("Article item could not be retrieved"); //$NON-NLS-1$
 		}
@@ -174,17 +172,17 @@ public abstract class AbstractCollectionTest extends TestCase {
 			article.setGuid(article.getUUID().toString());
 			article.internalSetText(""); //$NON-NLS-1$
 			article.setLink(""); //$NON-NLS-1$
-			collection.addNew(new Article[] {
-				article
-			});
+			collection.addNew(new Article[] { article });
 		}
 	}
 
 	public final void testGetThe1000Articles() throws CoreException {
-		AggregatorItem folder = getCollection().getChildAt(0);
+		AggregatorItem folder = getCollection().getChildAt(
+				EnumSet.allOf(ItemType.class), 0);
 		System.out.println(folder);
 		for (int a = 0; a < 1000; a++) {
-			AggregatorItem item = ((Folder) folder).getChildAt(a);
+			AggregatorItem item = ((Folder) folder).getChildAt(EnumSet
+					.allOf(ItemType.class), 0);
 			System.out.println(item);
 			if (item == null)
 				fail("Retrieved item is null"); //$NON-NLS-1$

@@ -10,11 +10,11 @@ import javax.xml.parsers.SAXParserFactory;
 
 import junit.framework.TestCase;
 import no.resheim.aggregator.core.AggregatorPlugin;
+import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
-import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.IAggregatorEventListener;
+import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.AggregatorItem.ItemType;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.rss.internal.FeedParser;
@@ -66,7 +66,7 @@ public class FeedParserTest extends TestCase {
 					// The folder should now contain 20 items
 					try {
 						AggregatorItemParent folder = (AggregatorItemParent) getCollection()
-								.getChildAt(0);
+								.getChildAt(EnumSet.allOf(ItemType.class), 0);
 						int count = folder.getChildCount(EnumSet
 								.allOf(ItemType.class));
 						if (count != 20) {
