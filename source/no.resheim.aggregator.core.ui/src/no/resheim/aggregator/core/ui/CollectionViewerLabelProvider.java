@@ -56,11 +56,10 @@ import org.eclipse.swt.widgets.Display;
 public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		implements ILabelProvider, IColorProvider, IPropertyChangeListener,
 		ITableLabelProvider {
+
+	/** The image registry we're using */
 	private static ImageRegistry registry = AggregatorUIPlugin.getDefault()
 			.getImageRegistry();
-
-	/** Font to use when indicating that a feed is being updated */
-	private Font italic;
 
 	/** Font to use when indicating that a feed has unread items */
 	private Font bold;
@@ -71,10 +70,17 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 	 */
 	private Font boldItalic;
 
-	private Color pUnreadItemColor;
+	final Calendar calendar = Calendar.getInstance();
+
+	final DateFormat dateFormat = DateFormat.getDateTimeInstance();
+
+	/** Font to use when indicating that a feed is being updated */
+	private Font italic;
 
 	/** Preference: show unread items in header */
-	private boolean pShowUnreadCount = true;
+	private boolean pShowUnreadCount = true;;
+
+	private Color pUnreadItemColor;
 
 	/**
 	 * 
@@ -82,7 +88,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 	public CollectionViewerLabelProvider() {
 		super();
 		initialize();
-	};
+	}
 
 	@Override
 	public void dispose() {
@@ -148,6 +154,25 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 			return item.getCollection();
 		} catch (CoreException e) {
 			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public Image getColumnImage(Object element, int columnIndex) {
+		if (columnIndex == 0) {
+			return getImage(element);
+		}
+		return null;
+	}
+
+	public String getColumnText(Object element, int columnIndex) {
+		switch (columnIndex) {
+		case 0:
+			return getText(element);
+		case 1:
+			return ((AggregatorItem) element).getLabelString();
+		default:
+			break;
 		}
 		return null;
 	}
@@ -244,11 +269,37 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		Image baseImage = registry.get(getBaseId(item));
 		Point size = new Point(16, 16);
 		DecorationOverlayIcon icon = new DecorationOverlayIcon(baseImage,
-				new ImageDescriptor[] { type, getMarkingOverlay(item), null,
-						si, null }, size) {
+				new ImageDescriptor[] { type, null, null, si, null }, size) {
 		};
 		registry.put(id, icon);
 		return registry.get(id);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
+	 */
+	public Image getImage(Object element) {
+		if (element == null) {
+			return null;
+		}
+		if (element instanceof Subscription) {
+			return getImage((Subscription) element, null, null);
+		}
+		if (element instanceof Folder
+				&& ((Folder) element).getFeedUUID() != null) {
+			Subscription feed = getCollection((Folder) element).getFeeds().get(
+					((Folder) element).getFeedUUID());
+			if (feed != null) {
+				return getImage(feed, feed.getLastStatus(), (Folder) element);
+			} else {
+				return null;
+			}
+		} else if (element instanceof AggregatorItem) {
+			return getImage((AggregatorItem) element);
+		}
+		return null;
 	}
 
 	private Image getImage(Subscription feed, IStatus status, Folder folder) {
@@ -283,64 +334,11 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		Image baseImage = getBaseFeedImageDescriptor(feed);
 		Point size = new Point(16, 16);
 		DecorationOverlayIcon icon = new DecorationOverlayIcon(baseImage,
-				new ImageDescriptor[] { null, getMarkingOverlay(folder), null,
-						si, null }, size) {
+				new ImageDescriptor[] { null, null, null, si, null }, size) {
 		};
 		// Store the image for the next time
 		registry.put(id, icon);
 		return registry.get(id);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
-	 */
-	public Image getImage(Object element) {
-		if (element == null) {
-			return null;
-		}
-		if (element instanceof Subscription) {
-			return getImage((Subscription) element, null, null);
-		}
-		if (element instanceof Folder
-				&& ((Folder) element).getFeedUUID() != null) {
-			Subscription feed = getCollection((Folder) element).getFeeds().get(
-					((Folder) element).getFeedUUID());
-			if (feed != null) {
-				return getImage(feed, feed.getLastStatus(), (Folder) element);
-			} else {
-				return null;
-			}
-		} else if (element instanceof AggregatorItem) {
-			return getImage((AggregatorItem) element);
-		}
-		return null;
-	}
-
-	private ImageDescriptor getMarkingOverlay(AggregatorItem item) {
-		if (item == null) {
-			return null;
-		}
-		ImageDescriptor mark = null;
-		String label = "NONE";
-		if (item.getLabels().length > 0) {
-			label = item.getLabels()[0];
-		}
-		/*
-		 * switch (label) { case IMPORTANT: mark = registry
-		 * .getDescriptor(AggregatorUIPlugin.IMG_MARK_IMPORTANT); break; case
-		 * TODO: mark =
-		 * registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_TODO); break; case
-		 * FIRST_PRIORITY: mark =
-		 * registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_1PRI); break; case
-		 * SECOND_PRIORITY: mark =
-		 * registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_2PRI); break; case
-		 * THIRD_PRIORITY: mark =
-		 * registry.getDescriptor(AggregatorUIPlugin.IMG_MARK_3PRI); break;
-		 * default: break; }
-		 */
-		return mark;
 	}
 
 	public String getText(Object element) {
@@ -382,7 +380,6 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		}
 		return null;
 	}
-
 	/**
 	 * Initialises certain presentation values such as fonts and colours.
 	 */
@@ -421,27 +418,5 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		pUnreadItemColor = new Color(getDisplay(), PreferenceConverter
 				.getColor(store, PreferenceConstants.P_UNREAD_ITEM_COLOR));
 
-	}
-
-	public Image getColumnImage(Object element, int columnIndex) {
-		if (columnIndex == 0) {
-			return getImage(element);
-		}
-		return null;
-	}
-
-	final Calendar calendar = Calendar.getInstance();
-	final DateFormat dateFormat = DateFormat.getDateTimeInstance();
-
-	public String getColumnText(Object element, int columnIndex) {
-		switch (columnIndex) {
-		case 0:
-			return getText(element);
-		case 1:
-			return ((AggregatorItem) element).getLabelString();
-		default:
-			break;
-		}
-		return null;
 	}
 }
