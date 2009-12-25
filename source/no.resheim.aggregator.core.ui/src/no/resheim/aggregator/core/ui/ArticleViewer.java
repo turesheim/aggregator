@@ -32,7 +32,7 @@ import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceConverter;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
@@ -111,6 +111,7 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 		updateFromPreferences();
 		AggregatorUIPlugin.getDefault().getPreferenceStore()
 				.addPropertyChangeListener(this);
+		JFaceResources.getFontRegistry().addListener(this);
 		fBrowserListener = new BrowserStatusTextListener();
 		browser.addStatusTextListener(fBrowserListener);
 		browser.addLocationListener(new LocationListener() {
@@ -159,7 +160,6 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 				}
 			}
 		});
-
 		createActions();
 	}
 
@@ -388,12 +388,19 @@ public class ArticleViewer extends Composite implements IPropertyChangeListener 
 	 * Updates the content property set with values from preference settings.
 	 */
 	private void updateFromPreferences() {
-		IPreferenceStore store = AggregatorUIPlugin.getDefault()
-				.getPreferenceStore();
-		FontData fd = PreferenceConverter.getFontData(store,
-				PreferenceConstants.P_PREVIEW_FONT);
-		contentProperties.put("font-family", fd.getName()); //$NON-NLS-1$
-		contentProperties.put("font-size", String.valueOf(fd.getHeight())); //$NON-NLS-1$
+		if (!JFaceResources.getFontRegistry().hasValueFor(
+				"no.resheim.aggregator.core.ui.articleTextFont")) {
+			FontData[] fontData = JFaceResources.getHeaderFont().getFontData();
+			fontData[0].setHeight(10);
+			JFaceResources.getFontRegistry().put(
+					"no.resheim.aggregator.core.ui.articleTextFont", fontData);
+		}
+		FontData[] fd = JFaceResources.getFont(
+				"no.resheim.aggregator.core.ui.articleTextFont").getFontData();
+
+		contentProperties.put("font-family", fd[0].getName()); //$NON-NLS-1$
+		contentProperties.put("font-size", String.valueOf(fd[0].getHeight())); //$NON-NLS-1$
+		show(selectedArticle);
 
 	}
 

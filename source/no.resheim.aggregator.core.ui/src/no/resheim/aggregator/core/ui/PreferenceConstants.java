@@ -38,9 +38,6 @@ public class PreferenceConstants {
 	/** The colour to use for unread items */
 	public static final String P_UNREAD_ITEM_COLOR = "unread_item_color"; //$NON-NLS-1$
 
-	/** The font to use when showing the article */
-	public static final String P_PREVIEW_FONT = "preview_font"; //$NON-NLS-1$
-
 	/** The default archiving method to use */
 	public static final String P_ARCHIVING_METHOD = "archiving_method"; //$NON-NLS-1$
 

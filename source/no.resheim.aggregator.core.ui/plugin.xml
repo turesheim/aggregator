@@ -533,7 +533,7 @@
             name="HTML Document" type="text/html">
          <code>
             &lt;body style=&quot;margin:4px;font-family:&apos;${font-family}&apos;
-            ;font-size:${font-size}pt&quot;&gt;${content}
+            ;font-size:${font-size}px&quot;&gt;${content}
 &lt;/body&gt;
          </code>
       </handler>
@@ -657,14 +657,16 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
             id="no.resheim.aggregator.core.ui.articleTitleFont"
             isEditable="true"
             label="Article Title">
-         <fontValue
-               value="Times New Roman-bold-36"
-               ws="carbon">
-         </fontValue>
       </fontDefinition>
       <fontDefinition
             id="no.resheim.aggregator.core.ui.articleLabelFont"
             label="Article Label">
+      </fontDefinition>
+      <fontDefinition
+            categoryId="no.resheim.aggregator.core.ui.themeElementCategory"
+            id="no.resheim.aggregator.core.ui.articleTextFont"
+            isEditable="true"
+            label="Article Text">
       </fontDefinition>
    </extension>
    

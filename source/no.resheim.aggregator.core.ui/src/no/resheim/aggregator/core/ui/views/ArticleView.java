@@ -41,10 +41,6 @@ public class ArticleView extends ViewPart implements ISelectionListener {
 		store.addPropertyChangeListener(new IPropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent event) {
 				updateFromPreferences();
-				if (event.getProperty().equals(
-						PreferenceConstants.P_PREVIEW_FONT)) {
-					viewer.show(fLastSelectionItem);
-				}
 			}
 		});
 	}

@@ -17,7 +17,6 @@ import no.resheim.aggregator.core.ui.PreferenceConstants;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.FontFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -51,16 +50,12 @@ public class AggregatorPreferencePage extends FieldEditorPreferencePage
 					Messages.AggregatorPreferencePage_Show_Unread_Count,
 					getFieldEditorParent()));
 		}
-		{
-			addField(new FontFieldEditor(PreferenceConstants.P_PREVIEW_FONT,
-					Messages.AggregatorPreferencePage_Preview_Font, null,
-					getFieldEditorParent()));
-		}
 
 		{
 			addField(new ColorFieldEditor(
 					PreferenceConstants.P_UNREAD_ITEM_COLOR,
-					Messages.AggregatorPreferencePage_UnreadItemColor, getFieldEditorParent()));
+					Messages.AggregatorPreferencePage_UnreadItemColor,
+					getFieldEditorParent()));
 		}
 
 		{
@@ -70,19 +65,16 @@ public class AggregatorPreferencePage extends FieldEditorPreferencePage
 							new String[] {
 									Messages.AggregatorPreferencePage_View,
 									PreferenceConstants.LinkOpen.VIEW
-											.toString()
-							},
+											.toString() },
 							new String[] {
 									Messages.AggregatorPreferencePage_Editor,
 									PreferenceConstants.LinkOpen.EDITOR
-											.toString()
-							},
+											.toString() },
 							new String[] {
 									Messages.AggregatorPreferencePage_External,
 									PreferenceConstants.LinkOpen.EXTERNAL
-											.toString()
-							}
-					}, getFieldEditorParent(), true));
+											.toString() } },
+					getFieldEditorParent(), true));
 		}
 
 		{
@@ -111,7 +103,8 @@ public class AggregatorPreferencePage extends FieldEditorPreferencePage
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+	 * @see
+	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench workbench) {
 	}

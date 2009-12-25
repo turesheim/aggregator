@@ -209,9 +209,6 @@ public class ArticlesView extends ViewPart implements ISelectionListener {
 
 			public void handleEvent(Event event) {
 				if (event.index == 1 && event.text != null) {
-					TreeItem item = (TreeItem) event.item;
-					System.out.println(event.text);
-					// textLayout.setText(event.item.toString());
 					textLayout.setStyle(fLabelStyle, event.start, event.end);
 					textLayout.draw(event.gc, event.x, event.y);
 				}
@@ -230,6 +227,7 @@ public class ArticlesView extends ViewPart implements ISelectionListener {
 		});
 		createActions();
 		hookContextMenu();
+		System.out.println("ArticlesView.createPartControl()");
 	}
 
 	private void refreshView() {
