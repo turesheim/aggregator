@@ -90,4 +90,18 @@
             id="no.resheim.aggregator.rcp.splashHandlers.extensible">
       </splashHandler>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipse.ui.ExtensionFactory:colorsAndFontsPreferencePage"
+            id="org.eclipse.ui.preferencePages.ColorsAndFonts"
+            name="Colors and Fonts">
+         <keywordReference
+               id="org.eclipse.ui.ide.appearance">
+         </keywordReference>
+         <keywordReference
+               id="org.eclipse.ui.ide.themes">
+         </keywordReference>
+      </page>
+   </extension>
 </plugin>
