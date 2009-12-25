@@ -18,6 +18,13 @@ import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 
+/**
+ * This abstract implementation of a feed catalogue adds a few common
+ * properties.
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
+ */
 public abstract class AbstractFeedCatalog implements IFeedCatalog,
 		IExecutableExtension {
 

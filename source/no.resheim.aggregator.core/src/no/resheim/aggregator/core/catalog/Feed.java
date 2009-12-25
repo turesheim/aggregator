@@ -12,6 +12,12 @@ package no.resheim.aggregator.core.catalog;
 
 import no.resheim.aggregator.core.data.Subscription;
 
+/**
+ * 
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
+ */
 public class Feed {
 
 	private Subscription subscription;

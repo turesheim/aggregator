@@ -651,5 +651,21 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
             id="no.resheim.aggregator.core.ui.newSubscriptionWizard">
       </primaryWizard>
    </extension>
+   <extension
+         point="org.eclipse.ui.themes">
+      <themeElementCategory
+            id="no.resheim.aggregator.core.ui.themeElementCategory"
+            label="Aggregator">
+      </themeElementCategory>
+      <fontDefinition
+            defaultsTo="org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyTitle"
+            id="no.resheim.aggregator.core.ui.articleTitleFont"
+            label="Article Title">
+      </fontDefinition>
+      <fontDefinition
+            id="no.resheim.aggregator.core.ui.articleLabelFont"
+            label="Article Label">
+      </fontDefinition>
+   </extension>
    
 </plugin>

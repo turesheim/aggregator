@@ -13,7 +13,7 @@ package no.resheim.aggregator.core.ui.commands;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorCollection;
-import no.resheim.aggregator.core.data.FeedWorkingCopy;
+import no.resheim.aggregator.core.data.SubscriptionWorkingCopy;
 import no.resheim.aggregator.core.data.Subscription.Archiving;
 import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
@@ -63,7 +63,7 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 			if (item != null)
 				parent = collection;
 		}
-		FeedWorkingCopy wc = getNewFeedWorkingCopy(parent);
+		SubscriptionWorkingCopy wc = getNewFeedWorkingCopy(parent);
 		wizard.setFeed(wc);
 		IDialogSettings workbenchSettings = AggregatorUIPlugin.getDefault()
 				.getDialogSettings();
@@ -81,8 +81,8 @@ public class AddFeedCommandHandler extends AbstractAggregatorCommandHandler
 		return null;
 	}
 
-	private FeedWorkingCopy getNewFeedWorkingCopy(AggregatorItem parent) {
-		FeedWorkingCopy wc = FeedWorkingCopy.newInstance(parent);
+	private SubscriptionWorkingCopy getNewFeedWorkingCopy(AggregatorItem parent) {
+		SubscriptionWorkingCopy wc = SubscriptionWorkingCopy.newInstance(parent);
 		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()

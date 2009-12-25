@@ -35,25 +35,43 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.TextLayout;
+import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+/**
+ * A view that lists articles.
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
+ */
 public class ArticlesView extends ViewPart implements ISelectionListener {
 
 	TreeViewer viewer;
+	Font fLabelFont;
 
+	/**
+	 * A table layout that will automatically resize all columns.
+	 * 
+	 * @author Torkild Ulvøy Resheim
+	 * @since 1.0
+	 */
 	public class AutoResizeTableLayout extends TableLayout implements
 			ControlListener {
 		private final Tree table;
-		@SuppressWarnings("unchecked")
-		private List columns = new ArrayList();
+		private List<ColumnLayoutData> columns = new ArrayList<ColumnLayoutData>();
 		private boolean autosizing = false;
 
 		public AutoResizeTableLayout(Tree table) {
@@ -61,7 +79,6 @@ public class ArticlesView extends ViewPart implements ISelectionListener {
 			table.addControlListener(this);
 		}
 
-		@SuppressWarnings("unchecked")
 		public void addColumnData(ColumnLayoutData data) {
 			columns.add(data);
 			super.addColumnData(data);
@@ -158,8 +175,17 @@ public class ArticlesView extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		fWaitCursor = new Cursor(getSite().getShell().getDisplay(),
-				SWT.CURSOR_WAIT);
+
+		fLabelFont = PlatformUI.getWorkbench().getThemeManager()
+				.getCurrentTheme().getFontRegistry().get(
+						"no.resheim.aggregator.core.ui.articleLabelFont");
+		Display display = getSite().getShell().getDisplay();
+		fLabelStyle = new TextStyle(fLabelFont, display
+				.getSystemColor(SWT.COLOR_WHITE), display
+				.getSystemColor(SWT.COLOR_GRAY));
+		final TextLayout textLayout = new TextLayout(display);
+
+		fWaitCursor = new Cursor(display, SWT.CURSOR_WAIT);
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL
 				| SWT.VIRTUAL);
 		Tree tree = viewer.getTree();
@@ -170,15 +196,27 @@ public class ArticlesView extends ViewPart implements ISelectionListener {
 		TreeColumn c1 = new TreeColumn(tree, SWT.LEFT);
 		c1.setText("Title");
 		layout.addColumnData(new ColumnWeightData(75, 300, false));
-		TreeColumn c2 = new TreeColumn(tree, SWT.LEFT);
+		TreeColumn c2 = new TreeColumn(tree, SWT.RIGHT);
 		c2.setText("Labels");
 		layout.addColumnData(new ColumnWeightData(25, 140, false));
-
 		viewer.setUseHashlookup(true);
 		viewer.setComparer(new AggregatorItemComparer());
 		viewer.setContentProvider(new FeedViewerContentProvider(EnumSet
 				.of(ItemType.ARTICLE)));
 		viewer.setLabelProvider(new CollectionViewerLabelProvider());
+		final Tree table = viewer.getTree();
+		table.addListener(SWT.PaintItem, new Listener() {
+
+			public void handleEvent(Event event) {
+				if (event.index == 1 && event.text != null) {
+					TreeItem item = (TreeItem) event.item;
+					System.out.println(event.text);
+					// textLayout.setText(event.item.toString());
+					textLayout.setStyle(fLabelStyle, event.start, event.end);
+					textLayout.draw(event.gc, event.x, event.y);
+				}
+			}
+		});
 		getSite().getWorkbenchWindow().getSelectionService()
 				.addPostSelectionListener(this);
 		getSite().setSelectionProvider(viewer);
@@ -186,7 +224,7 @@ public class ArticlesView extends ViewPart implements ISelectionListener {
 				.getPreferenceStore();
 		store.addPropertyChangeListener(new IPropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent event) {
-				// TODO: Just listen to what we need.
+				// TODO: Just listen to what we actually need.
 				refreshView();
 			}
 		});
@@ -265,6 +303,7 @@ public class ArticlesView extends ViewPart implements ISelectionListener {
 
 	private final static Separator selection_separator = new Separator(
 			"selection"); //$NON-NLS-1$
+	private TextStyle fLabelStyle;
 
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui;
 
-import no.resheim.aggregator.core.data.FeedWorkingCopy;
+import no.resheim.aggregator.core.data.SubscriptionWorkingCopy;
 import no.resheim.aggregator.core.ui.internal.FeedPropertiesComposite;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -28,11 +28,11 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class FeedPropertiesDialog extends MessageDialog {
 
-	private FeedWorkingCopy feed;
+	private SubscriptionWorkingCopy feed;
 
 	public FeedPropertiesDialog(Shell parentShell, String dialogTitle,
 			Image dialogTitleImage, String dialogMessage, int dialogImageType,
-			String[] dialogButtonLabels, int defaultIndex, FeedWorkingCopy feed) {
+			String[] dialogButtonLabels, int defaultIndex, SubscriptionWorkingCopy feed) {
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage,
 				dialogImageType, dialogButtonLabels, defaultIndex);
 		this.feed = feed;

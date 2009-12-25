@@ -11,7 +11,7 @@
  *******************************************************************************/
 package no.resheim.aggregator.core.ui.internal;
 
-import no.resheim.aggregator.core.data.FeedWorkingCopy;
+import no.resheim.aggregator.core.data.SubscriptionWorkingCopy;
 import no.resheim.aggregator.core.data.Subscription.Archiving;
 import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
@@ -75,7 +75,7 @@ public class NewFeedWizardOptionsPage extends WizardPage {
 	 */
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
-		final FeedWorkingCopy workingCopy = wizard.getWorkingCopy();
+		final SubscriptionWorkingCopy workingCopy = wizard.getWorkingCopy();
 		final GridLayout gridLayout_1 = new GridLayout();
 		gridLayout_1.numColumns = 2;
 		container.setLayout(gridLayout_1);
@@ -205,7 +205,7 @@ public class NewFeedWizardOptionsPage extends WizardPage {
 	}
 
 	private void updateArchivingWidgets() {
-		FeedWorkingCopy workingCopy = wizard.getWorkingCopy();
+		SubscriptionWorkingCopy workingCopy = wizard.getWorkingCopy();
 		switch (workingCopy.getArchiving()) {
 		case KEEP_ALL:
 			radioKeepAll.setSelection(true);
@@ -233,7 +233,7 @@ public class NewFeedWizardOptionsPage extends WizardPage {
 	}
 
 	private void updateRefreshWidgets() {
-		FeedWorkingCopy workingCopy = wizard.getWorkingCopy();
+		SubscriptionWorkingCopy workingCopy = wizard.getWorkingCopy();
 		switch (workingCopy.getUpdatePeriod()) {
 		case MINUTES:
 			periodCombo.setEnabled(true);

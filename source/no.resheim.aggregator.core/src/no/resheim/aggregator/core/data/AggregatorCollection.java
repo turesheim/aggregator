@@ -173,35 +173,35 @@ public class AggregatorCollection extends AggregatorItemParent {
 	 * Adds a new feed to the collection. If the feed location is not specified
 	 * a new folder will automatically be created and associated with the feed.
 	 * 
-	 * @param feed
+	 * @param subscription
 	 *            the new feed to add
 	 * @return the {@link Folder} where feed items will be put
 	 */
-	public Folder addNew(Subscription feed) {
-		feed.validate();
+	public Folder addNew(Subscription subscription) {
+		subscription.validate();
 		Folder folder = null;
 		try {
 			fDatabase.writeLock().lock();
 			// No location has been specified for the feed so we must create a
 			// new folder at the collection root and use this.
-			if (feed.getLocation() == null) {
+			if (subscription.getLocation() == null) {
 				folder = new Folder(this, UUID.randomUUID());
-				folder.setFeed(feed.getUUID());
-				folder.setTitle(feed.getTitle());
+				folder.setFeed(subscription.getUUID());
+				folder.setTitle(subscription.getTitle());
 				fDatabase.add(folder);
 				move(folder, this, this);
-				feed.setLocation(folder.getUUID());
+				subscription.setLocation(folder.getUUID());
 				// XXX: Bad hack. Find a better way to create the RS
 				// fDatabase.getChildAt(folder, 0);
 			} else {
 				// FIXME: Determine the folder from the location
 			}
-			fFeeds.put(feed.getUUID(), feed);
-			fDatabase.add(feed);
+			fFeeds.put(subscription.getUUID(), subscription);
+			fDatabase.add(subscription);
 			AbstractSynchronizer synchronizer = AggregatorPlugin
-					.getSynchronizer(feed.getSynchronizer());
+					.getSynchronizer(subscription.getSynchronizer());
 			synchronizer.setCollection(this);
-			synchronizer.setSubscription(feed);
+			synchronizer.setSubscription(subscription);
 			synchronizer.schedule();
 		} catch (CoreException e) {
 			e.printStackTrace();

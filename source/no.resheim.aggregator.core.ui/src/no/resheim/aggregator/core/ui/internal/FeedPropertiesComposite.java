@@ -12,7 +12,7 @@
 package no.resheim.aggregator.core.ui.internal;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
-import no.resheim.aggregator.core.data.FeedWorkingCopy;
+import no.resheim.aggregator.core.data.SubscriptionWorkingCopy;
 import no.resheim.aggregator.core.data.Subscription.Archiving;
 import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
 
@@ -53,7 +53,7 @@ public class FeedPropertiesComposite extends Composite {
 	private Button keepUnreadItemsButton;
 	private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
-	private FeedWorkingCopy feed = null;
+	private SubscriptionWorkingCopy feed = null;
 
 	private Label titleLabel = null;
 
@@ -98,7 +98,7 @@ public class FeedPropertiesComposite extends Composite {
 
 	private Button loginButton;
 
-	public FeedPropertiesComposite(Composite parent, FeedWorkingCopy feed) {
+	public FeedPropertiesComposite(Composite parent, SubscriptionWorkingCopy feed) {
 		super(parent, SWT.NONE);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = org.eclipse.swt.layout.GridData.FILL;

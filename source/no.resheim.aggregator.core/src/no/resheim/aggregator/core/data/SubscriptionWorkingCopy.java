@@ -9,45 +9,35 @@ import java.util.UUID;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public final class FeedWorkingCopy extends Subscription {
-	public static FeedWorkingCopy newInstance(AggregatorItem parent) {
+public final class SubscriptionWorkingCopy extends Subscription {
+	public static SubscriptionWorkingCopy newInstance(AggregatorItem parent) {
 		Subscription feed = new Subscription();
 		feed.setUUID(UUID.randomUUID());
-		return new FeedWorkingCopy(feed);
+		return new SubscriptionWorkingCopy(feed);
 	}
 
-	/**
-	 * @uml.property name="feed"
-	 * @uml.associationEnd
-	 */
 	Subscription feed;
 
-	/**
-	 * @uml.property name="password"
-	 */
 	protected String password;
 
-	/**
-	 * @uml.property name="username"
-	 */
 	protected String username;
 
-	public FeedWorkingCopy(Subscription feed) {
+	public SubscriptionWorkingCopy(Subscription feed) {
 		super();
 		this.feed = feed;
-		this.uuid = feed.uuid;
+		setUUID(feed.getUUID());
 		copy(feed);
 	}
 
 	// FIXME: Use clone instead?
 	public void copy(Subscription feed) {
-		title = feed.getTitle();
-		url = feed.url;
+		setTitle(feed.getTitle());
+		setURL(feed.getURL());
 		archiving = feed.archiving;
 		archivingItems = feed.archivingItems;
 		archivingDays = feed.archivingDays;
-		updateInterval = feed.updateInterval;
-		updatePeriod = feed.updatePeriod;
+		setUpdateInterval(feed.getUpdateInterval());
+		setUpdatePeriod(feed.getUpdatePeriod());
 		hidden = feed.hidden;
 		anonymousAccess = feed.anonymousAccess;
 		keepUnread = feed.keepUnread;
@@ -57,17 +47,16 @@ public final class FeedWorkingCopy extends Subscription {
 
 	/**
 	 * @return
-	 * @uml.property name="feed"
 	 */
 	public Subscription getFeed() {
 		if (feed != null) {
-			feed.setTitle(title);
-			feed.url = url;
+			feed.setTitle(getTitle());
+			feed.setURL(getURL());
 			feed.archiving = archiving;
 			feed.archivingItems = archivingItems;
 			feed.archivingDays = archivingDays;
-			feed.updateInterval = updateInterval;
-			feed.updatePeriod = updatePeriod;
+			feed.setUpdateInterval(getUpdateInterval());
+			feed.setUpdatePeriod(getUpdatePeriod());
 			feed.hidden = hidden;
 			feed.anonymousAccess = anonymousAccess;
 			feed.keepUnread = keepUnread;
@@ -79,7 +68,6 @@ public final class FeedWorkingCopy extends Subscription {
 
 	/**
 	 * @return
-	 * @uml.property name="password"
 	 */
 	public String getPassword() {
 		return password;
@@ -87,7 +75,6 @@ public final class FeedWorkingCopy extends Subscription {
 
 	/**
 	 * @return
-	 * @uml.property name="username"
 	 */
 	public String getUsername() {
 		return username;
@@ -95,7 +82,6 @@ public final class FeedWorkingCopy extends Subscription {
 
 	/**
 	 * @param password
-	 * @uml.property name="password"
 	 */
 	public void setPassword(String password) {
 		this.password = password;
@@ -103,7 +89,6 @@ public final class FeedWorkingCopy extends Subscription {
 
 	/**
 	 * @param username
-	 * @uml.property name="username"
 	 */
 	public void setUsername(String username) {
 		this.username = username;

@@ -23,7 +23,7 @@ import no.resheim.aggregator.core.data.Subscription;
  */
 public interface IFeedCatalog {
 	/**
-	 * The default updater to use.
+	 * The default synchronizer to use.
 	 */
 	public static final String DEFAULT_SYNCHRONIZER_ID = "no.resheim.aggregator.core.directSynchronizer";
 

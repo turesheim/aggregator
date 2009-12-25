@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 
 /**
- * Synchronizer that connects directly to the feed URL and downloads from there.
+ * Synchroniser that connects directly to the feed URL and downloads from there.
  * This is the normal way of operation.
  * 
  * @author Torkild Ulvøy Resheim

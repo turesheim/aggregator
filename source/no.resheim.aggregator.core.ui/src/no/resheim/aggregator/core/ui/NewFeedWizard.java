@@ -14,7 +14,7 @@ package no.resheim.aggregator.core.ui;
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorCollection;
-import no.resheim.aggregator.core.data.FeedWorkingCopy;
+import no.resheim.aggregator.core.data.SubscriptionWorkingCopy;
 import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.Subscription.Archiving;
 import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
@@ -47,7 +47,7 @@ public class NewFeedWizard extends Wizard implements IWorkbenchWizard {
 		return collection;
 	}
 
-	FeedWorkingCopy workingCopy;
+	SubscriptionWorkingCopy workingCopy;
 
 	public NewFeedWizard() {
 		super();
@@ -78,7 +78,7 @@ public class NewFeedWizard extends Wizard implements IWorkbenchWizard {
 		return feed;
 	}
 
-	public FeedWorkingCopy getWorkingCopy() {
+	public SubscriptionWorkingCopy getWorkingCopy() {
 		return workingCopy;
 	}
 
@@ -103,7 +103,7 @@ public class NewFeedWizard extends Wizard implements IWorkbenchWizard {
 		return true;
 	}
 
-	public void setFeed(FeedWorkingCopy workingCopy) {
+	public void setFeed(SubscriptionWorkingCopy workingCopy) {
 		this.workingCopy = workingCopy;
 	}
 
@@ -114,12 +114,12 @@ public class NewFeedWizard extends Wizard implements IWorkbenchWizard {
 				parent = (AggregatorItem) selection.getFirstElement();
 			}
 		}
-		FeedWorkingCopy wc = getNewFeedWorkingCopy(parent);
+		SubscriptionWorkingCopy wc = getNewFeedWorkingCopy(parent);
 		setFeed(wc);
 	}
 
-	private FeedWorkingCopy getNewFeedWorkingCopy(AggregatorItem parent) {
-		FeedWorkingCopy wc = FeedWorkingCopy.newInstance(parent);
+	private SubscriptionWorkingCopy getNewFeedWorkingCopy(AggregatorItem parent) {
+		SubscriptionWorkingCopy wc = SubscriptionWorkingCopy.newInstance(parent);
 		// Initialise with default values from the preference store.
 		// This is done here as the preference system is a UI component.
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()

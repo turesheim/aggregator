@@ -16,7 +16,8 @@ import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 
 /**
- * @author torkild
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
  */
 public abstract class AggregatorItemParent extends AggregatorItem {
 
@@ -37,7 +38,7 @@ public abstract class AggregatorItemParent extends AggregatorItem {
 	}
 
 	/**
-	 * Adds a new feed to the database and immediately stores it's data in the
+	 * Adds a new item to the database and immediately stores it's data in the
 	 * persistent storage.
 	 * 
 	 * @param feed

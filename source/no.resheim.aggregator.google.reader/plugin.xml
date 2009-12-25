@@ -13,7 +13,7 @@
             category="no.resheim.aggregator.ui.preferences.general"
             class="no.resheim.aggregator.google.reader.ui.GooglePreferencePage"
             id="no.resheim.aggregator.core.google.page"
-            name="Google Reader Integration">
+            name="Google Reader">
       </page>
    </extension>
    <extension

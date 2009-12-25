@@ -15,7 +15,7 @@ import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.AggregatorCollection;
-import no.resheim.aggregator.core.data.FeedWorkingCopy;
+import no.resheim.aggregator.core.data.SubscriptionWorkingCopy;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.AggregatorItemChangedEvent.EventType;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
@@ -51,7 +51,7 @@ public class FeedPropertiesCommandHandler extends
 			if (o instanceof Folder) {
 				Subscription feed = ((Folder) o).getFeed();
 				if (feed != null) {
-					FeedWorkingCopy wc = new FeedWorkingCopy(feed);
+					SubscriptionWorkingCopy wc = new SubscriptionWorkingCopy(feed);
 					FeedPropertiesDialog dialog = new FeedPropertiesDialog(
 							HandlerUtil.getActiveShell(event),
 							Messages.FeedPropertiesCommand_Title,
@@ -85,7 +85,7 @@ public class FeedPropertiesCommandHandler extends
 		return null;
 	}
 
-	private void setCredentials(FeedWorkingCopy wc) {
+	private void setCredentials(SubscriptionWorkingCopy wc) {
 		ISecurePreferences root = SecurePreferencesFactory.getDefault().node(
 				AggregatorPlugin.SECURE_STORAGE_ROOT);
 		ISecurePreferences feedNode = root.node(wc.getUUID().toString());

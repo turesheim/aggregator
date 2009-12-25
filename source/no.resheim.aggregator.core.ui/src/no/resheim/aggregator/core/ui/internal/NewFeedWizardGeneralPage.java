@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.catalog.IFeedCatalog;
-import no.resheim.aggregator.core.data.FeedWorkingCopy;
+import no.resheim.aggregator.core.data.SubscriptionWorkingCopy;
 import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.NewFeedWizard;
@@ -93,7 +93,7 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		container.setLayout(gridLayout);
 		setControl(container);
 
-		final FeedWorkingCopy workingCopy = wizard.getWorkingCopy();
+		final SubscriptionWorkingCopy workingCopy = wizard.getWorkingCopy();
 
 		final SashForm sashForm = new SashForm(container, SWT.NONE);
 		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -212,7 +212,7 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		sashForm.setWeights(new int[] { 1, 1 });
 	}
 
-	private void createConnectionGroup(final FeedWorkingCopy workingCopy,
+	private void createConnectionGroup(final SubscriptionWorkingCopy workingCopy,
 			Composite detailsGroup) {
 		final Group group = new Group(detailsGroup, SWT.NONE);
 		group.setText("Connection");
@@ -245,7 +245,7 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		});
 	}
 
-	private void createAuthenticationGroup(final FeedWorkingCopy workingCopy,
+	private void createAuthenticationGroup(final SubscriptionWorkingCopy workingCopy,
 			final Composite group) {
 
 		final Group group_1 = new Group(group, SWT.NONE);
@@ -305,7 +305,7 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 	}
 
 	private void validate() {
-		FeedWorkingCopy workingCopy = wizard.getWorkingCopy();
+		SubscriptionWorkingCopy workingCopy = wizard.getWorkingCopy();
 
 		if (workingCopy.getTitle().length() == 0) {
 			setMessage(Messages.NewFeedWizardGeneralPage_Error_Missing_title);

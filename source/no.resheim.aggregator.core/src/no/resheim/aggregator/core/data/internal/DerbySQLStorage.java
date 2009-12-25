@@ -899,9 +899,9 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			}
 			if (item instanceof Folder) {
 				s.executeUpdate("update folders set labels='" //$NON-NLS-1$
-						+ item.getLabelString() + "' title='"
-						+ item.getTitle()
-						+ "' where uuid='" //$NON-NLS-1$
+						+ item.getLabelString()
+						+ "', title='"
+						+ item.getTitle() + "' where uuid='" //$NON-NLS-1$
 						+ item.getUUID() + "'"); //$NON-NLS-1$
 			}
 			// Re-execute this one so that articles view is updated.

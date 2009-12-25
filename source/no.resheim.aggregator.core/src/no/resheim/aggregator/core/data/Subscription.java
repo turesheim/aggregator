@@ -14,6 +14,7 @@ package no.resheim.aggregator.core.data;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import no.resheim.aggregator.core.catalog.Feed;
 import no.resheim.aggregator.core.catalog.IFeedCatalog;
 
 import org.eclipse.core.runtime.Assert;
@@ -21,14 +22,15 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 /**
- * Feeds are
+ * A {@link Subscription} is a representation of the subscription to a feed.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
 public class Subscription implements Comparable<Subscription> {
 	/**
-	 * @author torkild
+	 * @author Torkild Ulvøy Resheim
+	 * @since 1.0
 	 */
 	public enum Archiving {
 		/** Keep all items */
@@ -42,7 +44,7 @@ public class Subscription implements Comparable<Subscription> {
 	}
 
 	/**
-	 * @author torkild
+	 * @author Torkild Ulvøy Resheim
 	 */
 	public enum UpdatePeriod {
 		DAYS, HOURS, MINUTES
@@ -74,53 +76,42 @@ public class Subscription implements Comparable<Subscription> {
 	protected boolean keepUnread;
 
 	/**
-	 * Default is OK
-	 * 
-	 * @uml.property name="lastStatus"
+	 * The status code received the last time the feed was attempted updated.
 	 */
 	private IStatus lastStatus = Status.OK_STATUS;
 
-	/**
-	 * @uml.property name="lastUpdate"
-	 */
-	protected long lastUpdate;
+	private long lastUpdate;
 
-	/**
-	 * @uml.property name="link"
-	 */
 	private String link;
 
-	/**
-	 * @uml.property name="location"
-	 */
-	protected UUID location;
+	private UUID location;
 
 	private String synchronizerId;
 
-	ArrayList<Article> tempItems;
+	private ArrayList<Article> tempItems;
 
-	protected boolean threaded;
+	private boolean threaded;
 
-	protected String title;
+	private String title;
 
 	private String type;
-
-	protected int updateInterval = 1;
 
 	/**
 	 * The default is to update every hour.
 	 */
-	protected UpdatePeriod updatePeriod = UpdatePeriod.HOURS;
-
-	boolean updating;
-
-	protected String url = BLANK_STRING;
-
-	protected UUID uuid;
+	private int updateInterval = 1;
 
 	/**
-	 * @uml.property name="webmaster"
+	 * The default is to update every hour.
 	 */
+	private UpdatePeriod updatePeriod = UpdatePeriod.HOURS;
+
+	private boolean updating;
+
+	private String url = BLANK_STRING;
+
+	private UUID uuid;
+
 	private String webmaster;
 
 	/**
@@ -246,9 +237,9 @@ public class Subscription implements Comparable<Subscription> {
 	}
 
 	/**
-	 * Returns the synchronisation mechanism to use. "feed" means the internal
-	 * feed update mechanism. While "google-reader" use the Google Reader
-	 * synchroniser.
+	 * Returns the identifier of the synchronisation mechanism to use. "feed"
+	 * means the internal feed update mechanism. While "google-reader" use the
+	 * Google Reader synchroniser.
 	 * 
 	 * 
 	 * @return the identifier of the synchronisation mechanism.
@@ -259,7 +250,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @return
-	 * @uml.property name="tempItems"
 	 */
 	public ArrayList<Article> getTempItems() {
 		return tempItems;
@@ -267,7 +257,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @return
-	 * @uml.property name="title"
 	 */
 	public String getTitle() {
 		return title;
@@ -275,7 +264,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @return
-	 * @uml.property name="type"
 	 */
 	public String getType() {
 		return type;
@@ -283,7 +271,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @return
-	 * @uml.property name="updateInterval"
 	 */
 	public int getUpdateInterval() {
 		return updateInterval;
@@ -291,7 +278,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @return
-	 * @uml.property name="updatePeriod"
 	 */
 	public UpdatePeriod getUpdatePeriod() {
 		return updatePeriod;
@@ -299,7 +285,7 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * Returns the calculated update interval of the feed in milliseconds. This
-	 * field should not be serialized.
+	 * field should not be serialised.
 	 * 
 	 * @return The update interval
 	 */
@@ -332,7 +318,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @return
-	 * @uml.property name="webmaster"
 	 */
 	public String getWebmaster() {
 		return webmaster;
@@ -340,7 +325,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @return
-	 * @uml.property name="anonymousAccess"
 	 */
 	public boolean isAnonymousAccess() {
 		return anonymousAccess;
@@ -348,15 +332,15 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @return
-	 * @uml.property name="hidden"
 	 */
 	public boolean isHidden() {
 		return hidden;
 	}
 
 	/**
-	 * @return
-	 * @uml.property name="threaded"
+	 * Indicates whether or not the feed items are threaded.
+	 * 
+	 * @return whether or not the feed items are threaded.
 	 */
 	public boolean isThreaded() {
 		return threaded;
@@ -364,7 +348,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @return
-	 * @uml.property name="updating"
 	 */
 	public boolean isUpdating() {
 		return updating;
@@ -376,7 +359,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param anonymousAccess
-	 * @uml.property name="anonymousAccess"
 	 */
 	public void setAnonymousAccess(boolean anonymousAccess) {
 		this.anonymousAccess = anonymousAccess;
@@ -384,7 +366,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param archiving
-	 * @uml.property name="archiving"
 	 */
 	public void setArchiving(Archiving archiving) {
 		this.archiving = archiving;
@@ -392,7 +373,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param archivingDays
-	 * @uml.property name="archivingDays"
 	 */
 	public void setArchivingDays(int archivingDays) {
 		this.archivingDays = archivingDays;
@@ -400,7 +380,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param archivingItems
-	 * @uml.property name="archivingItems"
 	 */
 	public void setArchivingItems(int archivingItems) {
 		this.archivingItems = archivingItems;
@@ -408,7 +387,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param copyright
-	 * @uml.property name="copyright"
 	 */
 	public void setCopyright(String copyright) {
 		this.copyright = copyright;
@@ -416,7 +394,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param description
-	 * @uml.property name="description"
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -424,7 +401,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param editor
-	 * @uml.property name="editor"
 	 */
 	public void setEditor(String editor) {
 		this.editor = editor;
@@ -432,7 +408,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param hidden
-	 * @uml.property name="hidden"
 	 */
 	public void setHidden(boolean hidden) {
 		this.hidden = hidden;
@@ -440,7 +415,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param imageData
-	 * @uml.property name="imageData"
 	 */
 	public void setImageData(byte[] imageData) {
 		this.imageData = imageData;
@@ -452,7 +426,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param lastStatus
-	 * @uml.property name="lastStatus"
 	 */
 	public void setLastStatus(IStatus lastStatus) {
 		this.lastStatus = lastStatus;
@@ -463,7 +436,6 @@ public class Subscription implements Comparable<Subscription> {
 	 * 
 	 * @param lastUpdate
 	 *            The System.currentTimeMillis() of the last update.
-	 * @uml.property name="lastUpdate"
 	 */
 	public void setLastUpdate(long lastUpdate) {
 		this.lastUpdate = lastUpdate;
@@ -471,7 +443,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param link
-	 * @uml.property name="link"
 	 */
 	public void setLink(String link) {
 		this.link = link;
@@ -483,7 +454,6 @@ public class Subscription implements Comparable<Subscription> {
 	 * 
 	 * @param location
 	 *            UUID of the folder
-	 * @uml.property name="location"
 	 */
 	public void setLocation(UUID location) {
 		this.location = location;
@@ -502,7 +472,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param threaded
-	 * @uml.property name="threaded"
 	 */
 	public void setThreaded(boolean threaded) {
 		this.threaded = threaded;
@@ -510,7 +479,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param title
-	 * @uml.property name="title"
 	 */
 	public void setTitle(String title) {
 		this.title = title;
@@ -518,7 +486,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param type
-	 * @uml.property name="type"
 	 */
 	public void setType(String type) {
 		this.type = type;
@@ -528,7 +495,6 @@ public class Subscription implements Comparable<Subscription> {
 	 * Set to -1 to get the default update interval.
 	 * 
 	 * @param updateInterval
-	 * @uml.property name="updateInterval"
 	 */
 	public void setUpdateInterval(int updateInterval) {
 		this.updateInterval = updateInterval;
@@ -536,7 +502,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param updatePeriod
-	 * @uml.property name="updatePeriod"
 	 */
 	public void setUpdatePeriod(UpdatePeriod updatePeriod) {
 		this.updatePeriod = updatePeriod;
@@ -544,7 +509,6 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param updating
-	 * @uml.property name="updating"
 	 */
 	public void setUpdating(boolean updating) {
 		this.updating = updating;
@@ -560,7 +524,7 @@ public class Subscription implements Comparable<Subscription> {
 
 	/**
 	 * @param webmaster
-	 * @uml.property name="webmaster"
+	 *            TODO: Move to {@link Feed}
 	 */
 	public void setWebmaster(String webmaster) {
 		this.webmaster = webmaster;
@@ -577,14 +541,14 @@ public class Subscription implements Comparable<Subscription> {
 	 * 
 	 * @param wc
 	 */
-	public void updateFromWorkingCopy(FeedWorkingCopy wc) {
-		title = wc.title;
-		url = wc.url;
+	public void updateFromWorkingCopy(SubscriptionWorkingCopy wc) {
+		title = wc.getTitle();
+		url = wc.getURL();
 		archiving = wc.archiving;
 		archivingItems = wc.archivingItems;
 		archivingDays = wc.archivingDays;
-		updateInterval = wc.updateInterval;
-		updatePeriod = wc.updatePeriod;
+		updateInterval = wc.getUpdateInterval();
+		updatePeriod = wc.getUpdatePeriod();
 		hidden = wc.hidden;
 		anonymousAccess = wc.anonymousAccess;
 		keepUnread = wc.keepUnread;
