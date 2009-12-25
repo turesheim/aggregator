@@ -40,7 +40,11 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plug-in life cycle
+ * This plug-in handles the life cycle of the aggregator user interface along
+ * with several utility features.
+ * 
+ * @author Torkild Ulvøy Resheim
+ * @since 1.0
  */
 public class AggregatorUIPlugin extends AbstractUIPlugin {
 

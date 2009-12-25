@@ -96,7 +96,7 @@ public class LabelItemSelectionHandler extends AbstractAggregatorCommandHandler
 		AggregatorItem[] items = getSelectedItems(selection);
 		Object m = parameters.get(PARM_MARK);
 		String label = m.toString();
-		String[] labels = items[0].getLabels();
+		items[0].getLabels();
 		element.setChecked(items[0].hasLabel(label));
 	}
 }

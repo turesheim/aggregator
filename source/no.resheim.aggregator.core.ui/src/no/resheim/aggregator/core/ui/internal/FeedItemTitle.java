@@ -60,10 +60,11 @@ public class FeedItemTitle extends Composite {
 	private CLabel titleLabel;
 
 	private static final String BLANK = ""; //$NON-NLS-1$
+
 	/**
-	 * 
+	 * Identifier of the font to use for the title
 	 */
-	private static final String TITLE_FONT = "org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyTitle"; //$NON-NLS-1$
+	private static final String TITLE_FONT = "no.resheim.aggregator.core.ui.articleTitleFont"; //$NON-NLS-1$
 
 	private FeedViewWidgetFactory factory;
 

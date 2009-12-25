@@ -13,9 +13,10 @@ package no.resheim.aggregator.core.ui;
 /**
  * 
  * @author Torkild Ulvøy Resheim
- * 
+ * @since 1.0
  */
 public interface IArticleViewerListener {
+
 	public void statusTextChanged(String text);
 
 }

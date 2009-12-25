@@ -52,17 +52,22 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.statushandlers.StatusManager;
 
 /**
- * A control that is used to show aggregator articles. A {@link Browser}
- * instance will be used to render the HTML.
+ * A control that is used to show an aggregator item. A {@link Browser} instance
+ * will be used to render the HTML.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
 public class ArticleViewer extends Composite implements IPropertyChangeListener {
 	private static final String CONTENT_PROPERTY = "content";
+
 	/** The default content type */
 	private static final String DEFAULT_CONTENT_TYPE = "text/html"; //$NON-NLS-1$
+
+	/** A component rendering the title of the item */
 	private FeedItemTitle title;
+
+	/** A component rendering the contents of the item */
 	private Browser browser;
 
 	private ListenerList listeners;

@@ -69,6 +69,29 @@
             name="Rename Folder">
       </command>
       <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.FeedCollectionSelectionHandler"
+            id="no.resheim.aggregator.core.ui.selectCollection"
+            name="Select Collection">
+         <commandParameter
+               id="collectionId"
+               name="Collection Identifier"
+               optional="false"
+               typeId="no.resheim.aggregator.core.ui.collectionCommandParameterType"
+               values="no.resheim.aggregator.core.ui.commands.CollectionSelectionParameterValues">
+         </commandParameter>
+      </command>
+      <command
+            defaultHandler="no.resheim.aggregator.core.ui.commands.LabelItemSelectionHandler"
+            id="no.resheim.aggregator.core.ui.markItem"
+            name="Mark Item">
+         <commandParameter
+               id="markId"
+               name="Label"
+               optional="true"
+               typeId="no.resheim.aggregator.core.ui.markItemCommandParameterType">
+         </commandParameter>
+      </command>
+      <command
             defaultHandler="no.resheim.aggregator.core.ui.commands.CopyLinkLocationCommandHandler"
             id="no.resheim.aggregator.core.ui.copyLinkCommand"
             name="Copy Link Location">
@@ -83,6 +106,16 @@
             id="no.resheim.aggregator.core.ui.emptyTrash"
             name="Empty Trash">
       </command>
+      <commandParameterType
+            converter="no.resheim.aggregator.core.ui.commands.CollectionParameterValueConverter"
+            id="no.resheim.aggregator.core.ui.collectionCommandParameterType"
+            type="no.resheim.aggregator.core.data.AggregatorCollection">
+      </commandParameterType>
+      <commandParameterType
+            converter="no.resheim.aggregator.core.ui.commands.LabelItemParameterValueConverter"
+            id="no.resheim.aggregator.core.ui.markItemCommandParameterType"
+            type="java.lang.String">
+      </commandParameterType>
       <command
             defaultHandler="no.resheim.aggregator.core.ui.views.SetLayoutCommandHandler"
             id="no.resheim.aggregator.core.ui.setLayoutCommand"
@@ -619,9 +652,15 @@ PLUGINSPAGE=&quot;http://www.macromedia.com/go/getflashplayer&quot;&gt;&lt;/EMBE
             label="Aggregator">
       </themeElementCategory>
       <fontDefinition
-            defaultsTo="org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyTitle"
+            categoryId="no.resheim.aggregator.core.ui.themeElementCategory"
+            defaultsTo="org.eclipse.ui.workbench.TAB_TEXT_FONT"
             id="no.resheim.aggregator.core.ui.articleTitleFont"
+            isEditable="true"
             label="Article Title">
+         <fontValue
+               value="Times New Roman-bold-36"
+               ws="carbon">
+         </fontValue>
       </fontDefinition>
       <fontDefinition
             id="no.resheim.aggregator.core.ui.articleLabelFont"
