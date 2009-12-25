@@ -69,29 +69,6 @@
             name="Rename Folder">
       </command>
       <command
-            defaultHandler="no.resheim.aggregator.core.ui.commands.FeedCollectionSelectionHandler"
-            id="no.resheim.aggregator.core.ui.selectCollection"
-            name="Select Collection">
-         <commandParameter
-               id="collectionId"
-               name="Collection Identifier"
-               optional="false"
-               typeId="no.resheim.aggregator.core.ui.collectionCommandParameterType"
-               values="no.resheim.aggregator.core.ui.commands.CollectionSelectionParameterValues">
-         </commandParameter>
-      </command>
-      <command
-            defaultHandler="no.resheim.aggregator.core.ui.commands.LabelItemSelectionHandler"
-            id="no.resheim.aggregator.core.ui.markItem"
-            name="Mark Item">
-         <commandParameter
-               id="markId"
-               name="Mark Type"
-               optional="true"
-               typeId="no.resheim.aggregator.core.ui.markItemCommandParameterType">
-         </commandParameter>
-      </command>
-      <command
             defaultHandler="no.resheim.aggregator.core.ui.commands.CopyLinkLocationCommandHandler"
             id="no.resheim.aggregator.core.ui.copyLinkCommand"
             name="Copy Link Location">
@@ -106,16 +83,6 @@
             id="no.resheim.aggregator.core.ui.emptyTrash"
             name="Empty Trash">
       </command>
-      <commandParameterType
-            converter="no.resheim.aggregator.core.ui.commands.CollectionParameterValueConverter"
-            id="no.resheim.aggregator.core.ui.collectionCommandParameterType"
-            type="no.resheim.aggregator.core.data.FeedCollection">
-      </commandParameterType>
-      <commandParameterType
-            converter="no.resheim.aggregator.core.ui.commands.LabelItemParameterValueConverter"
-            id="no.resheim.aggregator.core.ui.markItemCommandParameterType"
-            type="no.resheim.aggregator.core.data.AggregatorItem.Mark">
-      </commandParameterType>
       <command
             defaultHandler="no.resheim.aggregator.core.ui.views.SetLayoutCommandHandler"
             id="no.resheim.aggregator.core.ui.setLayoutCommand"
@@ -203,12 +170,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
-      <key
-            commandId="no.resheim.aggregator.ui.nextUnread"
-            contextId="no.resheim.aggregator.ui.context"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="Ctrl+.">
-      </key>
       <key
             commandId="no.resheim.aggregator.core.ui.delete"
             contextId="no.resheim.aggregator.ui.context"
