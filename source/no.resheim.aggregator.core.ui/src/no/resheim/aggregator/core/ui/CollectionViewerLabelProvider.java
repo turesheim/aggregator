@@ -196,7 +196,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 			return font;
 		if (element instanceof Folder) {
 			Folder folder = ((Folder) element);
-			int unread = getCollection(folder).getItemCount(folder);
+			int unread = getCollection(folder).getUnreadItemCount(folder);
 			Subscription feed = ((Folder) element).getFeed();
 			if (feed != null && feed.isUpdating()) {
 				if (unread > 0) {
@@ -348,7 +348,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 				StringBuffer sb = new StringBuffer();
 				sb.append(item.getTitle());
 				if (pShowUnreadCount && getCollection(item) != null) {
-					int unread = getCollection(item).getItemCount(item);
+					int unread = getCollection(item).getUnreadItemCount(item);
 					if (unread > 0) {
 						sb.append(" ("); //$NON-NLS-1$
 						sb.append(unread);

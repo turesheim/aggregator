@@ -292,7 +292,7 @@ public class AggregatorCollection extends AggregatorItemParent {
 	 * @param element
 	 * @return
 	 */
-	public int getItemCount(AggregatorItem element) {
+	public int getUnreadItemCount(AggregatorItem element) {
 		try {
 			fDatabase.readLock().lock();
 			return fDatabase.getUnreadCount((AggregatorItem) element);
