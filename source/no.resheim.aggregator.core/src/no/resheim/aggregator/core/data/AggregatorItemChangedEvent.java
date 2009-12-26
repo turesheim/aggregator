@@ -23,7 +23,7 @@ public class AggregatorItemChangedEvent {
 	 * @author torkild
 	 */
 	public enum EventType {
-		CREATED, FAILED, MOVED, READ, REMOVED, RESTORED, SHIFTED, CHANGED
+		CREATED, MOVED, REMOVED, CHANGED
 	}
 
 	/**
@@ -32,15 +32,8 @@ public class AggregatorItemChangedEvent {
 	 */
 	public static final int NEW_PARENT = 0x1;
 
-	/**
-	 * @uml.property name="items"
-	 */
 	private Object[] items;
 
-	/**
-	 * @uml.property name="type"
-	 * @uml.associationEnd
-	 */
 	private EventType type;
 
 	/**
@@ -55,18 +48,10 @@ public class AggregatorItemChangedEvent {
 		this.type = type;
 	}
 
-	/**
-	 * @return
-	 * @uml.property name="items"
-	 */
 	public Object[] getItems() {
 		return items;
 	}
 
-	/**
-	 * @return
-	 * @uml.property name="type"
-	 */
 	public EventType getType() {
 		return type;
 	}
