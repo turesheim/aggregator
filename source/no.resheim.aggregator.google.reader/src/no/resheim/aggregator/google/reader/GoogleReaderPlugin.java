@@ -7,13 +7,14 @@ import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.HttpCookie;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
+import java.text.MessageFormat;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.google.reader.ui.CredentialsDialog;
@@ -86,8 +87,10 @@ public class GoogleReaderPlugin extends AbstractUIPlugin {
 	}
 
 	/**
+	 * Obtains credentials using the GUI, asking the user to type in user name
+	 * and password.
 	 * 
-	 * @return
+	 * @return the credentials.
 	 */
 	private static Credentials getCredentialsUI() {
 		final Credentials c = new Credentials();
@@ -124,24 +127,26 @@ public class GoogleReaderPlugin extends AbstractUIPlugin {
 
 	/**
 	 * Log in to the Google account. If the process of obtaining credentials
-	 * succeeded <code>true</code> is returned.
+	 * succeeded an OK status is returned. Otherwise a more detailed error
+	 * description is returned. Any exception will return an error status.
 	 * 
-	 * @return <code>true</code> if cookie was set correctly
+	 * @return status of the login procedure.
 	 */
-	public static boolean login() {
+	public static IStatus login() {
 		try {
 			// Obtain credentials and pop up a log-in dialog if we have none.
 			Credentials c = getCredentials();
 			String sid = null;
-			// Something bad happened or credentials were wrong if we enter here
+			// Something bad happened or credentials were wrong if we enter
+			// this loop here
 			while ((sid = getSID(c)) == null) {
-				// Use the GUI to get the credentials. Will also put these in
-				// the secure storage.
+				// Use the GUI to get the credentials. Will also put these
+				// in the secure storage.
 				c = getCredentialsUI();
 				// User cancelled or did not supply complete information.
 				if (c.login == null || c.login.length() == 0
 						|| c.password.length() == 0) {
-					return false;
+					return Status.CANCEL_STATUS;
 				}
 			}
 			// Google does not set the authentication cookie so we must do that
@@ -155,13 +160,15 @@ public class GoogleReaderPlugin extends AbstractUIPlugin {
 			cookie.setDomain(".google.com");
 			manager.getCookieStore().add(new URI("http://www.google.com"),
 					cookie);
-			return true;
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		} catch (CoreException e) {
-			StatusManager.getManager().handle(e, PLUGIN_ID);
+			return Status.OK_STATUS;
+		} catch (Exception e) {
+			if (e instanceof CoreException) {
+				// Use the existing status code if we have one.
+				return ((CoreException) e).getStatus();
+			}
+			return new Status(IStatus.ERROR, GoogleReaderPlugin.PLUGIN_ID,
+					"Could not log into Google Reader.", e);
 		}
-		return false;
 	}
 
 	public static String getToken() throws CoreException {
@@ -196,18 +203,22 @@ public class GoogleReaderPlugin extends AbstractUIPlugin {
 
 	/**
 	 * Connects to the Google server and attempts to obtain a session identifier
-	 * (SID) using the given credentials.
+	 * (SID) using the given credentials. If for some reason the SID could not
+	 * be obtained an {@link CoreException} is normally thrown. Details of the
+	 * failure should be obtained by examining the exception. If there was a
+	 * HTTP error the response code is likely to be found in the status' code.
 	 * 
 	 * @param c
-	 *            the credentials
+	 *            the credentials to use
 	 * @return a session identifier or <code>null</code>
 	 */
 	private static String getSID(Credentials c) throws CoreException {
 		String sid = null;
+		int responseCode = 0;
 		try {
 			URL url = new URL("https://www.google.com/accounts/ClientLogin");
-			URLConnection yc = AggregatorPlugin.getDefault().getConnection(url,
-					true, null);
+			HttpURLConnection yc = AggregatorPlugin.getDefault().getConnection(
+					url, true, null);
 			String data = URLEncoder.encode("Email", ENCODING) + "="
 					+ URLEncoder.encode(c.login, ENCODING);
 			data += "&" + URLEncoder.encode("Passwd", ENCODING) + "="
@@ -217,6 +228,12 @@ public class GoogleReaderPlugin extends AbstractUIPlugin {
 			yc.setDoOutput(true);
 			yc.getOutputStream().write(data.getBytes());
 			yc.getOutputStream().flush();
+			responseCode = yc.getResponseCode();
+			// This is a special case. If the credentials we were using were not
+			// accepted we're indicating this by returning a <code>null</code>
+			// SID rather than throwing an exception.
+			if (responseCode == HttpURLConnection.HTTP_FORBIDDEN)
+				return null;
 			// Get the response
 			BufferedReader rd = new BufferedReader(new InputStreamReader(yc
 					.getInputStream()));
@@ -230,16 +247,18 @@ public class GoogleReaderPlugin extends AbstractUIPlugin {
 			rd.close();
 		} catch (MalformedURLException e) {
 			throw new CoreException(new Status(IStatus.ERROR, PLUGIN_ID,
-					"Could not log in to Google account.", e));
+					"Could not obtain Google session identifier.", e));
 		} catch (UnknownHostException e) {
 			throw new CoreException(new Status(IStatus.ERROR, PLUGIN_ID,
-					"Could not log in to Google account.", e));
+					"Could not obtain Google session identifier.", e));
 		} catch (IOException e) {
 			throw new CoreException(new Status(IStatus.ERROR, PLUGIN_ID,
-					"Could not log in to Google account.", e));
+					responseCode, MessageFormat.format(
+							"Could not obtain Google session identifier",
+							new Object[] {}), e));
 		} catch (StorageException e) {
 			throw new CoreException(new Status(IStatus.ERROR, PLUGIN_ID,
-					"Could not log in to Google account.", e));
+					"Could not obtain Google session identifier.", e));
 		}
 		return sid;
 	}

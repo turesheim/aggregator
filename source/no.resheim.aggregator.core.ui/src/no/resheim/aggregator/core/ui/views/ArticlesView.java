@@ -59,8 +59,8 @@ import org.eclipse.ui.part.ViewPart;
  */
 public class ArticlesView extends ViewPart implements ISelectionListener {
 
-	TreeViewer viewer;
-	Font fLabelFont;
+	private TreeViewer viewer;
+	private Font fLabelFont;
 
 	/**
 	 * A table layout that will automatically resize all columns.
@@ -105,8 +105,8 @@ public class ArticlesView extends ViewPart implements ISelectionListener {
 			// the first time it is being called on Linux.
 			// This method resets the layout to null,
 			// so we run it only when the value is OK.
-			if (width <= 1)
-				return;
+			// if (width <= 1)
+			// return;
 
 			TreeColumn[] tableColumns = table.getColumns();
 			int size = Math.min(columns.size(), tableColumns.length);

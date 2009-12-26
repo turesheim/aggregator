@@ -18,8 +18,8 @@ import no.resheim.aggregator.core.data.SubscriptionWorkingCopy;
 import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.core.data.Subscription.Archiving;
 import no.resheim.aggregator.core.data.Subscription.UpdatePeriod;
-import no.resheim.aggregator.core.ui.internal.NewFeedWizardGeneralPage;
-import no.resheim.aggregator.core.ui.internal.NewFeedWizardOptionsPage;
+import no.resheim.aggregator.core.ui.wizards.NewFeedWizardGeneralPage;
+import no.resheim.aggregator.core.ui.wizards.NewFeedWizardSynchronizationPage;
 
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
@@ -67,7 +67,7 @@ public class NewFeedWizard extends Wizard implements IWorkbenchWizard {
 	@Override
 	public void addPages() {
 		super.addPages();
-		archiving = new NewFeedWizardOptionsPage(this);
+		archiving = new NewFeedWizardSynchronizationPage(this);
 		general = new NewFeedWizardGeneralPage(this);
 		addPage(general);
 		addPage(archiving);

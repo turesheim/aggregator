@@ -27,10 +27,14 @@ import no.resheim.aggregator.core.catalog.AbstractFeedCatalog;
 import no.resheim.aggregator.core.data.Subscription;
 import no.resheim.aggregator.google.reader.rss.SubscriptionsParser;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.security.storage.StorageException;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.xml.sax.SAXException;
 
 /**
+ * This extension of {@link AbstractFeedCatalog} logs in to Google reader and
+ * obtains a list of all feeds currently subscribed to.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.1
@@ -44,7 +48,8 @@ public class GoogleReaderFeedCatalog extends AbstractFeedCatalog {
 
 	public Subscription[] getFeeds() {
 		ArrayList<Subscription> feeds = new ArrayList<Subscription>();
-		if (GoogleReaderPlugin.login()) {
+		IStatus login = GoogleReaderPlugin.login();
+		if (login.isOK()) {
 			try {
 				URL url = new URL(SUBSCRIPTIONS_URL);
 				URLConnection yc = AggregatorPlugin.getDefault().getConnection(
@@ -69,6 +74,8 @@ public class GoogleReaderFeedCatalog extends AbstractFeedCatalog {
 			} catch (SAXException e) {
 				e.printStackTrace();
 			}
+		} else {
+			StatusManager.getManager().handle(login, StatusManager.BLOCK);
 		}
 		return feeds.toArray(new Subscription[feeds.size()]);
 	}

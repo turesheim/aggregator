@@ -9,7 +9,7 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.core.ui.internal;
+package no.resheim.aggregator.core.ui.wizards;
 
 import no.resheim.aggregator.core.data.SubscriptionWorkingCopy;
 import no.resheim.aggregator.core.data.Subscription.Archiving;
@@ -33,12 +33,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
 /**
- * Wizard page for specifying extra feed options.
+ * Wizard page for specifying synchronisation options such as update interval
+ * and removal of old items.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class NewFeedWizardOptionsPage extends WizardPage {
+public class NewFeedWizardSynchronizationPage extends WizardPage {
 
 	private Combo periodCombo;
 	private Spinner intervalField;
@@ -59,7 +60,7 @@ public class NewFeedWizardOptionsPage extends WizardPage {
 	/**
 	 * Create the wizard
 	 */
-	public NewFeedWizardOptionsPage(NewFeedWizard wizard) {
+	public NewFeedWizardSynchronizationPage(NewFeedWizard wizard) {
 		super(Messages.NewFeedWizardOptionsPage_Title);
 		setTitle(Messages.NewFeedWizardOptionsPage_Title);
 		setDescription(Messages.NewFeedWizardOptionsPage_Description);

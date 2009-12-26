@@ -71,7 +71,7 @@ public class CredentialsDialog extends Dialog {
 				SWT.CENTER, false, false, 2, 1);
 		pleaseEnterTheLabel.setLayoutData(gd_pleaseEnterTheLabel);
 		pleaseEnterTheLabel
-				.setText("Please enter the credentials for logging in to your Google account.\nThis information will be safely stored in an encrypted location.");
+				.setText("Please enter the credentials for logging in to your Google account. This information will be safely stored in an encrypted location.");
 
 		final Label userNameemailLabel = new Label(container, SWT.NONE);
 		userNameemailLabel.setText("User name (e-mail):");

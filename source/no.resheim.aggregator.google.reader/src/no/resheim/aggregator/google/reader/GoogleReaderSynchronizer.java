@@ -93,7 +93,7 @@ public class GoogleReaderSynchronizer extends AbstractSynchronizer {
 						new Object[] { subscription.getTitle() }), null);
 		try {
 			// First log in or cancel if credentials could not be obtained.
-			if (!GoogleReaderPlugin.login()) {
+			if (!GoogleReaderPlugin.login().isOK()) {
 				ms.add(new Status(IStatus.WARNING, AggregatorPlugin.PLUGIN_ID,
 						MessageFormat.format(
 								"Logging into Google account cancelled",

@@ -9,14 +9,14 @@
  * Contributors:
  *     Torkild Ulvøy Resheim - initial API and implementation
  *******************************************************************************/
-package no.resheim.aggregator.core.ui.internal;
+package no.resheim.aggregator.core.ui.wizards;
 
 import java.util.ArrayList;
 
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.catalog.IFeedCatalog;
-import no.resheim.aggregator.core.data.SubscriptionWorkingCopy;
 import no.resheim.aggregator.core.data.Subscription;
+import no.resheim.aggregator.core.data.SubscriptionWorkingCopy;
 import no.resheim.aggregator.core.ui.AggregatorUIPlugin;
 import no.resheim.aggregator.core.ui.NewFeedWizard;
 
@@ -212,8 +212,8 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		sashForm.setWeights(new int[] { 1, 1 });
 	}
 
-	private void createConnectionGroup(final SubscriptionWorkingCopy workingCopy,
-			Composite detailsGroup) {
+	private void createConnectionGroup(
+			final SubscriptionWorkingCopy workingCopy, Composite detailsGroup) {
 		final Group group = new Group(detailsGroup, SWT.NONE);
 		group.setText("Connection");
 		final GridLayout gridLayout_1 = new GridLayout();
@@ -245,8 +245,8 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 		});
 	}
 
-	private void createAuthenticationGroup(final SubscriptionWorkingCopy workingCopy,
-			final Composite group) {
+	private void createAuthenticationGroup(
+			final SubscriptionWorkingCopy workingCopy, final Composite group) {
 
 		final Group group_1 = new Group(group, SWT.NONE);
 		// group_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,

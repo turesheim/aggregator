@@ -1,11 +1,11 @@
 package no.resheim.aggregator.core;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.net.Proxy.Type;
 import java.util.ArrayList;
@@ -314,8 +314,8 @@ public class AggregatorPlugin extends Plugin {
 					boolean persistent = Boolean.parseBoolean(element
 							.getAttribute("persistent")); //$NON-NLS-1$
 
-					final AggregatorCollection collection = new AggregatorCollection(id,
-							pub, def);
+					final AggregatorCollection collection = new AggregatorCollection(
+							id, pub, def);
 					collection.setTitle(name);
 					collectionMap.put(id, collection);
 					IAggregatorStorage storage = null;
@@ -375,10 +375,11 @@ public class AggregatorPlugin extends Plugin {
 	 * @throws StorageException
 	 * @throws UnknownHostException
 	 */
-	public URLConnection getConnection(URL url, boolean anonymous, String nodeId)
-			throws IOException, StorageException, UnknownHostException {
+	public HttpURLConnection getConnection(URL url, boolean anonymous,
+			String nodeId) throws IOException, StorageException,
+			UnknownHostException {
 		IProxyData proxyData = null;
-		URLConnection yc = null;
+		HttpURLConnection yc = null;
 		IProxyService service = getProxyService();
 		// We might be unable to get a proxy service in that we'll try to
 		// connect anyways.
@@ -389,12 +390,12 @@ public class AggregatorPlugin extends Plugin {
 		}
 		// If we have no proxy data we'll use a direct connection
 		if (proxyData == null) {
-			yc = url.openConnection();
+			yc = (HttpURLConnection) url.openConnection();
 		} else {
 			InetSocketAddress sockAddr = new InetSocketAddress(InetAddress
 					.getByName(proxyData.getHost()), proxyData.getPort());
 			Proxy proxy = new Proxy(Type.HTTP, sockAddr);
-			yc = url.openConnection(proxy);
+			yc = (HttpURLConnection) url.openConnection(proxy);
 		}
 		if (proxyData != null && proxyData.isRequiresAuthentication()) {
 			String proxyLogin = proxyData.getUserId()

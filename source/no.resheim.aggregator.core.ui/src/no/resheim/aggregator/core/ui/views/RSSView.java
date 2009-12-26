@@ -192,6 +192,7 @@ public class RSSView extends ViewPart implements IFeedView,
 	}
 
 	public void collectionInitialized(AggregatorCollection collection) {
+		System.out.println("Collection initialized");
 		if (collection.getId().equals(DEFAULT_COLLECTION_ID)) {
 			setDefaultCollection();
 		}
@@ -235,11 +236,10 @@ public class RSSView extends ViewPart implements IFeedView,
 						IContextService.class)).activateContext(CONTEXT_ID);
 			}
 		});
-		if (AggregatorPlugin.getDefault().isInitialized()) {
+		if (AggregatorPlugin.isInitialized()) {
 			setDefaultCollection();
-		} else {
-			AggregatorPlugin.getDefault().addFeedCollectionListener(this);
 		}
+		AggregatorPlugin.getDefault().addFeedCollectionListener(this);
 		IPreferenceStore store = AggregatorUIPlugin.getDefault()
 				.getPreferenceStore();
 		store.addPropertyChangeListener(new IPropertyChangeListener() {
@@ -450,6 +450,12 @@ public class RSSView extends ViewPart implements IFeedView,
 		Display.getDefault().asyncExec(update);
 	}
 
+	/**
+	 * Listens to collection events and pops up a notification of new feed items
+	 * has been added.
+	 * 
+	 * TODO: Use selected collection
+	 */
 	private void registerDesktopNotifications() {
 		AggregatorCollection collection = AggregatorPlugin.getDefault()
 				.getFeedCollection(null);
@@ -483,12 +489,14 @@ public class RSSView extends ViewPart implements IFeedView,
 	}
 
 	private void setDefaultCollection() {
+		System.out.println("Using default collection");
 		Display d = getViewSite().getShell().getDisplay();
 		d.asyncExec(new Runnable() {
 			public void run() {
 				fCollection = AggregatorPlugin.getDefault().getFeedCollection(
 						DEFAULT_COLLECTION_ID);
 				viewer.setInput(fCollection);
+				viewer.refresh();
 			}
 		});
 		registerDesktopNotifications();
