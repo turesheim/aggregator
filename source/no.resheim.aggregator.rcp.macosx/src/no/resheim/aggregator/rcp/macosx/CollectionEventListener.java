@@ -34,7 +34,11 @@ public class CollectionEventListener implements IStartup {
 	private void updateUnreadCount(final NSDockTile tile,
 			final AggregatorCollection collection) {
 		int count = collection.getUnreadItemCount(collection);
-		tile.setBadgeLabel(Integer.toString(count));
+		if (count > 0) {
+			tile.setBadgeLabel(Integer.toString(count));
+		} else {
+			tile.setBadgeLabel("");
+		}
 	}
 
 }
