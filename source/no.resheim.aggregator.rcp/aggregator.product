@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Muninn" id="no.resheim.aggregator.rcp.product" application="no.resheim.aggregator.rcp.application" version="1.0.0" useFeatures="false" includeLaunchers="true">
+<product name="Aggregator" id="no.resheim.aggregator.rcp.product" application="no.resheim.aggregator.rcp.application" version="1.0.0" useFeatures="false" includeLaunchers="true">
 
 
    <configIni use="default">
@@ -11,9 +11,9 @@
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="icons/Aggregator.png" i32="icons/Aggregator.png" i48="icons/Aggregator.png" i64="icons/Aggregator.png" i128="/no.resheim.aggregator.rcp/icons/aggregator_window_128.png"/>
+   <windowImages i16="/no.resheim.aggregator.rcp/icons/aggregator_window_16.png" i32="/no.resheim.aggregator.rcp/icons/aggregator_window_32.png" i48="/no.resheim.aggregator.rcp/icons/aggregator_window_48.png" i64="/no.resheim.aggregator.rcp/icons/aggregator_window_64.png" i128="/no.resheim.aggregator.rcp/icons/aggregator_window_128.png"/>
 
-   <launcher name="muninn">
+   <launcher name="Aggregator">
       <macosx icon="/no.resheim.aggregator.rcp/icons/Aggregator.icns"/>
       <solaris/>
       <win useIco="false">
@@ -31,6 +31,7 @@
       <plugin id="no.resheim.aggregator.core.ui"/>
       <plugin id="no.resheim.aggregator.google.reader"/>
       <plugin id="no.resheim.aggregator.rcp"/>
+      <plugin id="no.resheim.aggregator.rcp.macoscx" fragment="true"/>
       <plugin id="no.resheim.aggregator.ui"/>
       <plugin id="no.resheim.aggregator.ui.help"/>
       <plugin id="org.apache.commons.codec"/>
