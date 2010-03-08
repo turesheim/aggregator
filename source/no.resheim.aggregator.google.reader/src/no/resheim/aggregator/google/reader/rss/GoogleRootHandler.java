@@ -6,23 +6,20 @@ package no.resheim.aggregator.google.reader.rss;
 import java.util.ArrayList;
 
 import no.resheim.aggregator.core.catalog.IFeedCatalog;
-import no.resheim.aggregator.core.data.Subscription;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-class SubscriptionsHandler implements IGoogleElementHandler {
-	private ArrayList<Object> feeds;
+class GoogleRootHandler implements IGoogleElementHandler {
+	StringBuffer buffer = new StringBuffer();
+	ArrayList<Object> elements;
+
 	private IFeedCatalog catalog;
 
-	public SubscriptionsHandler(IFeedCatalog catalog, ArrayList<Object> feeds) {
+	public GoogleRootHandler(IFeedCatalog catalog, ArrayList<Object> elements) {
 		super();
-		this.feeds = feeds;
+		this.elements = elements;
 		this.catalog = catalog;
-	}
-
-	public SubscriptionsHandler() {
-
 	}
 
 	public void endElement(String qName) throws SAXException {
@@ -34,8 +31,14 @@ class SubscriptionsHandler implements IGoogleElementHandler {
 
 	public IGoogleElementHandler startElement(String qName, Attributes atts)
 			throws SAXException {
-		if (qName.equals("object")) {
-			return new FeedHandler(new Subscription(catalog), feeds);
+		if (qName.equals("list")) {
+			if (atts.getValue("name").equals("subscriptions")) {
+				return new SubscriptionsHandler(catalog, elements);
+			} else if (atts.getValue("name").equals("tags")) {
+				return new TagsHandler(catalog, elements);
+			} else {
+				System.out.println(atts.getValue("name"));
+			}
 		}
 		return this;
 	}

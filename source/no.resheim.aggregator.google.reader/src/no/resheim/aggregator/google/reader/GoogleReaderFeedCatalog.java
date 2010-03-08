@@ -25,7 +25,7 @@ import javax.xml.parsers.SAXParserFactory;
 import no.resheim.aggregator.core.AggregatorPlugin;
 import no.resheim.aggregator.core.catalog.AbstractFeedCatalog;
 import no.resheim.aggregator.core.data.Subscription;
-import no.resheim.aggregator.google.reader.rss.SubscriptionsParser;
+import no.resheim.aggregator.google.reader.rss.GoogleParser;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.security.storage.StorageException;
@@ -42,20 +42,20 @@ import org.xml.sax.SAXException;
 public class GoogleReaderFeedCatalog extends AbstractFeedCatalog {
 
 	private static final String SUBSCRIPTIONS_URL = "http://www.google.com/reader/api/0/subscription/list?output=xml";
+	private static final String LABELS_URL = "http://www.google.com/reader/api/0/tag/list?output=xml";
 
 	public GoogleReaderFeedCatalog() {
 	}
 
 	public Subscription[] getFeeds() {
-		ArrayList<Subscription> feeds = new ArrayList<Subscription>();
+		ArrayList<Object> feeds = new ArrayList<Object>();
 		IStatus login = GoogleReaderPlugin.login();
 		if (login.isOK()) {
 			try {
 				URL url = new URL(SUBSCRIPTIONS_URL);
 				URLConnection yc = AggregatorPlugin.getDefault().getConnection(
 						url, true, null);
-				SubscriptionsParser handler = new SubscriptionsParser(this,
-						feeds);
+				GoogleParser handler = new GoogleParser(this, feeds);
 				SAXParserFactory factory = SAXParserFactory.newInstance();
 				SAXParser parser = factory.newSAXParser();
 				InputStream is = yc.getInputStream();
@@ -78,6 +78,39 @@ public class GoogleReaderFeedCatalog extends AbstractFeedCatalog {
 			StatusManager.getManager().handle(login, StatusManager.BLOCK);
 		}
 		return feeds.toArray(new Subscription[feeds.size()]);
+	}
+
+	public String[] getLabels() {
+		ArrayList<Object> feeds = new ArrayList<Object>();
+		IStatus login = GoogleReaderPlugin.login();
+		if (login.isOK()) {
+			try {
+				URL url = new URL(LABELS_URL);
+				URLConnection yc = AggregatorPlugin.getDefault().getConnection(
+						url, true, null);
+				GoogleParser handler = new GoogleParser(this, feeds);
+				SAXParserFactory factory = SAXParserFactory.newInstance();
+				SAXParser parser = factory.newSAXParser();
+				InputStream is = yc.getInputStream();
+				parser.parse(yc.getInputStream(), handler);
+				is.close();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (StorageException e) {
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+				e.printStackTrace();
+			}
+		} else {
+			StatusManager.getManager().handle(login, StatusManager.BLOCK);
+		}
+		return feeds.toArray(new String[feeds.size()]);
 	}
 
 	public boolean isEnabled() {

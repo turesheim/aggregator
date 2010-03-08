@@ -1,13 +1,25 @@
-CREATE TABLE folders (
+/* Labels are used to group articles */
+CREATE TABLE labels (
+		/* The labelr identifier */
 		uuid CHAR(36) NOT NULL PRIMARY KEY,
+		/* The label parent identifier */
+		parent_uuid CHAR(36),
+		/* The title of the label */
+        title VARCHAR(256) NOT NULL
+);
+
+/* Folders hold other folders and articles */
+CREATE TABLE folders (
+		/* The folder identifier */
+		uuid CHAR(36) NOT NULL PRIMARY KEY,
+		/* The folder parent */
 		parent_uuid CHAR(36),
 		subscription_uuid CHAR(36),
 		hidden INT NOT NULL,
+		/* The title of the folder */
         title VARCHAR(256) NOT NULL,
 		/* System flags */
 		flags VARCHAR(128) NOT NULL,
-		/* Comma separated list of labels */
-		labels VARCHAR(256) NOT NULL,
 		FOREIGN KEY (parent_uuid) references folders (uuid) ON DELETE CASCADE
 	);
 
@@ -28,9 +40,11 @@ CREATE TABLE articles (
 		flags VARCHAR(128) NOT NULL,
 		/* Comma separated list of labels */
 		labels VARCHAR(256) NOT NULL,
+		/* Whether or not the article has been read */
 		is_read INT NOT NULL,
 		/* Publication date */
 	    publication_date BIGINT NOT NULL,
+	    /* The date the article was read */
 		read_date BIGINT NOT NULL,
 		/* Date when added to the collection */
 		added_date BIGINT NOT NULL,
@@ -38,6 +52,7 @@ CREATE TABLE articles (
 		description CLOB,
 		/* The name of the author ? */
 		creator VARCHAR(128),
+		/* ? */
 		media_player VARCHAR(128),
 		/* Date of the last (local) change */
 		last_changed BIGINT NOT NULL,
@@ -51,9 +66,13 @@ CREATE TABLE articles (
 */
 CREATE TABLE media_content (
 		ordering INT NOT NULL,
+		/* The article the content belongs to */
 		article_uuid CHAR(36) NOT NULL,
+		/* URL of the content */
 		content_url VARCHAR(128),
+		/* URL of the thumbnail */
 		thumbnail_url VARCHAR(128),
+		/* Content MIME type */
 		content_type VARCHAR(128),
 		filesize BIGINT,
 		medium VARCHAR(32),
@@ -68,14 +87,19 @@ CREATE TABLE media_content (
 		width VARCHAR(32),
 		lang VARCHAR(32),
 		player_url VARCHAR(128),		
+		/* Reference the article */
 		FOREIGN KEY (article_uuid) references articles (uuid) ON DELETE CASCADE
 	);
 
 /* Holds article notes */
 CREATE TABLE notes (
+		/* The id of the note */
 		uuid CHAR(36) NOT NULL PRIMARY KEY,
+		/* The id of the article */
 		article_uuid CHAR(36),
+		/* The note text */
 		notes CLOB,
+		/* Reference the article */
 		FOREIGN KEY (article_uuid) references articles (uuid) ON DELETE CASCADE
 	);
 
@@ -139,6 +163,7 @@ CREATE TABLE filter_action (
 		FOREIGN KEY (filter_uuid) references filters (uuid) ON DELETE CASCADE
 	);
 
+CREATE INDEX labels on labels (title);
 /* Selection*/
 CREATE INDEX feeds_url ON subscriptions (url, uuid);
 /* Article list display per date */

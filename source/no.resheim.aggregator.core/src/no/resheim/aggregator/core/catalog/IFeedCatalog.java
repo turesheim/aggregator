@@ -23,7 +23,7 @@ import no.resheim.aggregator.core.data.Subscription;
  */
 public interface IFeedCatalog {
 	/**
-	 * The default synchronizer to use.
+	 * The default synchroniser to use.
 	 */
 	public static final String DEFAULT_SYNCHRONIZER_ID = "no.resheim.aggregator.core.directSynchronizer";
 
@@ -34,6 +34,8 @@ public interface IFeedCatalog {
 	 */
 	// XXX: Return a FEED instead of SUBSCRIPTION
 	public Subscription[] getFeeds();
+
+	public String[] getLabels();
 
 	/**
 	 * Returns the enabled state of the catalogue.

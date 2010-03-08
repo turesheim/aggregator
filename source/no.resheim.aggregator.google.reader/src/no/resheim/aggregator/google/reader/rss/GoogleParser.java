@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import no.resheim.aggregator.core.catalog.IFeedCatalog;
-import no.resheim.aggregator.core.data.Subscription;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -27,19 +26,18 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Torkild Ulvøy Resheim
  * @since 1.0
  */
-public class SubscriptionsParser extends DefaultHandler {
+public class GoogleParser extends DefaultHandler {
 	protected final Stack<IGoogleElementHandler> handlers;
 	StringBuffer buffer;
 	boolean capture;
 	IFeedCatalog catalog;
 
-	public SubscriptionsParser(IFeedCatalog catalog,
-			ArrayList<Subscription> feeds) {
+	public GoogleParser(IFeedCatalog catalog, ArrayList<Object> elements) {
 		handlers = new Stack<IGoogleElementHandler>();
 		buffer = new StringBuffer();
 		this.catalog = catalog;
 		// Root element is "object"
-		handlers.push(new SubscriptionsRootHandler(catalog, feeds));
+		handlers.push(new GoogleRootHandler(catalog, elements));
 	}
 
 	public void characters(char[] ch, int start, int length)

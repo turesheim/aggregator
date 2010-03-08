@@ -14,7 +14,7 @@ public class Perspective implements IPerspectiveFactory {
 		String editorArea = layout.getEditorArea();
 		// We don't need the editor area.
 		layout.setEditorAreaVisible(false);
-		layout.setFixed(false);
+		layout.setFixed(true);
 		layout.addStandaloneView(MAIN_VIEW_ID, false, IPageLayout.LEFT, 0.25f,
 				editorArea);
 		layout.addStandaloneView(ARTICLES_VIEW_ID, true, IPageLayout.LEFT,

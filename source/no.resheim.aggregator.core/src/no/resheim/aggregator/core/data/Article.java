@@ -30,6 +30,25 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	}
 
 	/**
+	 * Adds a new label to the aggregator item.
+	 * 
+	 * @param label
+	 *            the label to add.
+	 */
+	public void addLabel(String label) {
+		if (!hasLabel(label)) {
+			try {
+				String[] newLabels = new String[fLabels.length + 1];
+				System.arraycopy(fLabels, 0, newLabels, 1, fLabels.length);
+				newLabels[0] = label.trim();
+				fLabels = newLabels;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
 	 * The creator of the feed
 	 * 
 	 * @uml.property name="creator"
@@ -121,9 +140,12 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 	 */
 	protected Subscription fSubscription;
 
+	private String[] fLabels;
+
 	public Article(AggregatorItemParent parent, UUID uuid) {
 		super(parent, uuid);
 		mediaContent = new ArrayList<MediaContent>();
+		fLabels = new String[0];
 	}
 
 	/**
@@ -141,6 +163,7 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 		fSubscription = subscription;
 		fLocation = subscription.getLocation();
 		subscriptionUuid = subscription.getUUID();
+		fLabels = new String[0];
 	}
 
 	/**
@@ -159,6 +182,7 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 		Assert.isNotNull(parent);
 		fLocation = parent.getUUID();
 		subscriptionUuid = subscriptionId;
+		fLabels = new String[0];
 	}
 
 	public int compareTo(Article arg0) {
@@ -414,5 +438,65 @@ public class Article extends AggregatorItem implements Comparable<Article> {
 
 	public void setMediaPlayerURL(String mediaPlayerURL) {
 		this.mediaPlayerURL = mediaPlayerURL;
+	}
+
+	public String[] getLabels() {
+		return fLabels;
+	}
+
+	public String getLabelString() {
+		StringBuilder sb = new StringBuilder();
+		synchronized (fLabels) {
+			boolean comma = false;
+			for (String string : fLabels) {
+				if (comma) {
+					sb.append(", ");
+				}
+				sb.append(string);
+				comma = true;
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Tests if the given label is already assigned to the item and returns
+	 * <code>true</code> if this is the case.
+	 * 
+	 * @param label
+	 *            the label to test for.
+	 * @return <code>true</code> if the label is assigned.
+	 */
+	public boolean hasLabel(String label) {
+		boolean found = false;
+		synchronized (fLabels) {
+			for (String l : fLabels) {
+				if (l != null && l.equalsIgnoreCase(label.trim())) {
+					found = true;
+				}
+			}
+		}
+		return found;
+	}
+
+	/**
+	 * 
+	 * @param label
+	 */
+	public void removeLabel(String label) {
+		if (hasLabel(label)) {
+			int c = 0;
+			String[] newLabels = new String[fLabels.length - 1];
+			for (String string : fLabels) {
+				if (!string.equalsIgnoreCase(label.trim())) {
+					newLabels[c++] = string;
+				}
+			}
+			fLabels = newLabels;
+		}
+	}
+
+	public void setLabels(String[] labels) {
+		this.fLabels = labels;
 	}
 }

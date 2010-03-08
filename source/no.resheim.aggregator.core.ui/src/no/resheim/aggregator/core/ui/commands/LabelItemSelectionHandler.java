@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import no.resheim.aggregator.core.data.AggregatorItem;
+import no.resheim.aggregator.core.data.Article;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -53,13 +54,14 @@ public class LabelItemSelectionHandler extends AbstractAggregatorCommandHandler
 
 		AggregatorItem[] items = getSelectedItems(event);
 		Object m = event.getObjectParameterForExecution(PARM_MARK);
-		if (m != null && items.length > 0) {
+		if (m != null && items.length > 0 && items[0] instanceof Article) {
 			try {
+				Article a = (Article) items[0];
 				String label = m.toString();
-				if (!items[0].hasLabel(label)) {
-					items[0].addLabel(label);
+				if (!a.hasLabel(label)) {
+					a.addLabel(label);
 				} else {
-					items[0].removeLabel(label);
+					a.removeLabel(label);
 				}
 				items[0].getCollection().writeBack(items[0]);
 				IWorkbenchWindow window = HandlerUtil
@@ -96,7 +98,10 @@ public class LabelItemSelectionHandler extends AbstractAggregatorCommandHandler
 		AggregatorItem[] items = getSelectedItems(selection);
 		Object m = parameters.get(PARM_MARK);
 		String label = m.toString();
-		items[0].getLabels();
-		element.setChecked(items[0].hasLabel(label));
+		if (items.length > 0 && items[0] instanceof Article) {
+			Article a = (Article) items[0];
+			a.getLabels();
+			element.setChecked(a.hasLabel(label));
+		}
 	}
 }

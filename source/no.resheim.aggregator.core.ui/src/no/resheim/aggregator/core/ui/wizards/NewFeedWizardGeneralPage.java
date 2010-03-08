@@ -147,6 +147,7 @@ public class NewFeedWizardGeneralPage extends WizardPage {
 
 			public Object[] getChildren(Object parentElement) {
 				if (parentElement instanceof IFeedCatalog) {
+					((IFeedCatalog) parentElement).getLabels();
 					return ((IFeedCatalog) parentElement).getFeeds();
 				}
 				if (parentElement instanceof IFeedCatalog[]) {

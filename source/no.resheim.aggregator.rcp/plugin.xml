@@ -104,4 +104,29 @@
          </keywordReference>
       </page>
    </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="no.resheim.aggregator.rcp.commands.UpdateAllCommandHandler"
+            id="no.resheim.aggregator.rcp.updateAll"
+            name="Update All">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            description="Aggregator actions"
+            id="no.resheim.aggregator.rcp.actionSet"
+            label="Aggregator"
+            visible="true">
+         <action
+               definitionId="no.resheim.aggregator.rcp.updateAll"
+               icon="icons/clcl16/nav_refresh.gif"
+               id="no.resheim.aggregator.rcp.updateAll"
+               label="Update All"
+               style="push"
+               toolbarPath="Normal/Aggregator">
+         </action>
+      </actionSet>
+   </extension>
 </plugin>

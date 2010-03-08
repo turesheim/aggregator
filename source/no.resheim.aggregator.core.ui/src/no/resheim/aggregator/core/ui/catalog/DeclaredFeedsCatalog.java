@@ -44,8 +44,8 @@ public class DeclaredFeedsCatalog extends AbstractFeedCatalog {
 							.getAttribute("create")); //$NON-NLS-1$
 					// Will use the default collection if the collectionId is
 					// null.
-					AggregatorCollection collection = AggregatorPlugin.getDefault()
-							.getFeedCollection(collectionId);
+					AggregatorCollection collection = AggregatorPlugin
+							.getDefault().getFeedCollection(collectionId);
 					if (collection != null) {
 						Subscription feed = createNewFeed(collection, element);
 						if (add && !collection.hasFeed(url)) {
@@ -83,5 +83,10 @@ public class DeclaredFeedsCatalog extends AbstractFeedCatalog {
 
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public String[] getLabels() {
+		// TODO Return labels from preferences?
+		return null;
 	}
 }

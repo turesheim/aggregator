@@ -77,13 +77,7 @@ import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.part.ViewPart;
 
 /**
- * 
- * The view context menu has three groups:
- * <ul>
- * <li>navigation</li>
- * <li>modify</li>
- * <li>selection</li>
- * </ul>
+ * The main view. This shows all the feeds, folders and labels available.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.0
@@ -323,6 +317,9 @@ public class RSSView extends ViewPart implements IFeedView,
 		}
 	}
 
+	/**
+	 * Initialise drag and drop.
+	 */
 	private void initDND() {
 		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
 		int operations = DND.DROP_MOVE;

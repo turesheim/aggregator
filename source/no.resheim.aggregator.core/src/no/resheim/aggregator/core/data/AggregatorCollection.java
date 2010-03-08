@@ -57,6 +57,8 @@ public class AggregatorCollection extends AggregatorItemParent {
 	/** Trash folder identifier */
 	private static final UUID TRASH_ID = UUID
 			.fromString("448119fa-609c-4463-89cf-31d41d94ad05"); //$NON-NLS-1$
+	private static final UUID LABEL_FOLDER_ID = UUID
+			.fromString("449119fa-609c-4463-89cf-31d41d94ad05"); //$NON-NLS-1$
 
 	/**
 	 * The persistent storage for our data.
@@ -79,24 +81,19 @@ public class AggregatorCollection extends AggregatorItemParent {
 
 	/**
 	 * Job that is awaken now and then for updating the collection.
-	 * 
-	 * @uml.property name="fRegistryUpdateJob"
-	 * @uml.associationEnd
 	 */
 	private final CollectionUpdateJob fCollectionUpdateJob = new CollectionUpdateJob(
 			this);
 
 	/**
-	 * @uml.property name="fTrashFolder"
-	 * @uml.associationEnd
+	 * The single instance of a trash folder
 	 */
 	private Folder fTrashFolder;
+	private Folder fLabelFolder;
 
 	/**
 	 * The identifier of the registry as specified when the registry was
 	 * declared.
-	 * 
-	 * @uml.property name="id"
 	 */
 	private String id;
 
@@ -159,6 +156,13 @@ public class AggregatorCollection extends AggregatorItemParent {
 					if (status.isOK()) {
 						newItems.add(feedItem);
 					}
+				} else if (item instanceof ArticleLabel) {
+					ArticleLabel feedItem = (ArticleLabel) item;
+					IStatus status = fDatabase.add(feedItem);
+					ms.add(status);
+					if (status.isOK()) {
+						newItems.add(feedItem);
+					}
 				}
 			}
 		} finally {
@@ -214,11 +218,18 @@ public class AggregatorCollection extends AggregatorItemParent {
 		return folder;
 	}
 
-	private void createTrashFolder() {
+	/**
+	 * Creates a new trash folder if it does not already exist.
+	 */
+	private void createSystemItems() {
 		try {
 			for (AggregatorItem item : getChildren(EnumSet.of(ItemType.FOLDER))) {
 				if (item.getUUID().equals(TRASH_ID)) {
 					fTrashFolder = (Folder) item;
+					break;
+				}
+				if (item.getUUID().equals(LABEL_FOLDER_ID)) {
+					fLabelFolder = (Folder) item;
 					break;
 				}
 			}
@@ -227,6 +238,14 @@ public class AggregatorCollection extends AggregatorItemParent {
 				trash.setSystem(true);
 				trash.setFlags(EnumSet.of(Flag.TRASH));
 				trash.setTitle(TRASH_FOLDER_NAME);
+				addNew(new AggregatorItem[] { trash });
+				fTrashFolder = trash;
+			}
+			if (fLabelFolder == null) {
+				Folder trash = new Folder(this, LABEL_FOLDER_ID);
+				trash.setSystem(true);
+				trash.setFlags(EnumSet.of(Flag.LABEL_ROOT));
+				trash.setTitle("Labels");
 				addNew(new AggregatorItem[] { trash });
 				fTrashFolder = trash;
 			}
@@ -379,7 +398,7 @@ public class AggregatorCollection extends AggregatorItemParent {
 	public void initialize(IAggregatorStorage storage) {
 		this.fDatabase = storage;
 		fFeeds = storage.getSubscriptions();
-		createTrashFolder();
+		createSystemItems();
 		// Start a new update job that will periodically wake up and create
 		// FeedUpdateJobs when a feed is scheduled for an update.
 		fCollectionUpdateJob.addJobChangeListener(new JobChangeAdapter() {
@@ -501,7 +520,7 @@ public class AggregatorCollection extends AggregatorItemParent {
 	 * 
 	 * @param item
 	 *            the folder item to synchronise
-	 * @return the syncrhonisation status
+	 * @return the synchronisation status
 	 * @throws CoreException
 	 */
 	public IStatus synchronize(AggregatorItem item) throws CoreException {

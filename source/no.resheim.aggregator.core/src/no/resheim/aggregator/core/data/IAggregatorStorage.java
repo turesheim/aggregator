@@ -38,12 +38,22 @@ import org.eclipse.core.runtime.IStatus;
 public interface IAggregatorStorage extends ISaveParticipant {
 
 	/**
-	 * Adds the given item to the storage.
+	 * Adds a new item (folder, article or label) to the storage.
 	 * 
 	 * @param item
 	 *            the item to add
+	 * @return the status of the operation.
 	 */
 	public abstract IStatus add(AggregatorItem item);
+
+	/**
+	 * Adds a new subscription to the storage.
+	 * 
+	 * @param subscription
+	 *            the subscription to add.
+	 * @return the status of the operation.
+	 */
+	public abstract IStatus add(Subscription subscription);
 
 	/**
 	 * Deletes the specified item from the storage. The implementor is
@@ -63,12 +73,32 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	public abstract void delete(Subscription subscription);
 
 	/**
-	 * Adds a new subscription to the storage.
+	 * Returns a list of articles belonging to the given subscription that has
+	 * been changed locally since the given time stamp.
 	 * 
 	 * @param subscription
-	 *            the subscription to add.
+	 *            the subscription
+	 * @param time
+	 *            the time stamp
+	 * @return a list of changed items
 	 */
-	public abstract void add(Subscription subscription);
+	public abstract List<Article> getChangedArticles(Subscription subscription,
+			long time);
+
+	/**
+	 * Returns the item at the given index in the specified parent item. If no
+	 * item could be found <code>null</code> is returned. A
+	 * {@link CoreException} is thrown if somthing went amiss.
+	 * 
+	 * @param parent
+	 *            the parent item
+	 * @param index
+	 *            the index of the child item
+	 * @return the child item or <code>null</code>
+	 * @throws CoreException
+	 */
+	public abstract AggregatorItem getChildAt(AggregatorItemParent parent,
+			EnumSet<ItemType> types, int index) throws CoreException;
 
 	/**
 	 * Calculates and returns the number of children the <i>parent</i> item has.
@@ -93,36 +123,19 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	public abstract String getDescription(Article item);
 
 	/**
+	 * Retrieves the filter set from the storage.
+	 * 
+	 * @return the filter set.
+	 */
+	public abstract Filter[] getFilters();
+
+	/**
 	 * Returns a map of all feeds regardless of the placement in the tree
 	 * structure. The map key is the subscription's unique identifier.
 	 * 
 	 * @return a map of all subscriptions
 	 */
 	public abstract HashMap<UUID, Subscription> getSubscriptions();
-
-	/**
-	 * Returns the article with the given <i>guid</i>.
-	 * 
-	 * @param guid
-	 *            the globally unique identifier
-	 * @return the article or <code>null</code>
-	 */
-	public abstract boolean hasArticle(String guid);
-
-	/**
-	 * Returns the item at the given index in the specified parent item. If no
-	 * item could be found <code>null</code> is returned. A
-	 * {@link CoreException} is thrown if somthing went amiss.
-	 * 
-	 * @param parent
-	 *            the parent item
-	 * @param index
-	 *            the index of the child item
-	 * @return the child item or <code>null</code>
-	 * @throws CoreException
-	 */
-	public abstract AggregatorItem getChildAt(AggregatorItemParent parent,
-			EnumSet<ItemType> types, int index) throws CoreException;
 
 	/**
 	 * Returns the number of unread articles the given parent item has.
@@ -134,17 +147,13 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	public abstract int getUnreadCount(AggregatorItem parent);
 
 	/**
-	 * Returns a list of articles belonging to the given subscription that has
-	 * been changed locally since the given time stamp.
+	 * Returns the article with the given <i>guid</i>.
 	 * 
-	 * @param subscription
-	 *            the subscription
-	 * @param time
-	 *            the time stamp
-	 * @return a list of changed items
+	 * @param guid
+	 *            the globally unique identifier
+	 * @return the article or <code>null</code>
 	 */
-	public abstract List<Article> getChangedArticles(Subscription subscription,
-			long time);
+	public abstract boolean hasArticle(String guid);
 
 	/**
 	 * Tests to see if the feed with the given URL already exists in the
@@ -166,6 +175,21 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	 */
 	// TODO: Replace with a more generic method
 	public abstract void moved(AggregatorItem item);
+
+	/**
+	 * Used to obtain a lock for reading from the storage.
+	 * 
+	 * @return the lock.
+	 */
+	public abstract Lock readLock();
+
+	/**
+	 * Updates the storage with the given filters.
+	 * 
+	 * @param filters
+	 *            the new filter set
+	 */
+	public abstract void setFilters(Filter[] filters);
 
 	/**
 	 * Shuts down the storage. Implementors should use this opportunity to clean
@@ -203,32 +227,10 @@ public interface IAggregatorStorage extends ISaveParticipant {
 	public abstract void writeBack(AggregatorItem item);
 
 	/**
-	 * Updates the storage with the given filters.
-	 * 
-	 * @param filters
-	 *            the new filter set
-	 */
-	public abstract void setFilters(Filter[] filters);
-
-	/**
-	 * Retrieves the filter set from the storage.
-	 * 
-	 * @return the filter set
-	 */
-	public abstract Filter[] getFilters();
-
-	/**
 	 * Used to obtain a lock for writing to the storage.
 	 * 
 	 * @returnt the lock.
 	 */
 	public abstract Lock writeLock();
-
-	/**
-	 * Used to obtain a lock for reading from the storage.
-	 * 
-	 * @return the lock.
-	 */
-	public abstract Lock readLock();
 
 }

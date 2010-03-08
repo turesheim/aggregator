@@ -24,6 +24,7 @@ import no.resheim.aggregator.core.data.AggregatorCollection;
 import no.resheim.aggregator.core.data.AggregatorItem;
 import no.resheim.aggregator.core.data.AggregatorItemParent;
 import no.resheim.aggregator.core.data.Article;
+import no.resheim.aggregator.core.data.ArticleLabel;
 import no.resheim.aggregator.core.data.BrokenItem;
 import no.resheim.aggregator.core.data.Folder;
 import no.resheim.aggregator.core.data.MediaContent;
@@ -94,6 +95,9 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			if (item instanceof Folder) {
 				insert((Folder) item);
 			}
+			if (item instanceof ArticleLabel) {
+				insert((ArticleLabel) item);
+			}
 			return Status.OK_STATUS;
 		} catch (SQLException e) {
 			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
@@ -102,11 +106,14 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		}
 	}
 
-	public void add(Subscription feed) {
+	public IStatus add(Subscription feed) {
 		try {
 			insert(feed);
+			return Status.OK_STATUS;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			return new Status(IStatus.ERROR, AggregatorPlugin.PLUGIN_ID,
+					MessageFormat.format(Messages.DerbySQLStorage_StoreError,
+							feed), e);
 		}
 	}
 
@@ -232,7 +239,14 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		item.setSystem(rs.getInt(4) != 0);
 		item.setTitle(rs.getString(5).trim());
 		item.setFlags(decodeFlags(rs.getString(6)));
-		item.setLabels(rs.getString(7).split(","));
+		return item;
+	}
+
+	private AggregatorItem composeLabel(AggregatorItemParent parent,
+			ResultSet rs) throws SQLException {
+		ArticleLabel item = new ArticleLabel(parent, UUID.fromString(rs
+				.getString(1)));
+		item.setTitle(rs.getString(3).trim());
 		return item;
 	}
 
@@ -468,6 +482,9 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			if (item == null && types.contains(ItemType.FOLDER)) {
 				item = selectFolder(parent, index);
 			}
+			if (types.contains(ItemType.LABEL)) {
+				item = selectLabel(parent, index);
+			}
 			// We should have something here so we're going to return a
 			// dummy item. See bug 636. In this we're assuming that we're never
 			// requesting an item that should not exist.
@@ -638,7 +655,7 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 	 */
 	private void insert(Folder folder) throws SQLException {
 		PreparedStatement ps = connection
-				.prepareStatement("insert into folders values(?,?,?,?,?,?,?)"); //$NON-NLS-1$
+				.prepareStatement("insert into folders values(?,?,?,?,?,?)"); //$NON-NLS-1$
 		ps.setEscapeProcessing(true);
 		ps.setString(1, folder.getUUID().toString());
 		// Folders are used to represent the root aggregator item
@@ -657,7 +674,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		ps.setInt(4, folder.isSystem() ? 1 : 0);
 		ps.setString(5, folder.getTitle());
 		ps.setString(6, encodeFlags(folder.getFlags()));
-		ps.setString(7, folder.getLabelString());
 		ps.executeUpdate();
 		ps.close();
 	}
@@ -697,6 +713,23 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			count += 1;
 			insert(content, item, count);
 		}
+	}
+
+	private void insert(ArticleLabel label) throws SQLException {
+		PreparedStatement ps = connection
+				.prepareStatement("insert into labels values(?,?,?)"); //$NON-NLS-1$
+		ps.setEscapeProcessing(true);
+		ps.setString(1, label.getUUID().toString());
+		// Folders are used to represent the root aggregator item
+		if (label.getParent() != null) {
+			ps.setString(2, ((AggregatorItem) label.getParent()).getUUID()
+					.toString());
+		} else {
+			ps.setNull(2, Types.CHAR);
+		}
+		ps.setString(3, label.getTitle());
+		ps.executeUpdate();
+		ps.close();
 	}
 
 	private void insert(MediaContent content, Article article, int order)
@@ -830,6 +863,24 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		return folder;
 	}
 
+	private AggregatorItem selectLabel(AggregatorItemParent parent, int index)
+			throws SQLException {
+		Statement s = connection.createStatement(
+				ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+		String query = null;
+		AggregatorItem label = null;
+		query = "select * from labels where parent_uuid='" //$NON-NLS-1$
+				+ parent.getUUID().toString() + "'";
+
+		ResultSet rs = s.executeQuery(query);
+		rs.absolute(index);
+		if (rs.next()) {
+			label = composeLabel(parent, rs);
+		}
+		rs.close();
+		return label;
+	}
+
 	public void setFilters(Filter[] filters) {
 	}
 
@@ -891,17 +942,15 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 			if (item instanceof Article) {
 				s
 						.executeUpdate("update articles set labels='" //$NON-NLS-1$
-								+ item.getLabelString()
+								+ ((Article) item).getLabelString()
 								+ "', is_read="
 								+ (((Article) item).isRead() ? "1" : "0")
 								+ ", last_changed=" + ((Article) item).getLastChanged() + ", starred=" + (((Article) item).isStarred() ? 1 : 0) + " where uuid='" //$NON-NLS-1$
 								+ item.getUUID() + "'"); //$NON-NLS-1$
 			}
 			if (item instanceof Folder) {
-				s.executeUpdate("update folders set labels='" //$NON-NLS-1$
-						+ item.getLabelString()
-						+ "', title='"
-						+ item.getTitle() + "' where uuid='" //$NON-NLS-1$
+				s.executeUpdate("update folders set title='" + item.getTitle()
+						+ "' where uuid='" //$NON-NLS-1$
 						+ item.getUUID() + "'"); //$NON-NLS-1$
 			}
 			// Re-execute this one so that articles view is updated.
@@ -925,26 +974,12 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * no.resheim.aggregator.model.IAggregatorStorage#updateFeed(no.resheim.
-	 * aggregator.model.Feed)
-	 */
 	public void updateSubscription(Subscription feed) {
 		// XXX: Use SQL "update" instead of "delete" & "insert"
 		delete(feed);
 		add(feed);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * no.resheim.aggregator.core.data.IAggregatorStorage#getChangedArticles
-	 * (no.resheim.aggregator.core.data.Subscription, long)
-	 */
 	public List<Article> getChangedArticles(Subscription subscription, long time) {
 		ArrayList<Article> articles = new ArrayList<Article>();
 		try {
@@ -957,7 +992,6 @@ public class DerbySQLStorage extends AbstractAggregatorStorage {
 				Article item = new Article(subscription, UUID.fromString(rs
 						.getString(1)));
 				updateFromResultSet(rs, item);
-				System.out.println("Changed " + item);
 				articles.add(item);
 			}
 			rs.close();

@@ -170,7 +170,10 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		case 0:
 			return getText(element);
 		case 1:
-			return ((AggregatorItem) element).getLabelString();
+			if (element instanceof Article)
+				return ((Article) element).getLabelString();
+			else
+				return null;
 		default:
 			break;
 		}
@@ -380,6 +383,7 @@ public class CollectionViewerLabelProvider extends ColumnLabelProvider
 		}
 		return null;
 	}
+
 	/**
 	 * Initialises certain presentation values such as fonts and colours.
 	 */

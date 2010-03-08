@@ -34,6 +34,8 @@ public abstract class AggregatorItem {
 		TRASH,
 		/** The item has been trashed */
 		TRASHED,
+		/** Label root */
+		LABEL_ROOT,
 	}
 
 	/**
@@ -42,15 +44,13 @@ public abstract class AggregatorItem {
 	 * folders are wanted, in others all types are wanted.
 	 */
 	public enum ItemType {
-		ARTICLE, FOLDER
+		ARTICLE, FOLDER, LABEL
 	};
 
 	/** The collection this item belongs to */
 	private AggregatorCollection collection;
 
 	private EnumSet<Flag> fFlags = EnumSet.noneOf(Flag.class);
-
-	private String[] fLabels;
 
 	private boolean fSystem = false;
 
@@ -75,26 +75,6 @@ public abstract class AggregatorItem {
 	protected AggregatorItem(AggregatorItemParent parent, UUID uuid) {
 		this.parent = parent;
 		this.uuid = uuid;
-		fLabels = new String[0];
-	}
-
-	/**
-	 * Adds a new label to the aggregator item.
-	 * 
-	 * @param label
-	 *            the label to add.
-	 */
-	public void addLabel(String label) {
-		if (!hasLabel(label)) {
-			try {
-				String[] newLabels = new String[fLabels.length + 1];
-				System.arraycopy(fLabels, 0, newLabels, 1, fLabels.length);
-				newLabels[0] = label.trim();
-				fLabels = newLabels;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	/**
@@ -123,25 +103,6 @@ public abstract class AggregatorItem {
 	 */
 	public EnumSet<Flag> getFlags() {
 		return fFlags;
-	}
-
-	public String[] getLabels() {
-		return fLabels;
-	}
-
-	public String getLabelString() {
-		StringBuilder sb = new StringBuilder();
-		synchronized (fLabels) {
-			boolean comma = false;
-			for (String string : fLabels) {
-				if (comma) {
-					sb.append(", ");
-				}
-				sb.append(string);
-				comma = true;
-			}
-		}
-		return sb.toString();
 	}
 
 	/**
@@ -173,46 +134,9 @@ public abstract class AggregatorItem {
 		return uuid;
 	}
 
-	/**
-	 * Tests if the given label is already assigned to the item and returns
-	 * <code>true</code> if this is the case.
-	 * 
-	 * @param label
-	 *            the label to test for.
-	 * @return <code>true</code> if the label is assigned.
-	 */
-	public boolean hasLabel(String label) {
-		boolean found = false;
-		synchronized (fLabels) {
-			for (String l : fLabels) {
-				if (l != null && l.equalsIgnoreCase(label.trim())) {
-					found = true;
-				}
-			}
-		}
-		return found;
-	}
-
 	public boolean isSystem() {
 		return fSystem;
 	};
-
-	/**
-	 * 
-	 * @param label
-	 */
-	public void removeLabel(String label) {
-		if (hasLabel(label)) {
-			int c = 0;
-			String[] newLabels = new String[fLabels.length - 1];
-			for (String string : fLabels) {
-				if (!string.equalsIgnoreCase(label.trim())) {
-					newLabels[c++] = string;
-				}
-			}
-			fLabels = newLabels;
-		}
-	}
 
 	public void setFlag(Flag flag) {
 		fFlags.add(flag);
@@ -220,10 +144,6 @@ public abstract class AggregatorItem {
 
 	public void setFlags(EnumSet<Flag> flags) {
 		this.fFlags = flags;
-	}
-
-	public void setLabels(String[] labels) {
-		this.fLabels = labels;
 	}
 
 	public void setSystem(boolean hidden) {

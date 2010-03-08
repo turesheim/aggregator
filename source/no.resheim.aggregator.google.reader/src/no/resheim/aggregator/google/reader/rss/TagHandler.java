@@ -13,19 +13,23 @@ package no.resheim.aggregator.google.reader.rss;
 
 import java.util.ArrayList;
 
-import no.resheim.aggregator.core.data.Subscription;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
+ * Parses a <b>tag</b> item in a google feed query.
  * 
  * @author Torkild Ulvøy Resheim
  * @since 1.1
  */
-class FeedHandler implements IGoogleElementHandler {
-	private Subscription feed;
-	private ArrayList<Object> feeds;
+class TagHandler implements IGoogleElementHandler {
+	private static final String OBJECT = "object";
+	private static final String LIST = "list";
+	private static final String ID = "id";
+	private static final String STRING = "string";
+	private static final String NAME = "name";
+	private String label;
+	private ArrayList<Object> items;
 	private StringBuffer buffer = new StringBuffer();
 	private boolean capture;
 	private boolean fIgnore;
@@ -33,7 +37,7 @@ class FeedHandler implements IGoogleElementHandler {
 	private Capturing fCapturing;
 
 	private enum Capturing {
-		NOTHING, TITLE, URL
+		NOTHING, TITLE, URL, ID
 	}
 
 	// Since we can have several objects embedded into this one we must track
@@ -51,36 +55,32 @@ class FeedHandler implements IGoogleElementHandler {
 		buffer.setLength(0);
 	}
 
-	public FeedHandler(Subscription feed, ArrayList<Object> feeds) {
+	public TagHandler(ArrayList<Object> items) {
 		super();
-		this.feed = feed;
-		this.feeds = feeds;
+		this.items = items;
 		fObjectLevel++;
 	}
 
-	public FeedHandler() {
+	public TagHandler() {
 	}
 
 	public void endElement(String qName) throws SAXException {
 
-		if (qName.equals("list")) {
+		if (qName.equals(LIST)) {
 			fIgnore = false;
 		}
 
-		if (qName.equals("object")) {
+		if (qName.equals(OBJECT)) {
 			fObjectLevel--;
 			if (fObjectLevel == 0) {
-				feeds.add(feed);
+				items.add(label);
 			}
 		}
-		if (!fCapturing.equals(Capturing.NOTHING) && qName.equals("string")) {
+		if (!fCapturing.equals(Capturing.NOTHING) && qName.equals(STRING)) {
 			String data = buffer.toString();
 			switch (fCapturing) {
-			case TITLE:
-				feed.setTitle(data);
-				break;
-			case URL:
-				feed.setURL(data.replaceFirst("feed/", ""));
+			case ID:
+				label = data.substring(data.lastIndexOf('/') + 1);
 				break;
 			default:
 				break;
@@ -104,18 +104,14 @@ class FeedHandler implements IGoogleElementHandler {
 			return this;
 		}
 		// Ignore this list!
-		if (qName.equals("list")) {
+		if (qName.equals(LIST)) {
 			fIgnore = true;
 		}
-		if (qName.equals("string") && fObjectLevel == 1) {
-			String id = atts.getValue("name");
+		if (qName.equals(STRING) && fObjectLevel == 1) {
+			String id = atts.getValue(NAME);
 			if (id != null) {
-				if (id.equals("id")) {
-					fCapturing = Capturing.URL;
-					setCapture(true);
-				}
-				if (id.equals("title")) {
-					fCapturing = Capturing.TITLE;
+				if (id.equals(ID)) {
+					fCapturing = Capturing.ID;
 					setCapture(true);
 				}
 			}
