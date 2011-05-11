@@ -1,3 +1,0 @@
-# Google Reader Integration
-feature@no.resheim.aggregator.google.reader=HEAD,:pserver:builder@amon:/data/cvs/resheim,,aggregator/source/feature_no.resheim.aggregator.google.reader
-plugin@no.resheim.aggregator.google.reader=HEAD,:pserver:builder@amon:/data/cvs/resheim,,aggregator/source/no.resheim.aggregator.google.reader
